@@ -10,9 +10,7 @@ import arbeitsrechnungen.ArbeitsrechnungenApp;
 
 public class ArbeitsrechnungenAboutBox extends javax.swing.JDialog {
 
-	private static final long serialVersionUID = -9146179220653040768L;
-
-	public ArbeitsrechnungenAboutBox(java.awt.Frame parent) {
+    public ArbeitsrechnungenAboutBox(java.awt.Frame parent) {
         super(parent);
         initComponents();
         getRootPane().setDefaultButton(closeButton);

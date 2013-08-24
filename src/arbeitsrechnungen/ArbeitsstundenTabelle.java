@@ -15,6 +15,10 @@ import java.beans.PropertyChangeEvent;
 import java.util.*;
 import java.sql.ResultSet;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
+import arbeitsrechnungen.gui.dialogs.RechnungDialog;
+import arbeitsrechnungen.gui.jframes.Einheit_einzel;
+
 import java.awt.event.*;
 import javax.swing.*;
 

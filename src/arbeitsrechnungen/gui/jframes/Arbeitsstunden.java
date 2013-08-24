@@ -34,7 +34,7 @@
  * Created on 03.05.2009, 19:48:36
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.jframes;
 
 /**
  *
@@ -43,6 +43,9 @@ package arbeitsrechnungen;
 
 import java.sql.ResultSet;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.ArbeitsrechnungenApp;
+import arbeitsrechnungen.ArbeitsstundenTabelle;
+import arbeitsrechnungen.Punkt;
 // import DialogBox.*;
 import java.util.*;
 

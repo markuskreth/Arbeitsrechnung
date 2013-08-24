@@ -7,6 +7,8 @@ package arbeitsrechnungen;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
+import arbeitsrechnungen.gui.jframes.StartFenster;
+
 /**
  * The main class of the application.
  */
