@@ -16,20 +16,18 @@ import java.util.Calendar;
 
 public class mySqlDate {
 
-java.util.Date datum;
 GregorianCalendar cal;
 
     public mySqlDate(java.util.Date datum) {
-        this.datum = datum;
         cal = new GregorianCalendar();
         cal.setTime(datum);
     }
 
-    public String getSqlDate(){
-        return getSqlDate(datum);
-    }
+    public mySqlDate(GregorianCalendar cal) {
+		this.cal = cal;
+	}
     
-    public String getSqlDate(java.util.Date local_datum){
+    public String getSqlDate(){
         java.sql.Date sqldate = new java.sql.Date(cal.getTimeInMillis());
         return(sqldate.toString());
     }
@@ -53,9 +51,11 @@ GregorianCalendar cal;
     public int getMinute(){
         return cal.get(Calendar.MINUTE);
     }
+    
     public long getTimestamp(){
         return cal.getTimeInMillis();
     }
+    
     public long getSqlTimestamp(){
         java.sql.Date sqldate = new java.sql.Date(cal.getTimeInMillis());
         return sqldate.getTime();

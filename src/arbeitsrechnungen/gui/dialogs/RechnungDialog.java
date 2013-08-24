@@ -5,7 +5,7 @@
  * Created on 02.09.2009, 11:52:54
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.dialogs;
 
 /**
  *
@@ -28,6 +28,7 @@ import org.jdesktop.beansbinding.AutoBinding;
 
 import ArbeitsstundeModel.ArbeitsstundeImpl;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.RechnungData;
 
 public class RechnungDialog extends javax.swing.JDialog implements PropertyChangeListener,DocumentListener{
 

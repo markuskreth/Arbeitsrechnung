@@ -2,9 +2,11 @@
  * ArbeitsrechnungenAboutBox.java
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.dialogs;
 
 import org.jdesktop.application.Action;
+
+import arbeitsrechnungen.ArbeitsrechnungenApp;
 
 public class ArbeitsrechnungenAboutBox extends javax.swing.JDialog {
 

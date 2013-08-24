@@ -9,7 +9,7 @@
  * Created on 27.04.2009, 10:10:09
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.jframes;
 
 /**
  *
@@ -32,10 +32,12 @@ import mouseoverhintmanager.MouseOverHintManager;
 import org.apache.log4j.Logger;
 
 import arbeitsabrechnungendataclass.Verbindung;
-//import javax.swing.event.TableModelListener;
-//import java.awt.event.ContainerListener;
+import arbeitsrechnungen.StartFensterTableCellRenderer;
+import arbeitsrechnungen.gui.dialogs.Optionen;
 import arbeitsrechnungen.persister.DatenPersister;
 import arbeitsrechnungen.persister.DatenPersister.Forderung;
+//import javax.swing.event.TableModelListener;
+//import java.awt.event.ContainerListener;
 
 public class StartFenster extends javax.swing.JFrame implements
 		PropertyChangeListener {

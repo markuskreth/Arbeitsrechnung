@@ -9,7 +9,7 @@
  * Created on 29.04.2009, 15:15:15
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.dialogs;
 
 /**
  *
@@ -17,6 +17,7 @@ package arbeitsrechnungen;
  */
 import java.sql.ResultSet;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.ArbeitsrechnungenApp;
 
 
 public class AngebotDialog extends javax.swing.JDialog {

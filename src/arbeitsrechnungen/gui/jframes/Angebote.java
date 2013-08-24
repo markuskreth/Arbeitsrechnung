@@ -9,7 +9,7 @@
  * Created on 28.04.2009, 20:22:24
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.jframes;
 
 /**
  *
@@ -18,6 +18,9 @@ package arbeitsrechnungen;
 
 import java.sql.ResultSet;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.ArbeitsrechnungenApp;
+import arbeitsrechnungen.Punkt;
+import arbeitsrechnungen.gui.dialogs.AngebotDialog;
 // import DialogBox.*;
 import java.util.*;
 
