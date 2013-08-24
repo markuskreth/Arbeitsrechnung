@@ -1,0 +1,56 @@
+\documentclass[a4paper,12pt]{scrlttr2}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{eurosym}
+\usepackage{graphicx}
+
+\setkomavar{backaddress}{M. Kreth, Lister Kirchweg 7, 30163 Hannover}
+\setkomavar{fromaddress}{\centering \textbf{Markus Kreth}\\Lister Kirchweg 7, 30163 Hannover\\Telefon: 0511 - 26 18 291, Email: markus.kreth@web.de}
+%\setkomavar{yourref}{%%yourref%%}
+%\setkomavar{yourmail}{21. Februar 2007}
+\setkomavar{signature}{Markus Kreth}
+\setkomavar{invoice}{Opexx-2010-09}
+\setkomavar{frombank}{\begin{footnotesize}\textbf{Bankverbindung:} Inhaber: Markus Kreth; BLZ: 25050180; Konto: 37793160\end{footnotesize}}
+%\setkomavar{customer}{%%customer%%}
+\setkomavar{date}{11.09.2010}
+\setkomavar{location}{\raggedright
+Steuernummer: 25/124/04832\\
+Kein gesonderter Ausweis der Umsatzsteuer \mbox{(§ 19 UStG)}
+}
+\setkomavar{subject}{Rechnung Kreth}
+\begin{document}
+\firstfoot{%
+\parbox[b]{\linewidth}{%
+\centering\def\\{, }\usekomavar{frombank}%
+}%
+}
+\begin{letter}{Opexx\\
+Bayernstr. 21\\
+30855 Langenhagen}
+\opening{Sehr geehrte Damen und Herren,}
+für die folgenden von mir erbrachten Leistungen erlaube ich mir  für 45.0 Std. insgesamt 299,26\officialeuro\ 
+ zu berechnen.
+
+\begin{tabular}{|l|l|l|r|}\hline 
+Datum & Inhalt & Std. & Honorar\\\hline \hline 
+04.08.2010 & kurierdienst - Stundenlohn & 6.5 & 43,23 \officialeuro\ \\\hline 
+05.08.2010 & kurierdienst - Stundenlohn & 5.0 & 33,25 \officialeuro\ \\\hline 
+11.08.2010 & kurierdienst - Stundenlohn & 5.0 & 33,25 \officialeuro\ \\\hline 
+12.08.2010 & kurierdienst - Stundenlohn & 6.0 & 39,90 \officialeuro\ \\\hline 
+18.08.2010 & kurierdienst - Stundenlohn & 6.0 & 39,90 \officialeuro\ \\\hline 
+19.08.2010 & kurierdienst - Stundenlohn & 6.0 & 39,90 \officialeuro\ \\\hline 
+31.08.2010 & kurierdienst - Stundenlohn & 10.5 & 69,83 \officialeuro\ \\\hline 
+\hline & & 45.0 & 299,26 \officialeuro\ \\\hline 
+\end{tabular}\\
+
+
+Bitte überweisen Sie den Betrag bis zum 11.10.2010
+ auf das unten genannte Konto.
+\closing{Mit freundlichen Grüßen\\\includegraphics[width=3.5cm]{/home/markus/programming/NetBeansProjects/Arbeitsrechnungen/Tex-Vorlagen/Sign.jpg}}
+
+%enclosure listing
+%\encl{%%encl%%}
+
+\end{letter}
+\end{document}

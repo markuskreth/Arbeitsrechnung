@@ -1,0 +1,37 @@
+\documentclass[a4paper,12pt]{scrlttr2}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[ngerman]{babel}
+
+\setkomavar{backaddress}{M. Kreth, Lister Kirchweg 7, 30163 Hannover}
+\setkomavar{fromaddress}{\centering \textbf{Markus Kreth}\\Lister Kirchweg 7, 30163 Hannover\\Telefon: 0511 - 26 18 291, Email: markus.kreth@web.de}
+%\setkomavar{yourref}{%%yourref%%}
+%\setkomavar{yourmail}{21. Februar 2007}
+\setkomavar{signature}{Markus Kreth}
+\setkomavar{invoice}{Solfit-2009-08}
+\setkomavar{frombank}{\begin{footnotesize}\textbf{Bankverbindung:} Inhaber: Markus Kreth; BLZ: 25050180; Konto: 37793160\end{footnotesize}}
+%\setkomavar{customer}{%%customer%%}
+\setkomavar{location}{\raggedright
+Steuernummer: 25/124/04832\\
+Kein gesonderter Ausweis der Umsatzsteuer \mbox{(§ 19 UStG)}
+}
+
+%\setkomavar{date}{Angaben\\Angaben 2. Zeile}
+\setkomavar{subject}{Rechnung für den Monat August}
+\begin{document}
+\firstfoot{%
+\parbox[b]{\linewidth}{%
+\centering\def\\{, }\usekomavar{frombank}%
+}%
+}
+
+\begin{letter}{Name\\Straße 5\\30000 Hannover}
+\opening{Sehr geehrte Damen und Herren,}
+%%Text%%
+\closing{Mit freundlichen Grüßen}
+
+%enclosure listing
+%\encl{}
+
+\end{letter}
+\end{document}

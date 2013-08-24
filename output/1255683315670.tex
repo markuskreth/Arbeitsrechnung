@@ -1,0 +1,55 @@
+\documentclass[a4paper,12pt]{scrlttr2}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{eurosym}
+\usepackage{graphicx}
+
+\setkomavar{backaddress}{M. Kreth, Lister Kirchweg 7, 30163 Hannover}
+\setkomavar{fromaddress}{\centering \textbf{Markus Kreth}\\Lister Kirchweg 7, 30163 Hannover\\Telefon: 0511 - 26 18 291, Email: markus.kreth@web.de}
+%\setkomavar{yourref}{%%yourref%%}
+%\setkomavar{yourmail}{21. Februar 2007}
+\setkomavar{signature}{Markus Kreth}
+\setkomavar{invoice}{BOC Hannover-2009-10}
+\setkomavar{frombank}{\begin{footnotesize}\textbf{Bankverbindung:} Inhaber: Markus Kreth; BLZ: 25050180; Konto: 37793160\end{footnotesize}}
+%\setkomavar{customer}{%%customer%%}
+%\setkomavar{date}{%%datum%%}
+\setkomavar{location}{\raggedright
+Steuernummer: 25/124/04832\\
+Kein gesonderter Ausweis der Umsatzsteuer \mbox{(§ 19 UStG)}
+}
+\setkomavar{subject}{Rechnung Kreth}
+\begin{document}
+\firstfoot{%
+\parbox[b]{\linewidth}{%
+\centering\def\\{, }\usekomavar{frombank}%
+}%
+}
+\begin{letter}{BOC Hannover\\
+Vahrenwalder Str\\
+30    Hannover}
+\opening{Sehr geehrte Damen und Herren,}
+für die folgenden von mir erbrachten Leistungen erlaube ich mir  für 40.5 Std. insgesamt 124,00\officialeuro\ 
+ zu berechnen.
+
+\begin{tabular}{|l|l|l|l|l|r|}\hline 
+Datum & Inhalt & Std. & Dauer & Arbeiten & Honorar\\\hline \hline 
+26.08.2009 & Fahrräder statt Stunden & 8.0 & Bis 14 Uhr & 8 Stk & 24,00 \officialeuro\ \\\hline 
+27.08.2009 & Fahrräder statt Stunden & 9.0 & bis 14:40 & ca. 9 stk & 27,00 \officialeuro\ \\\hline 
+31.08.2009 & Arbeitseinheiten & 5.0 & Fahrradreparatur, Räder umgezogen & ca eine std & 17,50 \officialeuro\ \\\hline 
+01.09.2009 & Fahrräder statt Stunden & 6.0 & Bis 13 Uhr &  & 18,00 \officialeuro\ \\\hline 
+03.09.2009 & Fahrräder statt Stunden & 9.0 & 9 Fahrräder bis 14 Uhr & Viel Kleinkram & 27,00 \officialeuro\ \\\hline 
+07.09.2009 & Fahrräder statt Stunden & 3.5 & 3+ Kram &  & 10,50 \officialeuro\ \\\hline 
+\hline & & 40.5 & & & 124,00 \officialeuro\ \\\hline 
+\end{tabular}\\
+
+
+Bitte überweisen Sie den Betrag bis zum 16.11.2009
+ auf das unten genannte Konto.
+\closing{Mit freundlichen Grüßen}
+
+%enclosure listing
+%\encl{%%encl%%}
+
+\end{letter}
+\end{document}

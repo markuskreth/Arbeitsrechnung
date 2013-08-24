@@ -1,0 +1,60 @@
+\documentclass[a4paper,12pt]{scrlttr2}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{eurosym}
+\usepackage{graphicx}
+
+\setkomavar{backaddress}{M. Kreth, Lister Kirchweg 7, 30163 Hannover}
+\setkomavar{fromaddress}{\centering \textbf{Markus Kreth}\\Lister Kirchweg 7, 30163 Hannover\\Telefon: 0511 - 26 18 291, Email: markus.kreth@web.de}
+%\setkomavar{yourref}{%%yourref%%}
+%\setkomavar{yourmail}{21. Februar 2007}
+\setkomavar{signature}{Markus Kreth}
+\setkomavar{invoice}{Feuerwehr Hannover-2010-11}
+\setkomavar{frombank}{\begin{footnotesize}\textbf{Bankverbindung:} Inhaber: Markus Kreth; BLZ: 25050180; Konto: 37793160\end{footnotesize}}
+%\setkomavar{customer}{%%customer%%}
+\setkomavar{date}{02.11.2010}
+\setkomavar{location}{\raggedright
+Steuernummer: 25/124/04832\\
+Kein gesonderter Ausweis der Umsatzsteuer \mbox{(§ 19 UStG)}
+}
+\setkomavar{subject}{Rechnung Kreth}
+\begin{document}
+\firstfoot{%
+\parbox[b]{\linewidth}{%
+\centering\def\\{, }\usekomavar{frombank}%
+}%
+}
+\begin{letter}{-}
+\opening{Sehr geehrte Damen und Herren,}
+für die folgenden von mir erbrachten Leistungen erlaube ich mir insgesamt 264,00\officialeuro\ 
+ zu berechnen.
+
+\begin{tabular}{|l|l|l|r|}\hline 
+Datum & Inhalt & Wache/ Ausfall & Honorar\\\hline \hline 
+01.10.2010 & Fitnessstunde in der Woche & Wache 1 & 23,00 \officialeuro\ \\\hline 
+01.10.2010 & Fitnessstunde in der Woche & Wache 2 & 23,00 \officialeuro\ \\\hline 
+08.10.2010 & Fitnessstunde in der Woche & Wache 1 & 23,00 \officialeuro\ \\\hline 
+08.10.2010 & Fitnessstunde in der Woche & Wache 2 & 23,00 \officialeuro\ \\\hline 
+15.10.2010 & Ausgefallene Stunde & Wache 1 & 10,00 \officialeuro\ \\\hline 
+15.10.2010 & Ausgefallene Stunde & Wache 2 & 10,00 \officialeuro\ \\\hline 
+16.10.2010 & Spielstunde & Wache 5 & 20,00 \officialeuro\ \\\hline 
+16.10.2010 & Spielstunde & Wache 4 & 20,00 \officialeuro\ \\\hline 
+16.10.2010 & Spielstunde & Wache 1 & 20,00 \officialeuro\ \\\hline 
+22.10.2010 & Fitnessstunde in der Woche & Wache 1 & 23,00 \officialeuro\ \\\hline 
+22.10.2010 & Fitnessstunde in der Woche & Wache 2 & 23,00 \officialeuro\ \\\hline 
+29.10.2010 & Fitnessstunde in der Woche & Wache 1 & 23,00 \officialeuro\ \\\hline 
+29.10.2010 & Fitnessstunde in der Woche & Wache2 & 23,00 \officialeuro\ \\\hline 
+\hline & & & 264,00 \officialeuro\ \\\hline 
+\end{tabular}\\
+
+
+Bitte überweisen Sie den Betrag bis zum 02.12.2010
+ auf das unten genannte Konto.
+\closing{Mit freundlichen Grüßen\\\includegraphics[width=3.5cm]{/home/markus/programming/NetBeansProjects/Arbeitsrechnungen/Tex-Vorlagen/Sign.jpg}}
+
+%enclosure listing
+%\encl{%%encl%%}
+
+\end{letter}
+\end{document}
