@@ -3,7 +3,7 @@
 /bin/
 target/
 .svn/
-# output/
+output/
 pdf-speicher/
 
  
