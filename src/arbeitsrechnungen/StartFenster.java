@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
 
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import mouseoverhintmanager.MouseOverHintManager;
@@ -139,22 +140,8 @@ public class StartFenster extends javax.swing.JFrame implements
 	 */
 	private void initForderungen() {
 		// Spaltenbreiten merken
-		int spaltenzahl = this.jTableForderungen.getColumnModel()
-				.getColumnCount();
-		// int[] selected = this.jTable1.getSelectedRows();
-		int[] breitenMax = new int[spaltenzahl];
-		int[] breitenOpt = new int[spaltenzahl];
-		int[] breitenMin = new int[spaltenzahl];
-
-		for (int i = 0; i < this.jTableForderungen.getColumnModel()
-				.getColumnCount(); i++) {
-			breitenMax[i] = this.jTableForderungen.getColumnModel()
-					.getColumn(i).getMaxWidth();
-			breitenOpt[i] = this.jTableForderungen.getColumnModel()
-					.getColumn(i).getPreferredWidth();
-			breitenMin[i] = this.jTableForderungen.getColumnModel()
-					.getColumn(i).getMinWidth();
-		}
+		int[][] spaltenBreiten = getSpaltenBreiten(this.jTableForderungen);
+		
 		// Model mit Überschriften erstellen
 		DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {},
 				new String[] { "Firma", "Rechnungsdatum", "Forderung" }) {
@@ -224,16 +211,49 @@ public class StartFenster extends javax.swing.JFrame implements
 
 		// eigenes Modell einsetzten und Vorgegebene Breiten speichern
 		jTableForderungen.setModel(mymodel);
-		for (int i = 0; i < breitenMax.length; i++) {
-			jTableForderungen.getColumnModel().getColumn(i)
-					.setMaxWidth(breitenMax[i]);
-			jTableForderungen.getColumnModel().getColumn(i)
-					.setPreferredWidth(breitenOpt[i]);
-			jTableForderungen.getColumnModel().getColumn(i)
-					.setMinWidth(breitenMin[i]);
-		}
+		
+		restoreSpaltenBreiten(jTableForderungen, spaltenBreiten);
+		
 		jTableForderungen.setDefaultRenderer(String.class,
 				new StartFensterTableCellRenderer());
+	}
+
+	private void restoreSpaltenBreiten(JTable tab,
+			int[][] spaltenBreiten) {
+
+		int[] breitenMax = spaltenBreiten[0];
+		int[] breitenOpt = spaltenBreiten[1];
+		int[] breitenMin = spaltenBreiten[2];
+
+		for (int i = 0; i < breitenMax.length; i++) {
+			tab.getColumnModel().getColumn(i)
+					.setMaxWidth(breitenMax[i]);
+			tab.getColumnModel().getColumn(i)
+					.setPreferredWidth(breitenOpt[i]);
+			tab.getColumnModel().getColumn(i)
+					.setMinWidth(breitenMin[i]);
+		}
+	}
+
+	private int[][] getSpaltenBreiten(JTable tab) {
+		int spaltenzahl = tab.getColumnModel()
+				.getColumnCount();
+
+		int[] breitenMax = new int[spaltenzahl];
+		int[] breitenOpt = new int[spaltenzahl];
+		int[] breitenMin = new int[spaltenzahl];
+
+		for (int i = 0; i < tab.getColumnModel()
+				.getColumnCount(); i++) {
+			breitenMax[i] = tab.getColumnModel()
+					.getColumn(i).getMaxWidth();
+			breitenOpt[i] = tab.getColumnModel()
+					.getColumn(i).getPreferredWidth();
+			breitenMin[i] = tab.getColumnModel()
+					.getColumn(i).getMinWidth();
+		}
+		int[][] res = {breitenMax, breitenOpt, breitenMin};
+		return res;
 	}
 
 	/**
@@ -241,23 +261,8 @@ public class StartFenster extends javax.swing.JFrame implements
 	 * gefüllt
 	 */
 	private void initEinheiten() {
-		// Spaltenbreiten merken
-		int spaltenzahl = this.jTableEinheiten.getColumnModel()
-				.getColumnCount();
-		// int[] selected = this.jTable1.getSelectedRows();
-		int[] breitenMax = new int[spaltenzahl];
-		int[] breitenOpt = new int[spaltenzahl];
-		int[] breitenMin = new int[spaltenzahl];
-
-		for (int i = 0; i < this.jTableEinheiten.getColumnModel()
-				.getColumnCount(); i++) {
-			breitenMax[i] = this.jTableEinheiten.getColumnModel().getColumn(i)
-					.getMaxWidth();
-			breitenOpt[i] = this.jTableEinheiten.getColumnModel().getColumn(i)
-					.getPreferredWidth();
-			breitenMin[i] = this.jTableEinheiten.getColumnModel().getColumn(i)
-					.getMinWidth();
-		}
+		int[][] spaltenBreiten = getSpaltenBreiten(jTableEinheiten);
+		
 		// Model mit Überschriften erstellen
 		javax.swing.table.DefaultTableModel mymodel = new javax.swing.table.DefaultTableModel(
 				new Object[][] {},
@@ -296,6 +301,7 @@ public class StartFenster extends javax.swing.JFrame implements
 
 		java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
 		Vector<Forderung> forderungen2 = persister.getForderungen();
+		
 		for (Iterator<Forderung> iterator = forderungen2.iterator(); iterator.hasNext();) {
 			Forderung forderung = iterator.next();
 			summe += forderung.getKlientenpreis();
@@ -309,27 +315,7 @@ public class StartFenster extends javax.swing.JFrame implements
 			datensatz.add(df.format(forderung.getKlientenpreis()) + " €");
 			mymodel.addRow(datensatz);
 		}
-//		try {
-//			while (daten.next()) {
-//				Vector<String> datensatz;
-//				datensatz = new Vector<String>();
-//				datensatz.add(daten.getString("auftraggeber"));
-//				datensatz.add(String.valueOf(daten.getInt("anzahl")));
-//				java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
-//				datensatz.add(df.format(daten.getDouble("klientpreis")) + " €");
-//				summe = summe + daten.getDouble("klientpreis"); // summe ist
-//																// gesamtsumme,
-//																// in daten nur
-//																// die des
-//																// einzelnen
-//																// Klienten
-//				mymodel.addRow(datensatz);
-//				this.Einheiten_ids.add(daten.getInt("id"));
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-
+		
 		// In der letzten Zeile die Summe ausgeben
 		Vector<String> datensatz;
 		datensatz = new Vector<String>();
@@ -341,14 +327,9 @@ public class StartFenster extends javax.swing.JFrame implements
 
 		// eigenes Modell einsetzten und Vorgegebene Breiten speichern
 		jTableEinheiten.setModel(mymodel);
-		for (int i = 0; i < breitenMax.length; i++) {
-			jTableEinheiten.getColumnModel().getColumn(i)
-					.setMaxWidth(breitenMax[i]);
-			jTableEinheiten.getColumnModel().getColumn(i)
-					.setPreferredWidth(breitenOpt[i]);
-			jTableEinheiten.getColumnModel().getColumn(i)
-					.setMinWidth(breitenMin[i]);
-		}
+		
+		restoreSpaltenBreiten(jTableEinheiten, spaltenBreiten);
+		
 		jTableEinheiten.setDefaultRenderer(String.class,
 				new StartFensterTableCellRenderer());
 	}
