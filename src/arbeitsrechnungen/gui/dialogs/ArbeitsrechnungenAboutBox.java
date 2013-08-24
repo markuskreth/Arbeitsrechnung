@@ -2,13 +2,17 @@
  * ArbeitsrechnungenAboutBox.java
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.dialogs;
 
 import org.jdesktop.application.Action;
 
+import arbeitsrechnungen.ArbeitsrechnungenApp;
+
 public class ArbeitsrechnungenAboutBox extends javax.swing.JDialog {
 
-    public ArbeitsrechnungenAboutBox(java.awt.Frame parent) {
+	private static final long serialVersionUID = -9146179220653040768L;
+
+	public ArbeitsrechnungenAboutBox(java.awt.Frame parent) {
         super(parent);
         initComponents();
         getRootPane().setDefaultButton(closeButton);

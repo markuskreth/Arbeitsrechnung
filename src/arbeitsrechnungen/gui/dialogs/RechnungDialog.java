@@ -5,7 +5,7 @@
  * Created on 02.09.2009, 11:52:54
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.dialogs;
 
 /**
  *
@@ -17,6 +17,9 @@ import ArbeitsstundeModel.*;
 import java.util.*;
 import java.sql.*;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.ArbeitsrechnungenApp;
+import arbeitsrechnungen.RechnungData;
+
 import java.beans.PropertyChangeListener;
 import javax.swing.event.DocumentListener;
 import java.beans.PropertyChangeSupport;

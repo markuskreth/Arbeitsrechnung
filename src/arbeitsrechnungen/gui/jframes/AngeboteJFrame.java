@@ -9,7 +9,7 @@
  * Created on 28.04.2009, 20:22:24
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.jframes;
 
 /**
  *
@@ -18,10 +18,13 @@ package arbeitsrechnungen;
 
 import java.sql.ResultSet;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.ArbeitsrechnungenApp;
+import arbeitsrechnungen.Punkt;
+import arbeitsrechnungen.gui.dialogs.AngebotDialog;
 // import DialogBox.*;
 import java.util.*;
 
-public class Angebote extends javax.swing.JFrame {
+public class AngeboteJFrame extends javax.swing.JFrame {
 
     Verbindung verbindung;
     ResultSet klienten;
@@ -30,7 +33,7 @@ public class Angebote extends javax.swing.JFrame {
     boolean wait = false;
 
     /** Creates new form Angebote */
-    public Angebote() {
+    public AngeboteJFrame() {
         initComponents();
         // Klientenliste in ComboBox eintragen und Formatieren.
         verbindung = new Verbindung("Arbeitrechnungen", "markus", "0773");
@@ -135,7 +138,7 @@ public class Angebote extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Angebote"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(Angebote.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(AngeboteJFrame.class);
         jLabelUeberschrift.setText(resourceMap.getString("jLabelUeberschrift.text")); // NOI18N
         jLabelUeberschrift.setName("jLabelUeberschrift"); // NOI18N
 
@@ -358,7 +361,7 @@ public class Angebote extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Angebote().setVisible(true);
+                new AngeboteJFrame().setVisible(true);
             }
         });
     }

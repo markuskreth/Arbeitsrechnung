@@ -19,7 +19,6 @@ package arbeitsrechnungen;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.sql.ResultSet;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
@@ -31,11 +30,12 @@ import mouseoverhintmanager.MouseOverHintManager;
 
 import org.apache.log4j.Logger;
 
-import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.gui.jframes.KlientenEditorJFrame;
+import arbeitsrechnungen.persister.DatenPersister;
+import arbeitsrechnungen.persister.DatenPersister.Einheit;
+import arbeitsrechnungen.persister.DatenPersister.Forderung;
 //import javax.swing.event.TableModelListener;
 //import java.awt.event.ContainerListener;
-import arbeitsrechnungen.persister.DatenPersister;
-import arbeitsrechnungen.persister.DatenPersister.Forderung;
 
 public class StartFenster extends javax.swing.JFrame implements
 		PropertyChangeListener {
@@ -49,10 +49,12 @@ public class StartFenster extends javax.swing.JFrame implements
 	Vector<Integer> Einheiten_ids = new Vector<Integer>();
 	Properties optionen = new Properties();
 	MouseOverHintManager hintman;
+	private DatenPersister persister;
 
 	/** Creates new form StartFenster */
 	public StartFenster() {
 		loadOptions();
+		persister = new DatenPersister(optionen);
 		initComponents();
 		initForderungen();
 		initEinheiten();
@@ -145,9 +147,7 @@ public class StartFenster extends javax.swing.JFrame implements
 		// Model mit Überschriften erstellen
 		DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {},
 				new String[] { "Firma", "Rechnungsdatum", "Forderung" }) {
-			/**
-			 * 
-			 */
+			
 			private static final long serialVersionUID = 1080987754441922362L;
 
 			@Override
@@ -160,44 +160,24 @@ public class StartFenster extends javax.swing.JFrame implements
 				return false;
 			}
 		};
-
-		// Daten laden
-		Verbindung verbindung = new Verbindung(
-				optionen.getProperty("sqlserver"),
-				optionen.getProperty("datenbank"),
-				optionen.getProperty("user"), optionen.getProperty("password"));
-		String sqltext = "SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, einheiten.Rechnung_Datum AS datum, SUM(einheiten.Preis) AS summe "
-				+ "FROM einheiten, klienten "
-				+ "WHERE einheiten.klienten_id = klienten.klienten_id "
-				+ "AND NOT (ISNULL( einheiten.Rechnung_verschickt )) "
-				+ "AND ISNULL( einheiten.Bezahlt ) "
-				+ "GROUP BY einheiten.Rechnung_Datum,einheiten.klienten_id "
-				+ "ORDER BY einheiten.Rechnung_Datum;";
-
-		System.out.println(sqltext);
-		ResultSet daten = null;
-		if (verbindung.connected()) {
-			System.out.println("Connected!");
-			daten = verbindung.query(sqltext);
-		}
-
+		
+		Vector<Forderung> ford = persister.getForderungen();
 		// Ergebnise einzeln zum Model hinzufügen
 		double summe = 0;
-		try {
-			while (daten.next()) {
-				Vector<String> datensatz;
-				datensatz = new Vector<String>();
-				datensatz.add(daten.getString("auftraggeber"));
-				datensatz.add(java.text.DateFormat.getDateInstance().format(
-						daten.getDate("datum")));
-				java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
-				datensatz.add(df.format(daten.getDouble("summe")) + " €");
-				summe = summe + daten.getDouble("summe");
-				mymodel.addRow(datensatz);
-				this.Forderungen_ids.add(daten.getInt("id"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
+		for (Iterator<Forderung> iterator = ford.iterator(); iterator.hasNext();) {
+			Forderung fg = iterator.next();
+
+			Vector<String> datensatz;
+			datensatz = new Vector<String>();
+			datensatz.add(fg.getAuftraggeber());
+
+			datensatz.add(java.text.DateFormat.getDateInstance().format(
+					fg.getDatum().getTime()));
+			datensatz.add(df.format(fg.getSumme()) + " €");
+			summe = summe + fg.getSumme();
+			mymodel.addRow(datensatz);
+			this.Forderungen_ids.add(fg.getId());
 		}
 
 		// In der letzten Zeile die Summe ausgeben
@@ -205,7 +185,6 @@ public class StartFenster extends javax.swing.JFrame implements
 		datensatz = new Vector<String>();
 		datensatz.add("Summe");
 		datensatz.add("");
-		java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
 		datensatz.add(df.format(summe) + " €");
 		mymodel.addRow(datensatz);
 
@@ -283,36 +262,22 @@ public class StartFenster extends javax.swing.JFrame implements
 			}
 		};
 
-//		// Daten laden
-//		Verbindung verbindung = new Verbindung(
-//				optionen.getProperty("sqlserver"),
-//				optionen.getProperty("datenbank"),
-//				optionen.getProperty("user"), optionen.getProperty("password"));
-//		String sqltext = "SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis "
-//				+ "FROM einheiten, klienten "
-//				+ "WHERE einheiten.klienten_id = klienten.klienten_id "
-//				+ "AND ISNULL( einheiten.Rechnung_verschickt ) "
-//				+ "AND ISNULL( einheiten.Bezahlt ) "
-//				+ "GROUP BY einheiten.klienten_id " + "ORDER BY klientpreis;";
-
-		DatenPersister persister = new DatenPersister(optionen);
 		double summe = 0;
 		
-
 		java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
-		Vector<Forderung> forderungen2 = persister.getForderungen();
+		Vector<Einheit> einheiten2 = persister.getEinheiten();
 		
-		for (Iterator<Forderung> iterator = forderungen2.iterator(); iterator.hasNext();) {
-			Forderung forderung = iterator.next();
-			summe += forderung.getKlientenpreis();
-			this.Einheiten_ids.add(forderung.getId());
+		for (Iterator<Einheit> iterator = einheiten2.iterator(); iterator.hasNext();) {
+			Einheit einheit = iterator.next();
+			
+			summe += einheit.getKlientenpreis();
+			this.Einheiten_ids.add(einheit.getId());
 
 			Vector<String> datensatz;
 			datensatz = new Vector<String>();
-
-			datensatz.add(forderung.getAuftraggeber());
-			datensatz.add(String.valueOf(forderung.getAnzahl()));
-			datensatz.add(df.format(forderung.getKlientenpreis()) + " €");
+			datensatz.add(einheit.getAuftraggeber());
+			datensatz.add(String.valueOf(einheit.getAnzahl()));
+			datensatz.add(df.format(einheit.getKlientenpreis()) + " €");
 			mymodel.addRow(datensatz);
 		}
 		
@@ -792,8 +757,8 @@ public class StartFenster extends javax.swing.JFrame implements
 	}// GEN-LAST:event_jButtonKlientenEditorActionPerformed
 
 	private void openKlientenEditor(Integer KlientenID, Integer Tabelle) {
-		KlientenEditor klienteneditor;
-		klienteneditor = new KlientenEditor();
+		KlientenEditorJFrame klienteneditor;
+		klienteneditor = new KlientenEditorJFrame();
 		klienteneditor.arbeitsstundenTabelle1.addPropertyChangeListener(
 				"ArbeitsstundenTabelle.Tabellendaten", this);
 		klienteneditor.setSelbststaendig(false);
@@ -801,9 +766,9 @@ public class StartFenster extends javax.swing.JFrame implements
 			klienteneditor.findRow(KlientenID);
 			klienteneditor.updateComponents();
 			if (Tabelle == FORDERUNGEN)
-				klienteneditor.setFilter(KlientenEditor.EINGEREICHTE);
+				klienteneditor.setFilter(KlientenEditorJFrame.EINGEREICHTE);
 			if (Tabelle == EINHEITEN)
-				klienteneditor.setFilter(KlientenEditor.NICHTEINGEREICHTE);
+				klienteneditor.setFilter(KlientenEditorJFrame.NICHTEINGEREICHTE);
 		}
 		klienteneditor.setVisible(true);
 	}

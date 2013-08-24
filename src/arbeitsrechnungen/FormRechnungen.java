@@ -17,6 +17,8 @@ package arbeitsrechnungen;
  */
 import java.sql.ResultSet;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.gui.dialogs.RechnungDialog;
+
 import java.util.Properties;
 import java.util.Vector;
 //import java.lang.String;

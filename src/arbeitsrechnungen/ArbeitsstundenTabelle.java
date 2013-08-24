@@ -15,16 +15,18 @@ import java.beans.PropertyChangeEvent;
 import java.util.*;
 import java.sql.ResultSet;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.gui.dialogs.RechnungDialog;
+
 import java.awt.event.*;
 import javax.swing.*;
 //import java.io.*;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-// import java.lang.System.*;
 
 public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowListener{
 
-    private Vector<ArbeitsstundeImpl> Arbeitsstunden;
+	private static final long serialVersionUID = 8161115991876323549L;
+	private Vector<ArbeitsstundeImpl> Arbeitsstunden;
     java.util.Properties optionen = new java.util.Properties();
     private javax.swing.JFrame parent = null;
     private int anzahl = 0;
@@ -245,7 +247,12 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
                     "Datum", "Inhalt", "Start", "Ende", "Preis", this.zusatz1_name, this.zusatz2_name, "Preisänderung", "Eingereicht", "Bezahlt"
                 }
         ){
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1913170267962749520L;
+
+			@Override
             public Class getColumnClass(int columnIndex) {
                 return String.class;
             }
@@ -419,7 +426,11 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
                 "Datum", "Inhalt", "Start", "Ende", "Preis", "Zusatz1", "Zusatz2", "Preisänderung", "Eingereicht", "Bezahlt"
             }
         ) {
-            Class[] types = new Class [] {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 516135999448412054L;
+			Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
