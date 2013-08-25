@@ -4,34 +4,41 @@
  *
  * Created on 14.05.2009, 23:13:56
  */
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.panels;
 
 /**
  *
  * @author markus
  */
-import ArbeitsstundeModel.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
-import java.util.*;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Vector;
+
+import javax.swing.JOptionPane;
+
+import org.jdesktop.beansbinding.AutoBinding;
+
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.mySqlDate;
+import arbeitsrechnungen.data.Arbeitsstunde;
+import arbeitsrechnungen.data.ArbeitsstundeImpl;
 import arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import arbeitsrechnungen.gui.dialogs.RechnungDialog;
 import arbeitsrechnungen.gui.jframes.Einheit_einzel;
-
-import java.awt.event.*;
-import javax.swing.*;
-
-import org.jdesktop.beansbinding.AutoBinding;
 //import java.io.*;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
 // import java.lang.System.*;
 
 public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowListener{
 
 	private static final long serialVersionUID = 8161115991876323549L;
-	private Vector<ArbeitsstundeImpl> Arbeitsstunden;
+	private Vector<Arbeitsstunde> Arbeitsstunden;
     java.util.Properties optionen = new java.util.Properties();
     private javax.swing.JFrame parent = null;
     private int anzahl = 0;
@@ -45,10 +52,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
     private javax.swing.table.TableColumn spalte5;
     private javax.swing.table.TableColumn spalte6;
     private Integer[] geloeschte_spalten = new Integer[2];
-//    private javax.​swing.​table.​TableColumnModel spalte5;
-//    private javax.​swing.​table.​TableColumnModel spalte6;
-    private String outputfile_pdf;
-//    private WindowListener fensterlistener;
+
     private String filter = "(ISNULL(Bezahlt) OR ISNULL(Rechnung_verschickt))";
     public static final String TEXUMBRUCH = "\\\\\\\\";
     public static final String TEXLINE = "\\\\hline";
@@ -135,7 +139,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
         System.out.println("readList: " + sqltext);
         ResultSet daten = verbindung.query(sqltext);
 
-        Arbeitsstunden = new Vector<ArbeitsstundeModel.ArbeitsstundeImpl>();
+        Arbeitsstunden = new Vector<arbeitsrechnungen.data.Arbeitsstunde>();
         try {
             while (daten.next()) {
                 if( (daten.getBoolean("preis_pro_stunde")) && (stundenzahl==null) ){
@@ -271,7 +275,8 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
 
         for (int i=0; i<Arbeitsstunden.size();i++){
             try{
-                Vector<Object> daten = this.Arbeitsstunden.elementAt(i).toVector();
+            	Arbeitsstunde elementAt = this.Arbeitsstunden.elementAt(i);
+                Vector<Object> daten = elementAt.toVector();
                 daten.removeElementAt(0);
                 daten.removeElementAt(0);
                 daten.removeElementAt(0);
@@ -368,7 +373,8 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
         jPopupMenu1.setInvoker(jTable1);
         jPopupMenu1.setName("jPopupMenu1"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(ArbeitsstundenTabelle.class);
+        ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
+        
         jMenuItembearbeiten.setText(resourceMap.getString("jMenuItembearbeiten.text")); // NOI18N
         jMenuItembearbeiten.setFocusPainted(true);
         jMenuItembearbeiten.setName("jMenuItembearbeiten"); // NOI18N
@@ -841,203 +847,203 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
-	private String rechnungStart(){
-        String inputfile = "/home/markus/programming/NetBeansProjects/Arbeitsrechnungen/Tex-Vorlagen/Rechnung_Allgemein.tex";
-        String auftraggeber="";
+//	private String rechnungStart(){
+//        String inputfile = "/home/markus/programming/NetBeansProjects/Arbeitsrechnungen/Tex-Vorlagen/Rechnung_Allgemein.tex";
+//        String auftraggeber="";
+//
+//        //Adresse festlegen und in 'adresse' speichern
+//        String adresse = "";
+//        Verbindung verbindung = new Verbindung(optionen.getProperty("sqlserver"), optionen.getProperty("datenbank") ,
+//                optionen.getProperty("user"), optionen.getProperty("password"));
+//        String sqltext = "SELECT * FROM klienten WHERE  klienten_id=" + this.klient + ";";
+//        System.out.println("ArbeitsstundenTabelle::rechnungStart: " + sqltext);
+//        ResultSet angebote = verbindung.query(sqltext);
+//        try{
+//            angebote.first();
+//            System.out.println(angebote.getString("Auftraggeber"));
+//            System.out.println(angebote.getString("AAdresse1"));
+//            System.out.println(angebote.getString("APLZ"));
+//            System.out.println(angebote.getString("AOrt"));
+//            auftraggeber = angebote.getString("Auftraggeber");
+//            adresse = angebote.getString("Auftraggeber");
+//            adresse = adresse + TEXUMBRUCH + angebote.getString("AAdresse1");
+//            if(angebote.getString("AAdresse2").length()>2) {
+//                adresse = adresse + TEXUMBRUCH + angebote.getString("AAdresse2");
+//            }
+//            adresse = adresse + TEXUMBRUCH + angebote.getString("APLZ") + " " + angebote.getString("AOrt");
+//
+//            try{
+//                    if(!angebote.getString("tex_datei").isEmpty()) {
+//                    inputfile = angebote.getString("tex_datei");
+//                }
+//            }catch (Exception e){
+//                System.err.println("tex-datei ist NULL");
+//            }
+//        }catch (Exception e){
+//            System.err.println("Angebote-Exeption");
+//            //e.printStackTrace();
+//        }
+//
+//System.err.println("Inputfile: " + inputfile);
+//
+//        // Tex-Datei öffnen und in String 'latex' speichern
+//        java.io.FileReader latexdatei;
+//        String latex = "";
+//        try{
+//            latexdatei = new java.io.FileReader(inputfile);
+//            int c;
+//            try{
+//                while ((c = latexdatei.read()) != -1) {
+////                    System.out.print((char)c);
+//                    latex = latex.concat(java.lang.String.valueOf((char)c));
+//                }
+//                latexdatei.close();
+//            }catch (java.io.IOException e){
+//                System.err.println("Tex-Datei auslesen und in Variable \"latex\" speichern.");
+//                e.printStackTrace();
+//            }
+//        }catch(java.io.FileNotFoundException e){
+//            e.printStackTrace();
+//            System.err.println("Tex-Datei öffnen und in String 'latex' speichern");
+//        }
+//        java.text.DateFormat df;
+//        df = java.text.DateFormat.getDateInstance(java.text.DateFormat.DATE_FIELD, Locale.US);
+//        String datum = df.format(new java.util.GregorianCalendar().getTime());
+//        datum = datum.replace("/", "-");
+//        datum = datum.replace(" ", "_");
+//
+//        if (this.klient==1){
+//            latex = this.rechnungFeuerwehr(latex, adresse);
+//            outputfile_pdf = outputfile_pdf + "Feuerwehr_" + datum + ".pdf";
+//        }else{
+//            latex = this.rechnungAllgemein(latex, adresse);
+//            outputfile_pdf = outputfile_pdf + auftraggeber.replace(" ", "_").replace("/", "-") + "_" + datum + ".pdf";
+//        }
+//        return latex;
+//    }
 
-        //Adresse festlegen und in 'adresse' speichern
-        String adresse = "";
-        Verbindung verbindung = new Verbindung(optionen.getProperty("sqlserver"), optionen.getProperty("datenbank") ,
-                optionen.getProperty("user"), optionen.getProperty("password"));
-        String sqltext = "SELECT * FROM klienten WHERE  klienten_id=" + this.klient + ";";
-        System.out.println("ArbeitsstundenTabelle::rechnungStart: " + sqltext);
-        ResultSet angebote = verbindung.query(sqltext);
-        try{
-            angebote.first();
-            System.out.println(angebote.getString("Auftraggeber"));
-            System.out.println(angebote.getString("AAdresse1"));
-            System.out.println(angebote.getString("APLZ"));
-            System.out.println(angebote.getString("AOrt"));
-            auftraggeber = angebote.getString("Auftraggeber");
-            adresse = angebote.getString("Auftraggeber");
-            adresse = adresse + TEXUMBRUCH + angebote.getString("AAdresse1");
-            if(angebote.getString("AAdresse2").length()>2) {
-                adresse = adresse + TEXUMBRUCH + angebote.getString("AAdresse2");
-            }
-            adresse = adresse + TEXUMBRUCH + angebote.getString("APLZ") + " " + angebote.getString("AOrt");
-
-            try{
-                    if(!angebote.getString("tex_datei").isEmpty()) {
-                    inputfile = angebote.getString("tex_datei");
-                }
-            }catch (Exception e){
-                System.err.println("tex-datei ist NULL");
-            }
-        }catch (Exception e){
-            System.err.println("Angebote-Exeption");
-            //e.printStackTrace();
-        }
-
-System.err.println("Inputfile: " + inputfile);
-
-        // Tex-Datei öffnen und in String 'latex' speichern
-        java.io.FileReader latexdatei;
-        String latex = "";
-        try{
-            latexdatei = new java.io.FileReader(inputfile);
-            int c;
-            try{
-                while ((c = latexdatei.read()) != -1) {
-//                    System.out.print((char)c);
-                    latex = latex.concat(java.lang.String.valueOf((char)c));
-                }
-                latexdatei.close();
-            }catch (java.io.IOException e){
-                System.err.println("Tex-Datei auslesen und in Variable \"latex\" speichern.");
-                e.printStackTrace();
-            }
-        }catch(java.io.FileNotFoundException e){
-            e.printStackTrace();
-            System.err.println("Tex-Datei öffnen und in String 'latex' speichern");
-        }
-        java.text.DateFormat df;
-        df = java.text.DateFormat.getDateInstance(java.text.DateFormat.DATE_FIELD, Locale.US);
-        String datum = df.format(new java.util.GregorianCalendar().getTime());
-        datum = datum.replace("/", "-");
-        datum = datum.replace(" ", "_");
-
-        if (this.klient==1){
-            latex = this.rechnungFeuerwehr(latex, adresse);
-            outputfile_pdf = outputfile_pdf + "Feuerwehr_" + datum + ".pdf";
-        }else{
-            latex = this.rechnungAllgemein(latex, adresse);
-            outputfile_pdf = outputfile_pdf + auftraggeber.replace(" ", "_").replace("/", "-") + "_" + datum + ".pdf";
-        }
-        return latex;
-    }
-
-    private String rechnungFeuerwehr(String latex, String adresse){
-
-        // Tabellenkopf
-        String tabelle =
-                "\\\\begin{tabular}{|l|l|l|l|l|}\n" +
-                TEXLINE + " Datum/ Tag & Wache/ Abteilung & Teilnehmer & Ausgefallen & Betrag ";
-        // Daten in Tabelle schreiben und Summe sammeln
-        double rechnung_summe = 0;
-
-        String zeilenumbruch = TEXUMBRUCH + TEXLINE + "\n "; //"\\\\\\\\\\\\hline\n ";
-        for (int i = 0; i<Arbeitsstunden.size(); i++){
-            if (i==0){
-                zeilenumbruch = "\\\\\\\\\\\\hline\\\\hline\n ";
-            }else {
-                zeilenumbruch = "\\\\\\\\\\\\hline\n ";
-            }
-            tabelle = tabelle + zeilenumbruch +
-                    Arbeitsstunden.elementAt(i).getDatum() + " & " +
-                    Arbeitsstunden.elementAt(i).getZusatz1() + " & ";
-            try{
-                Integer.parseInt(Arbeitsstunden.elementAt(i).getZusatz2());
-                tabelle = tabelle + Arbeitsstunden.elementAt(i).getZusatz2() + " &  & ";
-            }catch (NumberFormatException e){
-                tabelle = tabelle + " & Ja & ";
-            }
-            // tabelle = tabelle + Arbeitsstunden.elementAt(i).getZusatz2() + " &  & ";
-            tabelle = tabelle + (Arbeitsstunden.elementAt(i).getPreis() ) +" \\\\officialeuro";
-            rechnung_summe = rechnung_summe + Arbeitsstunden.elementAt(i).getPreis(); //+ Arbeitsstunden.elementAt(i).getPreisAenderung()
-        }
-
-        // Zeile mit Summe hinzufügen
-        tabelle = tabelle + TEXUMBRUCH + TEXLINE + TEXLINE + "\n\\\\textbf{Summe} & & & & " + rechnung_summe + " " + TEXEURO;
-        // Tabellenfuß
-        tabelle = tabelle + TEXUMBRUCH + TEXLINE + "\n\\\\end{tabular}\n";
-        java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        String betreff = " " + cal.get(Calendar.DAY_OF_WEEK) + "." + cal.get(Calendar.YEAR);
-        // Text in latex ersetzen
-        // JOptionPane.showMessageDialog(this, latex);
-        adresse = "-";
-        System.out.println("Adresse: "+ adresse);
-        latex = latex.replaceAll("%%Betreff%%\n", betreff);
-        latex = latex.replaceAll("%%Adresse%%\n", adresse);
-        latex = latex.replaceAll("%%Anrede%%\n", "-");
-        latex = latex.replaceAll("%%Text%%\n",
-                "Rechnungstext:" + TEXUMBRUCH +
-//                "\\\\\\\\\n------tab------------\\\\\\\\\n" +
-                tabelle +
-  //              "\\\\\\\\\n------tab------------\\\\\\\\\n" +
-                TEXUMBRUCH + "[.5cm]Ich erlaube mir für " + Arbeitsstunden.size() + " Stunden insgesamt " + rechnung_summe + " " + TEXEURO + " zu berechnen. " +
-                "Bitte überweisen Sie die Summe auf das unten angegebene Konto."
-                );
-        latex = latex.replaceAll("%%Closing%%\n", "Mit freundlichen Grüßen");
-        latex = latex.replaceAll("\n}", "}");
-        return latex;
-    }
-
-    private String rechnungAllgemein(String latex, String adresse){
-        double summe_rechnung = 0;
-        String tabelle;
-
-// Tabellenkopf
-        if(Arbeitsstunden.elementAt(0).getDauer()==0){
-            tabelle =
-                "\\\\begin{tabular}{|l|l|}\n" +
-                TEXLINE + " Datum & Betrag ";
-        }else{
-            tabelle =
-                "\\\\begin{tabular}{|l|l|l|l|}\n" +
-                TEXLINE + " Datum & Tätigkeit & Dauer & Betrag ";
-        }
-// Daten in Tabelle schreiben
-        for (int i = 0; i<Arbeitsstunden.size(); i++){
-            String zeilenumbruch = "\\\\\\\\\\\\hline\n ";
-            if (i==0){
-                zeilenumbruch = "\\\\\\\\\\\\hline\\\\hline\n ";
-            }
-            if(Arbeitsstunden.elementAt(0).getDauer()==0){
-                tabelle = tabelle + zeilenumbruch +
-                        DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN).format(
-                    Arbeitsstunden.elementAt(i).getDatum()) + " & ";
-                tabelle = tabelle + (Arbeitsstunden.elementAt(i).getPreis()) +" \\\\officialeuro";
-            }else{
-                tabelle = tabelle + zeilenumbruch +
-                        DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN).format(
-                    Arbeitsstunden.elementAt(i).getDatum()) + " & ";
-                tabelle = tabelle + Arbeitsstunden.elementAt(i).getInhalt() + " & ";
-                tabelle = tabelle + Arbeitsstunden.elementAt(i).getDauer()/60 + " Std. & ";
-                tabelle = tabelle + (Arbeitsstunden.elementAt(i).getPreis()) +" \\\\officialeuro";
-            }
-            summe_rechnung = summe_rechnung + Arbeitsstunden.elementAt(i).getPreis(); // + Arbeitsstunden.elementAt(i).getPreisAenderung()
-        }
-
-// Tabellenfuß
-        tabelle = tabelle + "\\\\\\\\\\\\hline\n\\\\end{tabular}\n";
-
-        java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        String betreff = "Rechnung " + cal.get(Calendar.DAY_OF_WEEK) + "." + cal.get(Calendar.YEAR);
-
-// Text in latex ersetzen
-        System.out.println("Adresse: "+ adresse);
-        latex = latex.replaceAll("%%Betreff%%\n", betreff);
-        latex = latex.replaceAll("%%Adresse%%\n", adresse);
-        latex = latex.replaceAll("%%Anrede%%\n", "Sehr geehrte Damen und Herren");
-        latex = latex.replaceAll("%%Text%%\n",
-                "für die folgenden Leistungen erlaube ich mir " + summe_rechnung + " " + TEXEURO + 
-                "\\\\ zu berechnen.\\\\\\\\" + TEXUMBRUCH +
-//                "\\\\\\\\\n------tab------------\\\\\\\\\n" +
-                tabelle +
-  //              "\\\\\\\\\n------tab------------\\\\\\\\\n" +
-                "\nBitte überweisen Sie dem genannten Betrag auf dieses Konto:" + TEXUMBRUCH + TEXUMBRUCH +
-                "\n\\\\begin{tabular}[c]{ll}" +
-                "\nBank: & SK Hannover" + TEXUMBRUCH +
-                "\nBLZ: & 25050180" + TEXUMBRUCH +
-                "\nKonto: & 37793160" +
-                "\n\\\\end{tabular}" + "\n"
-                );
-        latex = latex.replaceAll("%%Closing%%\n", "Mit freundlichen Grüßen");
-        latex = latex.replaceAll("\n}", "}");
-        return latex;
-    }
+//    private String rechnungFeuerwehr(String latex, String adresse){
+//
+//        // Tabellenkopf
+//        String tabelle =
+//                "\\\\begin{tabular}{|l|l|l|l|l|}\n" +
+//                TEXLINE + " Datum/ Tag & Wache/ Abteilung & Teilnehmer & Ausgefallen & Betrag ";
+//        // Daten in Tabelle schreiben und Summe sammeln
+//        double rechnung_summe = 0;
+//
+//        String zeilenumbruch = TEXUMBRUCH + TEXLINE + "\n "; //"\\\\\\\\\\\\hline\n ";
+//        for (int i = 0; i<Arbeitsstunden.size(); i++){
+//            if (i==0){
+//                zeilenumbruch = "\\\\\\\\\\\\hline\\\\hline\n ";
+//            }else {
+//                zeilenumbruch = "\\\\\\\\\\\\hline\n ";
+//            }
+//            tabelle = tabelle + zeilenumbruch +
+//                    Arbeitsstunden.elementAt(i).getDatum() + " & " +
+//                    Arbeitsstunden.elementAt(i).getZusatz1() + " & ";
+//            try{
+//                Integer.parseInt(Arbeitsstunden.elementAt(i).getZusatz2());
+//                tabelle = tabelle + Arbeitsstunden.elementAt(i).getZusatz2() + " &  & ";
+//            }catch (NumberFormatException e){
+//                tabelle = tabelle + " & Ja & ";
+//            }
+//            // tabelle = tabelle + Arbeitsstunden.elementAt(i).getZusatz2() + " &  & ";
+//            tabelle = tabelle + (Arbeitsstunden.elementAt(i).getPreis() ) +" \\\\officialeuro";
+//            rechnung_summe = rechnung_summe + Arbeitsstunden.elementAt(i).getPreis(); //+ Arbeitsstunden.elementAt(i).getPreisAenderung()
+//        }
+//
+//        // Zeile mit Summe hinzufügen
+//        tabelle = tabelle + TEXUMBRUCH + TEXLINE + TEXLINE + "\n\\\\textbf{Summe} & & & & " + rechnung_summe + " " + TEXEURO;
+//        // Tabellenfuß
+//        tabelle = tabelle + TEXUMBRUCH + TEXLINE + "\n\\\\end{tabular}\n";
+//        java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+//        cal.setTimeInMillis(System.currentTimeMillis());
+//        String betreff = " " + cal.get(Calendar.DAY_OF_WEEK) + "." + cal.get(Calendar.YEAR);
+//        // Text in latex ersetzen
+//        // JOptionPane.showMessageDialog(this, latex);
+//        adresse = "-";
+//        System.out.println("Adresse: "+ adresse);
+//        latex = latex.replaceAll("%%Betreff%%\n", betreff);
+//        latex = latex.replaceAll("%%Adresse%%\n", adresse);
+//        latex = latex.replaceAll("%%Anrede%%\n", "-");
+//        latex = latex.replaceAll("%%Text%%\n",
+//                "Rechnungstext:" + TEXUMBRUCH +
+////                "\\\\\\\\\n------tab------------\\\\\\\\\n" +
+//                tabelle +
+//  //              "\\\\\\\\\n------tab------------\\\\\\\\\n" +
+//                TEXUMBRUCH + "[.5cm]Ich erlaube mir für " + Arbeitsstunden.size() + " Stunden insgesamt " + rechnung_summe + " " + TEXEURO + " zu berechnen. " +
+//                "Bitte überweisen Sie die Summe auf das unten angegebene Konto."
+//                );
+//        latex = latex.replaceAll("%%Closing%%\n", "Mit freundlichen Grüßen");
+//        latex = latex.replaceAll("\n}", "}");
+//        return latex;
+//    }
+//
+//    private String rechnungAllgemein(String latex, String adresse){
+//        double summe_rechnung = 0;
+//        String tabelle;
+//
+//// Tabellenkopf
+//        if(Arbeitsstunden.elementAt(0).getDauer()==0){
+//            tabelle =
+//                "\\\\begin{tabular}{|l|l|}\n" +
+//                TEXLINE + " Datum & Betrag ";
+//        }else{
+//            tabelle =
+//                "\\\\begin{tabular}{|l|l|l|l|}\n" +
+//                TEXLINE + " Datum & Tätigkeit & Dauer & Betrag ";
+//        }
+//// Daten in Tabelle schreiben
+//        for (int i = 0; i<Arbeitsstunden.size(); i++){
+//            String zeilenumbruch = "\\\\\\\\\\\\hline\n ";
+//            if (i==0){
+//                zeilenumbruch = "\\\\\\\\\\\\hline\\\\hline\n ";
+//            }
+//            if(Arbeitsstunden.elementAt(0).getDauer()==0){
+//                tabelle = tabelle + zeilenumbruch +
+//                        DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN).format(
+//                    Arbeitsstunden.elementAt(i).getDatum()) + " & ";
+//                tabelle = tabelle + (Arbeitsstunden.elementAt(i).getPreis()) +" \\\\officialeuro";
+//            }else{
+//                tabelle = tabelle + zeilenumbruch +
+//                        DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN).format(
+//                    Arbeitsstunden.elementAt(i).getDatum()) + " & ";
+//                tabelle = tabelle + Arbeitsstunden.elementAt(i).getInhalt() + " & ";
+//                tabelle = tabelle + Arbeitsstunden.elementAt(i).getDauer()/60 + " Std. & ";
+//                tabelle = tabelle + (Arbeitsstunden.elementAt(i).getPreis()) +" \\\\officialeuro";
+//            }
+//            summe_rechnung = summe_rechnung + Arbeitsstunden.elementAt(i).getPreis(); // + Arbeitsstunden.elementAt(i).getPreisAenderung()
+//        }
+//
+//// Tabellenfuß
+//        tabelle = tabelle + "\\\\\\\\\\\\hline\n\\\\end{tabular}\n";
+//
+//        java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+//        cal.setTimeInMillis(System.currentTimeMillis());
+//        String betreff = "Rechnung " + cal.get(Calendar.DAY_OF_WEEK) + "." + cal.get(Calendar.YEAR);
+//
+//// Text in latex ersetzen
+//        System.out.println("Adresse: "+ adresse);
+//        latex = latex.replaceAll("%%Betreff%%\n", betreff);
+//        latex = latex.replaceAll("%%Adresse%%\n", adresse);
+//        latex = latex.replaceAll("%%Anrede%%\n", "Sehr geehrte Damen und Herren");
+//        latex = latex.replaceAll("%%Text%%\n",
+//                "für die folgenden Leistungen erlaube ich mir " + summe_rechnung + " " + TEXEURO + 
+//                "\\\\ zu berechnen.\\\\\\\\" + TEXUMBRUCH +
+////                "\\\\\\\\\n------tab------------\\\\\\\\\n" +
+//                tabelle +
+//  //              "\\\\\\\\\n------tab------------\\\\\\\\\n" +
+//                "\nBitte überweisen Sie dem genannten Betrag auf dieses Konto:" + TEXUMBRUCH + TEXUMBRUCH +
+//                "\n\\\\begin{tabular}[c]{ll}" +
+//                "\nBank: & SK Hannover" + TEXUMBRUCH +
+//                "\nBLZ: & 25050180" + TEXUMBRUCH +
+//                "\nKonto: & 37793160" +
+//                "\n\\\\end{tabular}" + "\n"
+//                );
+//        latex = latex.replaceAll("%%Closing%%\n", "Mit freundlichen Grüßen");
+//        latex = latex.replaceAll("\n}", "}");
+//        return latex;
+//    }
 
     private void jButtonRechnungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRechnungActionPerformed
         boolean isAnySubmitted = false;

@@ -11,24 +11,26 @@ package arbeitsrechnungen.gui.dialogs;
  *
  * @author markus
  */
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.event.DocumentListener;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding;
 
-import ArbeitsstundeModel.ArbeitsstundeImpl;
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsrechnungen.RechnungData;
+import arbeitsrechnungen.data.ArbeitsstundeImpl;
 
 public class RechnungDialog extends javax.swing.JDialog implements PropertyChangeListener,DocumentListener{
 
@@ -577,7 +579,9 @@ logger.debug("rechnungsnr: " + rechnungsnr);
         jButtonErstellen = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(RechnungDialog.class);
+        
+        ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
+        
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setMinimumSize(new java.awt.Dimension(446, 322));
         setModal(true);
@@ -794,20 +798,20 @@ logger.debug("rechnungsnr: " + rechnungsnr);
         jDateZahlDatum.setMinimumSize(new java.awt.Dimension(15, 19));
         jDateZahlDatum.setName("zahlungsdatum"); // NOI18N
         jDateZahlDatum.setPreferredSize(new java.awt.Dimension(130, 19));
-
-        jToggleButtonDetails.setIcon(resourceMap.getIcon("jToggleDetails.icon")); // NOI18N
+        
+        jToggleButtonDetails.setIcon(getIcon(resourceMap.getString("jToggleDetails.icon"))); // NOI18N
         jToggleButtonDetails.setSelected(true);
         jToggleButtonDetails.setText(resourceMap.getString("jToggleDetails.text")); // NOI18N
         jToggleButtonDetails.setToolTipText(resourceMap.getString("jToggleDetails.toolTipText")); // NOI18N
-        jToggleButtonDetails.setDisabledIcon(resourceMap.getIcon("jToggleDetails.disabledIcon")); // NOI18N
+        jToggleButtonDetails.setDisabledIcon(getIcon(resourceMap.getString("jToggleDetails.disabledIcon"))); // NOI18N
         jToggleButtonDetails.setName("jToggleDetails"); // NOI18N
-        jToggleButtonDetails.setSelectedIcon(resourceMap.getIcon("jToggleDetails.selectedIcon")); // NOI18N
+        jToggleButtonDetails.setSelectedIcon(getIcon(resourceMap.getString("jToggleDetails.selectedIcon"))); // NOI18N
         jToggleButtonDetails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonDetailsActionPerformed(evt);
             }
         });
-
+                
         jCheckBoxZusatz1.setSelected(true);
         jCheckBoxZusatz1.setText(resourceMap.getString("jCheckBoxZusatz1.text")); // NOI18N
         jCheckBoxZusatz1.setName("jCheckBoxZusatz1"); // NOI18N
@@ -964,7 +968,12 @@ logger.debug("rechnungsnr: " + rechnungsnr);
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jToggleButtonDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonDetailsActionPerformed
+    private Icon getIcon(String fileName) {
+    	fileName = "icons/" + fileName;
+    	return new ImageIcon(fileName);
+	}
+    
+	private void jToggleButtonDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonDetailsActionPerformed
         toggleDetails();
     }//GEN-LAST:event_jToggleButtonDetailsActionPerformed
 
@@ -1023,7 +1032,7 @@ logger.debug("rechnungsnr: " + rechnungsnr);
         if(!this.zusatz2 || !this.jCheckBoxZusatz2.isSelected()) z2 = null;
 
         // Nur arbetisstunden übernehmen, die auch gewält sind.
-        java.util.Vector<ArbeitsstundeModel.ArbeitsstundeImpl> tmp_einheiten = new java.util.Vector<ArbeitsstundeModel.ArbeitsstundeImpl>();
+        java.util.Vector<arbeitsrechnungen.data.ArbeitsstundeImpl> tmp_einheiten = new java.util.Vector<arbeitsrechnungen.data.ArbeitsstundeImpl>();
         for (int i = 0; i< einheiten.size() ; i++){
             java.lang.Boolean tmp_bool = (java.lang.Boolean)jTable1.getValueAt(i, 0);
             if (tmp_bool.booleanValue())

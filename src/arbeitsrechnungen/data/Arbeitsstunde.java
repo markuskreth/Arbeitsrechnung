@@ -1,9 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-package ArbeitsstundeModel;
+package arbeitsrechnungen.data;
 
 /**
  *
@@ -73,7 +69,7 @@ public interface Arbeitsstunde extends Serializable
 
     public void setBezahltDatum(java.util.Date datum);
 
-    public Vector toVector();
+    public Vector<Object> toVector();
 
     public double getDauer();
 
@@ -82,6 +78,7 @@ public interface Arbeitsstunde extends Serializable
     public void addPropertyChangeListener(PropertyChangeListener listener);
 
     public void removePropertyChangeListener(PropertyChangeListener listener);
+	public String getInhalt();
 
     public static final String PROP_KLIENTENID = "klientenid";
     public static final String PROP_ANGEBOTEID = "angeboteid";

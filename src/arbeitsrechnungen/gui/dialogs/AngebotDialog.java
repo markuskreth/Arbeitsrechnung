@@ -15,9 +15,11 @@ package arbeitsrechnungen.gui.dialogs;
  *
  * @author markus
  */
+import java.awt.Font;
 import java.sql.ResultSet;
+import java.util.ResourceBundle;
+
 import arbeitsabrechnungendataclass.Verbindung;
-import arbeitsrechnungen.ArbeitsrechnungenApp;
 
 
 public class AngebotDialog extends javax.swing.JDialog {
@@ -115,8 +117,9 @@ public class AngebotDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Form"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(AngebotDialog.class);
-        jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
+        ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
+        
+        jLabel1.setFont(Font.getFont(resourceMap.getString("jLabel1.font"))); // NOI18N
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 

@@ -16,19 +16,20 @@ package arbeitsrechnungen.gui.jframes;
  * @author markus
  */
 
+import java.awt.Font;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.util.GregorianCalendar;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
 import arbeitsabrechnungendataclass.Verbindung;
-//import javax.swing.JOptionPane;
-import arbeitsrechnungen.ArbeitsrechnungenApp;
 import arbeitsrechnungen.mySqlDate;
+//import javax.swing.JOptionPane;
 
 public class Einheit_einzel extends javax.swing.JFrame {
 
@@ -398,11 +399,13 @@ public class Einheit_einzel extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(Einheit_einzel.class);
+
+        ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
+        
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
 
-        jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
+        jLabel1.setFont(Font.getFont(resourceMap.getString("jLabel1.font"))); // NOI18N
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 

@@ -1,5 +1,5 @@
 
-package DatenKlassen;
+package arbeitsrechnungen.data;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
  *
  * @author markus
  */
-public class ClassRechnungen {
+public class Rechnung {
 
     protected double betrag;
     private int rechnungen_id;
@@ -39,7 +39,7 @@ public class ClassRechnungen {
     public static final String PROP_ADRESSE = "adresse";
     public static final String PROP_GELDEINGANG = "geldeingang";
 
-    public ClassRechnungen(int rechnungen_id) {
+    public Rechnung(int rechnungen_id) {
         this.rechnungen_id = rechnungen_id;
     }
 

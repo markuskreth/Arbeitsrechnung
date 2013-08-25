@@ -1,11 +1,11 @@
 
-package DatenKlassen;
+package arbeitsrechnungen.data;
 
 /**
  *
  * @author markus
  */
-public class ClassKlient {
+public class Klient {
     protected String Kunde;
     protected String AEmail;
     protected String ATelefon;

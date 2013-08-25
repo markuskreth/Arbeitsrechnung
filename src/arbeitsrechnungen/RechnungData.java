@@ -12,18 +12,23 @@ import java.util.*;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.data.ArbeitsstundeImpl;
+
 import java.io.*;
 import org.apache.log4j.Level;
 
 public class RechnungData {
-    private static Logger logger = Logger.getLogger("arbeitsrechnungen.RechnungData");
+    
+	private Logger logger = Logger.getLogger("arbeitsrechnungen.RechnungData");
+    
     protected static final String TEXUMBRUCH = "\\\\\\\\";
     protected static final String TEXLINE = "\\\\hline ";
     protected static final String TEXEURO = "\\\\officialeuro\\\\ ";
     public static final int TEXERROR = 103;
-	private static final String[] MONATE = {"Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"};
-	private boolean std_ersetzung = true;
-    String adresse;
+	
+    private boolean std_ersetzung = true;
+	private String adresse;
+    
     /**
      * Name der Tex-Vorlage
      */
@@ -102,7 +107,6 @@ public class RechnungData {
         this.rechnung_id = rechnung_id;
     }
 
-
     /**
      * Get the value of neu
      *
@@ -115,26 +119,12 @@ public class RechnungData {
     /**
      * Konstruktor
      */
-    public void RechnungData(){
+    public RechnungData(){
 	logger.setLevel(Level.DEBUG);
 logger.debug("Konstruktor RechnungenData wurde ausgeführt! Sonst nicht - wieso... bitte forschen");
         this.summe = 0.0;
-        this.optionen = getEinstellungen();
-    }
-
-    private Properties getEinstellungen(){
-        java.util.Properties sysprops = System.getProperties();
-        java.util.Properties opt = new java.util.Properties();
-        java.io.File optionfile  = new java.io.File(sysprops.getProperty("user.home") + sysprops.getProperty("file.separator") + ".arbeitrechnungen"
-                + sysprops.getProperty("file.separator") + "optionen.ini");
-        try{
-            opt.load(new java.io.FileInputStream(optionfile));
-//logger.debug("testopt: " + opt.getProperty("sqlserver"));
-            return opt;
-        }catch(Exception e){
-            System.err.println("ArbeitsstundenTabelle.java: Options-Datei konnte nicht geladen werden.");
-            return null;
-        }
+        
+        this.optionen = new Einstellungen().getEinstellungen();
     }
 
     /**
@@ -233,7 +223,7 @@ logger.debug("Stundenübernahme: " + stunden);
         DateFormat df = DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN);
         DecimalFormat zf = new DecimalFormat("0.00");
         // Verzeichnisse und Dateien festlegen
-        optionen = getEinstellungen();
+        optionen = new Einstellungen().getEinstellungen();
         int ergebnis =0;
 
         String outputfile_tex = optionen.getProperty("arbeitsverzeichnis");
@@ -280,7 +270,7 @@ logger.debug("Stundenübernahme: " + stunden);
 			ersetzung = "\"Monat\"";
 			java.util.GregorianCalendar einheit_dat = new java.util.GregorianCalendar();
 			einheit_dat.setTime(this.einheiten.elementAt(0).getDatum());
-			String new_monat = this.MONATE[einheit_dat.get(java.util.GregorianCalendar.MONTH)] + " " + einheit_dat.get(java.util.GregorianCalendar.YEAR);
+			String new_monat = einheit_dat.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMANY) + " " + einheit_dat.get(java.util.GregorianCalendar.YEAR);
 
 			logger.debug(ersetzung);
 			latexcode = latexcode.replaceAll(ersetzung,  new_monat);
@@ -303,8 +293,7 @@ logger.debug("Stundenübernahme: " + stunden);
 
         //pdflatex ausführen
         java.lang.Process proc;
-		java.io.BufferedInputStream proc_stream;
-// TODO Ausgabe von pdflatex abfangen!
+
         try {
             String command = "pdflatex -halt-on-error -output-directory " + optionen.getProperty("arbeitsverzeichnis") + " " + outputfile_tex;
             logger.debug("pdflatex wird ausgeführt: ");
@@ -312,8 +301,7 @@ logger.debug("Stundenübernahme: " + stunden);
 
             proc = Runtime.getRuntime().exec(command);
 
-			proc_stream = new java.io.BufferedInputStream(proc.getInputStream());
-            try{
+			try{
                 proc.waitFor();
                 this.latexergebnis =  proc.exitValue();
                 logger.debug("pdf Exit-Value: " + this.latexergebnis);
@@ -430,7 +418,7 @@ logger.debug("Stundenübernahme: " + stunden);
 				if (this.zusatz1_name.matches("Teilnehmerzahl"))
 					zeile = zeile.replaceAll("\"Teilnehmerzahl\"", einheiten.elementAt(i).getZusatz1());
 				zeile = zeile.replaceAll("\"Dauer\"", ((Double)(einheiten.elementAt(i).getDauer()/60.)).toString() );
-				// TODO Zugriff auf Datenbank-Zeiten...
+				
 				String zeiten = "17.00 - 19.00";
 				GregorianCalendar kalender = new GregorianCalendar();
 				kalender.setTime(einheiten.elementAt(i).getBeginn());
@@ -460,7 +448,6 @@ logger.debug("Stundenübernahme: " + stunden);
 
 			this.latexcode = this.latexcode.replaceAll(regexp, "%%tabelle%%");
 logger.debug("Tabllencode:: " + tabelle);
-			// TODO Einzelne Felder ersetzten pro Tag
 		}
         return tabelle;
     }

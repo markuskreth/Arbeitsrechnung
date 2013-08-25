@@ -16,14 +16,19 @@ package arbeitsrechnungen.gui.jframes;
  * @author markus
  */
 
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -369,9 +374,8 @@ public class StartFenster extends javax.swing.JFrame implements
 		jMenuHilfe = new javax.swing.JMenu();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application
-				.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class)
-				.getContext().getResourceMap(StartFenster.class);
+		
+		ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
 		setTitle(resourceMap.getString("Form.title")); // NOI18N
 		setName("Form"); // NOI18N
 
@@ -387,17 +391,14 @@ public class StartFenster extends javax.swing.JFrame implements
 						jButtonKlientenEditorActionPerformed(evt);
 					}
 				});
-
-		javax.swing.ActionMap actionMap = org.jdesktop.application.Application
-				.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class)
-				.getContext().getActionMap(StartFenster.class, this);
-		jButtonBeenden.setAction(actionMap.get("quit")); // NOI18N
+		
 		jButtonBeenden.setText(resourceMap.getString("jButtonBeenden.text")); // NOI18N
 		jButtonBeenden.setMaximumSize(new java.awt.Dimension(500, 25));
 		jButtonBeenden.setMinimumSize(new java.awt.Dimension(120, 25));
 		jButtonBeenden.setName("jButtonBeenden"); // NOI18N
 		jButtonBeenden.setPreferredSize(new java.awt.Dimension(151, 25));
-
+		jButtonBeenden.setAction(quitAction);
+		
 		jButtonArtenEinheiten.setText(resourceMap
 				.getString("jButtonArtenEinheiten.text")); // NOI18N
 		jButtonArtenEinheiten.setMaximumSize(new java.awt.Dimension(500, 25));
@@ -426,7 +427,7 @@ public class StartFenster extends javax.swing.JFrame implements
 				javax.swing.border.BevelBorder.RAISED));
 		jPanel1.setName("jPanel1"); // NOI18N
 
-		Status_links.setFont(resourceMap.getFont("Status_links.font")); // NOI18N
+		Status_links.setFont(Font.getFont(resourceMap.getString("Status_links.font"))); // NOI18N
 		Status_links.setText(resourceMap.getString("Status_links.text")); // NOI18N
 		Status_links.setName("Status_links"); // NOI18N
 
@@ -668,7 +669,7 @@ public class StartFenster extends javax.swing.JFrame implements
 		jMenuDatei.setText(resourceMap.getString("jMenuDatei.text")); // NOI18N
 		jMenuDatei.setName("jMenuDatei"); // NOI18N
 
-		jMenuItemBeenden.setAction(actionMap.get("quit")); // NOI18N
+		jMenuItemBeenden.setAction(quitAction); // NOI18N
 		jMenuItemBeenden
 				.setText(resourceMap.getString("jMenuItemBeenden.text")); // NOI18N
 		jMenuItemBeenden.setName("jMenuItemBeenden"); // NOI18N
@@ -912,7 +913,25 @@ public class StartFenster extends javax.swing.JFrame implements
 			}
 		});
 	}
+	
+	private void exit(){
+		setVisible(false);
+	}
 
+//quit.Action.text=Beenden
+//quit.Action.accelerator=ctrl pressed Q
+//quit.Action.shortDescription=Anwendung beenden
+	
+	Action quitAction = new AbstractAction("Anwendung beenden") {
+		
+		private static final long serialVersionUID = -7037463710032412611L;
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			exit();
+		}
+	};
+	
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JLabel Status_links;
 	private javax.swing.JButton jButton1;

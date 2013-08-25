@@ -16,13 +16,12 @@ package arbeitsrechnungen.gui.dialogs;
  * @author markus
  */
 
-import java.util.Properties;
-import java.io.*;
+import java.io.File;
 import java.util.Enumeration;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 import org.jdesktop.beansbinding.AutoBinding;
-
-import arbeitsrechnungen.ArbeitsrechnungenApp;
 
 public class Optionen extends javax.swing.JDialog {
 
@@ -145,7 +144,9 @@ public class Optionen extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(Optionen.class);
+
+        ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
+        
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
 

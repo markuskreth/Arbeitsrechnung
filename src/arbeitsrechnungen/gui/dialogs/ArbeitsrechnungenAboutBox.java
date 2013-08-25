@@ -4,13 +4,18 @@
 
 package arbeitsrechnungen.gui.dialogs;
 
-import org.jdesktop.application.Action;
+import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
-import arbeitsrechnungen.ArbeitsrechnungenApp;
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.xml.ws.Action;
 
 public class ArbeitsrechnungenAboutBox extends javax.swing.JDialog {
 
-    public ArbeitsrechnungenAboutBox(java.awt.Frame parent) {
+	private static final long serialVersionUID = -6832189607221118736L;
+
+	public ArbeitsrechnungenAboutBox(java.awt.Frame parent) {
         super(parent);
         initComponents();
         getRootPane().setDefaultButton(closeButton);
@@ -40,14 +45,26 @@ public class ArbeitsrechnungenAboutBox extends javax.swing.JDialog {
         javax.swing.JLabel imageLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(ArbeitsrechnungenAboutBox.class);
+
+        ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
+        
         setTitle(resourceMap.getString("title")); // NOI18N
         setModal(true);
         setName("aboutBox"); // NOI18N
         setResizable(false);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getActionMap(ArbeitsrechnungenAboutBox.class, this);
-        closeButton.setAction(actionMap.get("closeAboutBox")); // NOI18N
+        closeButton.setAction(new AbstractAction(resourceMap.getString("closeAboutBox.Action.text")) {
+			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 5874386517653009935L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArbeitsrechnungenAboutBox.this.setVisible(false);
+			}
+		}); // NOI18N
         closeButton.setName("closeButton"); // NOI18N
 
         appTitleLabel.setFont(appTitleLabel.getFont().deriveFont(appTitleLabel.getFont().getStyle() | java.awt.Font.BOLD, appTitleLabel.getFont().getSize()+4));
@@ -78,7 +95,7 @@ public class ArbeitsrechnungenAboutBox extends javax.swing.JDialog {
         appDescLabel.setText(resourceMap.getString("appDescLabel.text")); // NOI18N
         appDescLabel.setName("appDescLabel"); // NOI18N
 
-        imageLabel.setIcon(resourceMap.getIcon("imageLabel.icon")); // NOI18N
+        imageLabel.setIcon(new ImageIcon(resourceMap.getString("imageLabel.icon"))); // NOI18N
         imageLabel.setName("imageLabel"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
