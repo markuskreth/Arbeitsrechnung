@@ -11,21 +11,29 @@
  */
 package arbeitsrechnungen.gui.jframes;
 
+import java.awt.Component;
 import java.awt.FocusTraversalPolicy;
+import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.net.URL;
 import java.sql.ResultSet;
-import arbeitsabrechnungendataclass.Verbindung;
-import arbeitsrechnungen.ArbeitsrechnungenApp;
-import arbeitsrechnungen.ArbeitsstundenTabelle;
-import arbeitsrechnungen.FormRechnungen;
-import arbeitsrechnungen.gui.dialogs.AngebotDialog;
-import DialogBox.*;
-import java.util.*;
-import java.awt.Component;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Vector;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 import org.jdesktop.beansbinding.AutoBinding;
+
+import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.gui.dialogs.AngebotDialog;
+import arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle;
 
 /**
  * Umfassende Bearbeitung von Klientendaten, Angeboten und Zugriff auf Arbeitsstunden
@@ -631,9 +639,9 @@ public class KlientenEditor extends javax.swing.JFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelArbeitsstunden = new javax.swing.JPanel();
-        arbeitsstundenTabelle1 = new arbeitsrechnungen.ArbeitsstundenTabelle(this, this.getKlienten_id());
+        arbeitsstundenTabelle1 = new arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle(this, this.getKlienten_id());
         jPanelRechnungen = new javax.swing.JPanel();
-        formRechnungen1 = new arbeitsrechnungen.FormRechnungen(this.getKlienten_id());
+        formRechnungen1 = new arbeitsrechnungen.gui.panels.FormRechnungen(this.getKlienten_id());
         jPanelAngebote = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableAngebote = new javax.swing.JTable();
@@ -693,7 +701,8 @@ public class KlientenEditor extends javax.swing.JFrame {
         jButtonfindeTexDatei = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(KlientenEditor.class);
+
+		ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
 
@@ -987,7 +996,7 @@ public class KlientenEditor extends javax.swing.JFrame {
         jTextFieldKEmail.setName("KEmail"); // NOI18N
         jTextFieldKEmail.setPreferredSize(new java.awt.Dimension(4, 20));
 
-        jLabel13.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
+        jLabel13.setFont(Font.getFont(resourceMap.getString("jLabel13.font"))); // NOI18N
         jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
 
@@ -1018,11 +1027,11 @@ public class KlientenEditor extends javax.swing.JFrame {
             }
         });
 
-        jLabel14.setFont(resourceMap.getFont("jLabel14.font")); // NOI18N
+        jLabel14.setFont(Font.getFont(resourceMap.getString("jLabel14.font"))); // NOI18N
         jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
         jLabel14.setName("jLabel14"); // NOI18N
-
-        jButtonZumAnfang.setIcon(resourceMap.getIcon("jButtonZumAnfang.icon")); // NOI18N
+        
+        jButtonZumAnfang.setIcon(getIcon(resourceMap.getString("jButtonZumAnfang.icon"))); // NOI18N
         jButtonZumAnfang.setText(resourceMap.getString("jButtonZumAnfang.text")); // NOI18N
         jButtonZumAnfang.setName("jButtonZumAnfang"); // NOI18N
         jButtonZumAnfang.addActionListener(new java.awt.event.ActionListener() {
@@ -1030,8 +1039,8 @@ public class KlientenEditor extends javax.swing.JFrame {
                 jButtonZumAnfangActionPerformed(evt);
             }
         });
-
-        jButtonZurueck.setIcon(resourceMap.getIcon("jButtonZurueck.icon")); // NOI18N
+        
+        jButtonZurueck.setIcon(getIcon(resourceMap.getString("jButtonZurueck.icon"))); // NOI18N
         jButtonZurueck.setText(resourceMap.getString("jButtonZurueck.text")); // NOI18N
         jButtonZurueck.setName("jButtonZurueck"); // NOI18N
         jButtonZurueck.addActionListener(new java.awt.event.ActionListener() {
@@ -1040,7 +1049,7 @@ public class KlientenEditor extends javax.swing.JFrame {
             }
         });
 
-        jButtonVor.setIcon(resourceMap.getIcon("jButtonVor.icon")); // NOI18N
+        jButtonVor.setIcon(getIcon(resourceMap.getString("jButtonVor.icon"))); // NOI18N
         jButtonVor.setText(resourceMap.getString("jButtonVor.text")); // NOI18N
         jButtonVor.setName("jButtonVor"); // NOI18N
         jButtonVor.addActionListener(new java.awt.event.ActionListener() {
@@ -1049,7 +1058,7 @@ public class KlientenEditor extends javax.swing.JFrame {
             }
         });
 
-        jButtonZumEnde.setIcon(resourceMap.getIcon("jButtonZumEnde.icon")); // NOI18N
+        jButtonZumEnde.setIcon(getIcon(resourceMap.getString("jButtonZumEnde.icon"))); // NOI18N
         jButtonZumEnde.setText(resourceMap.getString("jButtonZumEnde.text")); // NOI18N
         jButtonZumEnde.setName("jButtonZumEnde"); // NOI18N
         jButtonZumEnde.addActionListener(new java.awt.event.ActionListener() {
@@ -1312,7 +1321,12 @@ public class KlientenEditor extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
+    private Icon getIcon(String fileName) {
+    	URL resource = getClass().getResource("/"+fileName);
+    	return new ImageIcon(resource);
+	}
+
+	/**
      *
      * jButtonVor wurde ausgelöst. Wenn möglich wird der nächste Datensatz im Recordset klientendaten angesprungen
      *
@@ -1447,7 +1461,6 @@ public class KlientenEditor extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        wertespeichern();
     }
 
     /**
@@ -1480,8 +1493,12 @@ public class KlientenEditor extends javax.swing.JFrame {
      * @param evt
      */
     private void jButtonDelKlientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDelKlientActionPerformed
-        if (ModalDialog.YesNoDialog(this, "Wollen Sie den Datensatz \"" + this.getAuftraggeber() +
-                "\" endgültig löschen?").equals("Ja")) {
+        
+
+        int ergebnis = JOptionPane.showConfirmDialog(this, "Wollen Sie den Datensatz \"" + this.getAuftraggeber() +
+                "\" endgültig löschen?","Löschen?", JOptionPane.YES_NO_OPTION);
+
+    	if (ergebnis == JOptionPane.YES_OPTION) {
             try {
                 String sql ="";
                 // Zuerst den Datensatz identifizieren, der als nächstes gezeigt wird.
@@ -1584,8 +1601,9 @@ public class KlientenEditor extends javax.swing.JFrame {
      * @param evt
      */
     private void jButtonEditAngebotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditAngebotActionPerformed
-        if (this.jTableAngebote.getSelectedRow() == -1) {
-            DialogBox.ModalDialog.OKDialog(this, "Bearbeitung abgebrochen!\nEin Eintrag muss ausgewählt sein!");
+        
+    	if (this.jTableAngebote.getSelectedRow() == -1) {
+        	JOptionPane.showMessageDialog(this, "Bearbeitung abgebrochen!\nEin Eintrag muss ausgewählt sein!");
         } else {
             int datensatz;
             try {
@@ -1607,7 +1625,7 @@ public class KlientenEditor extends javax.swing.JFrame {
      */
     private void jButtonDeleteAngebotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteAngebotActionPerformed
         if (this.jTableAngebote.getSelectedRow() == -1) {
-            DialogBox.ModalDialog.OKDialog(this, "Bearbeitung abgebrochen!\nEin Eintrag muss ausgewählt sein!");
+        	JOptionPane.showMessageDialog(this, "Bearbeitung abgebrochen!\nEin Eintrag muss ausgewählt sein!");
         } else {
             try {
                 this.angebote.first();
@@ -1615,13 +1633,16 @@ public class KlientenEditor extends javax.swing.JFrame {
                 int DatensatzID = this.angebote.getInt("angebote_id");
 
                 String Datensatzname = this.angebote.getString("Inhalt");
-                String Ergebnis = DialogBox.ModalDialog.YesNoDialog(this, "Soll der Datensatz " + Datensatzname +
-                        " wirklich endgültig gelöscht werden?");
-                if (Ergebnis.equals("Ja")) {
+                
+                int ergebnis = JOptionPane.showConfirmDialog(this, "Soll der Datensatz " + Datensatzname +
+                        " wirklich endgültig gelöscht werden?","Löschen?", JOptionPane.YES_NO_OPTION);
+                
+                if (ergebnis == JOptionPane.YES_OPTION) {
                     String sqltext = "DELETE FROM angebote WHERE angebote_id=" + DatensatzID + ";";
                     System.out.println(sqltext);
                     verbindung_angebote.sql(sqltext);
                 }
+                
                 this.updateAngeboteTabelle();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1716,6 +1737,7 @@ public class KlientenEditor extends javax.swing.JFrame {
             this.speicherWert(tf.getName(), tf.getText());
             klientendaten = verbindung.query("SELECT * FROM klienten;");
             findRow(this.getKlienten_id());
+            wertespeichern();
         }
         if (event.getSource() instanceof javax.swing.JCheckBox) {
             javax.swing.JCheckBox cb = (javax.swing.JCheckBox) event.getSource();
@@ -1748,17 +1770,21 @@ public class KlientenEditor extends javax.swing.JFrame {
      * @param event
      */
     private void TextFieldFocusLost(java.awt.event.FocusEvent event) {
+    	
         if (event.getSource() instanceof javax.swing.JTextField) {
             javax.swing.JTextField tf = (javax.swing.JTextField) event.getSource();
             this.speicherWert(tf.getName(), tf.getText());
             klientendaten = verbindung.query("SELECT * FROM klienten;");
             findRow(this.getKlienten_id());
+            wertespeichern();
         }
+        
         if (event.getSource() instanceof javax.swing.JTextArea) {
             javax.swing.JTextArea ta = (javax.swing.JTextArea) event.getSource();
             this.speicherWert(ta.getName(), ta.getText());
             klientendaten = verbindung.query("SELECT * FROM klienten;");
             findRow(this.getKlienten_id());
+            wertespeichern();
         }
     }
 
@@ -2133,8 +2159,8 @@ public class KlientenEditor extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public arbeitsrechnungen.ArbeitsstundenTabelle arbeitsstundenTabelle1;
-    private arbeitsrechnungen.FormRechnungen formRechnungen1;
+    public arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle arbeitsstundenTabelle1;
+    private arbeitsrechnungen.gui.panels.FormRechnungen formRechnungen1;
     private javax.swing.JButton jButtonBeenden;
     private javax.swing.JButton jButtonDelKlient;
     private javax.swing.JButton jButtonDeleteAngebot;

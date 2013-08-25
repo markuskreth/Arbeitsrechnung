@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jComboBoxKunden" min="-2" pref="131" max="-2" attributes="0"/>
+              <EmptySpace pref="361" max="32767" attributes="0"/>
+              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Component id="arbeitsstundenTabelle1" alignment="1" pref="609" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" pref="214" max="-2" attributes="0"/>
+              <EmptySpace pref="383" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" pref="21" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jComboBoxKunden" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="arbeitsstundenTabelle1" pref="359" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JComboBox" name="jComboBoxKunden">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new javax.swing.DefaultComboBoxModel(auftraggeberliste)" type="code"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="jComboBoxKunden" noResource="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jComboBoxKundenItemStateChanged"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="verbindung = new Verbindung(&quot;Arbeitrechnungen&quot;, &quot;markus&quot;, &quot;0773&quot;);&#xa;String sqltext = &quot;SELECT klienten_id, Auftraggeber from klienten;&quot;;&#xa;System.out.println(&quot;----------------------------------------&quot;);&#xa;System.out.println(sqltext);&#xa;System.out.println(&quot;----------------------------------------&quot;);&#xa;this.jComboBoxKunden.removeAllItems();&#xa;System.out.println(&quot;Combobox geleert!&quot;);&#xa;Auftraggeber = verbindung.query(sqltext);&#xa;Vector&lt;String&gt; auftraggeberliste = new Vector&lt;String&gt;();&#xa;try{&#xa;    int i=0;&#xa;    System.out.println(&quot;Fuellen des Vectors beginnt&quot;);&#xa;    while(Auftraggeber.next()){&#xa;        auftraggeberliste.add(Auftraggeber.getString(&quot;Auftraggeber&quot;));&#xa;        this.klientenid.addElement(new Punkt(Auftraggeber.getInt(&quot;klienten_id&quot;),i));&#xa;        i++;&#xa;        System.out.println(i + &quot;. Auftraggeber&quot;);&#xa;    }&#xa;}catch (Exception e) {&#xa;             System.out.println(&quot;Arbeitsstunden.java::updateKlienten:&quot;);&#xa;             e.printStackTrace();&#xa;} &#xa;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
+        <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
+        <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton2">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jButton2.text"/>
+        <Property name="name" type="java.lang.String" value="jButton2" noResource="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="arbeitsrechnungen.ArbeitsstundenTabelle" name="arbeitsstundenTabelle1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="arbeitsstundenTabelle1" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

@@ -1,34 +1,29 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * FormRechnungen.java
  *
  * Created on 22.09.2009, 19:08:09
  */
 
-package arbeitsrechnungen;
+package arbeitsrechnungen.gui.panels;
 
 /**
  *
  * @author markus
  */
+import java.beans.PropertyChangeSupport;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Vector;
+
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.data.Rechnung;
 import arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import arbeitsrechnungen.gui.dialogs.RechnungDialog;
-
-import java.util.Properties;
-import java.util.Vector;
 //import java.lang.String;
 //import java.lang.Exception;
-import java.sql.SQLException;
-
-import DatenKlassen.ClassRechnungen;
-import java.beans.PropertyChangeSupport;
-import java.util.Locale;
 
 
 public class FormRechnungen extends javax.swing.JPanel {
@@ -43,7 +38,7 @@ public class FormRechnungen extends javax.swing.JPanel {
 	private PropertyChangeSupport pchListeners = new PropertyChangeSupport(this);
 
     int klienten_id;
-    Vector<ClassRechnungen> rechnungen = new Vector<ClassRechnungen>();
+    Vector<Rechnung> rechnungen = new Vector<Rechnung>();
 	java.util.Properties sysprops = System.getProperties();
 
     /** FormRechnungen: nie benutzen! */
@@ -76,7 +71,7 @@ public class FormRechnungen extends javax.swing.JPanel {
         ResultSet res_rechnungen = verbindung.query(sql);
         try {
             while (res_rechnungen.next()){
-                ClassRechnungen tmp = new ClassRechnungen(res_rechnungen.getInt("rechnungen_id"));
+                Rechnung tmp = new Rechnung(res_rechnungen.getInt("rechnungen_id"));
                 tmp.setKlienten_id(res_rechnungen.getInt("klienten_id"));
 				java.util.GregorianCalendar kalender = new java.util.GregorianCalendar();
                  kalender.setTimeInMillis(res_rechnungen.getDate("datum").getTime());
@@ -187,7 +182,9 @@ public class FormRechnungen extends javax.swing.JPanel {
         jTable1.setModel(getMyModel());
         jTable1.setName("jTable1"); // NOI18N
         jScrollPane1.setViewportView(jTable1);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(FormRechnungen.class);
+
+        ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
+        
         jTable1.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTable1.columnModel.title0")); // NOI18N
         jTable1.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("jTable1.columnModel.title1")); // NOI18N
         jTable1.getColumnModel().getColumn(2).setHeaderValue(resourceMap.getString("jTable1.columnModel.title2")); // NOI18N

@@ -12,8 +12,7 @@
 package arbeitsrechnungen.gui.dialogs;
 
 import java.util.Date;
-
-import arbeitsrechnungen.ArbeitsrechnungenApp;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -45,7 +44,8 @@ public class Kalenderauswahl extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
         jButtonDatumLoeschen = new javax.swing.JButton();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arbeitsrechnungen.ArbeitsrechnungenApp.class).getContext().getResourceMap(Kalenderauswahl.class);
+
+        ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
         jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
 
