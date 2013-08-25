@@ -1,20 +1,9 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * StartFenster.java
  *
  * Created on 27.04.2009, 10:10:09
  */
-
 package arbeitsrechnungen.gui.jframes;
-
-/**
- *
- * @author markus
- */
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -24,8 +13,10 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -40,27 +31,31 @@ import mouseoverhintmanager.MouseOverHintManager;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsrechnungen.StartFensterTableCellRenderer;
 import arbeitsrechnungen.gui.dialogs.Optionen;
 import arbeitsrechnungen.gui.jframes.starttablemodels.LabledStringValueNoneditableTableModel;
 import arbeitsrechnungen.persister.DatenPersister;
 import arbeitsrechnungen.persister.DatenPersister.Forderung;
-//import javax.swing.event.TableModelListener;
-//import ContainerListener;
+import arbeitsrechnungen.persister.DatenPersister.Einheit;
 
-public class StartFenster extends javax.swing.JFrame implements
-		PropertyChangeListener {
-
+public class StartFenster 
+		extends javax.swing.JFrame 
+		implements PropertyChangeListener {
+	
+	public enum StartTable {
+		FORDERUNGEN,
+		EINHEITEN
+	}
+	
 	private static final long serialVersionUID = -1175489292478287196L;
-	public static final int FORDERUNGEN = 1;
-	public static final int EINHEITEN = 2;
-	Logger logger;
+	private Logger logger;
 
-	Vector<Integer> Forderungen_ids = new Vector<Integer>();                        
-	Vector<Integer> Einheiten_ids = new Vector<Integer>();
-	Properties optionen = new Properties();
-	MouseOverHintManager hintman;
+	DecimalFormat df = new DecimalFormat("0.00");
+	
+	private Vector<Integer> Forderungen_ids = new Vector<Integer>();                        
+	private Vector<Integer> Einheiten_ids = new Vector<Integer>();
+	private Properties optionen = new Properties();
+	private MouseOverHintManager hintman;
 	private DefaultTableModel forderungenTableModel;
 	private DefaultTableModel einheitenTableModel;
 	private DatenPersister persister;
@@ -70,8 +65,11 @@ public class StartFenster extends javax.swing.JFrame implements
 		logger = Logger.getLogger(getClass());
 		logger.setLevel(Level.DEBUG);
 		logger.info("current Loglevel: " + logger.getLevel());
+		
 		loadOrCreateOptions();
 
+		persister = new DatenPersister(optionen);
+		
 		// Model mit Überschriften erstellen
 		einheitenTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Firma", "Einsätze", "Summe" });
 		forderungenTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Firma", "Rechnungsdatum", "Forderung" });
@@ -165,51 +163,26 @@ public class StartFenster extends javax.swing.JFrame implements
 		// Spaltenbreiten merken
 		int[][] spaltenBreiten = getSpaltenBreiten(this.jTableForderungen);
 		
-		// Daten laden
-		Verbindung verbindung = new Verbindung(
-				optionen.getProperty("sqlserver"),
-				optionen.getProperty("datenbank"),
-				optionen.getProperty("user"), optionen.getProperty("password"));
-		String sqltext = "SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, einheiten.Rechnung_Datum AS datum, SUM(einheiten.Preis) AS summe "
-				+ "FROM einheiten, klienten "
-				+ "WHERE einheiten.klienten_id = klienten.klienten_id "
-				+ "AND NOT (ISNULL( einheiten.Rechnung_verschickt )) "
-				+ "AND ISNULL( einheiten.Bezahlt ) "
-				+ "GROUP BY einheiten.Rechnung_Datum,einheiten.klienten_id "
-				+ "ORDER BY einheiten.Rechnung_Datum;";
-
-		System.out.println(sqltext);
-		ResultSet daten = null;
-		if (verbindung.connected()) {
-			System.out.println("Connected!");
-			daten = verbindung.query(sqltext);
-		}
-
+		List<Forderung> forderungen = persister.getForderungen();
 		// Ergebnise einzeln zum Model hinzufügen
 		double summe = 0;
-		try {
-			while (daten.next()) {
-				Vector<String> datensatz;
-				datensatz = new Vector<String>();
-				datensatz.add(daten.getString("auftraggeber"));
-				datensatz.add(java.text.DateFormat.getDateInstance().format(
-						daten.getDate("datum")));
-				java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
-				datensatz.add(df.format(daten.getDouble("summe")) + " €");
-				summe = summe + daten.getDouble("summe");
-				forderungenTableModel.addRow(datensatz);
-				this.Forderungen_ids.add(daten.getInt("id"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		DateFormat dateFormat = DateFormat.getDateInstance();
+		for (Iterator<Forderung> iterator = forderungen.iterator(); iterator.hasNext();) {
+			Forderung forderung = iterator.next();
+			Vector<String> datensatz;
+			datensatz = new Vector<String>();
+			datensatz.add(forderung.getAuftraggeber());
+			datensatz.add(dateFormat.format(forderung.getDatum().getTime()));
+			datensatz.add(df.format(forderung.getSumme()) + "€");
+			summe += forderung.getSumme();
+			forderungenTableModel.addRow(datensatz);
+			Forderungen_ids.add(forderung.getId());
 		}
-
 		// In der letzten Zeile die Summe ausgeben
 		Vector<String> datensatz;
 		datensatz = new Vector<String>();
 		datensatz.add("Summe");
 		datensatz.add("");
-		java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
 		datensatz.add(df.format(summe) + " €");
 		forderungenTableModel.addRow(datensatz);
 		
@@ -264,24 +237,22 @@ public class StartFenster extends javax.swing.JFrame implements
 	private void initEinheiten() {
 		int[][] spaltenBreiten = getSpaltenBreiten(jTableEinheiten);
 		
-		// Daten laden
-		persister = new DatenPersister(optionen);
 		double summe = 0;
 		
-		java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
-		Vector<Forderung> forderungen2 = persister.getEinheiten();
+		List<Einheit> einheiten = persister.getEinheiten();
 		
-		for (Iterator<Forderung> iterator = forderungen2.iterator(); iterator.hasNext();) {
-			Forderung forderung = iterator.next();
-			summe += forderung.getKlientenpreis();
-			this.Einheiten_ids.add(forderung.getId());
+		for (Iterator<Einheit> iterator = einheiten.iterator(); iterator.hasNext();) {
+			Einheit einheit = iterator.next();
+			Einheiten_ids.add(einheit.getId());
+			
+			summe += einheit.getKlientenpreis();
 
 			Vector<String> datensatz;
 			datensatz = new Vector<String>();
 
-			datensatz.add(forderung.getAuftraggeber());
-			datensatz.add(String.valueOf(forderung.getAnzahl()));
-			datensatz.add(df.format(forderung.getKlientenpreis()) + " €");
+			datensatz.add(einheit.getAuftraggeber());
+			datensatz.add(String.valueOf(einheit.getAnzahl()));
+			datensatz.add(df.format(einheit.getKlientenpreis()) + " €");
 			einheitenTableModel.addRow(datensatz);
 		}
 		
@@ -734,21 +705,22 @@ public class StartFenster extends javax.swing.JFrame implements
 		openKlientenEditor(null, null);
 	}// GEN-LAST:event_jButtonKlientenEditorActionPerformed
 
-	private void openKlientenEditor(Integer KlientenID, Integer Tabelle) {
+	private void openKlientenEditor(Integer KlientenID, StartTable Tabelle) {
 		KlientenEditor klienteneditor;
 		klienteneditor = new KlientenEditor();
 		klienteneditor.arbeitsstundenTabelle1.addPropertyChangeListener(
 				"ArbeitsstundenTabelle.Tabellendaten", this);
-		klienteneditor.setSelbststaendig(false);
-		if (KlientenID != null) {
-			klienteneditor.findRow(KlientenID);
-			klienteneditor.updateComponents();
-			if (Tabelle == FORDERUNGEN)
-				klienteneditor.setFilter(KlientenEditor.EINGEREICHTE);
-			if (Tabelle == EINHEITEN)
-				klienteneditor.setFilter(KlientenEditor.NICHTEINGEREICHTE);
-		}
+
+		if (Tabelle == StartTable.FORDERUNGEN)
+			klienteneditor.setFilter(KlientenEditor.EINGEREICHTE);
+		if (Tabelle == StartTable.EINHEITEN)
+			klienteneditor.setFilter(KlientenEditor.NICHTEINGEREICHTE);
+		
 		klienteneditor.setVisible(true);
+		
+		if (KlientenID != null) {
+			klienteneditor.setCurrentKlientenId(KlientenID);
+		}
 	}
 
 	/**
@@ -779,7 +751,7 @@ public class StartFenster extends javax.swing.JFrame implements
 			// Klienteneditor übergeben.
 			openKlientenEditor(
 					this.Forderungen_ids.elementAt(this.jTableForderungen
-							.getSelectedRow()), FORDERUNGEN);
+							.getSelectedRow()), StartTable.FORDERUNGEN);
 		}
 		// Irgendwann ein Menü?
 		/*
@@ -793,26 +765,19 @@ public class StartFenster extends javax.swing.JFrame implements
 		if (this.jTableForderungen.getSelectedRowCount() == 0)
 			jTableEinheitenSetSelection(evt);
 		if (evt.getClickCount() > 1 && !evt.isPopupTrigger()) {
-			// Doppelklick mit links -> Klienteneditor
-			// SelectedRow wird in ID-Liste gesucht und gefundene ID an
-			// Klienteneditor übergeben.
+
 			openKlientenEditor(
 					this.Einheiten_ids.elementAt(this.jTableEinheiten
-							.getSelectedRow()), EINHEITEN);
+							.getSelectedRow()), StartTable.EINHEITEN);
 		}
-		// Irgendwann ein Menü?
-		/*
-		 * if (evt.isPopupTrigger()) { this.jPopupMenu1.show(jTable1,
-		 * evt.getX(), evt.getY()); System.out.println("Rechtsklick!"); }
-		 */
 
 	}// GEN-LAST:event_jTableEinheitenMouseClicked
 
-	private void jMenuItemOptionActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jMenuItemOptionActionPerformed
+	private void jMenuItemOptionActionPerformed(ActionEvent evt) {
 		// Öffne Options-Fenster
 		Optionen optionwindow = new Optionen(this, false);
 		optionwindow.setVisible(true);
-	}// GEN-LAST:event_jMenuItemOptionActionPerformed
+	}
 
 	private void jButtonArtenEinheitenActionPerformed(
 			ActionEvent evt) {
@@ -839,26 +804,11 @@ public class StartFenster extends javax.swing.JFrame implements
 				zeile);
 	}
 
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String args[]) {
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new StartFenster().setVisible(true);
-			}
-		});
-	}
-	
 	private void exit(){
 		setVisible(false);
+		dispose();
 	}
 
-//quit.Action.text=Beenden
-//quit.Action.accelerator=ctrl pressed Q
-//quit.Action.shortDescription=Anwendung beenden
-	
 	Action quitAction = new AbstractAction("Anwendung beenden") {
 		
 		private static final long serialVersionUID = -7037463710032412611L;
@@ -867,6 +817,7 @@ public class StartFenster extends javax.swing.JFrame implements
 		public void actionPerformed(ActionEvent e) {
 			exit();
 		}
+		
 	};
 	
 	// Variables declaration - do not modify//GEN-BEGIN:variables
