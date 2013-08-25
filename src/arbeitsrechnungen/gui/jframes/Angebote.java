@@ -15,7 +15,6 @@ package arbeitsrechnungen.gui.jframes;
  *
  * @author markus
  */
-
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -25,7 +24,6 @@ import javax.swing.JOptionPane;
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsrechnungen.Punkt;
 import arbeitsrechnungen.gui.dialogs.AngebotDialog;
-// import DialogBox.*;
 
 public class Angebote extends javax.swing.JFrame {
 
@@ -364,17 +362,6 @@ public class Angebote extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
 }//GEN-LAST:event_jButtonSchliessenActionPerformed
-
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Angebote().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDeleteAngebot;

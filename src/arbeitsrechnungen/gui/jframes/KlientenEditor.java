@@ -18,9 +18,9 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.net.URL;
 import java.sql.ResultSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -32,8 +32,13 @@ import javax.swing.JOptionPane;
 import org.jdesktop.beansbinding.AutoBinding;
 
 import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsrechnungen.Einstellungen;
+import arbeitsrechnungen.data.Angebot;
+import arbeitsrechnungen.data.Klient;
 import arbeitsrechnungen.gui.dialogs.AngebotDialog;
+import arbeitsrechnungen.gui.jframes.starttablemodels.LabledStringValueNoneditableTableModel;
 import arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle;
+import arbeitsrechnungen.persister.KlientenEditorPersister;
 
 /**
  * Umfassende Bearbeitung von Klientendaten, Angeboten und Zugriff auf Arbeitsstunden
@@ -43,34 +48,15 @@ import arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle;
 public class KlientenEditor extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 2229715761785683028L;
+	
 	Verbindung verbindung;
     Verbindung verbindung_angebote;
-    private boolean selbststaendig = true;
-    protected ResultSet klientendaten;
+    List<Klient> allKlienten;
+    Klient currentKlient = null;
+    int currentIndex = -1;
+    
     ResultSet angebote;
-    protected String Kunde;
-    protected String AEmail;
-    protected String ATelefon;
-    protected String AOrt;
-    protected String APlz;
-    protected String AAdress2;
-    protected String AAdress1;
-    protected String Auftraggeber;
-    protected String KEmail;
-    protected String KTelefon;
-    protected String KOrt;
-    protected String KPlz;
-    protected String KAdress2;
-    protected String KAdress1;
-    protected int klienten_id;
-    protected String Bemerkungen;
-    protected String tex_datei;
-    protected boolean Zusatz1;
-    protected String Zusatz1_Name;
-    protected boolean Zusatz2;
-    protected String Zusatz2_Name;
-    protected String rechnungnummer_bezeichnung;
-    java.util.Properties optionen = new java.util.Properties();
+    java.util.Properties optionen;
 
     public static final int EINGEREICHTE = 1;
     public static final int NICHTEINGEREICHTE = 2;
@@ -90,25 +76,24 @@ public class KlientenEditor extends javax.swing.JFrame {
         this.jTextAreaBemerkungen
     };
     java.awt.FocusTraversalPolicy policy = new FocusTraversalPolicyImpl();
+	private KlientenEditorPersister persister;
 
 
     /** Creates new form KlientenEditor */
     public KlientenEditor() {
         super("KlientenEditor");
 
-        optionen = getEinstellungen();
-        verbindung = new Verbindung(optionen.getProperty("sqlserver"), optionen.getProperty("datenbank") ,
-                optionen.getProperty("user"), optionen.getProperty("password"));
+        optionen = new Einstellungen().getEinstellungen();
+        persister = new KlientenEditorPersister(optionen);
+        
         verbindung_angebote = new Verbindung(optionen.getProperty("sqlserver"), optionen.getProperty("datenbank") ,
                 optionen.getProperty("user"), optionen.getProperty("password"));
-        klientendaten = verbindung.query("SELECT * FROM klienten;");
-        try {
-            if (klientendaten.first()) {
-                wertespeichern();
-            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        allKlienten = persister.getAllKlienten();
+        
+        if(allKlienten.size()>0){
+        	currentKlient = allKlienten.get(0);
+        	currentIndex = 0;
         }
 
         initComponents();
@@ -119,7 +104,7 @@ public class KlientenEditor extends javax.swing.JFrame {
             e.printStackTrace();
         }
         setEvents();
-	updateRechnungenPanel();
+        updateRechnungenPanel();
         updateKlient();
         updateAngeboteTabelle();
     }
@@ -510,65 +495,10 @@ public class KlientenEditor extends javax.swing.JFrame {
 	}
 
     /**
-     * Speichert die Werte des aktuellen Datensatzes im Recordset klientendaten in den lokalen Feldvariablen
-     * Datensatzbewegung muss vorher erfolgt sein! (z.B. jButtonVorActionPerformed oder findKlient
-     */
-    private void wertespeichern() {
-        try {
-            setKlienten_id(klientendaten.getInt("klienten_id"));
-            setAuftraggeber(klientendaten.getString("Auftraggeber"));
-            setAAdress1(klientendaten.getString("AAdresse1"));
-            setAAdress2(klientendaten.getString("AAdresse2"));
-            setAEmail(klientendaten.getString("AEmail"));
-            setAOrt(klientendaten.getString("AOrt"));
-            setAPlz(klientendaten.getString("APLZ"));
-            setATelefon(klientendaten.getString("ATelefon"));
-
-            setKunde(klientendaten.getString("Kunde"));
-            setKAdress1(klientendaten.getString("KAdresse1"));
-            setKAdress2(klientendaten.getString("KAdresse2"));
-            setKEmail(klientendaten.getString("KEmail"));
-            setKOrt(klientendaten.getString("KOrt"));
-            setKPlz(klientendaten.getString("KPLZ"));
-            setKTelefon(klientendaten.getString("KTelefon"));
-            setBemerkungen(klientendaten.getString("Bemerkungen"));
-            setTex_datei(klientendaten.getString("tex_datei"));
-            setZusatz1(klientendaten.getBoolean("Zusatz1"));
-            setZusatz1_Name(klientendaten.getString("Zusatz1_Name"));
-            setZusatz2(klientendaten.getBoolean("Zusatz2"));
-            setZusatz2_Name(klientendaten.getString("Zusatz2_Name"));
-	    setRechnungnummer_bezeichnung(klientendaten.getString("rechnungnummer_bezeichnung"));
-        } catch (Exception e) {
-            System.out.println("wertespeichern");
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Speichert einen einzelnen Wert in der Datenbank. Parameter sind der Name des zu änderndes Feldes und der neue Wert
-     *
-     * @param Feld
-     * @param Wert
-     */
-    private void speicherWert(String Feld, String Wert) {
-        /**
-         * Einen neuen Wert im zugehörigen Feld speichern.
-         */
-        try {
-            String sql = "UPDATE klienten SET " + Feld + "=\"" + Wert + "\" WHERE klienten_id=" + this.getKlienten_id() + ";";
-            verbindung.sql(sql);
-            System.out.println(sql);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
      * Hier werden alle Teile des Fensters aktualisiert,
      * wenn sich an der Ansicht etwas geändert hat.
      */
-    public void updateComponents() {
+    private void updateComponents() {
         updateKlient();
         updateTables();
     }
@@ -577,71 +507,78 @@ public class KlientenEditor extends javax.swing.JFrame {
      * Aktualisiert den Klienten und die Buttons
      */
     private void updateKlient(){
-        jTextFieldAuftraggeber.setText(getAuftraggeber());
-        jTextFieldAAdress1.setText(getAAdress1());
-        jTextFieldAAdress2.setText(getAAdress2());
-        jTextFieldAPlz.setText(getAPlz());
-        jTextFieldAOrt.setText(getAOrt());
-        jTextFieldATelefon.setText(getATelefon());
-        jTextFieldAEmail.setText(getAEmail());
-        jTextFieldKPlz.setText(getKPlz());
-        jTextFieldKOrt.setText(getKOrt());
-        jTextFieldKunde.setText(getKunde());
-        jTextFieldKAdress1.setText(getKAdress1());
-        jTextFieldKAdress2.setText(getKAdress2());
-        jTextFieldKTelefon.setText(getKTelefon());
-        jTextFieldKEmail.setText(getKEmail());
-        jTextAreaBemerkungen.setText(getBemerkungen());
-        jTextFieldTex_datei.setText(getTex_datei());
+        jTextFieldAuftraggeber.setText(currentKlient.getAuftraggeber());
+        jTextFieldAAdress1.setText(currentKlient.getAAdress1());
+        jTextFieldAAdress2.setText(currentKlient.getAAdress2());
+        jTextFieldAPlz.setText(currentKlient.getAPlz());
+        jTextFieldAOrt.setText(currentKlient.getAOrt());
+        jTextFieldATelefon.setText(currentKlient.getATelefon());
+        jTextFieldAEmail.setText(currentKlient.getAEmail());
+        jTextFieldKPlz.setText(currentKlient.getKPlz());
+        jTextFieldKOrt.setText(currentKlient.getKOrt());
+        jTextFieldKunde.setText(currentKlient.getKunde());
+        jTextFieldKAdress1.setText(currentKlient.getKAdress1());
+        jTextFieldKAdress2.setText(currentKlient.getKAdress2());
+        jTextFieldKTelefon.setText(currentKlient.getKTelefon());
+        jTextFieldKEmail.setText(currentKlient.getKEmail());
+        jTextAreaBemerkungen.setText(currentKlient.getBemerkungen());
+        jTextFieldTex_datei.setText(currentKlient.getTex_datei());
+        
+        jCheckBoxZusatz1.setSelected(currentKlient.isZusatz1());
+        jCheckBoxZusatz2.setSelected(currentKlient.isZusatz2());
+        jTextFieldZusatzBezeichnung1.setText(currentKlient.getZusatz1_Name());
+        jTextFieldZusatzBezeichnung2.setText(currentKlient.getZusatz2_Name());
+        this.jTextFieldRechnungBezeichnung.setText(currentKlient.getRechnungnummer_bezeichnung());
+
+        setVisibilityOfButtons();
+    }
+
+    private void setVisibilityOfButtons() {
+
         jButtonVor.setEnabled(true);
         jButtonZurueck.setEnabled(true);
         jButtonZumEnde.setEnabled(true);
         jButtonZumAnfang.setEnabled(true);
-        jCheckBoxZusatz1.setSelected(isZusatz1());
-        jCheckBoxZusatz2.setSelected(isZusatz2());
-        jTextFieldZusatzBezeichnung1.setText(this.getZusatz1_Name());
-        jTextFieldZusatzBezeichnung2.setText(this.getZusatz2_Name());
-	this.jTextFieldRechnungBezeichnung.setText(this.getRechnungnummer_bezeichnung());
-	try {
-            if (klientendaten.isFirst()) {
+        
+        if(currentKlient == null){
+            jButtonZurueck.setEnabled(false);
+            jButtonZumAnfang.setEnabled(false);
+            jButtonVor.setEnabled(false);
+            jButtonZumEnde.setEnabled(false);        	
+        } else {
+        	if(currentKlient.equals(allKlienten.get(0))){
                 jButtonZurueck.setEnabled(false);
                 jButtonZumAnfang.setEnabled(false);
-            }
-            if (klientendaten.isLast()) {
+        	} else if (currentKlient.equals(allKlienten.get(allKlienten.size()-1))){
+
                 jButtonVor.setEnabled(false);
                 jButtonZumEnde.setEnabled(false);
-            }
-        } catch (Exception e) {
-            System.out.println("updateComponents");
-            e.printStackTrace();
+        	}
         }
         
-    }
+	}
 
-    /**
+	/**
      * Bringt alle Tabellen auf den neuesten Stand (z.B. bei neuer Klientenwahl)
      */
     private void updateTables() {
         updateAngeboteTabelle();
         updateRechnungenPanel();
-        this.arbeitsstundenTabelle1.update(this.getKlienten_id());
+        this.arbeitsstundenTabelle1.update(currentKlient.getKlienten_id());
     }
 
     /** This method is called from within the constructor to
      * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
      */
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelArbeitsstunden = new javax.swing.JPanel();
-        arbeitsstundenTabelle1 = new arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle(this, this.getKlienten_id());
+        arbeitsstundenTabelle1 = new arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle(this, currentKlient.getKlienten_id());
         jPanelRechnungen = new javax.swing.JPanel();
-        formRechnungen1 = new arbeitsrechnungen.gui.panels.FormRechnungen(this.getKlienten_id());
+        formRechnungen1 = new arbeitsrechnungen.gui.panels.FormRechnungen(currentKlient.getKlienten_id());
         jPanelAngebote = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableAngebote = new javax.swing.JTable();
@@ -760,33 +697,10 @@ public class KlientenEditor extends javax.swing.JFrame {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jTableAngebote.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null}
-            },
-            new String [] {
-                "Inhalt", "Preis", "Beschreibung"
-            }
-        ) {
-            /**
-			 * 
-			 */
-			private static final long serialVersionUID = -8689301108448859392L;
-			Class<?>[] types = new Class [] {
-                java.lang.String.class, java.lang.Float.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class<?> getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        jTableAngebote.setModel(new LabledStringValueNoneditableTableModel(
+        		new String [] {"Inhalt", "Preis", "Beschreibung"}
+    		));
+        
         jTableAngebote.setName("jTableAngebote"); // NOI18N
         jTableAngebote.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         jTableAngebote.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1319,7 +1233,7 @@ public class KlientenEditor extends javax.swing.JFrame {
         bindingGroup.bind();
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private Icon getIcon(String fileName) {
     	URL resource = getClass().getResource("/"+fileName);
@@ -1332,50 +1246,46 @@ public class KlientenEditor extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void jButtonVorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVorActionPerformed
-        try {
-            if (klientendaten.next()) {
-                wertespeichern();
-                updateComponents();
-            }
-        } catch (Exception e) {
-            System.out.println("jButtonVorActionPerformed");
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_jButtonVorActionPerformed
+    private void jButtonVorActionPerformed(java.awt.event.ActionEvent evt) {
+        toNextKlientIfPossible();
+    }
 
-    /**
+    private void toNextKlientIfPossible() {
+    	if(currentIndex<allKlienten.size()){
+        	currentIndex++;
+        	currentKlient = allKlienten.get(currentIndex);
+            updateComponents();
+        }
+	}
+
+	/**
      *
      * jButtonZurueck wurde ausgelöst. Wenn möglich wird der vorherige Datensatz im Recordset klientendaten angesprungen
      *
      * @param evt
      */
-    private void jButtonZurueckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonZurueckActionPerformed
-        try {
-            if (klientendaten.previous()) {
-//                jButtonVor.setEnabled(true);
-                wertespeichern();
-                updateComponents();
-//                boolean wahrheit = klientendaten.isFirst();
-//                if(klientendaten.isFirst()){
-//                    jButtonZurueck.setEnabled(false);
-//                }
-            }
+    private void jButtonZurueckActionPerformed(java.awt.event.ActionEvent evt) {
+    	toPreviourKlientIfPossible();
+    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void toPreviourKlientIfPossible() {
+    	if(currentIndex>=0){
+        	currentIndex--;
+        	currentKlient = allKlienten.get(currentIndex);
+            updateComponents();
         }
-    }//GEN-LAST:event_jButtonZurueckActionPerformed
+	}
 
-    /**
+	/**
      * Panel für Rechnungen wird unsichtbar oder sichtbar, sobald Rechnungen existieren und wird dann aktualisiert
      */
     private void updateRechnungenPanel(){
         Verbindung verb = new Verbindung(optionen.getProperty("sqlserver"), optionen.getProperty("datenbank") ,
                 optionen.getProperty("user"), optionen.getProperty("password"));
-        String sql = "SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=" + getKlienten_id() + ";";
+        String sql = "SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=" + currentKlient.getKlienten_id() + ";";
         System.out.println("updateRechnugnenPanel: " + sql);
         ResultSet rechnungen = verb.query(sql);
+        
         try{
             this.jTabbedPane1.remove(jPanelRechnungen);
             if (rechnungen.first()){
@@ -1384,7 +1294,7 @@ public class KlientenEditor extends javax.swing.JFrame {
 //                    this.jTabbedPane1.addTab("Rechnungen", this.jPanelRechnungen);
 //                    this.jTabbedPane1.setSelectedComponent(this.jPanelRechnungen);
                     this.jTabbedPane1.insertTab("Rechnungen", null, jPanelRechnungen, null, 1);
-                    this.formRechnungen1.update(klienten_id);
+                    this.formRechnungen1.update(currentKlient.getKlienten_id());
                 }
             }
         } catch (Exception e) {
@@ -1402,65 +1312,27 @@ public class KlientenEditor extends javax.swing.JFrame {
         zf = java.text.DecimalFormat.getCurrencyInstance(Locale.GERMANY);
 
         int maxwidth = jTableAngebote.getColumnModel().getColumn(1).getMaxWidth();
-        klient = this.getKlienten_id();
+        klient = currentKlient.getKlienten_id();
 
-        String sqltext = "SELECT angebote_id, klienten_id, Inhalt, Preis, Beschreibung FROM angebote WHERE klienten_id=" + klient;
-        System.out.println("updateKlientenTabelle: " + sqltext);
-        angebote = verbindung_angebote.query(sqltext);
+        List<Angebot> angebote = persister.getAngeboteForKlient(klient);
+        
+        javax.swing.table.DefaultTableModel mymodel = 
+        		new LabledStringValueNoneditableTableModel(
+    				new String[]{"Inhalt", "Preis", "Beschreibung"}
+				);
 
-        javax.swing.table.DefaultTableModel mymodel = new javax.swing.table.DefaultTableModel(
-                new Object[][]{},
-                new String[]{
-                    "Inhalt", "Preis", "Beschreibung"
-                }) {
+        for (Iterator<Angebot> iterator = angebote.iterator(); iterator.hasNext();) {
+			Angebot angebot = iterator.next();
 
-            /**
-					 * 
-					 */
-					private static final long serialVersionUID = -2369933057824527741L;
+            Vector<String> einVektor = new Vector<String>();
+            einVektor.addElement(angebot.getInhalt());
+            einVektor.addElement(zf.format(angebot.getPreis()));
+            einVektor.addElement(angebot.getBeschreibung());
 
-			@Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return String.class;
-            }
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
-
-        try {
-            while (angebote.next()) {
-                Vector<Object> einVektor = new Vector<Object>();
-                einVektor.addElement(angebote.getString("Inhalt"));
-                einVektor.addElement(zf.format(angebote.getDouble("Preis")));
-                einVektor.addElement(angebote.getString("Beschreibung"));
-
-                mymodel.addRow(einVektor);
-            }
-        } catch (Exception e) {
-            System.out.println("updateTabelle");
-            e.printStackTrace();
-        }
+            mymodel.addRow(einVektor);
+		}
         jTableAngebote.setModel(mymodel);
         jTableAngebote.getColumnModel().getColumn(1).setMaxWidth(maxwidth);
-    }
-
-    /**
-     * Sucht im Recordset klientendaten nach id oder dem letzten Datensatz, falls id nicht gefunden wird.
-     * @param id
-     */
-    public void findRow(int id) {
-        // Setzt den aktuellen Datensatz auf die gesuche Klienten_ID
-        try {
-            klientendaten.first();
-            while (klientendaten.getInt("klienten_id") != id && klientendaten.next()) {
-//                System.out.println("id = " + id + ", klienten_id= " + klientendaten.getInt("klienten_id"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -1468,23 +1340,11 @@ public class KlientenEditor extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void jButtonNewKlientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewKlientActionPerformed
-        ResultSet tmp_record;
-        int newrecordID;
-        try {
-            verbindung.sql("INSERT INTO klienten (Auftraggeber, AAdresse1, APLZ, AOrt) " +
-                    "VALUES (\"Auftraggeber eingeben\", \"Strasse eingeben\", \"00000\", \"Ort eingeben\");");
-            tmp_record = verbindung.query("SELECT LAST_INSERT_ID()");
-            tmp_record.first();
-            newrecordID = tmp_record.getInt(1);
-            klientendaten = verbindung.query("SELECT * FROM klienten;");
-            findRow(newrecordID);
-            wertespeichern();
-            updateComponents();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_jButtonNewKlientActionPerformed
+    private void jButtonNewKlientActionPerformed(java.awt.event.ActionEvent evt) {
+    	currentKlient = persister.createNewAuftraggeber();
+    	allKlienten = persister.getAllKlienten();
+        updateComponents();
+    }
 
     /**
      * jButtonDelKlient wurde ausgelöst: Der Klient wird in der Datenbank gelöscht!
@@ -1492,108 +1352,82 @@ public class KlientenEditor extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    private void jButtonDelKlientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDelKlientActionPerformed
+    private void jButtonDelKlientActionPerformed(java.awt.event.ActionEvent evt) {
         
-
-        int ergebnis = JOptionPane.showConfirmDialog(this, "Wollen Sie den Datensatz \"" + this.getAuftraggeber() +
+        int ergebnis = JOptionPane.showConfirmDialog(this, "Wollen Sie den Datensatz \"" + currentKlient.getAuftraggeber() +
                 "\" endgültig löschen?","Löschen?", JOptionPane.YES_NO_OPTION);
 
     	if (ergebnis == JOptionPane.YES_OPTION) {
-            try {
-                String sql ="";
-                // Zuerst den Datensatz identifizieren, der als nächstes gezeigt wird.
-                if (klientendaten.isLast()) {
-                    klientendaten.previous();
-                } else {
-                    klientendaten.next();
-                }
-                final int neuerSatz = klientendaten.getInt("klienten_id");
-
-                // Zuerst alle zugehörigen Angebote und Einheiten in der Datenbank löschen
-                final int alterSatz = this.getKlienten_id();
-                sql = "DELETE FROM angebote WHERE klienten_id=" + alterSatz;
-                System.out.println(sql);
-                verbindung.sql(sql);
-
-                // Zugehörige Einheiten löschen
-                sql = "DELETE FROM einheiten WHERE klienten_id=" + alterSatz;
-                System.out.println(sql);
-                verbindung.sql(sql);
-
-                // Zugehörige Rechnungen  löschen
-                sql = "DELETE FROM rechnungen WHERE klienten_id=" + alterSatz;
-                System.out.println(sql);
-                verbindung.sql(sql);
-
-                // Dann den Datensatz in der Datenbank löschen
-                sql = "DELETE FROM klienten WHERE klienten_id=" + alterSatz;
-                System.out.println(sql);
-                verbindung.sql(sql);
-                // Dann das Formular aktualisieren
-                klientendaten = verbindung.query("SELECT * FROM klienten;");
-                findRow(neuerSatz);
-                wertespeichern();
-                updateComponents();
-            } catch (Exception e) {
-                e.printStackTrace();
+            // Zuerst den Datensatz identifizieren, der als nächstes gezeigt wird.
+            Klient toDelete = currentKlient;
+            
+            if (currentIslast()) {
+                toPreviourKlientIfPossible();
+            } else {
+                toNextKlientIfPossible();
             }
-        }
-    }//GEN-LAST:event_jButtonDelKlientActionPerformed
 
+            persister.delete(toDelete);
+            
+            updateComponents();
+        }
+    }
+
+    private boolean currentIslast(){
+    	if(currentKlient != null){
+    		return currentKlient.equals(allKlienten.get(allKlienten.size()-1));
+    	}
+    	return false;
+    }
     /**
      * Beenden-Knopf gedrückt: Fenster wird geschlossen. Wenn selbststaendig = true, wird System.exit(0) ausgeführt.
      * @param evt
      */
-    private void jButtonBeendenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBeendenActionPerformed
+    private void jButtonBeendenActionPerformed(java.awt.event.ActionEvent evt) {
         this.setVisible(false);
         this.dispose();
-        if (selbststaendig) {
-            System.out.println("Fenster ist eigenständig. Anwendung wird beendet!");
-            System.exit(0);
-        }
-    }//GEN-LAST:event_jButtonBeendenActionPerformed
+    }
 
     /**
      * jButtonZumEnde wurde ausgelöst: Der letzte Datensatz des Recordsetzs klientendaten wird angesprungen und die Anzeige wird aktualisiert.
      * @param evt
      */
-    private void jButtonZumEndeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonZumEndeActionPerformed
-        try {
-            if (klientendaten.last()) {
-                wertespeichern();
-                updateComponents();
-            }
-        } catch (Exception e) {
-            System.out.println("jButtonZumEndeActionPerformed");
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_jButtonZumEndeActionPerformed
+    private void jButtonZumEndeActionPerformed(java.awt.event.ActionEvent evt) {
+    	toLast();
+    }
 
-    /**
+    private void toLast() {
+    	if( ! allKlienten.isEmpty()){
+	    	currentIndex = allKlienten.size()-1;
+	    	currentKlient = allKlienten.get(currentIndex);
+    	}
+    }
+
+	/**
      * jButtonZumAnfang wurde ausgelöst: Der erste Datensatz des Recordsetzs klientendaten wird angesprungen und die Anzeige wird aktualisiert.
      * @param evt
      */
-    private void jButtonZumAnfangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonZumAnfangActionPerformed
-        try {
-            if (klientendaten.first()) {
-                wertespeichern();
-                updateComponents();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_jButtonZumAnfangActionPerformed
+    private void jButtonZumAnfangActionPerformed(java.awt.event.ActionEvent evt) {
+        toFirst();
+    }
 
-    /**
+    private void toFirst() {
+    	if( ! allKlienten.isEmpty()){
+	    	currentIndex = 0;
+	    	currentKlient = allKlienten.get(currentIndex);
+    	}
+	}
+
+	/**
      * jButtonaddAngebot wurde ausgelöst: Ein Angebot für diesen Klienten wird hinzugefügt.
      * @param evt
      */
-    private void jButtonaddAngebotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonaddAngebotActionPerformed
+    private void jButtonaddAngebotActionPerformed(java.awt.event.ActionEvent evt) {
         // Konstruktor mit 3 Parametern wird für neue Angebote benutzt -1 steht für unbekannte Angebot_ID
-        AngebotDialog eingabefenster = new AngebotDialog(this, -1, this.klienten_id);
+        AngebotDialog eingabefenster = new AngebotDialog(this, -1, currentKlient.getKlienten_id());
         eingabefenster.setVisible(true);
         updateAngeboteTabelle();    // Mit geändertem Datensatz anzeigen
-    }//GEN-LAST:event_jButtonaddAngebotActionPerformed
+    }
 
     /**
      * JButtonEditAngebot wurde ausgelöst: Das in der Tabelle selectierte Angebot wird in AngebotDialog bearbeitet
@@ -1673,26 +1507,25 @@ public class KlientenEditor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTableAngeboteMouseClicked
 
-    private void jButtonfindeTexDateiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonfindeTexDateiActionPerformed
+    private void jButtonfindeTexDateiActionPerformed(java.awt.event.ActionEvent evt) {
 
+    	
         java.awt.FileDialog dateiname = new java.awt.FileDialog(this, "Tex-Datei", java.awt.FileDialog.LOAD);
 		int endindex = 0;
-		if(this.tex_datei == null){
+		if(currentKlient.getTex_datei() == null){
 			endindex = 0;
 		}else {
-			endindex = this.tex_datei.lastIndexOf("/");
+			endindex = currentKlient.getTex_datei().lastIndexOf("/");
 		}
 		
         if (endindex > 0) {
-            dateiname.setDirectory(this.tex_datei.substring(0, endindex));
-            dateiname.setFile(this.tex_datei.substring(endindex, tex_datei.length()));
+            dateiname.setDirectory(currentKlient.getTex_datei().substring(0, endindex));
+            dateiname.setFile(currentKlient.getTex_datei().substring(endindex, currentKlient.getTex_datei().length()));
         } else {
-            if (tex_datei != null) {
-                dateiname.setFile(this.tex_datei);
+            if (currentKlient.getTex_datei() != null) {
+                dateiname.setFile(currentKlient.getTex_datei());
             }
         }
-//        System.out.println("Verzeichnis: " + dateiname.getDirectory());
-//        System.out.println("Datei: " + dateiname.getFile());
         dateiname.setFilenameFilter(new java.io.FilenameFilter() {
 
             public boolean accept(File dir, String name) {
@@ -1700,19 +1533,18 @@ public class KlientenEditor extends javax.swing.JFrame {
                     return true;
                 } else {
                     return false;
-//                    throw new UnsupportedOperationException("Not supported yet.");
                 }
             }
         });
 
         dateiname.setVisible(true);
         if (dateiname.getFile() != null) {
-            this.tex_datei = dateiname.getDirectory() + dateiname.getFile();
-            this.jTextFieldTex_datei.setText(this.tex_datei);
+        	persister.speicherWert(currentKlient.getKlienten_id(), "tex_datei", dateiname.getDirectory() + dateiname.getFile());
+            this.jTextFieldTex_datei.setText(currentKlient.getTex_datei());
+            
         }
         dateiname.dispose();
-        this.speicherWert("tex_datei", this.tex_datei);
-    }//GEN-LAST:event_jButtonfindeTexDateiActionPerformed
+    }
 
     /**
      * In der Tabelle wird die Zeile auf die geklickt wurde ausgwählt.
@@ -1734,20 +1566,17 @@ public class KlientenEditor extends javax.swing.JFrame {
             javax.swing.JTextField tf = (javax.swing.JTextField) event.getSource();
             System.out.println("Text: " + tf.getText() +
                     "\nName: " + tf.getName() + "\n");
-            this.speicherWert(tf.getName(), tf.getText());
-            klientendaten = verbindung.query("SELECT * FROM klienten;");
-            findRow(this.getKlienten_id());
-            wertespeichern();
+            persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), tf.getText());
+            allKlienten = persister.getAllKlienten();
         }
         if (event.getSource() instanceof javax.swing.JCheckBox) {
             javax.swing.JCheckBox cb = (javax.swing.JCheckBox) event.getSource();
             if (cb.isSelected()) {
-                speicherWert(cb.getName(), "1");
+            	persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), "1");
             } else {
-                speicherWert(cb.getName(), "0");
+            	persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), "0");
             }
-            klientendaten = verbindung.query("SELECT * FROM klienten;");
-            findRow(this.getKlienten_id());
+            allKlienten = persister.getAllKlienten();
         }
 
 //        System.out.println("Event.getSource: " +  event.getSource());
@@ -1773,391 +1602,30 @@ public class KlientenEditor extends javax.swing.JFrame {
     	
         if (event.getSource() instanceof javax.swing.JTextField) {
             javax.swing.JTextField tf = (javax.swing.JTextField) event.getSource();
-            this.speicherWert(tf.getName(), tf.getText());
-            klientendaten = verbindung.query("SELECT * FROM klienten;");
-            findRow(this.getKlienten_id());
-            wertespeichern();
+            persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), tf.getText());
+            allKlienten = persister.getAllKlienten();
         }
         
         if (event.getSource() instanceof javax.swing.JTextArea) {
             javax.swing.JTextArea ta = (javax.swing.JTextArea) event.getSource();
-            this.speicherWert(ta.getName(), ta.getText());
-            klientendaten = verbindung.query("SELECT * FROM klienten;");
-            findRow(this.getKlienten_id());
-            wertespeichern();
+            persister.speicherWert(currentKlient.getKlienten_id(), ta.getName(), ta.getText());
+            allKlienten = persister.getAllKlienten();
         }
     }
 
-	/**
-	 * Setzt eine spezielle bezeichnung, die für die Rechnungsnummer verwendet wird.
-	 * @param rechnungnummer_bezeichnung
-	 */
-	public void setRechnungnummer_bezeichnung(String rechnungnummer_bezeichnung){
-		this.rechnungnummer_bezeichnung = rechnungnummer_bezeichnung;
+
+	public void setCurrentKlientenId(Integer klientenID) {
+		for (int i = 0; i < allKlienten.size(); i++) {
+			Klient k = allKlienten.get(i);
+			if(k.getKlienten_id() == klientenID){
+				currentIndex = i;
+				currentKlient = k;
+				break;
+			}
+		}
+		updateComponents();
 	}
-
-	/**
-	 * Gibt die spezielle bezeichnung, die für die Rechnungsnummer verwendet wird, zurück.
-	 * @return
-	 */
-	public String getRechnungnummer_bezeichnung(){
-		return this.rechnungnummer_bezeichnung;
-	}
-
-    /**
-     * Setzt den Wert selbststaendig, bei false wird verhindert, dass System.exit(0) aufgerufen wird.
-     * (standardmäßig wird System.exit(0) aufgerufen!)
-     *
-     * Wenn das Fenster eigenständig läuft, soll Programm beendet werden anderenfalls, soll nur das Fenster geschlossen werden
-     *
-     * @param selbststaendig
-     */
-    public void setSelbststaendig(boolean selbststaendig) {
-        this.selbststaendig = selbststaendig;
-    }
-
-    /**
-     * Get the value of tex_datei
-     *
-     * @return the value of tex_datei
-     */
-    public String getTex_datei() {
-        return tex_datei;
-    }
-
-    /**
-     * Set the value of tex_datei
-     *
-     * @param tex_datei new value of tex_datei
-     */
-    public void setTex_datei(String tex_datei) {
-        this.tex_datei = tex_datei;
-    }
-
-    /**
-     * Set the value of Bemerkungen
-     *
-     * @param Bemerkungen new value of Bemerkungen
-     */
-    public void setBemerkungen(String Bemerkungen) {
-        this.Bemerkungen = Bemerkungen;
-    }
-
-    /**
-     * Set the value of klienten_id
-     *
-     * @param klienten_id new value of klienten_id
-     */
-    public void setKlienten_id(int klienten_id) {
-        this.klienten_id = klienten_id;
-    }
-
-    public void setAAdress1(String AAdress1) {
-        this.AAdress1 = AAdress1;
-    }
-
-    public void setAAdress2(String AAdress2) {
-        this.AAdress2 = AAdress2;
-    }
-
-    public void setAEmail(String AEmail) {
-        this.AEmail = AEmail;
-    }
-
-    public void setAOrt(String AOrt) {
-        this.AOrt = AOrt;
-    }
-
-    public void setAPlz(String APlz) {
-        this.APlz = APlz;
-    }
-
-    public void setATelefon(String ATelefon) {
-        this.ATelefon = ATelefon;
-    }
-
-    public void setAuftraggeber(String Auftraggeber) {
-        this.Auftraggeber = Auftraggeber;
-    }
-
-    public void setKAdress1(String KAdress1) {
-        this.KAdress1 = KAdress1;
-    }
-
-    public void setKAdress2(String KAdress2) {
-        this.KAdress2 = KAdress2;
-    }
-
-    public void setKEmail(String KEmail) {
-        this.KEmail = KEmail;
-    }
-
-    public void setKOrt(String KOrt) {
-        this.KOrt = KOrt;
-    }
-
-    public void setKPlz(String KPlz) {
-        this.KPlz = KPlz;
-    }
-
-    public void setKTelefon(String KTelefon) {
-        this.KTelefon = KTelefon;
-    }
-
-    public void setKunde(String Kunde) {
-        this.Kunde = Kunde;
-    }
-
-    /**
-     * Get the value of Bemerkungen
-     *
-     * @return the value of Bemerkungen
-     */
-    public String getBemerkungen() {
-        return Bemerkungen;
-    }
-
-    /**
-     * Get the value of klienten_id
-     *
-     * @return the value of klienten_id
-     */
-    public int getKlienten_id() {
-        return klienten_id;
-    }
-
-    /**
-     * Get the value of Kunde
-     *
-     * @return the value of Kunde
-     */
-    public String getKunde() {
-        return Kunde;
-    }
-
-    /**
-     * Get the value of KAdress1
-     *
-     * @return the value of KAdress1
-     */
-    public String getKAdress1() {
-        return KAdress1;
-    }
-
-    /**
-     * Get the value of KAdress2
-     *
-     * @return the value of KAdress2
-     */
-    public String getKAdress2() {
-        return KAdress2;
-    }
-
-    /**
-     * Get the value of KPlz
-     *
-     * @return the value of KPlz
-     */
-    public String getKPlz() {
-        return KPlz;
-    }
-
-    /**
-     * Get the value of KOrt
-     *
-     * @return the value of KOrt
-     */
-    public String getKOrt() {
-        return KOrt;
-    }
-
-    /**
-     * Get the value of KTelefon
-     *
-     * @return the value of KTelefon
-     */
-    public String getKTelefon() {
-        return KTelefon;
-    }
-
-    /**
-     * Get the value of KEmail
-     *
-     * @return the value of KEmail
-     */
-    public String getKEmail() {
-        return KEmail;
-    }
-
-    /**
-     * Get the value of Auftraggeber
-     *
-     * @return the value of Auftraggeber
-     */
-    public String getAuftraggeber() {
-        return Auftraggeber;
-    }
-
-    /**
-     * Get the value of KAdress1
-     *
-     * @return the value of KAdress1
-     */
-    public String getAAdress1() {
-        return AAdress1;
-    }
-
-    /**
-     * Get the value of KAdress2
-     *
-     * @return the value of KAdress2
-     */
-    public String getAAdress2() {
-        return AAdress2;
-    }
-
-    /**
-     * Get the value of KPlz
-     *
-     * @return the value of KPlz
-     */
-    public String getAPlz() {
-        return APlz;
-    }
-
-    /**
-     * Get the value of KOrt
-     *
-     * @return the value of KOrt
-     */
-    public String getAOrt() {
-        return AOrt;
-    }
-
-    /**
-     * Get the value of KTelefon
-     *
-     * @return the value of KTelefon
-     */
-    public String getATelefon() {
-        return ATelefon;
-    }
-
-    /**
-     * Get the value of KEmail
-     *
-     * @return the value of KEmail
-     */
-    public String getAEmail() {
-        return AEmail;
-    }
-
-
-    /**
-     * Get the value of Zusatz2_Name
-     *
-     * @return the value of Zusatz2_Name
-     */
-    public String getZusatz2_Name() {
-        return Zusatz2_Name;
-    }
-
-    /**
-     * Set the value of Zusatz2_Name
-     *
-     * @param Zusatz2_Name new value of Zusatz2_Name
-     */
-    public void setZusatz2_Name(String Zusatz2_Name) {
-        this.Zusatz2_Name = Zusatz2_Name;
-    }
-
-    /**
-     * Get the value of Zusatz2
-     *
-     * @return the value of Zusatz2
-     */
-    public boolean isZusatz2() {
-        return Zusatz2;
-    }
-
-    /**
-     * Set the value of Zusatz2
-     *
-     * @param Zusatz2 new value of Zusatz2
-     */
-    public void setZusatz2(boolean Zusatz2) {
-        this.Zusatz2 = Zusatz2;
-    }
-
-    /**
-     * Get the value of Zusatz1_Name
-     *
-     * @return the value of Zusatz1_Name
-     */
-    public String getZusatz1_Name() {
-        return Zusatz1_Name;
-    }
-
-    /**
-     * Set the value of Zusatz1_Name
-     *
-     * @param Zusatz1_Name new value of Zusatz1_Name
-     */
-    public void setZusatz1_Name(String Zusatz1_Name) {
-        this.Zusatz1_Name = Zusatz1_Name;
-    }
-
-    /**
-     * Get the value of Zusatz1
-     *
-     * @return the value of Zusatz1
-     */
-    public boolean isZusatz1() {
-        return Zusatz1;
-    }
-
-    /**
-     * Set the value of Zusatz1
-     *
-     * @param Zusatz1 new value of Zusatz1
-     */
-    public void setZusatz1(boolean Zusatz1) {
-        this.Zusatz1 = Zusatz1;
-    }
-
-    public Properties getEinstellungen(){
-        java.util.Properties sysprops = System.getProperties();
-        java.io.File optionfile  = new java.io.File(sysprops.getProperty("user.home") + sysprops.getProperty("file.separator") + ".arbeitrechnungen"
-                + sysprops.getProperty("file.separator") + "optionen.ini");
-
-        try{
-            optionen.load(new java.io.FileInputStream(optionfile));
-            return optionen;
-        }catch(Exception e){
-            System.err.println("RechnungenDialog.java: Options-Datei konnte nicht geladen werden.");
-            return null;
-        }
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                KlientenEditor dialog = new KlientenEditor();
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle arbeitsstundenTabelle1;
     private arbeitsrechnungen.gui.panels.FormRechnungen formRechnungen1;
@@ -2258,4 +1726,5 @@ public class KlientenEditor extends javax.swing.JFrame {
             return order[0];
         }
     }
+    
 }
