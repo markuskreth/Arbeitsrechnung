@@ -6,20 +6,24 @@ package arbeitsrechnungen;
  * @author markus
  */
 
-import org.apache.log4j.Logger;
-import ArbeitsstundeModel.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.Vector;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsrechnungen.data.ArbeitsstundeImpl;
 
-import java.io.*;
-import org.apache.log4j.Level;
-
 public class RechnungData {
     
-	private Logger logger = Logger.getLogger("arbeitsrechnungen.RechnungData");
+	private Logger logger = Logger.getLogger(RechnungData.class);
     
     protected static final String TEXUMBRUCH = "\\\\\\\\";
     protected static final String TEXLINE = "\\\\hline ";

@@ -26,7 +26,7 @@ public class DatenPersister {
 			logger.error("Not connected!");
 	}
 
-	public Vector<Forderung> getForderungen(){
+	public Vector<Forderung> getEinheiten(){
 		String sqltext = "SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis "
 				+ "FROM einheiten, klienten "
 				+ "WHERE einheiten.klienten_id = klienten.klienten_id "

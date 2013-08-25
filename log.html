@@ -11,7 +11,7 @@ th {background: #336699; color: #FFFFFF; text-align: left;}
 </head>
 <body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
 <hr size="1" noshade>
-Log session start time Sun May 30 21:05:00 CEST 2010<br>
+Log session start time Sun Aug 25 05:04:12 CEST 2013<br>
 <br>
 <table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
 <tr>
@@ -26,10 +26,28 @@ Log session start time Sun May 30 21:05:00 CEST 2010<br>
 <tr>
 <td>0</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:68</td>
+<td title="Message">current Loglevel: null</td>
+</tr>
+
+<tr>
+<td>550</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:24</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>551</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:424</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (302, 314, 313, 312) ORDER BY Datum, Preis;</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:37</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
 </tr>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -44,289 +62,7 @@ th {background: #336699; color: #FFFFFF; text-align: left;}
 </head>
 <body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
 <hr size="1" noshade>
-Log session start time Sun May 30 21:14:19 CEST 2010<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
-
-<tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:424</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (302, 314, 313, 312) ORDER BY Datum, Preis;</td>
-</tr>
-
-<tr>
-<td>11</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:478</td>
-<td title="Message">SELECT * FROM klienten WHERE klienten_id=28;</td>
-</tr>
-
-<tr>
-<td>19</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:358</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT Auftraggeber,rechnungnummer_bezeichnung FROM klienten WHERE klienten_id=28;</td>
-</tr>
-
-<tr>
-<td>21</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:377</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz</td>
-</tr>
-
-<tr>
-<td>23</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:383</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05</td>
-</tr>
-
-<tr>
-<td>24</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:386</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE &quot;MTV Groß-Buchholz-2010-05%&quot; ORDER BY rechnungnr;</td>
-</tr>
-
-<tr>
-<td>26</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:400</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05a</td>
-</tr>
-
-<tr>
-<td>31</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1085</td>
-<td title="Message">Listener übergeben und wird hinzugefügt...</td>
-</tr>
-
-<tr>
-<td>32</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1086</td>
-<td title="Message">arbeitsrechnungen.ArbeitsstundenTabelle$19@78b3e62</td>
-</tr>
-
-<tr>
-<td>5065</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>5067</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-
-<tr>
-<td>166744</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>166747</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Sun May 30 21:17:41 CEST 2010<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
-
-<tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:424</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (302, 314, 313, 312) ORDER BY Datum, Preis;</td>
-</tr>
-
-<tr>
-<td>7</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:478</td>
-<td title="Message">SELECT * FROM klienten WHERE klienten_id=28;</td>
-</tr>
-
-<tr>
-<td>13</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:358</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT Auftraggeber,rechnungnummer_bezeichnung FROM klienten WHERE klienten_id=28;</td>
-</tr>
-
-<tr>
-<td>14</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:377</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz</td>
-</tr>
-
-<tr>
-<td>16</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:383</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05</td>
-</tr>
-
-<tr>
-<td>17</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:386</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE &quot;MTV Groß-Buchholz-2010-05%&quot; ORDER BY rechnungnr;</td>
-</tr>
-
-<tr>
-<td>26</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:400</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05a</td>
-</tr>
-
-<tr>
-<td>30</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1085</td>
-<td title="Message">Listener übergeben und wird hinzugefügt...</td>
-</tr>
-
-<tr>
-<td>31</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1086</td>
-<td title="Message">arbeitsrechnungen.ArbeitsstundenTabelle$19@2c3299f6</td>
-</tr>
-
-<tr>
-<td>2167</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>2171</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-
-<tr>
-<td>6711</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>6715</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Mon May 31 00:30:27 CEST 2010<br>
+Log session start time Sun Aug 25 05:09:08 CEST 2013<br>
 <br>
 <table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
 <tr>
@@ -341,118 +77,28 @@ Log session start time Mon May 31 00:30:27 CEST 2010<br>
 <tr>
 <td>1</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:424</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (302, 314, 313, 312) ORDER BY Datum, Preis;</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:68</td>
+<td title="Message">current Loglevel: DEBUG</td>
 </tr>
 
 <tr>
-<td>230938</td>
+<td>942</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:478</td>
-<td title="Message">SELECT * FROM klienten WHERE klienten_id=28;</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:24</td>
+<td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>230950</td>
+<td>943</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:358</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT Auftraggeber,rechnungnummer_bezeichnung FROM klienten WHERE klienten_id=28;</td>
-</tr>
-
-<tr>
-<td>230952</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:377</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz</td>
-</tr>
-
-<tr>
-<td>230953</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:383</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05</td>
-</tr>
-
-<tr>
-<td>230954</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:386</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE &quot;MTV Groß-Buchholz-2010-05%&quot; ORDER BY rechnungnr;</td>
-</tr>
-
-<tr>
-<td>230955</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:400</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05a</td>
-</tr>
-
-<tr>
-<td>230958</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1085</td>
-<td title="Message">Listener übergeben und wird hinzugefügt...</td>
-</tr>
-
-<tr>
-<td>230959</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1086</td>
-<td title="Message">arbeitsrechnungen.ArbeitsstundenTabelle$19@5c6a9e79</td>
-</tr>
-
-<tr>
-<td>720388</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>720392</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-
-<tr>
-<td>821427</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>821430</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:37</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
 </tr>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -467,271 +113,7 @@ th {background: #336699; color: #FFFFFF; text-align: left;}
 </head>
 <body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
 <hr size="1" noshade>
-Log session start time Mon May 31 00:45:12 CEST 2010<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
-
-<tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:424</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (302, 314, 313, 312) ORDER BY Datum, Preis;</td>
-</tr>
-
-<tr>
-<td>9</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:478</td>
-<td title="Message">SELECT * FROM klienten WHERE klienten_id=28;</td>
-</tr>
-
-<tr>
-<td>16</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:358</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT Auftraggeber,rechnungnummer_bezeichnung FROM klienten WHERE klienten_id=28;</td>
-</tr>
-
-<tr>
-<td>17</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:377</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz</td>
-</tr>
-
-<tr>
-<td>18</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:383</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05</td>
-</tr>
-
-<tr>
-<td>18</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:386</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE &quot;MTV Groß-Buchholz-2010-05%&quot; ORDER BY rechnungnr;</td>
-</tr>
-
-<tr>
-<td>19</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:400</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05a</td>
-</tr>
-
-<tr>
-<td>22</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1085</td>
-<td title="Message">Listener übergeben und wird hinzugefügt...</td>
-</tr>
-
-<tr>
-<td>23</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1086</td>
-<td title="Message">arbeitsrechnungen.ArbeitsstundenTabelle$19@6483e5f1</td>
-</tr>
-
-<tr>
-<td>23201</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>23202</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-
-<tr>
-<td>37871</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>37873</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Mon May 31 00:46:51 CEST 2010<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
-
-<tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:424</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (302, 314, 313, 312) ORDER BY Datum, Preis;</td>
-</tr>
-
-<tr>
-<td>12</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:478</td>
-<td title="Message">SELECT * FROM klienten WHERE klienten_id=28;</td>
-</tr>
-
-<tr>
-<td>20</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:358</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT Auftraggeber,rechnungnummer_bezeichnung FROM klienten WHERE klienten_id=28;</td>
-</tr>
-
-<tr>
-<td>22</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:377</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz</td>
-</tr>
-
-<tr>
-<td>24</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:383</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05</td>
-</tr>
-
-<tr>
-<td>27</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:386</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE &quot;MTV Groß-Buchholz-2010-05%&quot; ORDER BY rechnungnr;</td>
-</tr>
-
-<tr>
-<td>29</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:400</td>
-<td title="Message">rechnungsnr: MTV Groß-Buchholz-2010-05a</td>
-</tr>
-
-<tr>
-<td>34</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1085</td>
-<td title="Message">Listener übergeben und wird hinzugefügt...</td>
-</tr>
-
-<tr>
-<td>35</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1086</td>
-<td title="Message">arbeitsrechnungen.ArbeitsstundenTabelle$19@5197d20c</td>
-</tr>
-
-<tr>
-<td>105709</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>105714</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Mon May 31 00:51:21 CEST 2010<br>
+Log session start time Sun Aug 25 05:22:07 CEST 2013<br>
 <br>
 <table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
 <tr>
@@ -747,27 +129,27 @@ Log session start time Mon May 31 00:51:21 CEST 2010<br>
 <td>0</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:508</td>
-<td title="Message">showPdf: /usr/bin/okular /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/output/1275259881601.pdf</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:69</td>
+<td title="Message">current Loglevel: DEBUG</td>
 </tr>
 
 <tr>
-<td>359384</td>
+<td>506</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:24</td>
+<td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>359387</td>
+<td>507</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:37</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
 </tr>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -782,7 +164,7 @@ th {background: #336699; color: #FFFFFF; text-align: left;}
 </head>
 <body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
 <hr size="1" noshade>
-Log session start time Tue Aug 03 16:42:59 CEST 2010<br>
+Log session start time Sun Aug 25 05:23:30 CEST 2013<br>
 <br>
 <table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
 <tr>
@@ -798,455 +180,295 @@ Log session start time Tue Aug 03 16:42:59 CEST 2010<br>
 <td>0</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:509</td>
-<td title="Message">showPdf: /usr/bin/okular /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/pdf-speicher/Solvay_GmbH_Solvay_GmbH_z.Hd._Herrn_Michael_Busche_Hans-Böckler-Allee_20_30173_Hannover_.pdf</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Fri Aug 06 17:15:15 CEST 2010<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:69</td>
+<td title="Message">current Loglevel: DEBUG</td>
 </tr>
 
 <tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:424</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (53, 54, 60, 65, 67, 70, 76) ORDER BY Datum, Preis;</td>
-</tr>
-
-<tr>
-<td>34</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:478</td>
-<td title="Message">SELECT * FROM klienten WHERE klienten_id=2;</td>
-</tr>
-
-<tr>
-<td>41</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:358</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT Auftraggeber,rechnungnummer_bezeichnung FROM klienten WHERE klienten_id=2;</td>
-</tr>
-
-<tr>
-<td>42</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:377</td>
-<td title="Message">rechnungsnr: Solvay GmbH</td>
-</tr>
-
-<tr>
-<td>43</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:383</td>
-<td title="Message">rechnungsnr: Solvay GmbH-2010-08</td>
-</tr>
-
-<tr>
-<td>43</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:386</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE &quot;Solvay GmbH-2010-08%&quot; ORDER BY rechnungnr;</td>
-</tr>
-
-<tr>
-<td>44</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:400</td>
-<td title="Message">rechnungsnr: Solvay GmbH-2010-08</td>
-</tr>
-
-<tr>
-<td>49</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1085</td>
-<td title="Message">Listener übergeben und wird hinzugefügt...</td>
-</tr>
-
-<tr>
-<td>50</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1086</td>
-<td title="Message">arbeitsrechnungen.ArbeitsstundenTabelle$19@490241ae</td>
-</tr>
-
-<tr>
-<td>4943</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: Mon Aug 02 17:15:15 CEST 2010</td>
-</tr>
-
-<tr>
-<td>11589</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: Thu Sep 03 17:15:15 CEST 2009</td>
-</tr>
-
-<tr>
-<td>15344</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: Mon Aug 03 17:15:15 CEST 2009</td>
-</tr>
-
-<tr>
-<td>20592</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:241</td>
-<td title="Message">null</td>
-</tr>
-
-<tr>
-<td>20595</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:242</td>
-<td title="Message"> wurde geändert!</td>
-</tr>
-
-<tr>
-<td>20597</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:243</td>
-<td title="Message">DefaultRootElement: BranchElement(paragraph) 0,19
-</td>
-</tr>
-
-<tr>
-<td>20599</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:253</td>
-<td title="Message">Rechnungsnummer geändert!</td>
-</tr>
-
-<tr>
-<td>21233</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:241</td>
-<td title="Message">null</td>
-</tr>
-
-<tr>
-<td>21234</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:242</td>
-<td title="Message"> wurde geändert!</td>
-</tr>
-
-<tr>
-<td>21236</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:243</td>
-<td title="Message">DefaultRootElement: BranchElement(paragraph) 0,20
-</td>
-</tr>
-
-<tr>
-<td>21238</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:253</td>
-<td title="Message">Rechnungsnummer geändert!</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Fri Aug 06 17:18:25 CEST 2010<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
-
-<tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:424</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (53, 54, 60, 65, 67, 70, 76) ORDER BY Datum, Preis;</td>
-</tr>
-
-<tr>
-<td>9</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:478</td>
-<td title="Message">SELECT * FROM klienten WHERE klienten_id=2;</td>
-</tr>
-
-<tr>
-<td>15</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:358</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT Auftraggeber,rechnungnummer_bezeichnung FROM klienten WHERE klienten_id=2;</td>
-</tr>
-
-<tr>
-<td>17</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:377</td>
-<td title="Message">rechnungsnr: Solvay GmbH</td>
-</tr>
-
-<tr>
-<td>18</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:383</td>
-<td title="Message">rechnungsnr: Solvay GmbH-2010-08</td>
-</tr>
-
-<tr>
-<td>19</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:386</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE &quot;Solvay GmbH-2010-08%&quot; ORDER BY rechnungnr;</td>
-</tr>
-
-<tr>
-<td>20</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:400</td>
-<td title="Message">rechnungsnr: Solvay GmbH-2010-08</td>
-</tr>
-
-<tr>
-<td>25</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1085</td>
-<td title="Message">Listener übergeben und wird hinzugefügt...</td>
-</tr>
-
-<tr>
-<td>26</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1086</td>
-<td title="Message">arbeitsrechnungen.ArbeitsstundenTabelle$19@6ac27081</td>
-</tr>
-
-<tr>
-<td>5439</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: Mon Aug 03 17:18:25 CEST 2009</td>
-</tr>
-
-<tr>
-<td>10691</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: Fri Sep 04 17:18:25 CEST 2009</td>
-</tr>
-
-<tr>
-<td>13934</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:241</td>
-<td title="Message">null</td>
-</tr>
-
-<tr>
-<td>13935</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:242</td>
-<td title="Message"> wurde geändert!</td>
-</tr>
-
-<tr>
-<td>13937</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:243</td>
-<td title="Message">DefaultRootElement: BranchElement(paragraph) 0,19
-</td>
-</tr>
-
-<tr>
-<td>13938</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:253</td>
-<td title="Message">Rechnungsnummer geändert!</td>
-</tr>
-
-<tr>
-<td>14486</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:241</td>
-<td title="Message">null</td>
-</tr>
-
-<tr>
-<td>14487</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:242</td>
-<td title="Message"> wurde geändert!</td>
-</tr>
-
-<tr>
-<td>14488</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:243</td>
-<td title="Message">DefaultRootElement: BranchElement(paragraph) 0,20
-</td>
-</tr>
-
-<tr>
-<td>14490</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:253</td>
-<td title="Message">Rechnungsnummer geändert!</td>
-</tr>
-
-<tr>
-<td>56959</td>
+<td>521</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:511</td>
-<td title="Message">showPdf: /usr/bin/okular /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/pdf-speicher/Solvay_GmbH_Solvay_GmbH-2009-08.pdf</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:24</td>
+<td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>57000</td>
+<td>522</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:37</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 05:28:44 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
 </tr>
 
 <tr>
-<td>57004</td>
+<td>1</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:69</td>
+<td title="Message">current Loglevel: DEBUG</td>
 </tr>
 
 <tr>
-<td>104968</td>
+<td>533</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:24</td>
+<td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>104971</td>
+<td>534</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:219</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:37</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 05:31:50 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:69</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>518</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:24</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>519</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:37</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 05:45:24 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:72</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>337</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#993300"><strong>ERROR</strong></font></td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:26</td>
+<td title="Message">Not connected!</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 05:49:02 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:72</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>310</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#993300"><strong>ERROR</strong></font></td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:26</td>
+<td title="Message">Not connected!</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 05:51:02 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:72</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 05:55:15 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:72</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>527</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:24</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>528</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:37</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
 </tr>
