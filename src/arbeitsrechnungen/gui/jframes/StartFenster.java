@@ -18,6 +18,9 @@ package arbeitsrechnungen.gui.jframes;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,15 +37,17 @@ import javax.swing.table.DefaultTableModel;
 
 import mouseoverhintmanager.MouseOverHintManager;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsrechnungen.StartFensterTableCellRenderer;
 import arbeitsrechnungen.gui.dialogs.Optionen;
+import arbeitsrechnungen.gui.jframes.starttablemodels.LabledStringValueNoneditableTableModel;
 import arbeitsrechnungen.persister.DatenPersister;
 import arbeitsrechnungen.persister.DatenPersister.Forderung;
 //import javax.swing.event.TableModelListener;
-//import java.awt.event.ContainerListener;
+//import ContainerListener;
 
 public class StartFenster extends javax.swing.JFrame implements
 		PropertyChangeListener {
@@ -50,16 +55,27 @@ public class StartFenster extends javax.swing.JFrame implements
 	private static final long serialVersionUID = -1175489292478287196L;
 	public static final int FORDERUNGEN = 1;
 	public static final int EINHEITEN = 2;
-	Logger logger = Logger.getRootLogger();
+	Logger logger;
 
-	Vector<Integer> Forderungen_ids = new Vector<Integer>();
+	Vector<Integer> Forderungen_ids = new Vector<Integer>();                        
 	Vector<Integer> Einheiten_ids = new Vector<Integer>();
 	Properties optionen = new Properties();
 	MouseOverHintManager hintman;
+	private DefaultTableModel forderungenTableModel;
+	private DefaultTableModel einheitenTableModel;
+	private DatenPersister persister;
 
 	/** Creates new form StartFenster */
 	public StartFenster() {
-		loadOptions();
+		logger = Logger.getLogger(getClass());
+		logger.setLevel(Level.DEBUG);
+		logger.info("current Loglevel: " + logger.getLevel());
+		loadOrCreateOptions();
+
+		// Model mit Überschriften erstellen
+		einheitenTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Firma", "Einsätze", "Summe" });
+		forderungenTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Firma", "Rechnungsdatum", "Forderung" });
+
 		initComponents();
 		initForderungen();
 		initEinheiten();
@@ -87,7 +103,7 @@ public class StartFenster extends javax.swing.JFrame implements
 		hintman.enableHints(this);
 	}
 
-	private void loadOptions() {
+	private void loadOrCreateOptions() {
 		// Testen ob das arbeitsverzeichnis im home-verzeichnis existiert
 		File homeverzeichnis;
 		Properties sysprops = System.getProperties();
@@ -149,25 +165,6 @@ public class StartFenster extends javax.swing.JFrame implements
 		// Spaltenbreiten merken
 		int[][] spaltenBreiten = getSpaltenBreiten(this.jTableForderungen);
 		
-		// Model mit Überschriften erstellen
-		DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {},
-				new String[] { "Firma", "Rechnungsdatum", "Forderung" }) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1080987754441922362L;
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				return String.class;
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-		};
-
 		// Daten laden
 		Verbindung verbindung = new Verbindung(
 				optionen.getProperty("sqlserver"),
@@ -200,7 +197,7 @@ public class StartFenster extends javax.swing.JFrame implements
 				java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
 				datensatz.add(df.format(daten.getDouble("summe")) + " €");
 				summe = summe + daten.getDouble("summe");
-				mymodel.addRow(datensatz);
+				forderungenTableModel.addRow(datensatz);
 				this.Forderungen_ids.add(daten.getInt("id"));
 			}
 		} catch (Exception e) {
@@ -214,10 +211,7 @@ public class StartFenster extends javax.swing.JFrame implements
 		datensatz.add("");
 		java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
 		datensatz.add(df.format(summe) + " €");
-		mymodel.addRow(datensatz);
-
-		// eigenes Modell einsetzten und Vorgegebene Breiten speichern
-		jTableForderungen.setModel(mymodel);
+		forderungenTableModel.addRow(datensatz);
 		
 		restoreSpaltenBreiten(jTableForderungen, spaltenBreiten);
 		
@@ -270,44 +264,12 @@ public class StartFenster extends javax.swing.JFrame implements
 	private void initEinheiten() {
 		int[][] spaltenBreiten = getSpaltenBreiten(jTableEinheiten);
 		
-		// Model mit Überschriften erstellen
-		javax.swing.table.DefaultTableModel mymodel = new javax.swing.table.DefaultTableModel(
-				new Object[][] {},
-				new String[] { "Firma", "Einsätze", "Summe" }) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -2401952331621012385L;
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				return String.class;
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-		};
-
-//		// Daten laden
-//		Verbindung verbindung = new Verbindung(
-//				optionen.getProperty("sqlserver"),
-//				optionen.getProperty("datenbank"),
-//				optionen.getProperty("user"), optionen.getProperty("password"));
-//		String sqltext = "SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis "
-//				+ "FROM einheiten, klienten "
-//				+ "WHERE einheiten.klienten_id = klienten.klienten_id "
-//				+ "AND ISNULL( einheiten.Rechnung_verschickt ) "
-//				+ "AND ISNULL( einheiten.Bezahlt ) "
-//				+ "GROUP BY einheiten.klienten_id " + "ORDER BY klientpreis;";
-
-		DatenPersister persister = new DatenPersister(optionen);
+		// Daten laden
+		persister = new DatenPersister(optionen);
 		double summe = 0;
 		
-
 		java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
-		Vector<Forderung> forderungen2 = persister.getForderungen();
+		Vector<Forderung> forderungen2 = persister.getEinheiten();
 		
 		for (Iterator<Forderung> iterator = forderungen2.iterator(); iterator.hasNext();) {
 			Forderung forderung = iterator.next();
@@ -320,7 +282,7 @@ public class StartFenster extends javax.swing.JFrame implements
 			datensatz.add(forderung.getAuftraggeber());
 			datensatz.add(String.valueOf(forderung.getAnzahl()));
 			datensatz.add(df.format(forderung.getKlientenpreis()) + " €");
-			mymodel.addRow(datensatz);
+			einheitenTableModel.addRow(datensatz);
 		}
 		
 		// In der letzten Zeile die Summe ausgeben
@@ -330,10 +292,7 @@ public class StartFenster extends javax.swing.JFrame implements
 		datensatz.add("");
 
 		datensatz.add(df.format(summe) + " €");
-		mymodel.addRow(datensatz);
-
-		// eigenes Modell einsetzten und Vorgegebene Breiten speichern
-		jTableEinheiten.setModel(mymodel);
+		einheitenTableModel.addRow(datensatz);
 		
 		restoreSpaltenBreiten(jTableEinheiten, spaltenBreiten);
 		
@@ -386,8 +345,8 @@ public class StartFenster extends javax.swing.JFrame implements
 		jButtonKlientenEditor.setName("jButtonKlientenEditor"); // NOI18N
 		jButtonKlientenEditor.setPreferredSize(new java.awt.Dimension(151, 25));
 		jButtonKlientenEditor
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
+				.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
 						jButtonKlientenEditorActionPerformed(evt);
 					}
 				});
@@ -406,8 +365,8 @@ public class StartFenster extends javax.swing.JFrame implements
 		jButtonArtenEinheiten.setName("jButtonArtenEinheiten"); // NOI18N
 		jButtonArtenEinheiten.setPreferredSize(new java.awt.Dimension(151, 25));
 		jButtonArtenEinheiten
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
+				.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
 						jButtonArtenEinheitenActionPerformed(evt);
 					}
 				});
@@ -417,8 +376,8 @@ public class StartFenster extends javax.swing.JFrame implements
 		jButton1.setMaximumSize(new java.awt.Dimension(500, 25));
 		jButton1.setMinimumSize(new java.awt.Dimension(120, 25));
 		jButton1.setName("jButtonEinheiten"); // NOI18N
-		jButton1.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		jButton1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				jButton1ActionPerformed(evt);
 			}
 		});
@@ -487,23 +446,15 @@ public class StartFenster extends javax.swing.JFrame implements
 
 		jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-		jTableForderungen.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { { null, null, null } }, new String[] {
-						"Firma", "Rechnungsdatum", "Forderung" }) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 6664843129153687040L;
-			Class<?>[] types = new Class[] { java.lang.String.class,
-					java.lang.String.class, java.lang.String.class };
+//		jTableForderungen.setModel(new LabledStringValueNoneditableTableModel(new String[] {
+//						"Firma", "Rechnungsdatum", "Forderung" }));
 
-			public Class<?> getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-		});
+		jTableEinheiten.setModel(einheitenTableModel);
+		jTableForderungen.setModel(forderungenTableModel);
+		
 		jTableForderungen.setName("jTableForderungen"); // NOI18N
-		jTableForderungen.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
+		jTableForderungen.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evt) {
 				jTableForderungenMouseClicked(evt);
 			}
 		});
@@ -581,23 +532,12 @@ public class StartFenster extends javax.swing.JFrame implements
 
 		jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-		jTableEinheiten.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { { null, null, null } }, new String[] {
-						"Firma", "Stundenanzahl", "Summe" }) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 7556516802796731084L;
-			Class<?>[] types = new Class[] { java.lang.String.class,
-					java.lang.String.class, java.lang.String.class };
-
-			public Class<?> getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-		});
+//		jTableEinheiten.setModel(new LabledStringValueNoneditableTableModel(
+//				new String[] {"Firma", "Stundenanzahl", "Summe" }));
+		
 		jTableEinheiten.setName("jTableEinheiten"); // NOI18N
-		jTableEinheiten.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
+		jTableEinheiten.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evt) {
 				jTableEinheitenMouseClicked(evt);
 			}
 		});
@@ -682,8 +622,8 @@ public class StartFenster extends javax.swing.JFrame implements
 
 		jMenuItemOption.setText(resourceMap.getString("jMenuItemOption.text")); // NOI18N
 		jMenuItemOption.setName("jMenuItemOption"); // NOI18N
-		jMenuItemOption.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		jMenuItemOption.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				jMenuItemOptionActionPerformed(evt);
 			}
 		});
@@ -790,7 +730,7 @@ public class StartFenster extends javax.swing.JFrame implements
 	}// </editor-fold>//GEN-END:initComponents
 
 	private void jButtonKlientenEditorActionPerformed(
-			java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonKlientenEditorActionPerformed
+			ActionEvent evt) {// GEN-FIRST:event_jButtonKlientenEditorActionPerformed
 		openKlientenEditor(null, null);
 	}// GEN-LAST:event_jButtonKlientenEditorActionPerformed
 
@@ -824,12 +764,12 @@ public class StartFenster extends javax.swing.JFrame implements
 		}
 	}
 
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+	private void jButton1ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
 		Arbeitsstunden arbeitsstunden = new Arbeitsstunden();
 		arbeitsstunden.setVisible(true);
 	}// GEN-LAST:event_jButton1ActionPerformed
 
-	private void jTableForderungenMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jTableForderungenMouseClicked
+	private void jTableForderungenMouseClicked(MouseEvent evt) {// GEN-FIRST:event_jTableForderungenMouseClicked
 		// System.out.println("Mouse geklickt! Anzahl: " + evt.getClickCount());
 		if (this.jTableForderungen.getSelectedRowCount() == 0)
 			jTableForderungenSetSelection(evt);
@@ -848,7 +788,7 @@ public class StartFenster extends javax.swing.JFrame implements
 		 */
 	}// GEN-LAST:event_jTableForderungenMouseClicked
 
-	private void jTableEinheitenMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jTableEinheitenMouseClicked
+	private void jTableEinheitenMouseClicked(MouseEvent evt) {// GEN-FIRST:event_jTableEinheitenMouseClicked
 		// System.out.println("Mouse geklickt! Anzahl: " + evt.getClickCount());
 		if (this.jTableForderungen.getSelectedRowCount() == 0)
 			jTableEinheitenSetSelection(evt);
@@ -868,17 +808,15 @@ public class StartFenster extends javax.swing.JFrame implements
 
 	}// GEN-LAST:event_jTableEinheitenMouseClicked
 
-	private void jMenuItemOptionActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItemOptionActionPerformed
+	private void jMenuItemOptionActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jMenuItemOptionActionPerformed
 		// Öffne Options-Fenster
 		Optionen optionwindow = new Optionen(this, false);
 		optionwindow.setVisible(true);
 	}// GEN-LAST:event_jMenuItemOptionActionPerformed
 
 	private void jButtonArtenEinheitenActionPerformed(
-			java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonArtenEinheitenActionPerformed
-		// TODO Einheitenarten Fenster erstellen und in Datenbank anlegen zur
-		// Abrechnung
-	}// GEN-LAST:event_jButtonArtenEinheitenActionPerformed
+			ActionEvent evt) {
+	}
 
 	private void jSplitPane1PropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_jSplitPane1PropertyChange
 		// TODO add your handling code here:
@@ -886,7 +824,7 @@ public class StartFenster extends javax.swing.JFrame implements
 				+ this.jSplitPane1.getDividerLocation());
 	}// GEN-LAST:event_jSplitPane1PropertyChange
 
-	private void jTableEinheitenSetSelection(java.awt.event.MouseEvent evt) {
+	private void jTableEinheitenSetSelection(MouseEvent evt) {
 		// System.out.println("Zeile wird selectiert.");
 		java.awt.Point p = evt.getPoint();
 		int zeile = this.jTableEinheiten.rowAtPoint(p);
@@ -894,8 +832,7 @@ public class StartFenster extends javax.swing.JFrame implements
 				zeile);
 	}
 
-	private void jTableForderungenSetSelection(java.awt.event.MouseEvent evt) {
-		// System.out.println("Zeile wird selectiert.");
+	private void jTableForderungenSetSelection(MouseEvent evt) {
 		java.awt.Point p = evt.getPoint();
 		int zeile = this.jTableForderungen.rowAtPoint(p);
 		this.jTableForderungen.getSelectionModel().setSelectionInterval(zeile,

@@ -9,7 +9,6 @@ package arbeitsrechnungen;
  *
  * @author markus
  */
-
 public class Punkt {
     int a=0;
     int b=0;
