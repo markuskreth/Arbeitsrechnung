@@ -737,7 +737,7 @@ public class StartFenster
 	}
 
 	private void jButton1ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-		Arbeitsstunden arbeitsstunden = new Arbeitsstunden();
+		Arbeitsstunden arbeitsstunden = new Arbeitsstunden(optionen);
 		arbeitsstunden.setVisible(true);
 	}// GEN-LAST:event_jButton1ActionPerformed
 
