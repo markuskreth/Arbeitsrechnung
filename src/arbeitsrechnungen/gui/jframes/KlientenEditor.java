@@ -29,12 +29,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import org.jdesktop.beansbinding.AutoBinding;
-
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsrechnungen.Einstellungen;
 import arbeitsrechnungen.data.Angebot;
 import arbeitsrechnungen.data.Klient;
+import arbeitsrechnungen.gui.LabelComponentBinding;
 import arbeitsrechnungen.gui.dialogs.AngebotDialog;
 import arbeitsrechnungen.gui.jframes.starttablemodels.LabledStringValueNoneditableTableModel;
 import arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle;
@@ -77,7 +76,6 @@ public class KlientenEditor extends javax.swing.JFrame {
     };
     java.awt.FocusTraversalPolicy policy = new FocusTraversalPolicyImpl();
 	private KlientenEditorPersister persister;
-
 
     /** Creates new form KlientenEditor */
     public KlientenEditor() {
@@ -571,7 +569,6 @@ public class KlientenEditor extends javax.swing.JFrame {
      * initialize the form.
      */
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -774,14 +771,8 @@ public class KlientenEditor extends javax.swing.JFrame {
         jCheckBoxZusatz1.setText(resourceMap.getString("Zusatz1.text")); // NOI18N
         jCheckBoxZusatz1.setName("Zusatz1"); // NOI18N
 
-        AutoBinding<Object, Object, Object, Object> binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jTextFieldZusatzBezeichnung1, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), jCheckBoxZusatz1, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         jCheckBoxZusatz2.setText(resourceMap.getString("Zusatz2.text")); // NOI18N
         jCheckBoxZusatz2.setName("Zusatz2"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jTextFieldZusatzBezeichnung2, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), jCheckBoxZusatz2, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
 
         jLabel17.setText(resourceMap.getString("jLabel17.text")); // NOI18N
         jLabel17.setName("jLabel17"); // NOI18N
@@ -797,9 +788,6 @@ public class KlientenEditor extends javax.swing.JFrame {
 
         jLabel19.setText(resourceMap.getString("jLabel19.text")); // NOI18N
         jLabel19.setName("jLabel19"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jTextFieldRechnungBezeichnung, org.jdesktop.beansbinding.ObjectProperty.create(), jLabel19, org.jdesktop.beansbinding.BeanProperty.create("labelFor"));
-        bindingGroup.addBinding(binding);
 
         jTextFieldRechnungBezeichnung.setText(resourceMap.getString("rechnungnummer_bezeichnung.text")); // NOI18N
         jTextFieldRechnungBezeichnung.setName("rechnungnummer_bezeichnung"); // NOI18N
@@ -869,26 +857,32 @@ public class KlientenEditor extends javax.swing.JFrame {
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setFocusable(false);
         jLabel6.setName("jLabel6"); // NOI18N
-
+        new LabelComponentBinding(jLabel6, jTextFieldKTelefon);
+        
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setFocusable(false);
         jLabel7.setName("jLabel7"); // NOI18N
+        new LabelComponentBinding(jLabel7, jTextFieldKEmail);
 
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setFocusable(false);
         jLabel1.setName("jLabel1"); // NOI18N
+        new LabelComponentBinding(jLabel1, jTextFieldKunde);
 
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setFocusable(false);
         jLabel2.setName("jLabel2"); // NOI18N
+        new LabelComponentBinding(jLabel2, jTextFieldKAdress1);
 
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setFocusable(false);
         jLabel3.setName("jLabel3"); // NOI18N
+        new LabelComponentBinding(jLabel3, jTextFieldKAdress2);
 
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setFocusable(false);
         jLabel4.setName("jLabel4"); // NOI18N
+        new LabelComponentBinding(jLabel4, jTextFieldKPlz);
 
         jTextFieldKPlz.setColumns(5);
         jTextFieldKPlz.setName("KPLZ"); // NOI18N
@@ -1229,8 +1223,6 @@ public class KlientenEditor extends javax.swing.JFrame {
                 .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        bindingGroup.bind();
 
         pack();
     }
@@ -1690,7 +1682,6 @@ public class KlientenEditor extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldTex_datei;
     private javax.swing.JTextField jTextFieldZusatzBezeichnung1;
     private javax.swing.JTextField jTextFieldZusatzBezeichnung2;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     private class FocusTraversalPolicyImpl extends FocusTraversalPolicy {
