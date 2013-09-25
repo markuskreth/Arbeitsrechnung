@@ -16,12 +16,15 @@ package de.kreth.arbeitsrechnungen.gui.dialogs;
  * @author markus
  */
 
-import java.io.File;
+import java.io.*;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-public class Optionen extends javax.swing.JDialog {
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+
+public class Optionen extends JDialog {
 
 	private static final long serialVersionUID = -527076543127705929L;
 
@@ -32,16 +35,16 @@ public class Optionen extends javax.swing.JDialog {
     boolean firststart;
 
     /** Creates new form Optionen */
-    public Optionen(javax.swing.JFrame parent, boolean firststart) {
+    public Optionen(JFrame parent, boolean firststart) {
         super(parent, true);
         this.firststart = firststart;
         initComponents();
         java.util.Properties sysprops = System.getProperties();
         String homedir = sysprops.getProperty("user.home");
-        optiondatei = new java.io.File(homedir + sysprops.getProperty("file.separator") + ".arbeitrechnungen"
+        optiondatei = new File(homedir + sysprops.getProperty("file.separator") + ".arbeitrechnungen"
                 + sysprops.getProperty("file.separator") + "optionen.ini");
         try{
-            einstellungen.load(new java.io.FileInputStream(optiondatei));
+            einstellungen.load(new FileInputStream(optiondatei));
         }catch(Exception e){
             System.err.println("Optionen.java: Options-Datei konnte nicht geladen werden.");
         }
@@ -50,17 +53,17 @@ public class Optionen extends javax.swing.JDialog {
         }
     }
 
-    private void setTexts(javax.swing.JComponent component, String propname){
+    private void setTexts(JComponent component, String propname){
         for(int i=0;i<component.getComponentCount();i++){
-            if(component.getComponent(i) instanceof javax.swing.JPanel || component.getComponent(i) instanceof javax.swing.JTabbedPane){
+            if(component.getComponent(i) instanceof JPanel || component.getComponent(i) instanceof JTabbedPane){
                 System.out.println(propname + ": " + component.getComponent(i).getClass() +
                         "(" + component.getComponent(i).getName() + ") " + "--> setTexts");
-                setTexts((javax.swing.JComponent)component.getComponent(i), propname);
+                setTexts((JComponent)component.getComponent(i), propname);
             }
-            if(component.getComponent(i) instanceof javax.swing.JTextField){
-                System.out.println(((javax.swing.JTextField)component.getComponent(i)).getName());
-                if(((javax.swing.JTextField)component.getComponent(i)).getName().matches(propname)){
-                    ((javax.swing.JTextField)component.getComponent(i)).setText(einstellungen.getProperty(propname));
+            if(component.getComponent(i) instanceof JTextField){
+                System.out.println(((JTextField)component.getComponent(i)).getName());
+                if(((JTextField)component.getComponent(i)).getName().matches(propname)){
+                    ((JTextField)component.getComponent(i)).setText(einstellungen.getProperty(propname));
                     i=component.getComponentCount();
                 }
             }
@@ -74,28 +77,28 @@ public class Optionen extends javax.swing.JDialog {
         // für jedes Property zugehöriges Textfeld 
         while (propnames.hasMoreElements()) {
             String propname = (String)propnames.nextElement();
-            setTexts((javax.swing.JComponent)this.getContentPane(),propname);
+            setTexts((JComponent)this.getContentPane(),propname);
         }
     }
 
-    private void getTexts(javax.swing.JComponent component){
+    private void getTexts(JComponent component){
         for(int i=0;i<component.getComponentCount();i++){
-            if(component.getComponent(i) instanceof javax.swing.JComponent){
+            if(component.getComponent(i) instanceof JComponent){
 //                System.out.println(component.getComponent(i).getClass() + "--> setTexts");
-                getTexts((javax.swing.JComponent)component.getComponent(i));
+                getTexts((JComponent)component.getComponent(i));
             }
-            if(component.getComponent(i) instanceof javax.swing.JTextField){
-                einstellungen.setProperty(((javax.swing.JTextField)component.getComponent(i)).getName(),
-                        ((javax.swing.JTextField)component.getComponent(i)).getText());
-                System.out.println(((javax.swing.JTextField)component.getComponent(i)).getName());
+            if(component.getComponent(i) instanceof JTextField){
+                einstellungen.setProperty(((JTextField)component.getComponent(i)).getName(),
+                        ((JTextField)component.getComponent(i)).getText());
+                System.out.println(((JTextField)component.getComponent(i)).getName());
             }
         }
     }
 
     private void saveoptions(){
-        getTexts((javax.swing.JComponent)this.getContentPane());
+        getTexts((JComponent)this.getContentPane());
         try{
-            einstellungen.store(new java.io.FileOutputStream(optiondatei),"Eigene Optionen");
+            einstellungen.store(new FileOutputStream(optiondatei),"Eigene Optionen");
         }catch(Exception e){
             System.err.println("Optionen.java: Options-Datei konnte nicht gespeichert werden.");
             e.printStackTrace();
@@ -107,37 +110,37 @@ public class Optionen extends javax.swing.JDialog {
      */
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanelDatenbank = new javax.swing.JPanel();
-        jTextFieldSqlServer = new javax.swing.JTextField();
-        jTextFieldUser = new javax.swing.JTextField();
-        jTextFieldDatenbank = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jPasswordFieldPassword = new javax.swing.JPasswordField();
-        jPanelPfade = new javax.swing.JPanel();
-        jTextFieldArbeitsverzeichnis = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jTextFieldVerzeichnisTexDateien = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jButtonArbVerz = new javax.swing.JButton();
-        jButtonTexVerz = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        jTextFieldStdTexDatei = new javax.swing.JTextField();
-        jButtonTexDatei = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        jTextFieldPdfProg = new javax.swing.JTextField();
-        jButtonDialogPdfViewer = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        jTextFieldPdfFiles = new javax.swing.JTextField();
-        jButtonDialogPdfVerz = new javax.swing.JButton();
-        jPanelEinheitenArten = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jTabbedPane1 = new JTabbedPane();
+        jPanelDatenbank = new JPanel();
+        jTextFieldSqlServer = new JTextField();
+        jTextFieldUser = new JTextField();
+        jTextFieldDatenbank = new JTextField();
+        jLabel3 = new JLabel();
+        jLabel4 = new JLabel();
+        jLabel5 = new JLabel();
+        jLabel6 = new JLabel();
+        jPasswordFieldPassword = new JPasswordField();
+        jPanelPfade = new JPanel();
+        jTextFieldArbeitsverzeichnis = new JTextField();
+        jLabel1 = new JLabel();
+        jTextFieldVerzeichnisTexDateien = new JTextField();
+        jLabel2 = new JLabel();
+        jButtonArbVerz = new JButton();
+        jButtonTexVerz = new JButton();
+        jLabel7 = new JLabel();
+        jTextFieldStdTexDatei = new JTextField();
+        jButtonTexDatei = new JButton();
+        jLabel8 = new JLabel();
+        jTextFieldPdfProg = new JTextField();
+        jButtonDialogPdfViewer = new JButton();
+        jLabel9 = new JLabel();
+        jTextFieldPdfFiles = new JTextField();
+        jButtonDialogPdfVerz = new JButton();
+        jPanelEinheitenArten = new JPanel();
+        jButton1 = new JButton();
+        jButton2 = new JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
         
@@ -172,43 +175,43 @@ public class Optionen extends javax.swing.JDialog {
         jPasswordFieldPassword.setText(resourceMap.getString("password.text")); // NOI18N
         jPasswordFieldPassword.setName("password"); // NOI18N
 
-        javax.swing.GroupLayout jPanelDatenbankLayout = new javax.swing.GroupLayout(jPanelDatenbank);
+        GroupLayout jPanelDatenbankLayout = new GroupLayout(jPanelDatenbank);
         jPanelDatenbank.setLayout(jPanelDatenbankLayout);
         jPanelDatenbankLayout.setHorizontalGroup(
-            jPanelDatenbankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanelDatenbankLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelDatenbankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelDatenbankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextFieldDatenbank)
                     .addComponent(jPasswordFieldPassword)
                     .addComponent(jTextFieldUser)
-                    .addComponent(jTextFieldSqlServer, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTextFieldSqlServer, GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelDatenbankLayout.setVerticalGroup(
-            jPanelDatenbankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanelDatenbankLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelDatenbankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldSqlServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldSqlServer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelDatenbankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelDatenbankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jPasswordFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelDatenbankLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldDatenbank, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPasswordFieldPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldDatenbank, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addContainerGap(119, Short.MAX_VALUE))
         );
@@ -282,71 +285,71 @@ public class Optionen extends javax.swing.JDialog {
             }
         });
 
-        javax.swing.GroupLayout jPanelPfadeLayout = new javax.swing.GroupLayout(jPanelPfade);
+        GroupLayout jPanelPfadeLayout = new GroupLayout(jPanelPfade);
         jPanelPfade.setLayout(jPanelPfadeLayout);
         jPanelPfadeLayout.setHorizontalGroup(
-            jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanelPfadeLayout.createSequentialGroup()
-                .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelPfadeLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldPdfProg, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonDialogPdfViewer, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldPdfProg, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonDialogPdfViewer, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelPfadeLayout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
                             .addComponent(jLabel7)
                             .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelPfadeLayout.createSequentialGroup()
-                                .addComponent(jTextFieldPdfFiles, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonDialogPdfVerz, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTextFieldPdfFiles, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonDialogPdfVerz, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanelPfadeLayout.createSequentialGroup()
-                                .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextFieldVerzeichnisTexDateien, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldArbeitsverzeichnis, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldStdTexDatei, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButtonTexDatei, javax.swing.GroupLayout.PREFERRED_SIZE, 17, Short.MAX_VALUE)
-                                    .addComponent(jButtonArbVerz, javax.swing.GroupLayout.PREFERRED_SIZE, 17, Short.MAX_VALUE)
-                                    .addComponent(jButtonTexVerz, javax.swing.GroupLayout.PREFERRED_SIZE, 17, Short.MAX_VALUE))))))
+                                .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldVerzeichnisTexDateien, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldArbeitsverzeichnis, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldStdTexDatei, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButtonTexDatei, GroupLayout.PREFERRED_SIZE, 17, Short.MAX_VALUE)
+                                    .addComponent(jButtonArbVerz, GroupLayout.PREFERRED_SIZE, 17, Short.MAX_VALUE)
+                                    .addComponent(jButtonTexVerz, GroupLayout.PREFERRED_SIZE, 17, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         jPanelPfadeLayout.setVerticalGroup(
-            jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanelPfadeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldArbeitsverzeichnis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldArbeitsverzeichnis, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(jButtonArbVerz, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldVerzeichnisTexDateien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonArbVerz, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldVerzeichnisTexDateien, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jButtonTexVerz, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonTexDatei, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldStdTexDatei, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonTexVerz, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonTexDatei, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldStdTexDatei, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldPdfFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonDialogPdfVerz, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldPdfFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonDialogPdfVerz, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
                 .addGap(18, 18, 18)
-                .addGroup(jPanelPfadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldPdfProg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonDialogPdfViewer, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanelPfadeLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldPdfProg, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonDialogPdfViewer, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addContainerGap(82, Short.MAX_VALUE))
         );
@@ -355,14 +358,14 @@ public class Optionen extends javax.swing.JDialog {
 
         jPanelEinheitenArten.setName("jPanelEinheitenArten"); // NOI18N
 
-        javax.swing.GroupLayout jPanelEinheitenArtenLayout = new javax.swing.GroupLayout(jPanelEinheitenArten);
+        GroupLayout jPanelEinheitenArtenLayout = new GroupLayout(jPanelEinheitenArten);
         jPanelEinheitenArten.setLayout(jPanelEinheitenArtenLayout);
         jPanelEinheitenArtenLayout.setHorizontalGroup(
-            jPanelEinheitenArtenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelEinheitenArtenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 371, Short.MAX_VALUE)
         );
         jPanelEinheitenArtenLayout.setVerticalGroup(
-            jPanelEinheitenArtenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelEinheitenArtenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 225, Short.MAX_VALUE)
         );
 
@@ -384,27 +387,27 @@ public class Optionen extends javax.swing.JDialog {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTabbedPane1, GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jTabbedPane1, GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
                 .addContainerGap())
@@ -428,24 +431,26 @@ public class Optionen extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButtonArbVerzActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonArbVerzActionPerformed
+    private void jButtonArbVerzActionPerformed(java.awt.event.ActionEvent evt) {
         String arb_verz = this.jTextFieldArbeitsverzeichnis.getText();
-        java.awt.FileDialog verz_name = new java.awt.FileDialog(this, "Tex-Verzeichnis");
-        if(arb_verz.length()>0) verz_name.setDirectory(arb_verz);
-        verz_name.setVisible(true);
-        this.jTextFieldArbeitsverzeichnis.setText(verz_name.getDirectory());
-        verz_name.dispose();
-    }//GEN-LAST:event_jButtonArbVerzActionPerformed
+        
+        File file = openFileChooserForDirectory(arb_verz, "Arbeitsverzeichnis");
+        if(file != null)
+        	this.jTextFieldArbeitsverzeichnis.setText(file.getAbsolutePath());
+        else
+        	this.jTextFieldArbeitsverzeichnis.setText("");
+        
+    }
 
-    private void jButtonTexVerzActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTexVerzActionPerformed
-        // 
+    private void jButtonTexVerzActionPerformed(java.awt.event.ActionEvent evt) {
+    	
         String tex_verz = this.jTextFieldVerzeichnisTexDateien.getText();
-        java.awt.FileDialog verz_name = new java.awt.FileDialog(this, "Tex-Verzeichnis");
-        if(tex_verz.length()>0) verz_name.setDirectory(tex_verz);
-        verz_name.setVisible(true);
-        this.jTextFieldVerzeichnisTexDateien.setText(verz_name.getDirectory());
-        verz_name.dispose();
-    }//GEN-LAST:event_jButtonTexVerzActionPerformed
+        File file = openFileChooserForDirectory(tex_verz, "Tex-Verzeichnis");
+        if(file != null)
+        	this.jTextFieldVerzeichnisTexDateien.setText(file.getAbsolutePath());
+        else 
+        	this.jTextFieldVerzeichnisTexDateien.setText("");
+    }
 
     private void jButtonTexDateiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTexDateiActionPerformed
         String tex_datei = jTextFieldStdTexDatei.getText();
@@ -460,7 +465,7 @@ public class Optionen extends javax.swing.JDialog {
             }
         }
 
-        dateiname.setFilenameFilter(new java.io.FilenameFilter() {
+        dateiname.setFilenameFilter(new FilenameFilter() {
 
             public boolean accept(File dir, String name) {
                 if(name.endsWith(".tex")) return true;
@@ -478,63 +483,88 @@ public class Optionen extends javax.swing.JDialog {
         }
         dateiname.dispose();
 
-    }//GEN-LAST:event_jButtonTexDateiActionPerformed
+    }
 
     private void jButtonDialogPdfVerzActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDialogPdfVerzActionPerformed
-        // TODO JFileChooser einrichten! - Verzeichnis akzeptieren, Dateien nicht anzeigen
-        java.io.File pdf_verz = new java.io.File(this.jTextFieldPdfFiles.getText());
-        javax.swing.JFileChooser verz_name = new javax.swing.JFileChooser();
-        if(pdf_verz.length()>0) verz_name.setCurrentDirectory(pdf_verz);
+
+    	String pdfVerzName = this.jTextFieldPdfFiles.getText();
+    	File selectedFile = openFileChooserForDirectory(pdfVerzName, "pdf-Verzeichnis");
+
+    	if(selectedFile != null)
+    		this.jTextFieldPdfFiles.setText(selectedFile.getAbsolutePath());
+    	else 
+    		this.jTextFieldPdfFiles.setText("");
+    }
+
+    private File openFileChooserForDirectory(String preSelectedFileName, String titel){
+
+        File pdf_verz = new File(preSelectedFileName);
+        
+        if(preSelectedFileName.length()<=0 || !pdf_verz.exists())
+        	pdf_verz = new File(".");
+        
+        JFileChooser verzFileChooser = new JFileChooser();
+        verzFileChooser.setName(titel);
+        FileFilter filter = new DirectoryFileFilter();
+		verzFileChooser.setFileFilter(filter);
+		verzFileChooser.setAcceptAllFileFilterUsed(false);
+		verzFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        verzFileChooser.setCurrentDirectory(pdf_verz);
 
 //        java.awt.FileDialog verz_name = new java.awt.FileDialog(this, "Verzeichnis für Pdf-Dateien");
 //        if(pdf_verz.length()>0) verz_name.setDirectory(pdf_verz);
 //        verz_name.setVisible(true);
-        verz_name.showOpenDialog(this);
 
-        this.jTextFieldPdfFiles.setText("");
-    }//GEN-LAST:event_jButtonDialogPdfVerzActionPerformed
-
+        int showOpenDialog = verzFileChooser.showDialog(this, titel);
+        File selectedFile;
+        if(showOpenDialog == JFileChooser.APPROVE_OPTION){
+        	selectedFile = verzFileChooser.getSelectedFile();
+        } else {
+        	selectedFile = null;
+        }
+        return selectedFile;
+    }
     /**
     * @param args the command line arguments
     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Optionen(new javax.swing.JFrame(),false).setVisible(true);
+                new Optionen(new JFrame(),false).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButtonArbVerz;
-    private javax.swing.JButton jButtonDialogPdfVerz;
-    private javax.swing.JButton jButtonDialogPdfViewer;
-    private javax.swing.JButton jButtonTexDatei;
-    private javax.swing.JButton jButtonTexVerz;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanelDatenbank;
-    private javax.swing.JPanel jPanelEinheitenArten;
-    private javax.swing.JPanel jPanelPfade;
-    private javax.swing.JPasswordField jPasswordFieldPassword;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextFieldArbeitsverzeichnis;
-    private javax.swing.JTextField jTextFieldDatenbank;
-    private javax.swing.JTextField jTextFieldPdfFiles;
-    private javax.swing.JTextField jTextFieldPdfProg;
-    private javax.swing.JTextField jTextFieldSqlServer;
-    private javax.swing.JTextField jTextFieldStdTexDatei;
-    private javax.swing.JTextField jTextFieldUser;
-    private javax.swing.JTextField jTextFieldVerzeichnisTexDateien;
+    private JButton jButton1;
+    private JButton jButton2;
+    private JButton jButtonArbVerz;
+    private JButton jButtonDialogPdfVerz;
+    private JButton jButtonDialogPdfViewer;
+    private JButton jButtonTexDatei;
+    private JButton jButtonTexVerz;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JLabel jLabel4;
+    private JLabel jLabel5;
+    private JLabel jLabel6;
+    private JLabel jLabel7;
+    private JLabel jLabel8;
+    private JLabel jLabel9;
+    private JPanel jPanelDatenbank;
+    private JPanel jPanelEinheitenArten;
+    private JPanel jPanelPfade;
+    private JPasswordField jPasswordFieldPassword;
+    private JTabbedPane jTabbedPane1;
+    private JTextField jTextFieldArbeitsverzeichnis;
+    private JTextField jTextFieldDatenbank;
+    private JTextField jTextFieldPdfFiles;
+    private JTextField jTextFieldPdfProg;
+    private JTextField jTextFieldSqlServer;
+    private JTextField jTextFieldStdTexDatei;
+    private JTextField jTextFieldUser;
+    private JTextField jTextFieldVerzeichnisTexDateien;
     // End of variables declaration//GEN-END:variables
 
 }
