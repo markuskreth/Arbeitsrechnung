@@ -1163,7 +1163,9 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
         // Datum auswählen
         java.util.Date datum = null;
         Kalenderauswahl dialog = new Kalenderauswahl(this.parent);
-        if(dialog.run()){
+        dialog.setVisible(true);
+        
+        if(dialog.isBestaetigt()){
             System.out.println("run abgeschlossen...");
             datum = dialog.getDatum(); // Wenn Dialog nicht abgebrochen wurde, setzte Datum (auch null)
             dialog.dispose();
