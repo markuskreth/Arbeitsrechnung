@@ -1211,11 +1211,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
         }else return false;
     }
 
-    private void jDateChooserVonDatumPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooserVonDatumPropertyChange
+    private void jDateChooserVonDatumPropertyChange(java.beans.PropertyChangeEvent evt) {
         // Läd Liste mit neuem Filter
         setFilter();
-//        System.out.println("Von-Datum geändert!");
-    }//GEN-LAST:event_jDateChooserVonDatumPropertyChange
+    }
 
     private void jDateChooserBisDatumPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooserBisDatumPropertyChange
         // Läd Liste mit neuem Filter

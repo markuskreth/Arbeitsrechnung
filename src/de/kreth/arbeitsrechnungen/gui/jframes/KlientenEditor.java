@@ -91,11 +91,25 @@ public class KlientenEditor extends JDialog {
             e.printStackTrace();
         }
         setEvents();
-        updateRechnungenPanel();
-        updateKlient();
-        updateAngeboteTabelle();
     }
 
+    @Override
+    public void setVisible(boolean b) {
+    	super.setVisible(b);
+    	if(b){
+    		new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+
+		            updateRechnungenPanel();
+		            updateKlient();
+		            updateAngeboteTabelle();
+				}
+			}).start();
+    	}
+    }
+    
     /**
      * Setzt für die Textfelder das Standard-Event TextFieldActionPerformed(ActionEvent evt)
      */
