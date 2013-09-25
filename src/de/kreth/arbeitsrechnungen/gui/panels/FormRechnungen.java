@@ -347,7 +347,8 @@ public class FormRechnungen extends JPanel {
 			// Datum abfragen
 			java.sql.Date sql_date;
 			Kalenderauswahl kalender = new Kalenderauswahl(null);
-			if(kalender.run()){
+			kalender.setVisible(true);
+			if(kalender.isBestaetigt() && kalender.getDatum() != null){ // TODO Löschen einer Bezahlung nicht implementiert...
 				sql_date = new java.sql.Date(kalender.getDatum().getTime());
 				String sql = "UPDATE einheiten SET Bezahlt=1, Bezahlt_Datum=\"" + sql_date.toString() + "\" WHERE rechnung_id IN " + in_klausel + ";";
 				System.out.println("FormRechnungen: jButtonBezahltAction: " + sql);
