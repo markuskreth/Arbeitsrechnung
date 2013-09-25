@@ -11,7 +11,7 @@ th {background: #336699; color: #FFFFFF; text-align: left;}
 </head>
 <body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
 <hr size="1" noshade>
-Log session start time Sun Aug 25 05:04:12 CEST 2013<br>
+Log session start time Sun Aug 25 18:38:50 CEST 2013<br>
 <br>
 <table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
 <tr>
@@ -28,25 +28,1189 @@ Log session start time Sun Aug 25 05:04:12 CEST 2013<br>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
 <td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:68</td>
-<td title="Message">current Loglevel: null</td>
+<td>StartFenster.java:67</td>
+<td title="Message">current Loglevel: DEBUG</td>
 </tr>
 
 <tr>
-<td>550</td>
+<td>279</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
 <td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:24</td>
+<td>AbstractPersister.java:27</td>
 <td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>551</td>
+<td>481</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
 <td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:37</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+
+<tr>
+<td>3699</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>3718</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>5401</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>5575</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=2</td>
+</tr>
+
+<tr>
+<td>10580</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=26</td>
+</tr>
+
+<tr>
+<td>11790</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>13063</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=26</td>
+</tr>
+
+<tr>
+<td>13679</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>26194</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=35</td>
+</tr>
+
+<tr>
+<td>49529</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=36</td>
+</tr>
+
+<tr>
+<td>51970</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=37</td>
+</tr>
+
+<tr>
+<td>55409</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=36</td>
+</tr>
+
+<tr>
+<td>56350</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=35</td>
+</tr>
+
+<tr>
+<td>57086</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>57947</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=26</td>
+</tr>
+
+<tr>
+<td>60096</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=26</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 18:50:09 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:67</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>282</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>485</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+
+<tr>
+<td>4180</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>4205</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>4830</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>4907</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>24332</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET Kunde=&quot;Arne Borstelmann&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>24334</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>34561</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KAdresse1=&quot;&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>34564</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>191780</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>191782</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>191842</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>194253</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>194275</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>194642</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>194718</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>246220</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KEmail=&quot;aborstelmann@htp-tel.de&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>246222</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>401719</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET AEmail=&quot;&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>401722</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>1603197</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>1603293</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET AEmail=&quot;&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>1603295</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 19:23:31 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:67</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>298</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>515</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+
+<tr>
+<td>2623</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>2643</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>3270</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>3345</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=2</td>
+</tr>
+
+<tr>
+<td>10872</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>10874</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>12762</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET ATelefon=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>12763</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>14084</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>14086</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>14146</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=2</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 19:33:16 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:67</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>291</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>496</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+
+<tr>
+<td>3078</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>3096</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>3682</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>3783</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=2</td>
+</tr>
+
+<tr>
+<td>6205</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET Kunde=&quot;Solfit&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>6207</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>6849</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KAdresse1=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>6851</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>9205</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KAdresse2=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>9207</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>9227</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>9229</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>10739</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KEmail=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>10744</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>10794</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>10796</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>11660</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KEmail=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>11662</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>11672</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>11673</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>14206</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KEmail=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>14208</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>14227</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>14229</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>26085</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KEmail=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>26087</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>26106</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>26108</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>27730</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KEmail=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>27732</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>31463</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KAdresse2=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>31465</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>31484</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>31485</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>45443</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KEmail=&quot;&quot; WHERE klienten_id=2;</td>
+</tr>
+
+<tr>
+<td>45445</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>45476</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=2</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 19:35:39 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:67</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>277</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>492</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+
+<tr>
+<td>2753</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>2774</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>3402</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>3491</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>6331</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>6332</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>7109</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KEmail=&quot;aborstelmann@htp-tel.de&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>7111</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>8820</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KTelefon=&quot;&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>8822</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>9304</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET KAdresse1=&quot;&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>9306</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>15032</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:77</td>
+<td title="Message">UPDATE klienten SET Kunde=&quot;Arne Borstelmann&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>15037</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>15086</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:89</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Sun Aug 25 20:25:41 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:67</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>323</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:27</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>572</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
 <td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
 </tr>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -62,7 +1226,7 @@ th {background: #336699; color: #FFFFFF; text-align: left;}
 </head>
 <body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
 <hr size="1" noshade>
-Log session start time Sun Aug 25 05:09:08 CEST 2013<br>
+Log session start time Sun Aug 25 20:48:25 CEST 2013<br>
 <br>
 <table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
 <tr>
@@ -75,81 +1239,75 @@ Log session start time Sun Aug 25 05:09:08 CEST 2013<br>
 </tr>
 
 <tr>
-<td>1</td>
+<td>0</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
 <td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:68</td>
+<td>StartFenster.java:67</td>
 <td title="Message">current Loglevel: DEBUG</td>
 </tr>
 
 <tr>
-<td>942</td>
+<td>327</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
 <td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:24</td>
+<td>AbstractPersister.java:27</td>
 <td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>943</td>
+<td>560</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
 <td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:37</td>
+<td>DatenPersister.java:56</td>
 <td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
 </tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Sun Aug 25 05:22:07 CEST 2013<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
 
 <tr>
-<td>0</td>
+<td>15066</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
-<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:69</td>
-<td title="Message">current Loglevel: DEBUG</td>
-</tr>
-
-<tr>
-<td>506</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level">INFO</td>
-<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:24</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:27</td>
 <td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>507</td>
+<td>15067</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:37</td>
-<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+<td title="arbeitsrechnungen.gui.jframes.Arbeitsstunden category">arbeitsrechnungen.gui.jframes.Arbeitsstunden</td>
+<td>Arbeitsstunden.java:81</td>
+<td title="Message">Init beginnt:</td>
+</tr>
+
+<tr>
+<td>32355</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:23</td>
+<td title="Message">SELECT * FROM klienten;</td>
+</tr>
+
+<tr>
+<td>184367</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.gui.jframes.Arbeitsstunden category">arbeitsrechnungen.gui.jframes.Arbeitsstunden</td>
+<td>Arbeitsstunden.java:199</td>
+<td title="Message">Tabelle aktualisiert - Klient=MTV Groß-Buchholz, id=28</td>
+</tr>
+
+<tr>
+<td>184572</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.gui.jframes.Arbeitsstunden category">arbeitsrechnungen.gui.jframes.Arbeitsstunden</td>
+<td>Arbeitsstunden.java:199</td>
+<td title="Message">Tabelle aktualisiert - Klient=MTV Groß-Buchholz, id=28</td>
 </tr>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -164,7 +1322,7 @@ th {background: #336699; color: #FFFFFF; text-align: left;}
 </head>
 <body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
 <hr size="1" noshade>
-Log session start time Sun Aug 25 05:23:30 CEST 2013<br>
+Log session start time Wed Sep 25 04:08:43 CEST 2013<br>
 <br>
 <table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
 <tr>
@@ -181,77 +1339,98 @@ Log session start time Sun Aug 25 05:23:30 CEST 2013<br>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
 <td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:69</td>
+<td>StartFenster.java:67</td>
 <td title="Message">current Loglevel: DEBUG</td>
 </tr>
 
 <tr>
-<td>521</td>
+<td>1544</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
 <td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:24</td>
+<td>AbstractPersister.java:25</td>
 <td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>522</td>
+<td>3450</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
 <td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:37</td>
+<td>DatenPersister.java:56</td>
 <td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
 </tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Sun Aug 25 05:28:44 CEST 2013<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
 
 <tr>
-<td>1</td>
+<td>24955</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
-<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:69</td>
-<td title="Message">current Loglevel: DEBUG</td>
-</tr>
-
-<tr>
-<td>533</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level">INFO</td>
-<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:24</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:25</td>
 <td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>534</td>
+<td>24956</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:37</td>
-<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:32</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>27536</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:205</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>27565</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:101</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>27692</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:101</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>27696</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:205</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>41368</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:101</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>41377</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:205</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
 </tr>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -266,7 +1445,7 @@ th {background: #336699; color: #FFFFFF; text-align: left;}
 </head>
 <body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
 <hr size="1" noshade>
-Log session start time Sun Aug 25 05:31:50 CEST 2013<br>
+Log session start time Wed Sep 25 04:40:32 CEST 2013<br>
 <br>
 <table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
 <tr>
@@ -283,600 +1462,219 @@ Log session start time Sun Aug 25 05:31:50 CEST 2013<br>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
 <td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:69</td>
+<td>StartFenster.java:67</td>
 <td title="Message">current Loglevel: DEBUG</td>
 </tr>
 
 <tr>
-<td>518</td>
+<td>353</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
 <td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:24</td>
+<td>AbstractPersister.java:25</td>
 <td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>519</td>
+<td>556</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
 <td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:37</td>
+<td>DatenPersister.java:56</td>
 <td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
 </tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Sun Aug 25 05:45:24 CEST 2013<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
 
 <tr>
-<td>0</td>
+<td>5924</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
-<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:72</td>
-<td title="Message">current Loglevel: DEBUG</td>
-</tr>
-
-<tr>
-<td>337</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#993300"><strong>ERROR</strong></font></td>
-<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:26</td>
-<td title="Message">Not connected!</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Sun Aug 25 05:49:02 CEST 2013<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
-
-<tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level">INFO</td>
-<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:72</td>
-<td title="Message">current Loglevel: DEBUG</td>
-</tr>
-
-<tr>
-<td>310</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#993300"><strong>ERROR</strong></font></td>
-<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:26</td>
-<td title="Message">Not connected!</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Sun Aug 25 05:51:02 CEST 2013<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
-
-<tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level">INFO</td>
-<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:72</td>
-<td title="Message">current Loglevel: DEBUG</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Sun Aug 25 05:55:15 CEST 2013<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
-
-<tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level">INFO</td>
-<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
-<td>StartFenster.java:72</td>
-<td title="Message">current Loglevel: DEBUG</td>
-</tr>
-
-<tr>
-<td>527</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level">INFO</td>
-<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:24</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:25</td>
 <td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>528</td>
+<td>5925</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:32</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>6443</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:205</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>6465</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:101</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>6523</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:101</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>6526</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:205</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>21607</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:101</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>21610</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:205</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>22197</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:101</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>22200</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:205</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 04:50:08 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.gui.jframes.StartFenster category">arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:67</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>334</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>589</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
 <td title="arbeitsrechnungen.persister.DatenPersister category">arbeitsrechnungen.persister.DatenPersister</td>
-<td>DatenPersister.java:37</td>
+<td>DatenPersister.java:56</td>
 <td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
 </tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Sat Aug 24 06:01:53 CEST 2013<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
-</tr>
 
 <tr>
-<td>0</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:427</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (727) ORDER BY Datum, Preis;</td>
-</tr>
-
-<tr>
-<td>63</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:481</td>
-<td title="Message">SELECT * FROM klienten WHERE klienten_id=1;</td>
-</tr>
-
-<tr>
-<td>69</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:361</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT Auftraggeber,rechnungnummer_bezeichnung FROM klienten WHERE klienten_id=1;</td>
-</tr>
-
-<tr>
-<td>71</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:380</td>
-<td title="Message">rechnungsnr: Feuerwehr Hannover</td>
-</tr>
-
-<tr>
-<td>71</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:386</td>
-<td title="Message">rechnungsnr: Feuerwehr Hannover-2013-08</td>
-</tr>
-
-<tr>
-<td>72</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:389</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE &quot;Feuerwehr Hannover-2013-08%&quot; ORDER BY rechnungnr;</td>
-</tr>
-
-<tr>
-<td>73</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:403</td>
-<td title="Message">rechnungsnr: Feuerwehr Hannover-2013-08</td>
-</tr>
-
-<tr>
-<td>76</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1088</td>
-<td title="Message">Listener übergeben und wird hinzugefügt...</td>
-</tr>
-
-<tr>
-<td>77</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1089</td>
-<td title="Message">arbeitsrechnungen.ArbeitsstundenTabelle$19@220acbe0</td>
-</tr>
-
-<tr>
-<td>16785</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:189</td>
-<td title="Message">Stundenübernahme: false</td>
-</tr>
-
-<tr>
-<td>16859</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:249</td>
-<td title="Message">Arbeitsverzeichnis: /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/output/</td>
-</tr>
-
-<tr>
-<td>16875</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:345</td>
-<td title="Message">pdflatex wird ausgeführt: </td>
-</tr>
-
-<tr>
-<td>16876</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:346</td>
-<td title="Message">pdflatex -halt-on-error -output-directory /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/output/ /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/output/1377316950236.tex</td>
-</tr>
-
-<tr>
-<td>18924</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:353</td>
-<td title="Message">pdf Exit-Value: 0</td>
-</tr>
-
-<tr>
-<td>18925</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:368</td>
-<td title="Message">Pdflatex beendet!</td>
-</tr>
-
-<tr>
-<td>22782</td>
+<td>20913</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level">INFO</td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:588</td>
-<td title="Message">showPdf: /usr/bin/okular /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/output/1377316950236.pdf</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
 </tr>
 
 <tr>
-<td>22834</td>
+<td>20914</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:222</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:32</td>
+<td title="Message">SELECT * FROM klienten </td>
 </tr>
 
 <tr>
-<td>22836</td>
+<td>22626</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:222</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:205</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
 </tr>
 
 <tr>
-<td>62349</td>
+<td>22698</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:222</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:101</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
 </tr>
 
 <tr>
-<td>62350</td>
+<td>509045</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:222</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>DHMProg by Markus Kreth</title>
-<style type="text/css">
-<!--
-body, table {font-family: arial,sans-serif; font-size: x-small;}
-th {background: #336699; color: #FFFFFF; text-align: left;}
--->
-</style>
-</head>
-<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
-<hr size="1" noshade>
-Log session start time Sat Aug 24 06:04:50 CEST 2013<br>
-<br>
-<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
-<tr>
-<th>Time</th>
-<th>Thread</th>
-<th>Level</th>
-<th>Category</th>
-<th>File:Line</th>
-<th>Message</th>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:101</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
 </tr>
 
 <tr>
-<td>0</td>
+<td>509052</td>
 <td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
 <td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:427</td>
-<td title="Message">SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND  einheiten.einheiten_id IN (727) ORDER BY Datum, Preis;</td>
-</tr>
-
-<tr>
-<td>8</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:481</td>
-<td title="Message">SELECT * FROM klienten WHERE klienten_id=1;</td>
-</tr>
-
-<tr>
-<td>13</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:361</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT Auftraggeber,rechnungnummer_bezeichnung FROM klienten WHERE klienten_id=1;</td>
-</tr>
-
-<tr>
-<td>14</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:380</td>
-<td title="Message">rechnungsnr: Feuerwehr Hannover</td>
-</tr>
-
-<tr>
-<td>15</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:386</td>
-<td title="Message">rechnungsnr: Feuerwehr Hannover-2013-08</td>
-</tr>
-
-<tr>
-<td>15</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:389</td>
-<td title="Message">RechnungDialog:setRechnungsnr:SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE &quot;Feuerwehr Hannover-2013-08%&quot; ORDER BY rechnungnr;</td>
-</tr>
-
-<tr>
-<td>16</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:403</td>
-<td title="Message">rechnungsnr: Feuerwehr Hannover-2013-08</td>
-</tr>
-
-<tr>
-<td>18</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1088</td>
-<td title="Message">Listener übergeben und wird hinzugefügt...</td>
-</tr>
-
-<tr>
-<td>19</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:1089</td>
-<td title="Message">arbeitsrechnungen.ArbeitsstundenTabelle$19@74b906f1</td>
-</tr>
-
-<tr>
-<td>14997</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:189</td>
-<td title="Message">Stundenübernahme: false</td>
-</tr>
-
-<tr>
-<td>15014</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:249</td>
-<td title="Message">Arbeitsverzeichnis: /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/output/</td>
-</tr>
-
-<tr>
-<td>15023</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:345</td>
-<td title="Message">pdflatex wird ausgeführt: </td>
-</tr>
-
-<tr>
-<td>15023</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:346</td>
-<td title="Message">pdflatex -halt-on-error -output-directory /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/output/ /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/output/1377317118223.tex</td>
-</tr>
-
-<tr>
-<td>15197</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:353</td>
-<td title="Message">pdf Exit-Value: 0</td>
-</tr>
-
-<tr>
-<td>15198</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:368</td>
-<td title="Message">Pdflatex beendet!</td>
-</tr>
-
-<tr>
-<td>17641</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level">INFO</td>
-<td title="arbeitsrechnungen.RechnungData category">arbeitsrechnungen.RechnungData</td>
-<td>RechnungData.java:588</td>
-<td title="Message">showPdf: /usr/bin/okular /home/markus/programming/NetBeansProjects/Arbeitsrechnungen/output/1377317118223.pdf</td>
-</tr>
-
-<tr>
-<td>17659</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:222</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>17666</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:222</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
-</tr>
-
-<tr>
-<td>49328</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:222</td>
-<td title="Message">Neuer Wert bei rechnungsdatum: null</td>
-</tr>
-
-<tr>
-<td>49330</td>
-<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
-<td title="Level"><font color="#339933">DEBUG</font></td>
-<td title="arbeitsrechnungen.RechnungDialog category">arbeitsrechnungen.RechnungDialog</td>
-<td>RechnungDialog.java:222</td>
-<td title="Message">Neuer Wert bei zahlungsdatum: null</td>
+<td title="arbeitsrechnungen.persister.KlientenEditorPersister category">arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:205</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
 </tr>
