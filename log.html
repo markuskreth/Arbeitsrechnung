@@ -1678,3 +1678,1254 @@ Log session start time Wed Sep 25 04:50:08 CEST 2013<br>
 <td>KlientenEditorPersister.java:205</td>
 <td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
 </tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 05:05:38 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.gui.jframes.StartFenster category">de.kreth.arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:59</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>305</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>526</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+
+<tr>
+<td>3818</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>3819</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>4383</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>4427</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>4435</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>4438</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>15804</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>15806</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>17507</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>17509</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 05:06:47 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.gui.jframes.StartFenster category">de.kreth.arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:59</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>297</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>502</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+
+<tr>
+<td>11195</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>11195</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>11772</td>
+<td title="Thread-0 thread">Thread-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>11780</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>11798</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>11817</td>
+<td title="Thread-0 thread">Thread-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>23663</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>23666</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>25296</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>25297</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>25632</td>
+<td title="Thread-1 thread">Thread-1</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>25704</td>
+<td title="Thread-1 thread">Thread-1</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>28257</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>28266</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>30262</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>30263</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>30491</td>
+<td title="Thread-2 thread">Thread-2</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>30528</td>
+<td title="Thread-2 thread">Thread-2</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>32112</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>32114</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>34387</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>34388</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>34621</td>
+<td title="Thread-3 thread">Thread-3</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>34629</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>34649</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>34650</td>
+<td title="Thread-3 thread">Thread-3</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>144540</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:90</td>
+<td title="Message">UPDATE klienten SET Auftraggeber=&quot;MTV Groß-Buchholz&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>144541</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>146274</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:90</td>
+<td title="Message">UPDATE klienten SET AAdresse1=&quot;Rotekreuzstr. 25&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>146274</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>151030</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:90</td>
+<td title="Message">UPDATE klienten SET AOrt=&quot;Hannover&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>151031</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>165020</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:90</td>
+<td title="Message">UPDATE klienten SET AAdresse1=&quot;Rotekreuzstr. 25&quot; WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>165021</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>212923</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>212927</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>212956</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>212958</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>212977</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>212979</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213007</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213009</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213028</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213030</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213051</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213053</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213070</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213072</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213091</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213094</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213115</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213118</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213141</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213144</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213162</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213164</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213183</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213185</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213202</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213204</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>213224</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>213226</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>282969</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>282973</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>284333</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>284335</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+
+<tr>
+<td>284353</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>284354</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>284363</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>284365</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>284379</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=28</td>
+</tr>
+
+<tr>
+<td>284381</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=28;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 05:35:33 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.gui.jframes.StartFenster category">de.kreth.arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:59</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>317</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>562</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 05:48:13 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.gui.jframes.StartFenster category">de.kreth.arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:59</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>321</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>533</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 05:52:52 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.gui.jframes.StartFenster category">de.kreth.arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:59</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>329</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>560</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+
+<tr>
+<td>3735</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>3736</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:33</td>
+<td title="Message">SELECT * FROM klienten </td>
+</tr>
+
+<tr>
+<td>4361</td>
+<td title="Thread-0 thread">Thread-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+
+<tr>
+<td>4472</td>
+<td title="Thread-0 thread">Thread-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>5648</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:102</td>
+<td title="Message">updateKlientenTabelle: SELECT angebote_id, Inhalt, Preis, preis_pro_stunde, Beschreibung FROM angebote WHERE klienten_id=1</td>
+</tr>
+
+<tr>
+<td>5653</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister category">de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister</td>
+<td>KlientenEditorPersister.java:206</td>
+<td title="Message">getRechnungenAnzahl: SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=1;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 05:55:28 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.gui.jframes.StartFenster category">de.kreth.arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:59</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>323</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>534</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 05:56:40 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.gui.jframes.StartFenster category">de.kreth.arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:59</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>317</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>544</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 05:58:43 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.gui.jframes.StartFenster category">de.kreth.arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:59</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>332</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>543</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DHMProg by Markus Kreth</title>
+<style type="text/css">
+<!--
+body, table {font-family: arial,sans-serif; font-size: x-small;}
+th {background: #336699; color: #FFFFFF; text-align: left;}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" topmargin="6" leftmargin="6">
+<hr size="1" noshade>
+Log session start time Wed Sep 25 06:15:27 CEST 2013<br>
+<br>
+<table cellspacing="0" cellpadding="4" border="1" bordercolor="#224466" width="100%">
+<tr>
+<th>Time</th>
+<th>Thread</th>
+<th>Level</th>
+<th>Category</th>
+<th>File:Line</th>
+<th>Message</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.gui.jframes.StartFenster category">de.kreth.arbeitsrechnungen.gui.jframes.StartFenster</td>
+<td>StartFenster.java:59</td>
+<td title="Message">current Loglevel: DEBUG</td>
+</tr>
+
+<tr>
+<td>304</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level">INFO</td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>AbstractPersister.java:25</td>
+<td title="Message">Connected!</td>
+</tr>
+
+<tr>
+<td>509</td>
+<td title="AWT-EventQueue-0 thread">AWT-EventQueue-0</td>
+<td title="Level"><font color="#339933">DEBUG</font></td>
+<td title="de.kreth.arbeitsrechnungen.persister.DatenPersister category">de.kreth.arbeitsrechnungen.persister.DatenPersister</td>
+<td>DatenPersister.java:56</td>
+<td title="Message">SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND ISNULL( einheiten.Rechnung_verschickt ) AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.klienten_id ORDER BY klientpreis;</td>
+</tr>

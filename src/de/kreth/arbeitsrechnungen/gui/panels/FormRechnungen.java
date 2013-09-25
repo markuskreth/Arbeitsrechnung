@@ -11,28 +11,22 @@ package de.kreth.arbeitsrechnungen.gui.panels;
  * @author markus
  */
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeSupport;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.*;
 
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
-
-import arbeitsabrechnungendataclass.Verbindung;
-import arbeitsabrechnungendataclass.Verbindung_mysql;
 
 
 public class FormRechnungen extends JPanel {
@@ -50,14 +44,6 @@ public class FormRechnungen extends JPanel {
     Vector<Rechnung> rechnungen = new Vector<Rechnung>();
 	java.util.Properties sysprops = System.getProperties();
 	private Window owner;
-
-    /** FormRechnungen: nie benutzen! */
-    // <editor-fold defaultstate="collapsed">
-    public FormRechnungen(Window owner) {
-        this(owner, 1);
-        JOptionPane.showMessageDialog(this, "Achtung!!! Falscher Konstruktor verwendet bei FormRechnungen", "Alarm!",
-                JOptionPane.ERROR_MESSAGE);
-    }// </editor-fold>
 
     /** Creates new form FormRechnungen 
      * @param owner */
@@ -203,58 +189,58 @@ public class FormRechnungen extends JPanel {
 
         jButtonLoeschen.setText(resourceMap.getString("jButtonLoeschen.text")); // NOI18N
         jButtonLoeschen.setName("jButtonLoeschen"); // NOI18N
-        jButtonLoeschen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonLoeschen.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonLoeschenActionPerformed(evt);
             }
         });
 
         jButtonAnsehen.setText(resourceMap.getString("jButtonAnsehen.text")); // NOI18N
         jButtonAnsehen.setName("jButtonAnsehen"); // NOI18N
-        jButtonAnsehen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonAnsehen.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonAnsehenActionPerformed(evt);
             }
         });
 
         jButtonAendern.setText(resourceMap.getString("jButtonAendern.text")); // NOI18N
         jButtonAendern.setName("jButtonAendern"); // NOI18N
-        jButtonAendern.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonAendern.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonAendernActionPerformed(evt);
             }
         });
 
         jButtonBezahlt.setText(resourceMap.getString("jButtonBezahlt.text")); // NOI18N
         jButtonBezahlt.setName("jButtonBezahlt"); // NOI18N
-        jButtonBezahlt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonBezahlt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonBezahltActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButtonBezahlt)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(jButtonAendern)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonAnsehen)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonLoeschen)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonLoeschen)
                     .addComponent(jButtonAnsehen)
                     .addComponent(jButtonAendern)
@@ -267,7 +253,7 @@ public class FormRechnungen extends JPanel {
      * Rechnung ansehen - Viewer in optionen aufrufen
      * @param evt
      */
-    private void jButtonAnsehenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnsehenActionPerformed
+    private void jButtonAnsehenActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonAnsehenActionPerformed
         String befehl = this.optionen.getProperty("pdfprogramm");
         if (this.jTable1.getSelectedRow() >= 0){
             System.out.println("Selected Row: " + this.jTable1.getSelectedRow());
@@ -284,11 +270,11 @@ public class FormRechnungen extends JPanel {
                 e.printStackTrace();
             }
         }else{
-            javax.swing.JOptionPane.showMessageDialog(null, "Zum Anzeigen bitte eine Rechnung auswählen.");
+            JOptionPane.showMessageDialog(null, "Zum Anzeigen bitte eine Rechnung auswählen.");
         }
     }//GEN-LAST:event_jButtonAnsehenActionPerformed
 
-    private void jButtonAendernActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAendernActionPerformed
+    private void jButtonAendernActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonAendernActionPerformed
         int rechnung_id = this.rechnungen.elementAt(this.jTable1.getSelectedRow()).getRechnungen_id();
 // System.out.println("Elemente in rechnungen: " + this.rechnungen.size());
 // System.out.println("Selected Column: " + this.jTable1.getSelectedColumn());
@@ -302,12 +288,12 @@ public class FormRechnungen extends JPanel {
 		return this.owner;
 	}
 
-	private void jButtonLoeschenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoeschenActionPerformed
+	private void jButtonLoeschenActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonLoeschenActionPerformed
 		int rechnung_id = this.rechnungen.elementAt(this.jTable1.getSelectedRow()).getRechnungen_id();
 
-		if(javax.swing.JOptionPane.showConfirmDialog(this.getParent(),
+		if(JOptionPane.showConfirmDialog(this.getParent(),
 				"Wollen Sie die gewählte Rechnung endgültig löschen?",
-				"Endgültige Löschung!", javax.swing.JOptionPane.YES_NO_OPTION) == javax.swing.JOptionPane.YES_OPTION){
+				"Endgültige Löschung!", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
 			String sql = "UPDATE einheiten SET Rechnung_verschickt=null, Rechnung_Datum=null, rechnung_id=null" +
                                            " WHERE rechnung_id=" + rechnung_id + ";";
 			System.out.println("FormRechnungen: jButtonLoeschenActionPerformed: " + sql);
@@ -321,7 +307,7 @@ public class FormRechnungen extends JPanel {
 				}else{
 					sql = "Achtung! Rechnung konnte nicht gelöscht werden!";
 				}
-				javax.swing.JOptionPane.showMessageDialog(this.getParent(), sql);
+				JOptionPane.showMessageDialog(this.getParent(), sql);
 			}
 			} catch (SQLException e){
 				sql = "Achtung! Rechnung konnte nicht gelöscht werden!";
@@ -330,33 +316,32 @@ public class FormRechnungen extends JPanel {
 		}
 	}//GEN-LAST:event_jButtonLoeschenActionPerformed
 
-	private void jButtonBezahltActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBezahltActionPerformed
+	private void jButtonBezahltActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonBezahltActionPerformed
 		
 		if (this.jTable1.getSelectedColumnCount() == 0){
-			// keine Rechnungen gewählt
-			javax.swing.JOptionPane.showMessageDialog(this, "Bitte wählen sie eine oder mehrere Rechnungen aus, um den Zahlungseingang zu bestätigen", "Keine Rechnung ausgewählt!", javax.swing.JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, 
+					"Bitte wählen sie eine oder mehrere Rechnungen aus, um den Zahlungseingang zu bestätigen", 
+					"Keine Rechnung ausgewählt!", JOptionPane.ERROR_MESSAGE);
 		}else{
-			// eine Rechnung ausgewählt - direkt ausführen
+			
 			int[] rechnung = this.jTable1.getSelectedRows();
-			String in_klausel = "(" + this.rechnungen.elementAt(rechnung[0]).getRechnungen_id();
-			for (int i=1; i<rechnung.length; i++){
-//				rechnung[i] = this.rechnungen.elementAt(i).getRechnungen_id();
-				in_klausel += ", " + this.rechnungen.elementAt(rechnung[i]).getRechnungen_id();
-			}
-			in_klausel += ")";
+			String in_klausel = buildInClauseForRechnungen(rechnung);
 			// Datum abfragen
 			java.sql.Date sql_date;
 			Kalenderauswahl kalender = new Kalenderauswahl(null);
 			kalender.setVisible(true);
 			if(kalender.isBestaetigt() && kalender.getDatum() != null){ // TODO Löschen einer Bezahlung nicht implementiert...
+				String sql;
+				
 				sql_date = new java.sql.Date(kalender.getDatum().getTime());
-				String sql = "UPDATE einheiten SET Bezahlt=1, Bezahlt_Datum=\"" + sql_date.toString() + "\" WHERE rechnung_id IN " + in_klausel + ";";
+				sql = "UPDATE einheiten SET Bezahlt=1, Bezahlt_Datum=\"" + sql_date.toString() + "\" WHERE rechnung_id IN " + in_klausel + ";";
+				
 				System.out.println("FormRechnungen: jButtonBezahltAction: " + sql);
 				try{
 				if(verbindung.sql(sql)){
 					sql = "UPDATE rechnungen SET geldeingang=\"" + sql_date.toString() + "\" WHERE rechnungen_id IN " + in_klausel + ";";
 					if(verbindung.sql(sql)){
-						JOptionPane.showMessageDialog(null, "Rechnung ist abgerechnet", "Rechnung bezahlt", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Rechnung ist abgerechnet", "Rechnung bezahlt", JOptionPane.INFORMATION_MESSAGE);
 						this.update();
 						for (int i=1; i<rechnung.length; i++){
 							pchListeners.fireIndexedPropertyChange(GEAENDERT, this.rechnungen.elementAt(rechnung[i]).getRechnungen_id(), true, false);
@@ -374,6 +359,18 @@ public class FormRechnungen extends JPanel {
 		}
 	}//GEN-LAST:event_jButtonBezahltActionPerformed
 
+	private String buildInClauseForRechnungen(int[] rechnung) {
+		String inClause = "(" + this.rechnungen.elementAt(rechnung[0]).getRechnungen_id();
+		
+		for (int i=1; i<rechnung.length; i++){
+//			rechnung[i] = this.rechnungen.elementAt(i).getRechnungen_id();
+			inClause += ", " + this.rechnungen.elementAt(rechnung[i]).getRechnungen_id();
+		}
+		
+		inClause += ")";
+		return inClause;
+	}
+
 	@Override
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener listener){
 		System.out.println("FormRechnungen: Listener übergeben und wird hinzugefügt...");
@@ -388,12 +385,12 @@ public class FormRechnungen extends JPanel {
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAendern;
-    private javax.swing.JButton jButtonAnsehen;
-    private javax.swing.JButton jButtonBezahlt;
-    private javax.swing.JButton jButtonLoeschen;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private JButton jButtonAendern;
+    private JButton jButtonAnsehen;
+    private JButton jButtonBezahlt;
+    private JButton jButtonLoeschen;
+    private JScrollPane jScrollPane1;
+    private JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
 }

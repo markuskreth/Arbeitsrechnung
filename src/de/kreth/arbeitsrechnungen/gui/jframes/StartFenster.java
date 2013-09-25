@@ -6,24 +6,15 @@
 package de.kreth.arbeitsrechnungen.gui.jframes;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import mouseoverhintmanager.MouseOverHintManager;
@@ -40,7 +31,7 @@ import de.kreth.arbeitsrechnungen.persister.DatenPersister.Forderung;
 
 
 public class StartFenster 
-		extends javax.swing.JFrame 
+		extends JFrame 
 		implements PropertyChangeListener {
 	
 	public enum StartTable {
@@ -784,7 +775,7 @@ public class StartFenster
 	}
 
 	private void jSplitPane1PropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_jSplitPane1PropertyChange
-		// TODO add your handling code here:
+
 		this.jLabel3.setText("Divider: "
 				+ this.jSplitPane1.getDividerLocation());
 	}// GEN-LAST:event_jSplitPane1PropertyChange
@@ -821,28 +812,28 @@ public class StartFenster
 	};
 	
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JLabel Status_links;
-	private javax.swing.JButton jButton1;
-	private javax.swing.JButton jButtonArtenEinheiten;
-	private javax.swing.JButton jButtonBeenden;
-	private javax.swing.JButton jButtonKlientenEditor;
-	private javax.swing.JLabel jLabel1;
-	private javax.swing.JLabel jLabel2;
-	private javax.swing.JLabel jLabel3;
-	private javax.swing.JMenuBar jMenuBar1;
-	private javax.swing.JMenu jMenuBearbeiten;
-	private javax.swing.JMenu jMenuDatei;
-	private javax.swing.JMenu jMenuHilfe;
-	private javax.swing.JMenuItem jMenuItemBeenden;
-	private javax.swing.JMenuItem jMenuItemOption;
-	private javax.swing.JPanel jPanel1;
-	private javax.swing.JPanel jPanel2;
-	private javax.swing.JPanel jPanel3;
-	private javax.swing.JScrollPane jScrollPane1;
-	private javax.swing.JScrollPane jScrollPane2;
-	private javax.swing.JSplitPane jSplitPane1;
-	private javax.swing.JTable jTableEinheiten;
-	private javax.swing.JTable jTableForderungen;
+	private JLabel Status_links;
+	private JButton jButton1;
+	private JButton jButtonArtenEinheiten;
+	private JButton jButtonBeenden;
+	private JButton jButtonKlientenEditor;
+	private JLabel jLabel1;
+	private JLabel jLabel2;
+	private JLabel jLabel3;
+	private JMenuBar jMenuBar1;
+	private JMenu jMenuBearbeiten;
+	private JMenu jMenuDatei;
+	private JMenu jMenuHilfe;
+	private JMenuItem jMenuItemBeenden;
+	private JMenuItem jMenuItemOption;
+	private JPanel jPanel1;
+	private JPanel jPanel2;
+	private JPanel jPanel3;
+	private JScrollPane jScrollPane1;
+	private JScrollPane jScrollPane2;
+	private JSplitPane jSplitPane1;
+	private JTable jTableEinheiten;
+	private JTable jTableForderungen;
 	// End of variables declaration//GEN-END:variables
 
 }
