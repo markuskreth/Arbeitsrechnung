@@ -4,6 +4,7 @@ package de.kreth.arbeitsrechnungen.data;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -25,6 +26,22 @@ public class Rechnung {
     protected Calendar geldeingang = null;
     protected Calendar zahldatum;
 
+    private Rechnung(Builder builder) {
+       this.betrag = builder.betrag;
+       this.rechnungen_id = builder.rechnungen_id;
+       this.klienten_id = builder.klienten_id;
+       this.datum = builder.datum;
+       this.rechnungnr = builder.rechnungnr;
+       this.adresse = builder.adresse;
+       this.texdatei = builder.texdatei;
+       this.pdfdatei = builder.pdfdatei;
+       this.zusatz1 = builder.zusatz1;
+       this.zusatz2 = builder.zusatz2;
+       this.zusammenfassungen = builder.zusammenfassungen;
+       this.geldeingang = builder.geldeingang;
+       this.zahldatum = builder.zahldatum;
+    }
+
     public static final String PROP_ZAHLDATUM = "zahldatum";
     public static final String PROP_ZUSAMMENFASSUNGEN = "zusammenfassungen";
     public static final String PROP_ZUSATZ1 = "zusatz1";
@@ -38,10 +55,6 @@ public class Rechnung {
     public static final String PROP_ZUSATZ2 = "zusatz2";
     public static final String PROP_ADRESSE = "adresse";
     public static final String PROP_GELDEINGANG = "geldeingang";
-
-    public Rechnung(int rechnungen_id) {
-        this.rechnungen_id = rechnungen_id;
-    }
 
     /**
      * Get the value of geldeingang
@@ -312,4 +325,107 @@ public class Rechnung {
         propertyChangeSupport.firePropertyChange(PROP_ZAHLDATUM, oldZahldatum, zahldatum);
     }
 
+    public static class Builder implements de.kreth.arbeitsrechnungen.Builder<Rechnung>{
+
+       private double betrag = 0;
+       private int rechnungen_id = -1;
+       private int klienten_id = -1;
+       private Calendar datum = null;
+       private String rechnungnr = "";
+       private String adresse = "";
+       private String texdatei ="";
+       private String pdfdatei ="";
+       private boolean zusatz1 = false;
+       private boolean zusatz2 = false;
+       private boolean zusammenfassungen;
+       private Calendar geldeingang = null;
+       private Calendar zahldatum = null;
+       
+      public Builder() {
+         datum = new GregorianCalendar();
+      }
+
+      public Builder setBetrag(double betrag) {
+         this.betrag = betrag;
+         return this;
+      }
+
+      
+      public Builder setRechnungen_id(int rechnungen_id) {
+         this.rechnungen_id = rechnungen_id;
+         return this;
+      }
+
+      
+      public Builder setKlienten_id(int klienten_id) {
+         this.klienten_id = klienten_id;
+         return this;
+      }
+
+      
+      public Builder setDatum(Calendar datum) {
+         this.datum = datum;
+         return this;
+      }
+
+      
+      public Builder setRechnungnr(String rechnungnr) {
+         this.rechnungnr = rechnungnr;
+         return this;
+      }
+
+      
+      public Builder setAdresse(String adresse) {
+         this.adresse = adresse;
+         return this;
+      }
+
+      
+      public Builder setTexdatei(String texdatei) {
+         this.texdatei = texdatei;
+         return this;
+      }
+
+      
+      public Builder setPdfdatei(String pdfdatei) {
+         this.pdfdatei = pdfdatei;
+         return this;
+      }
+
+      
+      public Builder setZusatz1(boolean zusatz1) {
+         this.zusatz1 = zusatz1;
+         return this;
+      }
+
+      
+      public Builder setZusatz2(boolean zusatz2) {
+         this.zusatz2 = zusatz2;
+         return this;
+      }
+
+      
+      public Builder setZusammenfassungen(boolean zusammenfassungen) {
+         this.zusammenfassungen = zusammenfassungen;
+         return this;
+      }
+
+      
+      public Builder setGeldeingang(Calendar geldeingang) {
+         this.geldeingang = geldeingang;
+         return this;
+      }
+
+      
+      public Builder setZahldatum(Calendar zahldatum) {
+         this.zahldatum = zahldatum;
+         return this;
+      }
+
+      @Override
+      public Rechnung build() {
+         return new Rechnung(this);
+      }
+       
+    }
 }

@@ -7,17 +7,45 @@ public class Angebot {
 	private String beschreibung;
 	private boolean preis_pro_stunde;
 	
-	public static Angebot createAngebot(int angebote_id, String inhalt, double preis,
-			String beschreibung, boolean preis_pro_stunde) {
-		Angebot a = new Angebot();
-		a.angebote_id = angebote_id;
-		a.inhalt = inhalt;
-		a.preis = preis;
-		a.beschreibung = beschreibung;
-		a.preis_pro_stunde = preis_pro_stunde;
-		return a;
+   private Angebot(Builder build) {
+      angebote_id = build.angebote_id;
+      inhalt = build.inhalt;
+      preis = build.preis;
+      beschreibung = build.beschreibung;
+      preis_pro_stunde = build.preis_pro_stunde;
+   }
+   
+	public static class Builder implements de.kreth.arbeitsrechnungen.Builder<Angebot>{
+
+	   private int angebote_id = -1;
+	   private String inhalt;
+	   private double preis;
+	   private String beschreibung = "";
+	   private boolean preis_pro_stunde = false;
+	   
+      public Builder(String inhalt, double preis) {
+         this.inhalt = inhalt;
+         this.preis = preis;
+      }
+      public Builder angebotId(int angebotId){
+         this.angebote_id = angebotId;
+         return this;
+      }
+      public Builder beschreibung(String beschreibung){
+         this.beschreibung = beschreibung;
+         return this;
+      }
+      public Builder preis_pro_stunde (boolean preis_pro_stunde){
+         this.preis_pro_stunde = preis_pro_stunde;
+         return this;
+      }
+      
+      @Override
+      public Angebot build() {
+         return new Angebot(this);
+      }
+      
 	}
-	
 	public boolean isPreis_pro_stunde() {
 		return preis_pro_stunde;
 	}

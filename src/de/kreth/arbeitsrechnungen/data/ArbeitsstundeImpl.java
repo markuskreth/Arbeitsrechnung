@@ -178,13 +178,145 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 		pss.firePropertyChange(PROP_AUFTRAGGEBER, oldAuftraggeber, Auftraggeber);
 	}
 
-	public ArbeitsstundeImpl(int id, int klientenid, int angeboteid) {
-		this.id = id;
-		this.klientenid = klientenid;
-		this.angeboteid = angeboteid;
+	public ArbeitsstundeImpl(Builder builder) {
+		this.id = builder.id;
+		this.klientenid = builder.klientenid;
+		this.angeboteid = builder.angeboteid;
+		this.auftraggeber = builder.auftraggeber;
+		this.beginn = builder.beginn;
+		this.bezahlt = builder.bezahlt;
+		this.datum = builder.datum;
+		this.dauer = builder.dauer;
+		this.einzelPreis = builder.einzelPreis;
+		this.ende = builder.ende;
+		this.inhalt = builder.inhalt;
+		this.klientenid = builder.klientenid;
+		this.preis = builder.preis;
+		this.preisaenderung = builder.preisaenderung;
+		this.preisProStunde = builder.preisProStunde;
+		this.verschickt = builder.verschickt;
+		this.zusatz1 = builder.zusatz1;
+		this.zusatz2 = builder.zusatz2;
 		this.pss = new PropertyChangeSupport(this);
 	}
 
+	public static class Builder implements de.kreth.arbeitsrechnungen.Builder<ArbeitsstundeImpl> {
+
+	   private int id;
+	   private int klientenid;
+	   private int angeboteid;
+	   private Date datum;
+	   private Date beginn;
+	   private Date ende;
+	   private Double preisaenderung = 0.0;
+	   private Date verschickt = null;
+	   private Date bezahlt = null;
+	   private String auftraggeber;
+	   private String inhalt;
+	   private double preis;
+	   protected String zusatz1;
+	   protected String zusatz2;
+	   protected double dauer;
+	   private double einzelPreis;
+	   private boolean preisProStunde;
+
+      public Builder(int id, int klientenid, int angeboteid) {
+         this.id = id;
+         this.klientenid = klientenid;
+         this.angeboteid = angeboteid;
+      }
+
+      public Builder setId(int id) {
+         this.id = id;
+         return this;
+      }
+      
+      public Builder setKlientenid(int klientenid) {
+         this.klientenid = klientenid;
+         return this;
+      }
+      
+      public Builder setAngeboteid(int angeboteid) {
+         this.angeboteid = angeboteid;
+         return this;
+      }
+      
+      public Builder datum(Date datum) {
+         this.datum = datum;
+         return this;
+      }
+      
+      public Builder beginn(Date beginn) {
+         this.beginn = beginn;
+         return this;
+      }
+      
+      public Builder ende(Date ende) {
+         this.ende = ende;
+         return this;
+      }
+      
+      public Builder preisaenderung(Double preisaenderung) {
+         this.preisaenderung = preisaenderung;
+         return this;
+      }
+      
+      public Builder setVerschickt(Date verschickt) {
+         this.verschickt = verschickt;
+         return this;
+      }
+      
+      public Builder setBezahlt(Date bezahlt) {
+         this.bezahlt = bezahlt;
+         return this;
+      }
+      
+      public Builder auftraggeber(String auftraggeber) {
+         this.auftraggeber = auftraggeber;
+         return this;
+      }
+      
+      public Builder inhalt(String inhalt) {
+         this.inhalt = inhalt;
+         return this;
+      }
+
+      public Builder preis(double preis) {
+         this.preis = preis;
+         return this;
+      }
+
+      public Builder zusatz1(String zusatz1) {
+         this.zusatz1 = zusatz1;
+         return this;
+      }
+
+      public Builder zusatz2(String zusatz2) {
+         this.zusatz2 = zusatz2;
+         return this;
+      }
+      
+      public Builder dauer(double dauer) {
+         this.dauer = dauer;
+         return this;
+      }
+
+      public Builder einzelPreis(double einzelPreis) {
+         this.einzelPreis = einzelPreis;
+         return this;
+      }
+
+      public Builder preisProStunde(boolean preisProStunde) {
+         this.preisProStunde = preisProStunde;
+         return this;
+      }
+
+      @Override
+      public ArbeitsstundeImpl build() {
+         return new ArbeitsstundeImpl(this);
+      }
+      
+	}
 	public java.lang.Integer getID() {
 		return id;
 	}

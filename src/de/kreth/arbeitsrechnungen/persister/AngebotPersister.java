@@ -29,7 +29,8 @@ public class AngebotPersister extends AbstractPersister {
             float preis = rs.getFloat("Preis");
             String beschr = rs.getString("Beschreibung");
             boolean preisPHour = rs.getInt("preis_pro_stunde")==1;
-            angebot = Angebot.createAngebot(angebotId, inhalt, preis, beschr, preisPHour);
+            
+            angebot = new Angebot.Builder(inhalt, preis).angebotId(angebotId).beschreibung(beschr).preis_pro_stunde(preisPHour).build();
         } catch (Exception e) {
             e.printStackTrace();
         }

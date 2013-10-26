@@ -62,12 +62,25 @@ public class KlientenEditorPersister extends AbstractPersister {
 				String rechnungnummer_bezeichnung = rs
 						.getString("rechnungnummer_bezeichnung");
 
-				result.add(Klient.createKlient(klientenId, auftraggeber,
-						aEmail, aTelefon, aOrt, aPlz, aAdress2, aAdress1,
-						kunde, kEmail, kTelefon, kOrt, kPLZ, kAdresse1,
-						kAdresse2, bemerkungen, tex_datei, zusatz1,
-						zusatz1_Name, zusatz2, zusatz2_Name,
-						rechnungnummer_bezeichnung));
+				result.add(new Klient.Builder(klientenId, auftraggeber, aAdress1, aPlz, aOrt)
+                                 .aEmail(aEmail)
+                                 .aTelefon(aTelefon)
+                                 .aAdress2(aAdress2)
+                                 .kunde(kunde)
+                                 .kEmail(kEmail)
+                                 .kTelefon(kTelefon)
+                                 .kOrt(kOrt)
+                                 .kPlz(kPLZ)
+                                 .kAdress1(kAdresse1)
+                                 .kAdress2(kAdresse2)
+                                 .bemerkungen(bemerkungen)
+                                 .tex_datei(tex_datei)
+                                 .zusatz1(zusatz1)
+                                 .zusatz1_Name(zusatz1_Name)
+                                 .zusatz2(zusatz2)
+                                 .zusatz2_Name(zusatz2_Name)
+                                 .rechnungnummer_bezeichnung(rechnungnummer_bezeichnung)
+                                 .build());
 			}
 		} catch (SQLException e) {
 			logger.warn("Fehler bei abfrage klienten tabelle", e);
@@ -76,7 +89,6 @@ public class KlientenEditorPersister extends AbstractPersister {
 		return result;
 	}
 	
-
     /**
      * Speichert einen einzelnen Wert in der Datenbank. Parameter sind der Name des zu änderndes Feldes und der neue Wert
      * @param klientenId
@@ -93,7 +105,6 @@ public class KlientenEditorPersister extends AbstractPersister {
 					"\" mit Wert \"" + Wert +
 					"\"", e);
         }
-
     }
 
 	public List<Angebot> getAngeboteForKlient(int klient) {
@@ -110,7 +121,12 @@ public class KlientenEditorPersister extends AbstractPersister {
 			    double preis = rs.getDouble("Preis");
 			    boolean preis_pro_stunde = rs.getBoolean("preis_pro_stunde");
 			    String beschreibung = rs.getString("Beschreibung");
-			    result.add(Angebot.createAngebot(angebote_id, inhalt, preis, beschreibung, preis_pro_stunde));
+			    Angebot angebot = new Angebot.Builder(inhalt, preis)
+                  			    .angebotId(angebote_id)
+                  			    .beschreibung(beschreibung)
+                  			    .preis_pro_stunde(preis_pro_stunde)
+                  			    .build();
+			    result.add(angebot);
 			}
 		} catch (SQLException e) {
 			logger.error("Fehler bei Abfrage Angebote", e);
@@ -132,13 +148,12 @@ public class KlientenEditorPersister extends AbstractPersister {
         
         logger.debug(sql);
         
-        
         try {
             verbindung.sql(sql);
             ResultSet rs = verbindung.query("SELECT LAST_INSERT_ID()");
 			rs.first();
 	        int klient_id = rs.getInt(1);
-	        k = Klient.createKlient(klient_id, auftraggeber, aAdresse1, plz, ort);
+	        k = new Klient.Builder(klient_id, auftraggeber, aAdresse1, plz, ort).build();
 		} catch (SQLException e) {
 			logger.error("Fehler bei createNewAuftraggeber", e);
 		}
