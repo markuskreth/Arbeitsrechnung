@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.util.Vector;
 
 import de.kreth.arbeitsrechnungen.data.*;
+import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 
 
 public class RechnungDialogPersister extends AbstractPersister {
@@ -16,37 +17,40 @@ public class RechnungDialogPersister extends AbstractPersister {
 		super(optionen);
 	}
 
-	public Rechnung getRechnungById(int rechnungs_id) {
+	public Builder getRechnungById(int rechnungs_id) {
 
 		String sql = "SELECT rechnungen_id, klienten_id, datum, rechnungnr, betrag, texdatei, "
 				+ "pdfdatei, adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, geldeingang, timestamp "
 				+ "FROM rechnungen WHERE rechnungen_id=" + rechnungs_id + ";";
 
 		logger.debug("RechnungDialog: Konstruktor (2): " + sql);
-		Rechnung r = new Rechnung(rechnungs_id);
+		Builder r = new Rechnung.Builder();
 
 		try {
 			ResultSet daten = verbindung.query(sql);
 			if (daten.next()) {
-				r.setKlienten_id(daten.getInt("klienten_id"));
-				Calendar datum = new GregorianCalendar();
-				datum.setTimeInMillis(daten.getDate("datum").getTime());
-				r.setDatum(datum);
-				r.setRechnungnr(daten.getString("rechnungnr"));
-				r.setBetrag(daten.getDouble("betrag"));
-				r.setTexdatei(daten.getString("texdatei"));
-				r.setPdfdatei(daten.getString("pdfdatei"));
-				r.setAdresse(daten.getString("adresse"));
-				r.setZusatz1(daten.getBoolean("zusatz1"));
-				r.setZusatz2(daten.getBoolean("zusatz2"));
-				r.setZusammenfassungen(daten.getBoolean("zusammenfassungen"));
-				Calendar zahldatum = new GregorianCalendar();
-				zahldatum.setTimeInMillis(daten.getDate("zahldatum").getTime());
-				r.setZahldatum(zahldatum);
-				Calendar geldeingang = new GregorianCalendar();
-				geldeingang.setTimeInMillis(daten.getDate("geldeingang")
-						.getTime());
-				r.setGeldeingang(geldeingang);
+			   Calendar datum = new GregorianCalendar();
+            datum.setTimeInMillis(daten.getDate("datum").getTime());
+            Calendar zahldatum = new GregorianCalendar();
+            zahldatum.setTimeInMillis(daten.getDate("zahldatum").getTime());
+            Calendar geldeingang = new GregorianCalendar();
+            geldeingang.setTimeInMillis(daten.getDate("geldeingang")
+                  .getTime());
+            
+			   r = r
+			   .setRechnungen_id(rechnungs_id)
+				.setKlienten_id(daten.getInt("klienten_id"))
+				.setDatum(datum)
+				.setRechnungnr(daten.getString("rechnungnr"))
+				.setBetrag(daten.getDouble("betrag"))
+				.setTexdatei(daten.getString("texdatei"))
+				.setPdfdatei(daten.getString("pdfdatei"))
+				.setAdresse(daten.getString("adresse"))
+				.setZusatz1(daten.getBoolean("zusatz1"))
+				.setZusatz2(daten.getBoolean("zusatz2"))
+				.setZusammenfassungen(daten.getBoolean("zusammenfassungen"))
+				.setZahldatum(zahldatum)
+				.setGeldeingang(geldeingang);
 			}
 		} catch (SQLException e) {
 			logger.debug(sql, e);
@@ -81,19 +85,20 @@ public class RechnungDialogPersister extends AbstractPersister {
 				// if((this.klienten_id == null) || (this.klienten_id ==
 				// daten.getInt("klienten_id"))){
 				int klienten_id = daten.getInt("klienten_id");
-				ArbeitsstundeImpl stunde = new ArbeitsstundeImpl(
+				ArbeitsstundeImpl stunde = new ArbeitsstundeImpl.Builder(
 						daten.getInt("einheiten_id"), klienten_id,
-						daten.getInt("angebote_id"));
-				stunde.setDatum(daten.getDate("Datum"));
-				stunde.setInhalt(daten.getString("Inhalt"));
-				stunde.setBeginn(daten.getTimestamp("Beginn"));
-				stunde.setEnde(daten.getTimestamp("Ende"));
-				stunde.setEinzelPreis(daten.getDouble("StundenPreis"));
-				stunde.setPreis(daten.getDouble("Preis"));
-				stunde.setZusatz1(daten.getString("zusatz1"));
-				stunde.setZusatz2(daten.getString("zusatz2"));
-				stunde.setPreisAenderung(daten.getDouble("Preisänderung"));
-				stunde.setDauer(daten.getDouble("Dauer"));
+						daten.getInt("angebote_id"))
+            				.datum(daten.getDate("Datum"))
+            				.inhalt(daten.getString("Inhalt"))
+            				.beginn(daten.getTimestamp("Beginn"))
+            				.ende(daten.getTimestamp("Ende"))
+            				.einzelPreis(daten.getDouble("StundenPreis"))
+            				.preis(daten.getDouble("Preis"))
+            				.zusatz1(daten.getString("zusatz1"))
+            				.zusatz2(daten.getString("zusatz2"))
+            				.preisaenderung(daten.getDouble("Preisänderung"))
+            				.dauer(daten.getDouble("Dauer"))
+            				.build();
 				try {
 					stunde.setVerschicktDatum(daten.getDate("Rechnung_Datum"));
 				} catch (Exception e) {
@@ -111,7 +116,7 @@ public class RechnungDialogPersister extends AbstractPersister {
 				result.add(stunde);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+		   logger.error(sql, e);
 		}
 		return result;
 	}
@@ -193,20 +198,21 @@ public class RechnungDialogPersister extends AbstractPersister {
 				// fortgefahren
 				// Wenn folgender Datensatz und Klientenid stimmt nicht überein
 				// -> Abbruch
-					ArbeitsstundeImpl stunde = new ArbeitsstundeImpl(
-							daten.getInt("einheiten_id"), daten.getInt("klienten_id"),
-							daten.getInt("angebote_id"));
-					stunde.setDatum(daten.getDate("Datum"));
-					stunde.setInhalt(daten.getString("Inhalt"));
-					stunde.setBeginn(daten.getTimestamp("Beginn"));
-					stunde.setEnde(daten.getTimestamp("Ende"));
-					stunde.setEinzelPreis(daten.getDouble("StundenPreis"));
-					stunde.setPreis(daten.getDouble("Preis"));
-					stunde.setZusatz1(daten.getString("zusatz1"));
-					stunde.setZusatz2(daten.getString("zusatz2"));
-					stunde.setPreisAenderung(daten.getDouble("Preisänderung"));
-					stunde.setDauer(daten.getDouble("Dauer"));
-					stunde.setPreisProStunde(daten.getBoolean("preis_pro_stunde"));
+					ArbeitsstundeImpl stunde = new ArbeitsstundeImpl.Builder(
+	                  daten.getInt("einheiten_id"), daten.getInt("klienten_id"),
+	                  daten.getInt("angebote_id"))
+	                        .datum(daten.getDate("Datum"))
+	                        .inhalt(daten.getString("Inhalt"))
+	                        .beginn(daten.getTimestamp("Beginn"))
+	                        .ende(daten.getTimestamp("Ende"))
+	                        .einzelPreis(daten.getDouble("StundenPreis"))
+	                        .preis(daten.getDouble("Preis"))
+	                        .zusatz1(daten.getString("zusatz1"))
+	                        .zusatz2(daten.getString("zusatz2"))
+	                        .preisaenderung(daten.getDouble("Preisänderung"))
+	                        .dauer(daten.getDouble("Dauer"))
+	                        .preisProStunde(daten.getBoolean("preis_pro_stunde"))
+	                        .build();
 					
 					try {
 						stunde.setVerschicktDatum(daten

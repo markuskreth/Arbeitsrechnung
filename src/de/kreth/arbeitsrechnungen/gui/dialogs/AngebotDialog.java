@@ -301,7 +301,11 @@ public class AngebotDialog extends javax.swing.JDialog {
 			angebotId = angebot.getAngebote_id();
 		}
 		
-		Angebot angebot = Angebot.createAngebot(angebotId, inhalt, preis, beschreibung, preisProStunde);
+		Angebot angebot = new Angebot.Builder(inhalt, preis)
+		                        .angebotId(angebotId)
+		                        .beschreibung(beschreibung)
+		                        .preis_pro_stunde(preisProStunde)
+		                        .build();
 		persister.insertOrUpdateAngebot(KlientenID, angebot);
 		
 		this.setVisible(false);
@@ -340,10 +344,6 @@ public class AngebotDialog extends javax.swing.JDialog {
 		}
 	}// GEN-LAST:event_jTextFieldBeschreibungFocusGained
 
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
 	/*
 	 * public static void main(String args[]) {
 	 * java.awt.EventQueue.invokeLater(new Runnable() { public void run() {

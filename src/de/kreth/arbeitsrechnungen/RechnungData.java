@@ -153,7 +153,7 @@ public class RechnungData {
 	 * @param zusatz1_name
 	 * @param zusatz2_name
 	 * @param zusammenfassungen_erlauben
-	 * @return
+	 * @return true bei Erfolg
 	 */
 	public boolean initRechnung(int klienten_id, String adresse,
 			String tex_datei, Vector<Arbeitsstunde> einheiten,
@@ -161,6 +161,7 @@ public class RechnungData {
 			Calendar zahlungsdatum, String rechnungsnr,
 			String zusatz1_name, String zusatz2_name, boolean stunden,
 			boolean zusammenfassungen_erlauben) {
+	   
 		boolean texfileSuccess;
 		
 		if (adresse.endsWith("\n"))
@@ -194,8 +195,12 @@ public class RechnungData {
 		return texfileSuccess;
 	}
 
+	/**
+	 * Tex-Datei öffnen und in String 'latex' speichern
+	 * @return true bei Erfolg
+	 */
 	private boolean openTexFile() {
-		// Tex-Datei öffnen und in String 'latex' speichern
+
 		java.io.FileReader latexdatei;
 		StringBuilder latex = new StringBuilder();
 		try {
@@ -208,9 +213,11 @@ public class RechnungData {
 				}
 				latexdatei.close();
 				this.latexcode = latex.toString();
+				
 				if (this.latexcode.contains("%Zeileanfang\n")
 						&& this.latexcode.contains("%Zeileende\n"))
 					this.std_ersetzung = false;
+				
 				return true;
 			} catch (java.io.IOException e) {
 				System.err.println("RechnungData:openTexFile: read Error");
@@ -227,11 +234,11 @@ public class RechnungData {
 	 * Erstellt aus der Vorlage und den Daten eine Tex-Datei und führt pdflatex
 	 * aus um eine pdf-Datei zu erstellen.
 	 * 
-	 * @return
+	 * @return Rückgabe des System Commandos, 0 = Erfolg
 	 */
 	public int makePdf() {
 		// Formatierungen
-		DateFormat df = DateFormat.getDateInstance(java.text.DateFormat.MEDIUM,
+		DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM,
 				Locale.GERMAN);
 		DecimalFormat zf = new DecimalFormat("0.00");
 		// Verzeichnisse und Dateien festlegen
