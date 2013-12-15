@@ -24,8 +24,12 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 
-public class Optionen extends JDialog {
+import org.apache.log4j.Logger;
 
+public class OptionenDialog extends JDialog {
+
+   Logger logger = Logger.getLogger(getClass());
+   
 	private static final long serialVersionUID = -527076543127705929L;
 
 	Properties einstellungen = new Properties();
@@ -35,7 +39,7 @@ public class Optionen extends JDialog {
     boolean firststart;
 
     /** Creates new form Optionen */
-    public Optionen(JFrame parent, boolean firststart) {
+    public OptionenDialog(JFrame parent, boolean firststart) {
         super(parent, true);
         this.firststart = firststart;
         initComponents();
@@ -46,7 +50,7 @@ public class Optionen extends JDialog {
         try{
             einstellungen.load(new FileInputStream(optiondatei));
         }catch(Exception e){
-            System.err.println("Optionen.java: Options-Datei konnte nicht geladen werden.");
+           logger.error("Optionen.java: Options-Datei konnte nicht geladen werden.");
         }
         if(!firststart){
             loadoptions();
@@ -56,12 +60,12 @@ public class Optionen extends JDialog {
     private void setTexts(JComponent component, String propname){
         for(int i=0;i<component.getComponentCount();i++){
             if(component.getComponent(i) instanceof JPanel || component.getComponent(i) instanceof JTabbedPane){
-                System.out.println(propname + ": " + component.getComponent(i).getClass() +
+               logger.debug(propname + ": " + component.getComponent(i).getClass() +
                         "(" + component.getComponent(i).getName() + ") " + "--> setTexts");
                 setTexts((JComponent)component.getComponent(i), propname);
             }
             if(component.getComponent(i) instanceof JTextField){
-                System.out.println(((JTextField)component.getComponent(i)).getName());
+                logger.debug(((JTextField)component.getComponent(i)).getName());
                 if(((JTextField)component.getComponent(i)).getName().matches(propname)){
                     ((JTextField)component.getComponent(i)).setText(einstellungen.getProperty(propname));
                     i=component.getComponentCount();
@@ -71,7 +75,7 @@ public class Optionen extends JDialog {
     }
 
     private void loadoptions(){
-        System.out.println("Optionen werden geladen...");
+        logger.debug("Optionen werden geladen...");
         Enumeration<?> propnames = einstellungen.propertyNames();
 
         // für jedes Property zugehöriges Textfeld 
@@ -84,13 +88,13 @@ public class Optionen extends JDialog {
     private void getTexts(JComponent component){
         for(int i=0;i<component.getComponentCount();i++){
             if(component.getComponent(i) instanceof JComponent){
-//                System.out.println(component.getComponent(i).getClass() + "--> setTexts");
+//                logger.debug(component.getComponent(i).getClass() + "--> setTexts");
                 getTexts((JComponent)component.getComponent(i));
             }
             if(component.getComponent(i) instanceof JTextField){
                 einstellungen.setProperty(((JTextField)component.getComponent(i)).getName(),
                         ((JTextField)component.getComponent(i)).getText());
-                System.out.println(((JTextField)component.getComponent(i)).getName());
+                logger.debug(((JTextField)component.getComponent(i)).getName());
             }
         }
     }
@@ -420,7 +424,7 @@ public class Optionen extends JDialog {
         this.setVisible(false);
         this.dispose();
         if(firststart){
-            System.out.println("Progamm wird beendet. Optionen nicht gespeichert.");
+            logger.debug("Progamm wird beendet. Optionen nicht gespeichert.");
             System.exit(-1);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -524,17 +528,7 @@ public class Optionen extends JDialog {
         }
         return selectedFile;
     }
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Optionen(new JFrame(),false).setVisible(true);
-            }
-        });
-    }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton jButton1;
     private JButton jButton2;

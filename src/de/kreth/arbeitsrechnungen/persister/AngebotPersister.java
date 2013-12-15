@@ -4,13 +4,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
+import arbeitsabrechnungendataclass.Verbindung;
+
 import de.kreth.arbeitsrechnungen.data.Angebot;
 
+public class AngebotPersister implements Persister {
 
-public class AngebotPersister extends AbstractPersister {
+   private Logger logger = Logger.getLogger(getClass());
+	private Verbindung verbindung;
 
-	public AngebotPersister(Properties optionen) {
-		super(optionen);
+   public AngebotPersister(Properties optionen) {
+	   verbindung = connectToDb(optionen);
 	}
 
 	public Angebot getAngebot(int angebotId){
@@ -84,4 +90,10 @@ public class AngebotPersister extends AbstractPersister {
 				+ " WHERE angebote_id=" + angebot.getAngebote_id() + ";";
 		return sqltext;
 	}
+
+   @Override
+   public Verbindung connectToDb(Properties optionen) {
+      return new DatabaseConnector(optionen).getVerbindung();
+   }
+
 }

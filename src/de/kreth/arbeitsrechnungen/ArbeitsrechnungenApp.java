@@ -18,6 +18,7 @@ public class ArbeitsrechnungenApp {
 
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
+			   ArbeitRechnungFactoryProductiv.init();
 				new StartFenster().setVisible(true);
 			}
 		});

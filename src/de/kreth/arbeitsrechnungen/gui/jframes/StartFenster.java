@@ -23,7 +23,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.StartFensterTableCellRenderer;
-import de.kreth.arbeitsrechnungen.gui.dialogs.Optionen;
+import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.starttablemodels.LabledStringValueNoneditableTableModel;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister.Einheit;
@@ -118,7 +118,7 @@ public class StartFenster
 
 		if (optionen.getProperty("sqlserver") == null) {
 			// Property sqlserver nicht gefunden: optionen nicht gespeichert!
-			Optionen optionwindow = new Optionen(this, true);
+			OptionenDialog optionwindow = new OptionenDialog(this, true);
 			optionwindow.setVisible(true);
 		}
 	}
@@ -130,7 +130,7 @@ public class StartFenster
 			// Dann wird das Options-Fenster geöffnet
 			if (optionfile.createNewFile()) {
 				logger.info("Options-Datei erfolgreich angelegt!");
-				Optionen optionwindow = new Optionen(this, true);
+				OptionenDialog optionwindow = new OptionenDialog(this, true);
 				optionwindow.setVisible(true);
 			}
 		} catch (Exception e) {
@@ -766,7 +766,7 @@ public class StartFenster
 
 	private void jMenuItemOptionActionPerformed(ActionEvent evt) {
 		// Öffne Options-Fenster
-		Optionen optionwindow = new Optionen(this, false);
+		OptionenDialog optionwindow = new OptionenDialog(this, false);
 		optionwindow.setVisible(true);
 	}
 

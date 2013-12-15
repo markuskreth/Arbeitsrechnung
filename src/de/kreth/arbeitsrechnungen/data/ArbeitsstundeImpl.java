@@ -6,6 +6,8 @@ package de.kreth.arbeitsrechnungen.data;
  */
 import java.util.*;
 import java.beans.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 
 
@@ -18,17 +20,17 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	private Date datum;
 	private Date beginn;
 	private Date ende;
-	private Double preisaenderung = 0.0;
+	private BigDecimal preisaenderung = BigDecimal.ZERO;
 	private Date verschickt = null;
 	private Date bezahlt = null;
 	private String auftraggeber;
 	private String inhalt;
-	private double preis;
+	private BigDecimal preis;
 	protected String zusatz1;
 	protected String zusatz2;
 	private PropertyChangeSupport pss;
-	protected double dauer;
-	private double einzelPreis;
+	protected int dauer;
+	private BigDecimal einzelPreis;
 	private boolean preisProStunde;
 
 	/**
@@ -36,7 +38,7 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * 
 	 * @return the value of einzelPreis
 	 */
-	public double getEinzelPreis() {
+	public BigDecimal getEinzelPreis() {
 		return einzelPreis;
 	}
 
@@ -47,8 +49,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 *            new value of einzelPreis
 	 */
 	public void setEinzelPreis(double einzelPreis) {
-		double oldEinzelPreis = this.einzelPreis;
-		this.einzelPreis = einzelPreis;
+		double oldEinzelPreis = this.einzelPreis.setScale(2, RoundingMode.HALF_UP).doubleValue();
+		this.einzelPreis = new BigDecimal(einzelPreis);
 		pss.firePropertyChange(PROP_EINZELPREIS, oldEinzelPreis, einzelPreis);
 	}
 
@@ -57,7 +59,7 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * 
 	 * @return the value of dauer
 	 */
-	public double getDauer() {
+	public int getDauerInMinutes() {
 		return dauer;
 	}
 
@@ -67,7 +69,7 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * @param dauer
 	 *            new value of dauer
 	 */
-	public void setDauer(double dauer) {
+	public void setDauer(int dauer) {
 		double oldDauer = this.dauer;
 		this.dauer = dauer;
 		pss.firePropertyChange(PROP_DAUER, oldDauer, dauer);
@@ -120,7 +122,7 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * 
 	 * @return the value of preis
 	 */
-	public double getPreis() {
+	public BigDecimal getPreis() {
 		return preis;
 	}
 
@@ -131,8 +133,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 *            new value of preis
 	 */
 	public void setPreis(double preis) {
-		double oldPreis = this.preis;
-		this.preis = preis;
+		double oldPreis = this.preis.setScale(2, RoundingMode.HALF_UP).doubleValue();
+		this.preis = new BigDecimal(preis);
 		pss.firePropertyChange(PROP_PREIS, oldPreis, preis);
 	}
 
@@ -178,7 +180,7 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 		pss.firePropertyChange(PROP_AUFTRAGGEBER, oldAuftraggeber, Auftraggeber);
 	}
 
-	public ArbeitsstundeImpl(Builder builder) {
+	private ArbeitsstundeImpl(Builder builder) {
 		this.id = builder.id;
 		this.klientenid = builder.klientenid;
 		this.angeboteid = builder.angeboteid;
@@ -208,16 +210,16 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	   private Date datum;
 	   private Date beginn;
 	   private Date ende;
-	   private Double preisaenderung = 0.0;
+	   private BigDecimal preisaenderung = BigDecimal.ZERO;
 	   private Date verschickt = null;
 	   private Date bezahlt = null;
 	   private String auftraggeber;
 	   private String inhalt;
-	   private double preis;
+	   private BigDecimal preis;
 	   protected String zusatz1;
 	   protected String zusatz2;
-	   protected double dauer;
-	   private double einzelPreis;
+	   protected int dauer;
+	   private BigDecimal einzelPreis;
 	   private boolean preisProStunde;
 
       public Builder(int id, int klientenid, int angeboteid) {
@@ -231,12 +233,12 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
          return this;
       }
       
-      public Builder setKlientenid(int klientenid) {
+      public Builder klientenid(int klientenid) {
          this.klientenid = klientenid;
          return this;
       }
       
-      public Builder setAngeboteid(int angeboteid) {
+      public Builder angeboteid(int angeboteid) {
          this.angeboteid = angeboteid;
          return this;
       }
@@ -256,8 +258,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
          return this;
       }
       
-      public Builder preisaenderung(Double preisaenderung) {
-         this.preisaenderung = preisaenderung;
+      public Builder preisaenderung(double preisaenderung) {
+         this.preisaenderung = BigDecimal.valueOf(preisaenderung);
          return this;
       }
       
@@ -266,7 +268,7 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
          return this;
       }
       
-      public Builder setBezahlt(Date bezahlt) {
+      public Builder bezahlt(Date bezahlt) {
          this.bezahlt = bezahlt;
          return this;
       }
@@ -282,7 +284,7 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
       }
 
       public Builder preis(double preis) {
-         this.preis = preis;
+         this.preis = BigDecimal.valueOf(preis);
          return this;
       }
 
@@ -296,13 +298,13 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
          return this;
       }
       
-      public Builder dauer(double dauer) {
-         this.dauer = dauer;
+      public Builder dauerInMinuten(int minuten) {
+         this.dauer = minuten;
          return this;
       }
 
       public Builder einzelPreis(double einzelPreis) {
-         this.einzelPreis = einzelPreis;
+         this.einzelPreis = BigDecimal.valueOf(einzelPreis);
          return this;
       }
 
@@ -359,13 +361,13 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 		this.pss.firePropertyChange(PROP_ENDE, old, ende);
 	}
 
-	public java.lang.Double getPreisAenderung() {
+	public BigDecimal getPreisAenderung() {
 		return preisaenderung;
 	}
 
-	public void setPreisAenderung(java.lang.Double aenderung) {
-		java.lang.Double old = this.preisaenderung;
-		this.preisaenderung = aenderung;
+	public void setPreisAenderung(double aenderung) {
+		java.lang.Double old = this.preisaenderung.setScale(2, RoundingMode.HALF_UP).doubleValue();
+		this.preisaenderung = BigDecimal.valueOf(aenderung);
 		this.pss.firePropertyChange(PROP_PREISAENDERUNG, old, aenderung);
 	}
 

@@ -9,10 +9,17 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
-public class DatenPersister extends AbstractPersister {
-	
+import org.apache.log4j.Logger;
+
+import arbeitsabrechnungendataclass.Verbindung;
+
+public class DatenPersister implements Persister {
+
+   private Logger logger = Logger.getLogger(getClass());
+   private Verbindung verbindung;
+
 	public DatenPersister(Properties optionen) {
-		super(optionen);
+	   verbindung = connectToDb(optionen);
 	}
 
 	public List<Forderung> getForderungen() {
@@ -119,5 +126,10 @@ public class DatenPersister extends AbstractPersister {
 			return auftraggeber + "(" + anzahl + "): " + klientenpreis + " €";
 		}
 	}
+
+   @Override
+   public Verbindung connectToDb(Properties optionen) {
+      return new DatabaseConnector(optionen).getVerbindung();
+   }
 
 }

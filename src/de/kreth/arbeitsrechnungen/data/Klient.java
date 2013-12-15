@@ -30,7 +30,7 @@ public class Klient {
    protected String zusatz2_Name;
    protected String rechnungnummer_bezeichnung;
 
-   public Klient(Builder builder) {
+   private Klient(Builder builder) {
 
       this.klienten_id = builder.klienten_id;
       this.auftraggeber = builder.auftraggeber;

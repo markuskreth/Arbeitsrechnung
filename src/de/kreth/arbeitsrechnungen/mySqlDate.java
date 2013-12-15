@@ -37,7 +37,7 @@ public class mySqlDate {
 
 	/**
 	 * januar = 1, August = 8, Dezember = 12
-	 * @return
+	 * @return Monat als menschenlesbare zahl
 	 */
 	public int getMonth() {
 		return cal.get(Calendar.MONTH) + 1;
