@@ -1,100 +1,107 @@
-
 package de.kreth.arbeitsrechnungen.data;
 
 /**
- *
  * @author markus
  */
-import java.io.*;
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Vector;
 
-public interface Arbeitsstunde extends Serializable
-{
-    public java.lang.Integer getID();
+public interface Arbeitsstunde extends Serializable {
 
-    public java.lang.Integer getKlientenID();
+   public Integer getID();
 
-    public java.lang.Integer getAngeboteID();
+   public Integer getKlientenID();
 
-    public java.util.Date getDatum();
+   public Integer getAngeboteID();
 
-    public void setDatum(java.util.Date datum);
+   public Date getDatum();
 
-    public java.util.Date getBeginn();
+   public void setDatum(Date datum);
 
-    public void setBeginn(java.util.Date beginn);
+   public Date getBeginn();
 
-    public java.util.Date getEnde();
+   public void setBeginn(Date beginn);
 
-    public void setEnde(java.util.Date ende);
+   public Date getEnde();
 
-	/**
-	 * Preis für eine einzelne Einheit oder Stunde
-	 * @return
-	 */
-	public double getEinzelPreis();
+   public void setEnde(Date ende);
 
-	public void setEinzelPreis(double preis);
+   /**
+    * Preis für eine einzelne Einheit oder Stunde
+    * 
+    * @return Preis für eine Einheit oder Stunde
+    */
+   public BigDecimal getEinzelPreis();
 
-	/**
-	 * Gesamtpreis für diese Einheit
-	 * @return
-	 */
-    public double getPreis();
+   public void setEinzelPreis(double preis);
 
-    public void setPreis(double preis);
+   /**
+    * Gesamtpreis für diese Einheit
+    * 
+    * @return Preis für diese Einheit?
+    */
+   public BigDecimal getPreis();
 
-    public String getZusatz2();
+   public void setPreis(double preis);
 
-    public void setZusatz2(String zusatz2);
+   public String getZusatz2();
 
-    public String getZusatz1();
+   public void setZusatz2(String zusatz2);
 
-    public void setZusatz1(String zusatz1);
+   public String getZusatz1();
 
-    public java.lang.Double getPreisAenderung();
+   public void setZusatz1(String zusatz1);
 
-    public void setPreisAenderung(java.lang.Double aenderung);
+   public BigDecimal getPreisAenderung();
 
-    public java.lang.Boolean isVerschickt();
+   public void setPreisAenderung(double aenderung);
 
-    public java.util.Date getVerschicktDatum();
+   public Boolean isVerschickt();
 
-    public void setVerschicktDatum(java.util.Date datum);
+   public Date getVerschicktDatum();
 
-    public java.lang.Boolean isBezahlt();
+   public void setVerschicktDatum(Date datum);
 
-    public java.util.Date getBezahltDatum();
+   public Boolean isBezahlt();
 
-    public void setBezahltDatum(java.util.Date datum);
+   public Date getBezahltDatum();
 
-    public Vector<Object> toVector();
+   public void setBezahltDatum(Date datum);
 
-    public double getDauer();
+   public Vector<Object> toVector();
 
-    public void setDauer(double dauer);
+   /**
+    * Dauer der Trainingsstunde in Minuten
+    * @return  minuten
+    */
+   public int getDauerInMinutes();
 
-    public void addPropertyChangeListener(PropertyChangeListener listener);
+   public void setDauer(int minutes);
 
-    public void removePropertyChangeListener(PropertyChangeListener listener);
-	public String getInhalt();
-	
-	public boolean isPreisProStunde();
-	
-    public static final String PROP_KLIENTENID = "klientenid";
-    public static final String PROP_ANGEBOTEID = "angeboteid";
-    public static final String PROP_DATUM = "datum";
-    public static final String PROP_BEGINN = "beginn";
-    public static final String PROP_ENDE = "ende";
-    public static final String PROP_PREISAENDERUNG = "preisaenderung";
-    public static final String PROP_VERSCHICKT = "verschickt";
-    public static final String PROP_BEZAHLT = "bezahlt";
-    public static final String PROP_AUFTRAGGEBER = "auftraggeber";
-    public static final String PROP_INHALT = "inhalt";
-    public static final String PROP_PREIS = "preis";
-    public static final String PROP_ZUSATZ1 = "zusatz1";
-    public static final String PROP_ZUSATZ2 = "zusatz2";
-    public static final String PROP_DAUER = "dauer";
-    public static final String PROP_EINZELPREIS = "einzelPreis";
+   public void addPropertyChangeListener(PropertyChangeListener listener);
+
+   public void removePropertyChangeListener(PropertyChangeListener listener);
+
+   public String getInhalt();
+
+   public boolean isPreisProStunde();
+
+   public static final String PROP_KLIENTENID = "klientenid";
+   public static final String PROP_ANGEBOTEID = "angeboteid";
+   public static final String PROP_DATUM = "datum";
+   public static final String PROP_BEGINN = "beginn";
+   public static final String PROP_ENDE = "ende";
+   public static final String PROP_PREISAENDERUNG = "preisaenderung";
+   public static final String PROP_VERSCHICKT = "verschickt";
+   public static final String PROP_BEZAHLT = "bezahlt";
+   public static final String PROP_AUFTRAGGEBER = "auftraggeber";
+   public static final String PROP_INHALT = "inhalt";
+   public static final String PROP_PREIS = "preis";
+   public static final String PROP_ZUSATZ1 = "zusatz1";
+   public static final String PROP_ZUSATZ2 = "zusatz2";
+   public static final String PROP_DAUER = "dauer";
+   public static final String PROP_EINZELPREIS = "einzelPreis";
 }

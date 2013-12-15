@@ -24,6 +24,8 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
+import de.kreth.arbeitsrechnungen.ArbeitsstundenSpalten;
 import de.kreth.arbeitsrechnungen.RechnungData;
 import de.kreth.arbeitsrechnungen.data.*;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
@@ -64,13 +66,18 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
 
       logger.setLevel(Level.DEBUG);
       initComponents();
-      klientenPersister = new KlientenEditorPersister(optionen);
-      persister = new RechnungDialogPersister(optionen);
+      klientenPersister = (KlientenEditorPersister) ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class, optionen);
+      persister = (RechnungDialogPersister) ArbeitRechnungFactory.getInstance().getPersister(RechnungDialogPersister.class, optionen);
 
       heute = new GregorianCalendar();
    }
 
-   /** Creates new form RechnungDialog */
+   /**
+    * Erstellt einen neuen RechnungsDialog für die übergebene RechnungsId. Die alte Rechnung wird angezeigt.
+    * @param optionen
+    * @param parent
+    * @param rechnungId
+    */
    public RechnungDialog(Properties optionen, Window parent, int rechnungId) {
       this(optionen, parent);
 
@@ -133,7 +140,12 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
 
    }
 
-   /** Creates new form RechnungDialog */
+   /**
+    * Erstellt eine neue Rechnung für die übergebenen Einheiten.
+    * @param optionen
+    * @param parent
+    * @param einheiten
+    */
    public RechnungDialog(Properties optionen, Window parent,
          Vector<Integer> einheiten) {
       this(optionen, parent);
@@ -226,58 +238,40 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    }
 
    private void makeTable() {
+      // Ja/Nein, Datum, Inhalt, Preis
+      List<ArbeitsstundenSpalten> spalten = new ArrayList<>();
+      spalten.add(ArbeitsstundenSpalten.Checkbox);
+      spalten.add(ArbeitsstundenSpalten.Datum);
+      spalten.add(ArbeitsstundenSpalten.Inhalt);
+      
       // TableModel instanzieren mit Titeln und 0 Zeilen
-      int spaltenanzahl = 4; // Mindestanzahl : Ja/Nein, Datum, Inhalt und
-      // Preis
-      int fact = 0;
+
       if (this.jCheckBoxStundenzahl.isSelected()) {
-         spaltenanzahl += 1;
-         fact += 1;
+         spalten.add(ArbeitsstundenSpalten.Stunden);
       }
       if (this.jCheckBoxZusatz1.isSelected() && rechnung.hasZusatz1()) {
-         spaltenanzahl += 1;
-         fact += 2;
+         spalten.add(ArbeitsstundenSpalten.Zusatz1);
       }
       if (this.jCheckBoxZusatz2.isSelected() && rechnung.hasZusatz2()) {
-         spaltenanzahl += 1;
-         fact += 4;
+         spalten.add(ArbeitsstundenSpalten.Zusatz2);
       }
-
-      String[] spaltentitel = new String[spaltenanzahl];
+      spalten.add(ArbeitsstundenSpalten.Preis);
+      
+      String[] spaltentitel = new String[spalten.size()];
       spaltentitel[0] = "";
-      spaltentitel[1] = "Datum";
-      spaltentitel[2] = "Inhalt";
-      switch (fact) {
-         case 1:
-            spaltentitel[3] = "Stunden";
-            break;
-         case 2:
-            spaltentitel[3] = this.klient.getZusatz1_Name();
-            break;
-         case 3:
-            spaltentitel[3] = "Stunden";
-            spaltentitel[4] = this.klient.getZusatz1_Name();
-            break;
-         case 4:
-            spaltentitel[3] = this.klient.getZusatz2_Name();
-            break;
-         case 5:
-            spaltentitel[3] = "Stunden";
-            spaltentitel[4] = this.klient.getZusatz2_Name();
-            break;
-         case 6:
-            spaltentitel[3] = this.klient.getZusatz1_Name();
-            spaltentitel[4] = this.klient.getZusatz2_Name();
-            break;
-         case 7:
-            spaltentitel[3] = "Stunden";
-            spaltentitel[4] = this.klient.getZusatz1_Name();
-            spaltentitel[5] = this.klient.getZusatz2_Name();
-            break;
+      
+      for (int i = 1; i < spalten.size(); i++) {
+         ArbeitsstundenSpalten tableColumn = spalten.get(i);
+         if(tableColumn == ArbeitsstundenSpalten.Zusatz1){
+            spaltentitel[i] = this.klient.getZusatz1_Name();
+         } else if(tableColumn == ArbeitsstundenSpalten.Zusatz2){
+            spaltentitel[i] = this.klient.getZusatz2_Name();
+         } else {
+            spaltentitel[i] = tableColumn.toString();
+         }
+
       }
-
-      spaltentitel[spaltenanzahl - 1] = "Preis";
-
+      
       DefaultTableModel mymodel = new DefaultTableModel(spaltentitel, 0) {
 
          /**
@@ -318,7 +312,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
          tabellenzeile.add(einheiten.elementAt(i).getDatum());
          tabellenzeile.add(einheiten.elementAt(i).getInhalt());
          if (this.jCheckBoxStundenzahl.isSelected())
-            tabellenzeile.add(einheiten.elementAt(i).getDauer() / 60); // Minuten
+            tabellenzeile.add(einheiten.elementAt(i).getDauerInMinutes() / 60); // Minuten
          // zu
          // Stunden
          if (this.jCheckBoxZusatz1.isSelected())
@@ -1176,16 +1170,12 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    private void jCheckBoxUnterschriftActionPerformed(ActionEvent evt) {}
 
    @Override
-   public void addPropertyChangeListener(
-         java.beans.PropertyChangeListener listener) {
-      logger.debug("Listener übergeben und wird hinzugefügt...");
-      logger.debug(listener.toString());
+   public void addPropertyChangeListener(PropertyChangeListener listener) {
       pchListeners.addPropertyChangeListener(listener);
    }
 
    @Override
-   public void removePropertyChangeListener(
-         java.beans.PropertyChangeListener listener) {
+   public void removePropertyChangeListener(PropertyChangeListener listener) {
       pchListeners.removePropertyChangeListener(listener);
    }
 

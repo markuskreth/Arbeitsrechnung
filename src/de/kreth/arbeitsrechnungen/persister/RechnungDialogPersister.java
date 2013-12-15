@@ -7,14 +7,21 @@ import java.util.GregorianCalendar;
 import java.util.Properties;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
+import arbeitsabrechnungendataclass.Verbindung;
+
 import de.kreth.arbeitsrechnungen.data.*;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 
 
-public class RechnungDialogPersister extends AbstractPersister {
+public class RechnungDialogPersister implements Persister{
+
+   private Logger logger = Logger.getLogger(getClass());
+   private Verbindung verbindung;
 
 	public RechnungDialogPersister(Properties optionen) {
-		super(optionen);
+	   verbindung = connectToDb(optionen);
 	}
 
 	public Builder getRechnungById(int rechnungs_id) {
@@ -97,7 +104,7 @@ public class RechnungDialogPersister extends AbstractPersister {
             				.zusatz1(daten.getString("zusatz1"))
             				.zusatz2(daten.getString("zusatz2"))
             				.preisaenderung(daten.getDouble("Preisänderung"))
-            				.dauer(daten.getDouble("Dauer"))
+            				.dauerInMinuten(daten.getInt("Dauer"))
             				.build();
 				try {
 					stunde.setVerschicktDatum(daten.getDate("Rechnung_Datum"));
@@ -210,7 +217,7 @@ public class RechnungDialogPersister extends AbstractPersister {
 	                        .zusatz1(daten.getString("zusatz1"))
 	                        .zusatz2(daten.getString("zusatz2"))
 	                        .preisaenderung(daten.getDouble("Preisänderung"))
-	                        .dauer(daten.getDouble("Dauer"))
+	                        .dauerInMinuten(daten.getInt("Dauer"))
 	                        .preisProStunde(daten.getBoolean("preis_pro_stunde"))
 	                        .build();
 					
@@ -244,5 +251,10 @@ public class RechnungDialogPersister extends AbstractPersister {
 
 		return data;
 	}
+
+   @Override
+   public Verbindung connectToDb(Properties optionen) {
+      return new DatabaseConnector(optionen).getVerbindung();
+   }
 
 }

@@ -6,14 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
+import arbeitsabrechnungendataclass.Verbindung;
+
 import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Klient;
 
 
-public class KlientenEditorPersister extends AbstractPersister {
+public class KlientenEditorPersister implements Persister {
+
+   private Logger logger = Logger.getLogger(getClass());
+   private Verbindung verbindung;
 
 	public KlientenEditorPersister(Properties optionen) {
-		super(optionen);
+	   verbindung = connectToDb(optionen);
 	}
 
 	public Klient getKlientById(int klient_id){
@@ -244,4 +251,10 @@ public class KlientenEditorPersister extends AbstractPersister {
 			logger.error("", e);
 		}
 	}
+
+   @Override
+   public Verbindung connectToDb(Properties optionen) {
+      return new DatabaseConnector(optionen).getVerbindung();
+   }
+
 }

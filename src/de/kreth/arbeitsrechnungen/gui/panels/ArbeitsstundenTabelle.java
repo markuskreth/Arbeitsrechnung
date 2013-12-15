@@ -11,6 +11,7 @@ import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -26,6 +27,7 @@ import org.apache.log4j.Logger;
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
+import de.kreth.arbeitsrechnungen.ArbeitsstundenSpalten;
 import de.kreth.arbeitsrechnungen.mySqlDate;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.ArbeitsstundeImpl;
@@ -110,8 +112,6 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
     * @param klienten_id
     */
    private void readList(int klienten_id) {
-      // TODO Einheitentypen unterscheiden (Accord, Stunden, Einheiten) und
-      // danach Tabelle, Einheit_einzel und Rechnung anpassen
       this.klient = klienten_id;
       anzahl = 0;
       summe = 0.00;
@@ -121,15 +121,15 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             + "einheiten.angebote_id, Datum, Beginn, Ende, einheiten.zusatz1, einheiten.zusatz2, Preisänderung, Rechnung_verschickt, "
             + "Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.preis_pro_stunde, "
             + "klienten.Zusatz1 AS bool1, klienten.Zusatz2 AS bool2, klienten.Zusatz1_Name, klienten.Zusatz2_Name FROM einheiten, "
-            + "angebote, klienten WHERE einheiten.klienten_id="
-            + klienten_id
+            + "angebote, klienten WHERE einheiten.klienten_id=" + klienten_id
             + " AND einheiten.angebote_id=angebote.angebote_id"
             + " AND einheiten.klienten_id=klienten.klienten_id"
-            + " AND "
-            + filter + " ORDER BY Datum, Preis;";
+            + " AND " + filter 
+            + " ORDER BY Datum, Preis;";
+      
       logger.info(getClass().getSimpleName() + ".readList: " + sqltext);
 
-      Arbeitsstunden = new Vector<de.kreth.arbeitsrechnungen.data.Arbeitsstunde>();
+      Arbeitsstunden = new Vector<Arbeitsstunde>();
       
       try {
          ResultSet daten = verbindung.query(sqltext);
@@ -162,7 +162,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
                   .zusatz1(daten.getString("zusatz1"))
                   .zusatz2(daten.getString("zusatz2"))
                   .preisaenderung(daten.getDouble("Preisänderung"))
-                  .dauer(daten.getDouble("Dauer"));
+                  .dauerInMinuten(daten.getInt("Dauer"));
             try {
                stunde.setVerschickt(daten.getDate("Rechnung_Datum"));
             } catch (Exception e) {
@@ -171,11 +171,11 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
                stunde.setVerschickt(null);
             }
             try {
-               stunde.setBezahlt(daten.getDate("Bezahlt_Datum"));
+               stunde.bezahlt(daten.getDate("Bezahlt_Datum"));
             } catch (Exception e) {
                logger.info(daten.getInt("einheiten.einheiten_id")
                      + ": Bezahlt Datum nicht gesetzt!", e);
-               stunde.setBezahlt(null);
+               stunde.bezahlt(null);
             }
             try {
                this.Arbeitsstunden.addElement(stunde.build());
@@ -247,13 +247,9 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       }
       // Model mit Überschriften erstellen
       javax.swing.table.DefaultTableModel mymodel = new javax.swing.table.DefaultTableModel(
-            new Object[][] {}, new String[] { "Datum", "Inhalt", "Start",
-                  "Ende", "Preis", this.zusatz1_name, this.zusatz2_name,
-                  "Preisänderung", "Eingereicht", "Bezahlt" }) {
-
-         /**
-			 * 
-			 */
+            new Object[][] {}, new String[] { ArbeitsstundenSpalten.Datum.toString(), ArbeitsstundenSpalten.Inhalt.toString(), ArbeitsstundenSpalten.Start.toString(),
+                  ArbeitsstundenSpalten.Ende.toString(), ArbeitsstundenSpalten.Preis.toString(), this.zusatz1_name, this.zusatz2_name,
+                  ArbeitsstundenSpalten.Preisänderung.toString(), ArbeitsstundenSpalten.Eingereicht.toString(), ArbeitsstundenSpalten.Bezahlt.toString() }) {
          private static final long serialVersionUID = 1913170267962749520L;
 
          @Override
@@ -293,13 +289,6 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          this.geloeschte_spalten[1] = 6;
          this.spalte6 = jTable1.getColumnModel().getColumn(6);
          jTable1.removeColumn(jTable1.getColumnModel().getColumn(6));
-         /*
-          * jTable1.getColumnModel().getColumn(6).setWidth(0);
-          * jTable1.getColumnModel().getColumn(6).setResizable(false);
-          * jTable1.getColumnModel().getColumn(6).setMaxWidth(0);
-          * jTable1.getColumnModel().getColumn(6).setPreferredWidth(0);
-          * jTable1.getColumnModel().getColumn(6).setMinWidth(0);
-          */
       } else {
          this.geloeschte_spalten[1] = null;
       }
@@ -1258,7 +1247,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    // return latex;
    // }
 
-   private void jButtonRechnungActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonRechnungActionPerformed
+   private void jButtonRechnungActionPerformed(java.awt.event.ActionEvent evt) {
       boolean isAnySubmitted = false;
 
       Vector<Integer> einheitenIDs = new Vector<Integer>();
@@ -1283,7 +1272,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       if (!isAnySubmitted) {
          RechnungDialog dialog = new RechnungDialog(optionen, this.parent,
                einheitenIDs);
-         dialog.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+         dialog.addPropertyChangeListener(new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
                if (evt.getPropertyName().matches(RechnungDialog.ERSTELLT)) {
@@ -1294,7 +1283,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          dialog.setVisible(true);
       }
       this.updateTable();
-   }// GEN-LAST:event_jButtonRechnungActionPerformed
+   }
 
    private void neue_rechnung() {
       this.firePropertyChange(RechnungDialog.ERSTELLT, 0, 1);

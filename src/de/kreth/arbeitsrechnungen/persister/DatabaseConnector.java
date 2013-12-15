@@ -11,12 +11,12 @@ import arbeitsabrechnungendataclass.Verbindung_mysql;
  * Stellt die Db-Verbindung her und stellt logger-Objekt zur Verfügung.
  * @author markus
  */
-public abstract class AbstractPersister {
+public final class DatabaseConnector {
 
-	protected Logger logger = Logger.getLogger(getClass());
-	protected Verbindung verbindung;
+	private Logger logger = Logger.getLogger(getClass());
+	private Verbindung verbindung;
 
-	public AbstractPersister(Properties optionen) {
+	public DatabaseConnector(Properties optionen) {
 		super();
 
 		verbindung = new Verbindung_mysql(optionen);
@@ -27,4 +27,8 @@ public abstract class AbstractPersister {
 			logger.error("Not connected!");
 	}
 
+   public Verbindung getVerbindung() {
+      return verbindung;
+   }
+   
 }

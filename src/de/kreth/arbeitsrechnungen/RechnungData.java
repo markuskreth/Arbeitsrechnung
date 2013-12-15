@@ -4,12 +4,14 @@ package de.kreth.arbeitsrechnungen;
  *
  * @author markus
  */
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -63,10 +65,10 @@ public class RechnungData {
 	String zusatz2_name;
 	boolean stunden;
 	boolean zusammenfassungen_erlauben;
-	Double summe = 0.0;
+	BigDecimal summe = BigDecimal.ZERO;
 	Double summe_stunden = 0.0;
 	java.util.Properties optionen = new java.util.Properties();
-	String latexcode;
+	String latexcode = null;
 	/**
 	 * Neue oder bearbeitete Rechnung - wird durch setRechnung_id belegt true:
 	 * Beim Speichern wird INSERT ausgeführt false: Beim Speichern wird UPDATE
@@ -133,7 +135,7 @@ public class RechnungData {
 	public RechnungData() {
 		logger.setLevel(Level.DEBUG);
 		logger.debug("Konstruktor RechnungenData wurde ausgeführt! Sonst nicht - wieso... bitte forschen");
-		this.summe = 0.0;
+		this.summe = BigDecimal.ZERO;
 
 		this.optionen = new Einstellungen().getEinstellungen();
 		verbindung = new Verbindung_mysql(optionen);
@@ -163,12 +165,7 @@ public class RechnungData {
 			boolean zusammenfassungen_erlauben) {
 	   
 		boolean texfileSuccess;
-		
-		if (adresse.endsWith("\n"))
-			adresse = adresse.substring(0, adresse.lastIndexOf("\n"));
-
-		adresse = adresse.replaceAll("\n\n", TEXUMBRUCH + TEXUMBRUCH + "\n");
-		this.adresse = adresse.replaceAll("\n", TEXUMBRUCH + TEXUMBRUCH + "\n");
+		this.adresse = trimAdressAndTexify(adresse);
 
 		this.klienten_id = klienten_id;
 		this.tex_datei = tex_datei;
@@ -195,7 +192,18 @@ public class RechnungData {
 		return texfileSuccess;
 	}
 
-	/**
+	private String trimAdressAndTexify(String adresse) {
+
+      if (adresse.endsWith("\n"))
+         adresse = adresse.substring(0, adresse.lastIndexOf("\n"));
+
+      adresse = adresse.replaceAll("\n\n", TEXUMBRUCH + TEXUMBRUCH + "\n");
+      adresse = adresse.replaceAll("\n", TEXUMBRUCH + TEXUMBRUCH + "\n");
+      
+      return adresse;
+   }
+
+   /**
 	 * Tex-Datei öffnen und in String 'latex' speichern
 	 * @return true bei Erfolg
 	 */
@@ -245,6 +253,8 @@ public class RechnungData {
 		optionen = new Einstellungen().getEinstellungen();
 		int ergebnis = 0;
 
+		checkValidity();
+		
 		String outputfile_tex = optionen.getProperty("arbeitsverzeichnis");
 		logger.debug("Arbeitsverzeichnis: " + outputfile_tex);
 		outputfile_tex = outputfile_tex + this.heute.getTimeInMillis() + ".tex";
@@ -281,7 +291,7 @@ public class RechnungData {
 			if (this.stunden)
 				latexcode = latexcode.replaceAll(
 						"%%summe%%",
-						" für " + this.summe_stunden + " Std. insgesamt "
+						" für " + zf.format(this.summe_stunden) + " Std. insgesamt "
 								+ zf.format(this.summe) + TEXEURO);
 			else
 				latexcode = latexcode.replaceAll("%%summe%%",
@@ -294,12 +304,14 @@ public class RechnungData {
 			String ersetzung = "\"Stunden\"";
 			logger.debug(ersetzung);
 			latexcode = latexcode.replaceAll(ersetzung,
-					this.summe_stunden.toString());
+					zf.format(summe_stunden));
 			ersetzung = "\"Stundenlohn\"";
 			logger.debug(ersetzung);
+			BigDecimal einzelPreis = this.einheiten.elementAt(0).getEinzelPreis();
+			einzelPreis = einzelPreis.setScale(2, RoundingMode.HALF_UP);
+			
 			latexcode = latexcode.replaceAll(ersetzung,
-					((Double) (this.einheiten.elementAt(0).getEinzelPreis()))
-							.toString());
+			      einzelPreis.toPlainString());
 			ersetzung = "\"Summe\"";
 			logger.debug(ersetzung);
 
@@ -351,7 +363,16 @@ public class RechnungData {
 				logger.debug("pdf Exit-Value: " + this.latexergebnis);
 				ergebnis = this.latexergebnis;
 				if (ergebnis != 0) {
-					System.err.println();
+				   StringBuilder output = new StringBuilder();
+				   
+				   streamToString(output, proc.getErrorStream());
+				   
+				   if(output.length()>0)
+				      output.append("\n\n");
+				   
+				   streamToString(output, proc.getInputStream());
+				   
+				   logger.error("Nicht erfolgreicht, exit-Wert=" + ergebnis + " in " + command + "\n\n" + output.toString());
 				} else {
 					this.pdf = outputfile_tex.substring(0,
 							outputfile_tex.lastIndexOf(".tex"))
@@ -367,11 +388,25 @@ public class RechnungData {
 		return ergebnis; // Ergebnis von pdflatex wird zurückgegeben
 	}
 
-	private String createTable() {
-		DateFormat df = DateFormat.getDateInstance(java.text.DateFormat.MEDIUM,
-				Locale.GERMAN);
+	private void checkValidity() {
+	   if(adresse == null || adresse.length()<=0)
+	      throw new IllegalStateException("Adresse ist ungültig: " + adresse);
+   }
+
+   private void streamToString(StringBuilder output, InputStream stream) throws IOException {
+      InputStreamReader in = new InputStreamReader(stream);
+      BufferedReader bin = new BufferedReader(in);
+      String line ;
+      while((line = bin.readLine()) != null){
+         output.append(line).append("\n");
+      }
+   }
+
+   private String createTable() {
+		DateFormat df = DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN);
 		DecimalFormat zf = new DecimalFormat("0.00");
 		StringBuilder tabelle = new StringBuilder();
+		
 		int fact = 0;
 		int spalten = 3; // Mind 3 Spalten: Datum, Inhalt und Honorar
 		if (this.stunden) {
@@ -410,18 +445,21 @@ public class RechnungData {
 
 				tabelle.append(df.format(einheiten.elementAt(i).getDatum()) + " & "
 						+ einheiten.elementAt(i).getInhalt() + " & ");
-				if (this.stunden)
-					tabelle.append(einheiten.elementAt(i).getDauer() / 60 + " & "); // Minuten
-																				// in
-																				// Stunden
+				
+				BigDecimal dauer = BigDecimal.ZERO;
+				if (this.stunden){
+				   dauer = BigDecimal.valueOf(einheiten.elementAt(i).getDauerInMinutes()).divide(BigDecimal.valueOf(60)).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
+				   tabelle.append(zf.format(dauer) + " & "); // Minuten in Stunden umrechnen
+				}
+				
 				if (zusatz1_name != null)
 					tabelle.append(einheiten.elementAt(i).getZusatz1() + " & ");
 				if (zusatz2_name != null)
 					tabelle.append(einheiten.elementAt(i).getZusatz2() + " & ");
 				tabelle.append(zf.format(einheiten.elementAt(i).getPreis()) + " "
 						+ TEXEURO + TEXUMBRUCH + TEXLINE + "\n");
-				this.summe += einheiten.elementAt(i).getPreis();
-				this.summe_stunden += einheiten.elementAt(i).getDauer() / 60; // Minuten
+				this.summe = this.summe.add(einheiten.elementAt(i).getPreis());
+				this.summe_stunden += dauer.doubleValue(); // Minuten
 																				// in
 																				// Stunden
 			}
@@ -433,7 +471,7 @@ public class RechnungData {
 						+ TEXUMBRUCH + TEXLINE + "\n" + "\\\\end{tabular}");
 				break;
 			case 1: // Datum, Inhalt, Std, Preis
-				tabelle.append(TEXLINE + "& & " + summe_stunden + " & "
+				tabelle.append(TEXLINE + "& & " + zf.format(summe_stunden) + " & "
 						+ zf.format(summe) + " " + TEXEURO + TEXUMBRUCH
 						+ TEXLINE + "\n" + "\\\\end{tabular}");
 				break;
@@ -448,12 +486,12 @@ public class RechnungData {
 						+ "\\\\end{tabular}");
 				break;
 			case 3: // Datum, Inhalt, Std, Zusatz, Preis
-				tabelle.append(TEXLINE + "& & " + summe_stunden + " & & "
+				tabelle.append(TEXLINE + "& & " + zf.format(summe_stunden) + " & & "
 						+ zf.format(summe) + " " + TEXEURO + TEXUMBRUCH
 						+ TEXLINE + "\n" + "\\\\end{tabular}");
 				break;
 			case 5: // Datum, Inhalt, Std, Zusatz, Preis
-				tabelle.append(TEXLINE + "& & " + summe_stunden + " & & "
+				tabelle.append(TEXLINE + "& & " + zf.format(summe_stunden) + " & & "
 						+ zf.format(summe) + " " + TEXEURO + TEXUMBRUCH
 						+ TEXLINE + "\n" + "\\\\end{tabular}");
 				break;
@@ -463,7 +501,7 @@ public class RechnungData {
 						+ "\\\\end{tabular}");
 				break;
 			case 7:
-				tabelle.append(TEXLINE + "& & " + summe_stunden + " & & & "
+				tabelle.append(TEXLINE + "& & " + zf.format(summe_stunden) + " & & & "
 						+ zf.format(summe) + " " + TEXEURO + TEXUMBRUCH
 						+ TEXLINE + "\n" + "\\\\end{tabular}");
 				break;
@@ -477,7 +515,6 @@ public class RechnungData {
 					this.latexcode.indexOf("%Zeileende"));
 			zeilencode = zeilencode.replace("%Zeileanfang", "");
 			zeilencode = zeilencode.replace("%Zeileende", "");
-			// javax.swing.JOptionPane.showMessageDialog(null, zeilencode);
 
 			// Zeilen erstellen
 			for (int i = 0; i < einheiten.size(); i++) {
@@ -488,7 +525,7 @@ public class RechnungData {
 					zeile = zeile.replaceAll("\"Teilnehmerzahl\"", einheiten
 							.elementAt(i).getZusatz1());
 				zeile = zeile.replaceAll("\"Dauer\"", ((Double) (einheiten
-						.elementAt(i).getDauer() / 60.)).toString());
+						.elementAt(i).getDauerInMinutes() / 60.)).toString());
 
 				String zeiten = "17.00 - 19.00";
 				GregorianCalendar kalender = new GregorianCalendar();
@@ -513,8 +550,9 @@ public class RechnungData {
 
 				zeile = zeile.replaceAll("\"vonbis\"", zeiten);
 
-				this.summe += einheiten.elementAt(i).getPreis();
-				this.summe_stunden += einheiten.elementAt(i).getDauer() / 60; // Minuten
+				this.summe = this.summe.add(einheiten.elementAt(i).getPreis());
+				
+				this.summe_stunden += einheiten.elementAt(i).getDauerInMinutes() / 60; // Minuten
 																				// in
 																				// Stunden
 
@@ -535,45 +573,46 @@ public class RechnungData {
 	private void checkEinheitenGleichheit(int i) {
 		// wird rekursiv wiederholt, bis keine Dublikate mehr gefunden werden.
 		if (i + 1 < einheiten.size()) {
-			if (einheiten.elementAt(i).getDatum()
-					.equals(einheiten.elementAt(i + 1).getDatum())
-					&& einheiten.elementAt(i).getAngeboteID()
-							.equals(einheiten.elementAt(i + 1).getAngeboteID())) {
+		   Arbeitsstunde element1 = einheiten.elementAt(i);
+		   Arbeitsstunde element2 = einheiten.elementAt(i + 1);
+			if (element1.getDatum().equals(element2.getDatum())
+					&& element1.getAngeboteID().equals(element2.getAngeboteID())) {
 				// Wenn Datum, Angebot_id übereinstimmen dann preis und zusätze
 				// checken
-				Double preis = einheiten.elementAt(i).getPreis();
-				if (preis.equals(einheiten.elementAt(i + 1).getPreis())) {
-					// Zusätze checken
-					String z1 = einheiten.elementAt(i + 1).getZusatz1();
-					String z2 = einheiten.elementAt(i + 1).getZusatz2();
-					if ((this.zusatz1_name == null || einheiten.elementAt(i)
-							.getZusatz1().equals(z1))
-							&& (this.zusatz2_name == null || einheiten
-									.elementAt(i).getZusatz2().equals(z2))) {
-						einheiten.elementAt(i).setPreis(
-								preis + einheiten.elementAt(i + 1).getPreis());
-						dublikate.add(einheiten.elementAt(i + 1).getID());
-						logger.info("Doppeltes Element wurde gefunden:"
-								+ "\ni = " + i + "\n ID von i: "
-								+ einheiten.elementAt(i).getID()
-								+ "\n ID von i + 1: "
-								+ einheiten.elementAt(i + 1).getID());
-						logger.debug("Anzahl der Elemente in dublikate: "
-								+ dublikate.size());
-						System.out.print("Enthaltene Elemente: "
-								+ dublikate.elementAt(0));
-						for (int k = 1; k < dublikate.size(); k++) {
-							System.out.print(", " + dublikate.elementAt(k));
-						}
-						einheiten.remove(i + 1);
-						checkEinheitenGleichheit(i);
-					}
-				}
+			   markAsDoubleIfPreisAndZusaetzeMacht(i, element1, element2);
 			}
 		}
 	}
 
-	public void showPdf() {
+	private void markAsDoubleIfPreisAndZusaetzeMacht(int i, Arbeitsstunde element1, Arbeitsstunde element2) {
+
+      BigDecimal preis = element1.getPreis();
+      if (preis.equals(element2.getPreis())) {
+         // Zusätze checken
+         String z1 = element2.getZusatz1();
+         String z2 = element2.getZusatz2();
+         if ((this.zusatz1_name == null || element1
+               .getZusatz1().equals(z1))
+               && (this.zusatz2_name == null || element1.getZusatz2().equals(z2))) {
+            
+            element1.setPreis(preis.add(element2.getPreis()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+            
+            dublikate.add(element2.getID());
+            
+            logger.info("Doppeltes Element wurde gefunden:"
+                  + "\ni = " + i + "\n ID von i: "
+                  + element1.getID()
+                  + "\n ID von i + 1: "
+                  + element2.getID());
+            
+            logger.debug("Anzahl der Elemente in dublikate: " + dublikate.size() + "\n" + dublikate);
+            einheiten.remove(i + 1);
+            checkEinheitenGleichheit(i);
+         }
+      }
+   }
+
+   public void showPdf() {
 		String pdfProg = optionen.getProperty("pdfprogramm");
 		if (pdfProg != null) {
 			if (this.latexergebnis == 0 && this.pdf != null) {
