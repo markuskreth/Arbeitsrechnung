@@ -3,22 +3,19 @@ package de.kreth.arbeitsrechnungen.persister;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
 import arbeitsabrechnungendataclass.Verbindung;
+import de.kreth.arbeitsrechnungen.Options;
 
 public class DatenPersister implements Persister {
 
    private Logger logger = Logger.getLogger(getClass());
    private Verbindung verbindung;
 
-	public DatenPersister(Properties optionen) {
+	public DatenPersister(Options optionen) {
 	   verbindung = connectToDb(optionen);
 	}
 
@@ -128,8 +125,8 @@ public class DatenPersister implements Persister {
 	}
 
    @Override
-   public Verbindung connectToDb(Properties optionen) {
-      return new DatabaseConnector(optionen).getVerbindung();
+   public Verbindung connectToDb(Options optionen) {
+      return new DatabaseConnector(optionen.getProperties()).getVerbindung();
    }
 
 }

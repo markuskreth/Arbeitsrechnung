@@ -8,8 +8,7 @@ package de.kreth.arbeitsrechnungen.gui.panels;
  * @author markus
  */
 import java.awt.Window;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.ResultSet;
@@ -26,15 +25,14 @@ import org.apache.log4j.Logger;
 
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsabrechnungendataclass.Verbindung_mysql;
-import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.ArbeitsstundenSpalten;
-import de.kreth.arbeitsrechnungen.mySqlDate;
+import de.kreth.arbeitsrechnungen.*;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.ArbeitsstundeImpl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.Einheit_einzel;
-
+   
+@SuppressWarnings("boxing")
 public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       WindowListener {
 
@@ -43,7 +41,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    private Logger logger = Logger.getLogger(getClass());
 
    private Vector<Arbeitsstunde> Arbeitsstunden;
-   private java.util.Properties optionen;
+   private Options optionen;
    private Window parent = null;
    private int anzahl = 0;
    private Double summe = 0.00;
@@ -86,7 +84,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       // Optionen mit Datenbankeinstellungen laden
       optionen = new Einstellungen().getEinstellungen();
 
-      verbindung = new Verbindung_mysql(optionen);
+      verbindung = new Verbindung_mysql(optionen.getProperties());
 
       geloeschte_spalten[0] = null;
       geloeschte_spalten[1] = null;
@@ -365,9 +363,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jMenuItembearbeiten.setFocusPainted(true);
       jMenuItembearbeiten.setName("jMenuItembearbeiten"); // NOI18N
       jMenuItembearbeiten
-            .addActionListener(new java.awt.event.ActionListener() {
+            .addActionListener(new ActionListener() {
 
-               public void actionPerformed(java.awt.event.ActionEvent evt) {
+               @Override
+               public void actionPerformed(ActionEvent evt) {
                   jMenuItembearbeitenActionPerformed(evt);
                }
             });
@@ -386,9 +385,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             .getString("jMenuItemRechnungDatum.text")); // NOI18N
       jMenuItemRechnungDatum.setName("jMenuItemRechnungDatum"); // NOI18N
       jMenuItemRechnungDatum
-            .addActionListener(new java.awt.event.ActionListener() {
+            .addActionListener(new ActionListener() {
 
-               public void actionPerformed(java.awt.event.ActionEvent evt) {
+               @Override
+               public void actionPerformed(ActionEvent evt) {
                   jMenuItemRechnungDatumActionPerformed(evt);
                }
             });
@@ -398,9 +398,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             .getString("jMenuItemBezahltDatum.text")); // NOI18N
       jMenuItemBezahltDatum.setName("jMenuItemBezahltDatum"); // NOI18N
       jMenuItemBezahltDatum
-            .addActionListener(new java.awt.event.ActionListener() {
+            .addActionListener(new ActionListener() {
 
-               public void actionPerformed(java.awt.event.ActionEvent evt) {
+               @Override
+               public void actionPerformed(ActionEvent evt) {
                   jMenuItemBezahltDatumActionPerformed(evt);
                }
             });
@@ -410,9 +411,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jMenuItem1.setActionCommand(resourceMap
             .getString("jMenuItem1.actionCommand")); // NOI18N
       jMenuItem1.setName("jMenuItem1"); // NOI18N
-      jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+      jMenuItem1.addActionListener(new ActionListener() {
 
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+         @Override
+         public void actionPerformed(ActionEvent evt) {
             jMenuItem1ActionPerformed(evt);
          }
       });
@@ -442,10 +444,12 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          boolean[] canEdit = new boolean[] { false, false, false, false, false,
                false, false, false, false, false };
 
+         @Override
          public Class<?> getColumnClass(int columnIndex) {
             return types[columnIndex];
          }
 
+         @Override
          public boolean isCellEditable(int rowIndex, int columnIndex) {
             return canEdit[columnIndex];
          }
@@ -453,13 +457,15 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jTable1.setEditingColumn(0);
       jTable1.setEditingRow(0);
       jTable1.setName("jTable1"); // NOI18N
-      jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+      jTable1.addMouseListener(new MouseAdapter() {
 
-         public void mouseClicked(java.awt.event.MouseEvent evt) {
+         @Override
+         public void mouseClicked(MouseEvent evt) {
             jTable1MouseClicked(evt);
          }
 
-         public void mousePressed(java.awt.event.MouseEvent evt) {
+         @Override
+         public void mousePressed(MouseEvent evt) {
             jTable1MousePressed(evt);
          }
       });
@@ -532,9 +538,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
 
       jButtonDelete.setText(resourceMap.getString("jButtonDelete.text")); // NOI18N
       jButtonDelete.setName("jButtonDelete"); // NOI18N
-      jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+      jButtonDelete.addActionListener(new ActionListener() {
 
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+         @Override
+         public void actionPerformed(ActionEvent evt) {
             jButtonDeleteActionPerformed(evt);
          }
       });
@@ -542,9 +549,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jButtonBearbeiten
             .setText(resourceMap.getString("jButtonBearbeiten.text")); // NOI18N
       jButtonBearbeiten.setName("jButtonBearbeiten"); // NOI18N
-      jButtonBearbeiten.addActionListener(new java.awt.event.ActionListener() {
+      jButtonBearbeiten.addActionListener(new ActionListener() {
 
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+         @Override
+         public void actionPerformed(ActionEvent evt) {
             jButtonBearbeitenActionPerformed(evt);
          }
       });
@@ -553,9 +561,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             .getString("jButtonNeuerDatensatz.text")); // NOI18N
       jButtonNeuerDatensatz.setName("jButtonNeuerDatensatz"); // NOI18N
       jButtonNeuerDatensatz
-            .addActionListener(new java.awt.event.ActionListener() {
+            .addActionListener(new ActionListener() {
 
-               public void actionPerformed(java.awt.event.ActionEvent evt) {
+               @Override
+               public void actionPerformed(ActionEvent evt) {
                   jButtonNeuerDatensatzActionPerformed(evt);
                }
             });
@@ -567,9 +576,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             .getString("jRadioButtonAbgeschlossene.actionCommand")); // NOI18N
       jRadioButtonAbgeschlossene.setName("jRadioButtonAbgeschlossene"); // NOI18N
       jRadioButtonAbgeschlossene
-            .addItemListener(new java.awt.event.ItemListener() {
+            .addItemListener(new ItemListener() {
 
-               public void itemStateChanged(java.awt.event.ItemEvent evt) {
+               @Override
+               public void itemStateChanged(ItemEvent evt) {
                   jRadioButtonAbgeschlosseneItemStateChanged(evt);
                }
             });
@@ -581,9 +591,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             .getString("jRadioButtonNichtBezahlte.actionCommand")); // NOI18N
       jRadioButtonNichtBezahlte.setName("jRadioButtonNichtBezahlte"); // NOI18N
       jRadioButtonNichtBezahlte
-            .addItemListener(new java.awt.event.ItemListener() {
+            .addItemListener(new ItemListener() {
 
-               public void itemStateChanged(java.awt.event.ItemEvent evt) {
+               @Override
+               public void itemStateChanged(ItemEvent evt) {
                   jRadioButtonNichtBezahlteItemStateChanged(evt);
                }
             });
@@ -595,9 +606,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             .getString("jRadioButtonNichtEingereichte.actionCommand")); // NOI18N
       jRadioButtonNichtEingereichte.setName("jRadioButtonNichtEingereichte"); // NOI18N
       jRadioButtonNichtEingereichte
-            .addItemListener(new java.awt.event.ItemListener() {
+            .addItemListener(new ItemListener() {
 
-               public void itemStateChanged(java.awt.event.ItemEvent evt) {
+               @Override
+               public void itemStateChanged(ItemEvent evt) {
                   jRadioButtonNichtEingereichteItemStateChanged(evt);
                }
             });
@@ -607,9 +619,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jRadioButtonAlle.setActionCommand(resourceMap
             .getString("jRadioButtonAlle.actionCommand")); // NOI18N
       jRadioButtonAlle.setName("jRadioButtonAlle"); // NOI18N
-      jRadioButtonAlle.addItemListener(new java.awt.event.ItemListener() {
+      jRadioButtonAlle.addItemListener(new ItemListener() {
 
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+         @Override
+         public void itemStateChanged(ItemEvent evt) {
             jRadioButtonAlleItemStateChanged(evt);
          }
       });
@@ -619,9 +632,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
 
       jButtonRechnung.setText(resourceMap.getString("jButtonRechnung.text")); // NOI18N
       jButtonRechnung.setName("jButtonRechnung"); // NOI18N
-      jButtonRechnung.addActionListener(new java.awt.event.ActionListener() {
+      jButtonRechnung.addActionListener(new ActionListener() {
 
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+         @Override
+         public void actionPerformed(ActionEvent evt) {
             jButtonRechnungActionPerformed(evt);
          }
       });
@@ -633,9 +647,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jRadioButtonOffene.setActionCommand(resourceMap
             .getString("jRadioButtonOffene.actionCommand")); // NOI18N
       jRadioButtonOffene.setName("jRadioButtonOffene"); // NOI18N
-      jRadioButtonOffene.addItemListener(new java.awt.event.ItemListener() {
+      jRadioButtonOffene.addItemListener(new ItemListener() {
 
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+         @Override
+         public void itemStateChanged(ItemEvent evt) {
             jRadioButtonOffeneItemStateChanged(evt);
          }
       });
@@ -660,6 +675,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jDateChooserVonDatum
             .addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 
+               @Override
                public void propertyChange(java.beans.PropertyChangeEvent evt) {
                   jDateChooserVonDatumPropertyChange(evt);
                }
@@ -669,6 +685,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jDateChooserBisDatum
             .addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 
+               @Override
                public void propertyChange(java.beans.PropertyChangeEvent evt) {
                   jDateChooserBisDatumPropertyChange(evt);
                }
@@ -917,13 +934,13 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    }
 
    private void jButtonNeuerDatensatzActionPerformed(
-         java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonNeuerDatensatzActionPerformed
+         ActionEvent evt) {// GEN-FIRST:event_jButtonNeuerDatensatzActionPerformed
       Einheit_einzel fenster = new Einheit_einzel(this.klient);
       fenster.addWindowListener(this);
       fenster.setVisible(true);
    }// GEN-LAST:event_jButtonNeuerDatensatzActionPerformed
 
-   private void jButtonBearbeitenActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonBearbeitenActionPerformed
+   private void jButtonBearbeitenActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonBearbeitenActionPerformed
       // Datensatz bearbeiten
       editEinheit();
    }// GEN-LAST:event_jButtonBearbeitenActionPerformed
@@ -942,7 +959,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       }
    }
 
-   private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonDeleteActionPerformed
+   private void jButtonDeleteActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonDeleteActionPerformed
       // Datensatz löschen
 
       int einheit_id[] = this.jTable1.getSelectedRows();
@@ -1247,7 +1264,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    // return latex;
    // }
 
-   private void jButtonRechnungActionPerformed(java.awt.event.ActionEvent evt) {
+   private void jButtonRechnungActionPerformed(ActionEvent evt) {
       boolean isAnySubmitted = false;
 
       Vector<Integer> einheitenIDs = new Vector<Integer>();
@@ -1274,6 +1291,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
                einheitenIDs);
          dialog.addPropertyChangeListener(new PropertyChangeListener() {
 
+            @Override
             public void propertyChange(PropertyChangeEvent evt) {
                if (evt.getPropertyName().matches(RechnungDialog.ERSTELLT)) {
                   neue_rechnung();
@@ -1289,7 +1307,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       this.firePropertyChange(RechnungDialog.ERSTELLT, 0, 1);
    }
 
-   private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jTable1MouseClicked
+   private void jTable1MouseClicked(MouseEvent evt) {// GEN-FIRST:event_jTable1MouseClicked
       
       if (this.jTable1.getSelectedRowCount() == 0)
          jTable1SetSelection(evt);
@@ -1308,36 +1326,36 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
     * 
     * @param evt
     */
-   private void jTable1SetSelection(java.awt.event.MouseEvent evt) {
+   private void jTable1SetSelection(MouseEvent evt) {
       java.awt.Point p = evt.getPoint();
       int zeile = this.jTable1.rowAtPoint(p);
       this.jTable1.getSelectionModel().setSelectionInterval(zeile, zeile);
    }
 
-   private void jRadioButtonAlleItemStateChanged(java.awt.event.ItemEvent evt) {// GEN-FIRST:event_jRadioButtonAlleItemStateChanged
+   private void jRadioButtonAlleItemStateChanged(ItemEvent evt) {// GEN-FIRST:event_jRadioButtonAlleItemStateChanged
       setFilter();
       update(this.klient);
    }// GEN-LAST:event_jRadioButtonAlleItemStateChanged
 
    private void jRadioButtonNichtEingereichteItemStateChanged(
-         java.awt.event.ItemEvent evt) {// GEN-FIRST:event_jRadioButtonNichtEingereichteItemStateChanged
+         ItemEvent evt) {// GEN-FIRST:event_jRadioButtonNichtEingereichteItemStateChanged
       setFilter();
       update(this.klient);
    }// GEN-LAST:event_jRadioButtonNichtEingereichteItemStateChanged
 
    private void jRadioButtonNichtBezahlteItemStateChanged(
-         java.awt.event.ItemEvent evt) {// GEN-FIRST:event_jRadioButtonNichtBezahlteItemStateChanged
+         ItemEvent evt) {// GEN-FIRST:event_jRadioButtonNichtBezahlteItemStateChanged
       setFilter();
       update(this.klient);
    }// GEN-LAST:event_jRadioButtonNichtBezahlteItemStateChanged
 
    private void jRadioButtonAbgeschlosseneItemStateChanged(
-         java.awt.event.ItemEvent evt) {// GEN-FIRST:event_jRadioButtonAbgeschlosseneItemStateChanged
+         ItemEvent evt) {// GEN-FIRST:event_jRadioButtonAbgeschlosseneItemStateChanged
       setFilter();
       update(this.klient);
    }// GEN-LAST:event_jRadioButtonAbgeschlosseneItemStateChanged
 
-   private void jRadioButtonOffeneItemStateChanged(java.awt.event.ItemEvent evt) {// GEN-FIRST:event_jRadioButtonOffeneItemStateChanged
+   private void jRadioButtonOffeneItemStateChanged(ItemEvent evt) {// GEN-FIRST:event_jRadioButtonOffeneItemStateChanged
       setFilter();
       update(this.klient);
    }// GEN-LAST:event_jRadioButtonOffeneItemStateChanged
@@ -1347,13 +1365,13 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          filter = buttonGroupFilter.getSelection().getActionCommand();
 
          if (this.jDateChooserVonDatum.getDate() != null) {
-            mySqlDate tmpdate = new mySqlDate(
+            MySqlDate tmpdate = new MySqlDate(
                   this.jDateChooserVonDatum.getDate());
             filter = filter + " AND Datum>=\"" + tmpdate.getSqlDate() + "\"";
          }
 
          if (this.jDateChooserBisDatum.getDate() != null) {
-            mySqlDate tmpdate = new mySqlDate(
+            MySqlDate tmpdate = new MySqlDate(
                   this.jDateChooserBisDatum.getDate());
             filter = filter + " AND Datum<=\"" + tmpdate.getSqlDate() + "\"";
          }
@@ -1378,7 +1396,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       }
    }
 
-   private void jTable1MousePressed(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jTable1MousePressed
+   private void jTable1MousePressed(MouseEvent evt) {// GEN-FIRST:event_jTable1MousePressed
       if (this.jTable1.getSelectedRowCount() == 0)
          jTable1SetSelection(evt);
       if (evt.isPopupTrigger()) {
@@ -1387,14 +1405,14 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    }// GEN-LAST:event_jTable1MousePressed
 
    private void jMenuItembearbeitenActionPerformed(
-         java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItembearbeitenActionPerformed
+         ActionEvent evt) {// GEN-FIRST:event_jMenuItembearbeitenActionPerformed
       editEinheit();
       this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true,
             false);
    }// GEN-LAST:event_jMenuItembearbeitenActionPerformed
 
    private void jMenuItemBezahltDatumActionPerformed(
-         java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItemBezahltDatumActionPerformed
+         ActionEvent evt) {// GEN-FIRST:event_jMenuItemBezahltDatumActionPerformed
       // Setzt das Bezahlt_Datum
       setDatumOnField("Bezahlt_Datum", "Bezahlt");
       update(klient);
@@ -1428,7 +1446,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          String sqltext = "null";
          int wahr = 0;
          if (datum != null) {
-            mySqlDate tmpdate = new mySqlDate(datum);
+            MySqlDate tmpdate = new MySqlDate(datum);
             sqltext = "\"" + tmpdate.getSqlDate() + "\"";
             wahr = 1;
          }
@@ -1467,7 +1485,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    }// GEN-LAST:event_jDateChooserBisDatumPropertyChange
 
    private void jMenuItemRechnungDatumActionPerformed(
-         java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItemRechnungDatumActionPerformed
+         ActionEvent evt) {// GEN-FIRST:event_jMenuItemRechnungDatumActionPerformed
       // Setzt das Rechnung_Datum
       if (setDatumOnField("Rechnung_Datum", "Rechnung_verschickt")) {
          update(klient);
@@ -1476,12 +1494,16 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       }
    }// GEN-LAST:event_jMenuItemRechnungDatumActionPerformed
 
-   private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem1ActionPerformed
+   private void jMenuItem1ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jMenuItem1ActionPerformed
       this.jTable1.clearSelection();
    }// GEN-LAST:event_jMenuItem1ActionPerformed
 
-   public void windowActivated(WindowEvent evt) {}
+   @Override
+   public void windowActivated(WindowEvent evt) {
+      // Nothing to do here
+   }
 
+   @Override
    public void windowClosed(WindowEvent evt) {
       // Ein Fenster, dass Daten modifiziert hat wurde geschlossen, Tabelle wird
       // neu geladen
@@ -1490,15 +1512,30 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             false);
    }
 
-   public void windowClosing(WindowEvent evt) {}
+   @Override
+   public void windowClosing(WindowEvent evt) {
+      // Nothing to do here
+   }
 
-   public void windowDeactivated(WindowEvent evt) {}
+   @Override
+   public void windowDeactivated(WindowEvent evt) {
+      // Nothing to do here
+   }
 
-   public void windowDeiconified(WindowEvent evt) {}
+   @Override
+   public void windowDeiconified(WindowEvent evt) {
+      // Nothing to do here      
+   }
 
-   public void windowIconified(WindowEvent evt) {}
+   @Override
+   public void windowIconified(WindowEvent evt) {
+      // Nothing to do here      
+   }
 
-   public void windowOpened(WindowEvent evt) {}
+   @Override
+   public void windowOpened(WindowEvent evt) {
+      // Nothing to do here
+   }
 
    // Variables declaration - do not modify//GEN-BEGIN:variables
    private javax.swing.ButtonGroup buttonGroupFilter;

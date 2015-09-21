@@ -2,12 +2,11 @@ package de.kreth.arbeitsrechnungen.persister;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
 import arbeitsabrechnungendataclass.Verbindung;
-
+import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 
 public class AngebotPersister implements Persister {
@@ -15,7 +14,7 @@ public class AngebotPersister implements Persister {
    private Logger logger = Logger.getLogger(getClass());
 	private Verbindung verbindung;
 
-   public AngebotPersister(Properties optionen) {
+   public AngebotPersister(Options optionen) {
 	   verbindung = connectToDb(optionen);
 	}
 
@@ -92,8 +91,8 @@ public class AngebotPersister implements Persister {
 	}
 
    @Override
-   public Verbindung connectToDb(Properties optionen) {
-      return new DatabaseConnector(optionen).getVerbindung();
+   public Verbindung connectToDb(Options optionen) {
+      return new DatabaseConnector(optionen.getProperties()).getVerbindung();
    }
 
 }

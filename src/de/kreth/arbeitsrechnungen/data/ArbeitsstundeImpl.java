@@ -38,7 +38,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * 
 	 * @return the value of einzelPreis
 	 */
-	public BigDecimal getEinzelPreis() {
+	@Override
+   public BigDecimal getEinzelPreis() {
 		return einzelPreis;
 	}
 
@@ -48,10 +49,11 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * @param einzelPreis
 	 *            new value of einzelPreis
 	 */
-	public void setEinzelPreis(double einzelPreis) {
+	@Override
+   public void setEinzelPreis(double einzelPreis) {
 		double oldEinzelPreis = this.einzelPreis.setScale(2, RoundingMode.HALF_UP).doubleValue();
 		this.einzelPreis = new BigDecimal(einzelPreis);
-		pss.firePropertyChange(PROP_EINZELPREIS, oldEinzelPreis, einzelPreis);
+		pss.firePropertyChange(PROP_EINZELPREIS, Double.valueOf(oldEinzelPreis), Double.valueOf(einzelPreis));
 	}
 
 	/**
@@ -59,7 +61,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * 
 	 * @return the value of dauer
 	 */
-	public int getDauerInMinutes() {
+	@Override
+   public int getDauerInMinutes() {
 		return dauer;
 	}
 
@@ -69,10 +72,11 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * @param dauer
 	 *            new value of dauer
 	 */
-	public void setDauer(int dauer) {
-		double oldDauer = this.dauer;
+	@Override
+   public void setDauer(int dauer) {
+		int oldDauer = this.dauer;
 		this.dauer = dauer;
-		pss.firePropertyChange(PROP_DAUER, oldDauer, dauer);
+		pss.firePropertyChange(PROP_DAUER, Integer.valueOf(oldDauer), Integer.valueOf(dauer));
 	}
 
 	/**
@@ -80,7 +84,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * 
 	 * @return the value of zusatz2
 	 */
-	public String getZusatz2() {
+	@Override
+   public String getZusatz2() {
 		return zusatz2;
 	}
 
@@ -90,7 +95,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * @param zusatz2
 	 *            new value of zusatz2
 	 */
-	public void setZusatz2(String zusatz2) {
+	@Override
+   public void setZusatz2(String zusatz2) {
 		String oldZusatz2 = this.zusatz2;
 		this.zusatz2 = zusatz2;
 		pss.firePropertyChange(PROP_ZUSATZ2, oldZusatz2, zusatz2);
@@ -101,7 +107,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * 
 	 * @return the value of zusatz1
 	 */
-	public String getZusatz1() {
+	@Override
+   public String getZusatz1() {
 		return zusatz1;
 	}
 
@@ -111,7 +118,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * @param zusatz1
 	 *            new value of zusatz1
 	 */
-	public void setZusatz1(String zusatz1) {
+	@Override
+   public void setZusatz1(String zusatz1) {
 		String oldZusatz1 = this.zusatz1;
 		this.zusatz1 = zusatz1;
 		pss.firePropertyChange(PROP_ZUSATZ1, oldZusatz1, zusatz1);
@@ -122,7 +130,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * 
 	 * @return the value of preis
 	 */
-	public BigDecimal getPreis() {
+	@Override
+   public BigDecimal getPreis() {
 		return preis;
 	}
 
@@ -132,10 +141,11 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * @param preis
 	 *            new value of preis
 	 */
-	public void setPreis(double preis) {
+	@Override
+   public void setPreis(double preis) {
 		double oldPreis = this.preis.setScale(2, RoundingMode.HALF_UP).doubleValue();
 		this.preis = new BigDecimal(preis);
-		pss.firePropertyChange(PROP_PREIS, oldPreis, preis);
+		pss.firePropertyChange(PROP_PREIS, Double.valueOf(oldPreis), Double.valueOf(preis));
 	}
 
 	/**
@@ -143,7 +153,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 	 * 
 	 * @return the value of inhalt
 	 */
-	public String getInhalt() {
+	@Override
+   public String getInhalt() {
 		return inhalt;
 	}
 
@@ -319,59 +330,71 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
       }
       
 	}
-	public java.lang.Integer getID() {
+	@Override
+   public int getID() {
 		return id;
 	}
 
-	public java.lang.Integer getKlientenID() {
+	@Override
+   public int getKlientenID() {
 		return klientenid;
 	}
 
-	public java.lang.Integer getAngeboteID() {
+	@Override
+   public int getAngeboteID() {
 		return angeboteid;
 	}
 
-	public java.util.Date getDatum() {
+	@Override
+   public java.util.Date getDatum() {
 		return datum;
 	}
 
-	public void setDatum(java.util.Date datum) {
+	@Override
+   public void setDatum(java.util.Date datum) {
 		java.util.Date old = this.datum;
 		this.datum = datum;
 		this.pss.firePropertyChange(PROP_DATUM, old, datum);
 	}
 
-	public java.util.Date getBeginn() {
+	@Override
+   public java.util.Date getBeginn() {
 		return beginn;
 	}
 
-	public void setBeginn(java.util.Date beginn) {
+	@Override
+   public void setBeginn(java.util.Date beginn) {
 		java.util.Date old = this.beginn;
 		this.beginn = beginn;
 		this.pss.firePropertyChange(PROP_BEGINN, old, beginn);
 	}
 
-	public java.util.Date getEnde() {
+	@Override
+   public java.util.Date getEnde() {
 		return ende;
 	}
 
-	public void setEnde(java.util.Date ende) {
+	@Override
+   public void setEnde(java.util.Date ende) {
 		java.util.Date old = this.ende;
 		this.ende = ende;
 		this.pss.firePropertyChange(PROP_ENDE, old, ende);
 	}
 
-	public BigDecimal getPreisAenderung() {
+	@Override
+   public BigDecimal getPreisAenderung() {
 		return preisaenderung;
 	}
 
-	public void setPreisAenderung(double aenderung) {
-		java.lang.Double old = this.preisaenderung.setScale(2, RoundingMode.HALF_UP).doubleValue();
+	@Override
+   public void setPreisAenderung(double aenderung) {
+		double old = this.preisaenderung.setScale(2, RoundingMode.HALF_UP).doubleValue();
 		this.preisaenderung = BigDecimal.valueOf(aenderung);
-		this.pss.firePropertyChange(PROP_PREISAENDERUNG, old, aenderung);
+		this.pss.firePropertyChange(PROP_PREISAENDERUNG, Double.valueOf(old), Double.valueOf(aenderung));
 	}
 
-	public java.lang.Boolean isVerschickt() {
+	@Override
+   public boolean isVerschickt() {
 		if (this.verschickt != null) {
 			return true;
 		} else {
@@ -380,17 +403,20 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 
 	}
 
-	public java.util.Date getVerschicktDatum() {
+	@Override
+   public java.util.Date getVerschicktDatum() {
 		return verschickt;
 	}
 
-	public void setVerschicktDatum(java.util.Date datum) {
+	@Override
+   public void setVerschicktDatum(java.util.Date datum) {
 		java.util.Date old = this.verschickt;
 		this.verschickt = datum;
 		this.pss.firePropertyChange(PROP_VERSCHICKT, old, datum);
 	}
 
-	public java.lang.Boolean isBezahlt() {
+	@Override
+   public boolean isBezahlt() {
 		if (this.bezahlt != null) {
 			return true;
 		} else {
@@ -398,22 +424,25 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 		}
 	}
 
-	public java.util.Date getBezahltDatum() {
+	@Override
+   public java.util.Date getBezahltDatum() {
 		return bezahlt;
 	}
 
-	public void setBezahltDatum(java.util.Date datum) {
+	@Override
+   public void setBezahltDatum(java.util.Date datum) {
 		java.util.Date old = this.bezahlt;
 		this.bezahlt = datum;
 		this.pss.firePropertyChange(PROP_BEZAHLT, old, datum);
 	}
 
-	public Vector<Object> toVector() {
+	@Override
+   public Vector<Object> toVector() {
 		Vector<Object> datensatz = new Vector<Object>();
 		try {
-			datensatz.add(this.id);
-			datensatz.add(this.klientenid);
-			datensatz.add(this.angeboteid);
+			datensatz.add(Integer.valueOf(this.id));
+			datensatz.add(Integer.valueOf(this.klientenid));
+			datensatz.add(Integer.valueOf(this.angeboteid));
 			try {
 				datensatz.add(DateFormat.getDateInstance(
 						java.text.DateFormat.MEDIUM, Locale.GERMAN).format(
@@ -464,12 +493,14 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 		return datensatz;
 	}
 
-	public synchronized void addPropertyChangeListener(
+	@Override
+   public synchronized void addPropertyChangeListener(
 			PropertyChangeListener listener) {
 		this.pss.addPropertyChangeListener(listener);
 	}
 
-	public synchronized void removePropertyChangeListener(
+	@Override
+   public synchronized void removePropertyChangeListener(
 			PropertyChangeListener listener) {
 		this.pss.removePropertyChangeListener(listener);
 	}
@@ -478,7 +509,8 @@ public class ArbeitsstundeImpl implements Arbeitsstunde {
 		this.preisProStunde = boolean1;
 	}
 	
-	public boolean isPreisProStunde(){
+	@Override
+   public boolean isPreisProStunde(){
 		return preisProStunde;
 	}
 }

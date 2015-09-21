@@ -21,6 +21,7 @@ import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 import de.kreth.arbeitsrechnungen.Einstellungen;
+import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
 
@@ -34,7 +35,7 @@ public class AngebotDialog extends javax.swing.JDialog {
 	NumberFormat nf = NumberFormat.getNumberInstance();
 
 	AngebotPersister persister;
-	java.util.Properties optionen = new java.util.Properties();
+	Options optionen;
 
 	/**
 	 * Creates new form AngebotDialog bei DatensatzID == -1 wird ein neuer
@@ -56,7 +57,7 @@ public class AngebotDialog extends javax.swing.JDialog {
 		if (this.angebot == null) {
 			// Neuer Datensatz - Felder nur mit Probewerten füllen
 			this.jTextFieldInhalt.setText("Pflichtfeld");
-			this.jTextFieldPreis.setValue(0);
+			this.jTextFieldPreis.setValue(Integer.valueOf(0));
 		} else {
 			// Vorhandenen Datensatz laden und edieren
 
@@ -113,7 +114,8 @@ public class AngebotDialog extends javax.swing.JDialog {
 		jTextFieldInhalt.setName("jTextFieldInhalt"); // NOI18N
 		jTextFieldInhalt.setSelectionEnd(jTextFieldInhalt.getText().length());
 		jTextFieldInhalt.addFocusListener(new java.awt.event.FocusAdapter() {
-			public void focusGained(java.awt.event.FocusEvent evt) {
+			@Override
+         public void focusGained(java.awt.event.FocusEvent evt) {
 				jTextFieldInhaltFocusGained(evt);
 			}
 		});
@@ -128,7 +130,8 @@ public class AngebotDialog extends javax.swing.JDialog {
 		jTextFieldPreis.setName("jTextFieldPreis"); // NOI18N
 		jTextFieldPreis.setSelectionEnd(jTextFieldPreis.getText().length());
 		jTextFieldPreis.addFocusListener(new java.awt.event.FocusAdapter() {
-			public void focusGained(java.awt.event.FocusEvent evt) {
+			@Override
+         public void focusGained(java.awt.event.FocusEvent evt) {
 				jTextFieldPreisFocusGained(evt);
 			}
 		});
@@ -143,7 +146,8 @@ public class AngebotDialog extends javax.swing.JDialog {
 				.length());
 		jTextFieldBeschreibung
 				.addFocusListener(new java.awt.event.FocusAdapter() {
-					public void focusGained(java.awt.event.FocusEvent evt) {
+					@Override
+               public void focusGained(java.awt.event.FocusEvent evt) {
 						jTextFieldBeschreibungFocusGained(evt);
 					}
 				});
@@ -152,7 +156,8 @@ public class AngebotDialog extends javax.swing.JDialog {
 				.setText(resourceMap.getString("jButtonSpeichern.text")); // NOI18N
 		jButtonSpeichern.setName("jButtonSpeichern"); // NOI18N
 		jButtonSpeichern.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+			@Override
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jButtonSpeichernActionPerformed(evt);
 			}
 		});
@@ -161,7 +166,8 @@ public class AngebotDialog extends javax.swing.JDialog {
 				.setText(resourceMap.getString("jButtonVerwerfen.text")); // NOI18N
 		jButtonVerwerfen.setName("jButtonVerwerfen"); // NOI18N
 		jButtonVerwerfen.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+			@Override
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jButtonVerwerfenActionPerformed(evt);
 			}
 		});
@@ -287,8 +293,13 @@ public class AngebotDialog extends javax.swing.JDialog {
 		
 		// Falls ein leerzeichen gefunden wird, nur den vorderen Teil nuten (€)
 		preisString = preisString.substring(0, preisString.indexOf(" "));
-		preisString = preisString.replace(",", ".");
-		Integer preis = Integer.valueOf(preisString);
+		Double preis;
+		try {
+	      preis = Double.valueOf(preisString);
+		}  catch (NumberFormatException e) {
+   		preisString = preisString.replace(",", ".");
+   		preis = Double.valueOf(preisString);
+		}
 		
 		String beschreibung = jTextFieldBeschreibung.getText();
 		String inhalt = jTextFieldInhalt.getText();
@@ -301,7 +312,7 @@ public class AngebotDialog extends javax.swing.JDialog {
 			angebotId = angebot.getAngebote_id();
 		}
 		
-		Angebot angebot = new Angebot.Builder(inhalt, preis)
+		Angebot angebot = new Angebot.Builder(inhalt, preis.doubleValue())
 		                        .angebotId(angebotId)
 		                        .beschreibung(beschreibung)
 		                        .preis_pro_stunde(preisProStunde)

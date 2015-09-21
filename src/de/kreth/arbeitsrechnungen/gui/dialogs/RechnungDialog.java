@@ -12,8 +12,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.*;
+import java.sql.ResultSet;
 import java.util.*;
 
 import javax.swing.*;
@@ -24,9 +27,9 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
-import de.kreth.arbeitsrechnungen.ArbeitsstundenSpalten;
-import de.kreth.arbeitsrechnungen.RechnungData;
+import arbeitsabrechnungendataclass.Verbindung;
+import arbeitsabrechnungendataclass.Verbindung_mysql;
+import de.kreth.arbeitsrechnungen.*;
 import de.kreth.arbeitsrechnungen.data.*;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
@@ -59,11 +62,14 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    private Rechnung rechnung = null;
    private Vector<Arbeitsstunde> einheiten;
    private Klient klient;
+   private Verbindung verbindung;
 
-   private RechnungDialog(Properties optionen, Window parent) {
+   private RechnungDialog(Options optionen, Window parent) {
       super(parent);
       setModal(true);
-
+      
+      verbindung = new Verbindung_mysql(optionen.getProperties());
+      
       logger.setLevel(Level.DEBUG);
       initComponents();
       klientenPersister = (KlientenEditorPersister) ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class, optionen);
@@ -78,7 +84,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
     * @param parent
     * @param rechnungId
     */
-   public RechnungDialog(Properties optionen, Window parent, int rechnungId) {
+   public RechnungDialog(Options optionen, Window parent, int rechnungId) {
       this(optionen, parent);
 
       this.jToggleButtonDetails.setSelected(false);
@@ -86,7 +92,9 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
 
       this.useCreateinsteadUpdate = false;
 
-      rechnung = persister.getRechnungById(rechnungId).build();
+      String z1 = klient.getZusatz1_Name();
+      String z2 = klient.getZusatz2_Name();
+      rechnung = persister.getRechnungById(rechnungId).zusatz1Name(z1).zusatz2Name(z2).build();
       einheiten = persister.getEinheiten(rechnungId);
       klient = klientenPersister.getKlientById(rechnung.getKlienten_id());
 
@@ -146,7 +154,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
     * @param parent
     * @param einheiten
     */
-   public RechnungDialog(Properties optionen, Window parent,
+   public RechnungDialog(Options optionen, Window parent,
          Vector<Integer> einheiten) {
       this(optionen, parent);
 
@@ -168,12 +176,21 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       zahldatum.add(Calendar.MONTH, 1);
       
       Builder reBuilder = new Rechnung.Builder()
-            .setTexdatei(optionen.getProperty("stdtexdatei"))
-            .setDatum(heute)
-            .setZahldatum(zahldatum)
-            .setRechnungnr(generateRechnungsnr(heute));
+            .texdatei(optionen.getStdTexFile())
+            .datum(heute)
+            .zahldatum(zahldatum)
+            .rechnungnr(generateRechnungsnr(heute))
+            .klienten_id(this.klient.getKlienten_id())
+            .zusatz1(klient.hasZusatz1())
+            .zusatz2(klient.hasZusatz2())
+            .zusatz1Name(klient.getZusatz1_Name())
+            .zusatz2Name(klient.getZusatz2_Name());
 
       setAdresse(reBuilder);
+
+      if (klient.getTex_datei() != null && !klient.getTex_datei().isEmpty()) {
+         reBuilder.texdatei(klient.getTex_datei());
+      }
       
       rechnung = reBuilder.build();
 
@@ -193,7 +210,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       this.jTextRechnungsnummer.getDocument().addDocumentListener(this);
    }
 
-   public void propertyChange(java.beans.PropertyChangeEvent e) {
+   @Override
+   public void propertyChange(PropertyChangeEvent e) {
       JComponent quelle = (JComponent) e.getSource();
 
       logger.debug("Neuer Wert bei " + quelle.getName() + ": "
@@ -206,14 +224,17 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       }
    }
 
+   @Override
    public void insertUpdate(DocumentEvent e) {
       changeText(e);
    }
 
+   @Override
    public void removeUpdate(DocumentEvent e) {
       changeText(e);
    }
 
+   @Override
    public void changedUpdate(DocumentEvent e) {
       changeText(e);
    }
@@ -305,14 +326,14 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
          else {
             // Wenn sie schon eingerichtet ist wird der Booleanwert
             // übernommen
-            java.lang.Boolean tmp_bool = (java.lang.Boolean) jTable1
-                  .getValueAt(i, 0);
-            tabellenzeile.add(new Boolean(tmp_bool.booleanValue()));
+            Boolean tmp_bool = Boolean.valueOf(jTable1.getValueAt(i, 0).toString());
+            tabellenzeile.add(tmp_bool);
          }
+         
          tabellenzeile.add(einheiten.elementAt(i).getDatum());
          tabellenzeile.add(einheiten.elementAt(i).getInhalt());
          if (this.jCheckBoxStundenzahl.isSelected())
-            tabellenzeile.add(einheiten.elementAt(i).getDauerInMinutes() / 60); // Minuten
+            tabellenzeile.add(Integer.valueOf(einheiten.elementAt(i).getDauerInMinutes() / 60)); // Minuten
          // zu
          // Stunden
          if (this.jCheckBoxZusatz1.isSelected())
@@ -371,14 +392,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
                   : klient.getAAdress2() + "\n") + klient.getAPlz() + " "
             + klient.getAOrt();
 
-      reBuilder.setAdresse(adresse);
-
-      reBuilder.setZusatz1(klient.hasZusatz1());
-      reBuilder.setZusatz2(klient.hasZusatz2());
-
-      if (klient.getTex_datei() != null && !klient.getTex_datei().isEmpty()) {
-         reBuilder.setTexdatei(klient.getTex_datei());
-      }
+      reBuilder.adresse(adresse);
    }
 
    /**
@@ -523,6 +537,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jToggleButtonZusammenfassungen.setName("jToggleButtonZusammenfassungen"); // NOI18N
       jToggleButtonZusammenfassungen.addActionListener(new ActionListener() {
 
+         @Override
          public void actionPerformed(ActionEvent evt) {
             jToggleButtonZusammenfassungenActionPerformed(evt);
          }
@@ -648,6 +663,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jDateRechnungsdatum
             .addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 
+               @Override
                public void propertyChange(java.beans.PropertyChangeEvent evt) {
                   jDateRechnungsdatumPropertyChange(evt);
                }
@@ -674,22 +690,26 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jTextRechnungsnummer.setPreferredSize(new Dimension(130, 19));
       jTextRechnungsnummer.addMouseListener(new MouseAdapter() {
 
+         @Override
          public void mouseClicked(MouseEvent evt) {
             jTextRechnungsnummerMouseClicked(evt);
          }
       });
       jTextRechnungsnummer.addActionListener(new ActionListener() {
 
+         @Override
          public void actionPerformed(ActionEvent evt) {
             jTextRechnungsnummerActionPerformed(evt);
          }
       });
       jTextRechnungsnummer.addFocusListener(new FocusAdapter() {
 
+         @Override
          public void focusGained(FocusEvent evt) {
             jTextRechnungsnummerFocusGained(evt);
          }
 
+         @Override
          public void focusLost(FocusEvent evt) {
             jTextRechnungsnummerFocusLost(evt);
          }
@@ -714,6 +734,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
             .getString("jToggleDetails.selectedIcon"))); // NOI18N
       jToggleButtonDetails.addActionListener(new ActionListener() {
 
+         @Override
          public void actionPerformed(ActionEvent evt) {
             jToggleButtonDetailsActionPerformed(evt);
          }
@@ -724,6 +745,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jCheckBoxZusatz1.setName("jCheckBoxZusatz1"); // NOI18N
       jCheckBoxZusatz1.addActionListener(new ActionListener() {
 
+         @Override
          public void actionPerformed(ActionEvent evt) {
             jCheckBoxZusatz1ActionPerformed(evt);
          }
@@ -734,6 +756,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jCheckBoxZusatz2.setName("jCheckBoxZusatz2"); // NOI18N
       jCheckBoxZusatz2.addActionListener(new ActionListener() {
 
+         @Override
          public void actionPerformed(ActionEvent evt) {
             jCheckBoxZusatz2ActionPerformed(evt);
          }
@@ -744,6 +767,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jCheckBoxStundenzahl.setName("jCheckBoxStundenzahl"); // NOI18N
       jCheckBoxStundenzahl.addActionListener(new ActionListener() {
 
+         @Override
          public void actionPerformed(ActionEvent evt) {
             jCheckBoxStundenzahlActionPerformed(evt);
          }
@@ -754,13 +778,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jCheckBoxUnterschrift.setActionCommand(resourceMap
             .getString("jCheckBoxUnterschrift.actionCommand")); // NOI18N
       jCheckBoxUnterschrift.setName("jCheckBoxUnterschrift"); // NOI18N
-      jCheckBoxUnterschrift.addActionListener(new ActionListener() {
-
-         public void actionPerformed(ActionEvent evt) {
-            jCheckBoxUnterschriftActionPerformed(evt);
-         }
-      });
-
+      
       GroupLayout jPanelobenLayout = new GroupLayout(jPaneloben);
       jPaneloben.setLayout(jPanelobenLayout);
       jPanelobenLayout
@@ -958,6 +976,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jButton1.setName("jButtonAbbrechen"); // NOI18N
       jButton1.addActionListener(new ActionListener() {
 
+         @Override
          public void actionPerformed(ActionEvent evt) {
             jButton1ActionPerformed(evt);
          }
@@ -967,6 +986,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jButtonErstellen.setName("jButtonErstellen"); // NOI18N
       jButtonErstellen.addActionListener(new ActionListener() {
 
+         @Override
          public void actionPerformed(ActionEvent evt) {
             jButtonErstellenActionPerformed(evt);
          }
@@ -1021,8 +1041,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    }
 
    private Icon getIcon(String fileName) {
-      fileName = "icons/" + fileName;
-      return new ImageIcon(fileName);
+      return new ImageIcon("icons/" + fileName);
    }
 
    private void jToggleButtonDetailsActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jToggleButtonDetailsActionPerformed
@@ -1089,18 +1108,13 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
     * 
     * @param evt
     */
-   private void jButtonErstellenActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonErstellenActionPerformed
+   private void jButtonErstellenActionPerformed(ActionEvent evt) {
+      Options einstellungen = new Einstellungen().getEinstellungen();
+      
 
-      RechnungData rechnungData = new RechnungData();
 
-      String z1 = klient.getZusatz1_Name();
-      String z2 = klient.getZusatz2_Name();
-      rechnungData.setUnterschrift(jCheckBoxUnterschrift.isSelected());
-
-      if (!this.rechnung.hasZusatz1() || !this.jCheckBoxZusatz1.isSelected())
-         z1 = null;
-      if (!this.rechnung.hasZusatz2() || !this.jCheckBoxZusatz2.isSelected())
-         z2 = null;
+      this.rechnung.setZusatz1(this.jCheckBoxZusatz1.isSelected());
+      this.rechnung.setZusatz2(this.jCheckBoxZusatz2.isSelected());
 
       // Nur arbetisstunden übernehmen, die auch gewält sind.
       Vector<Arbeitsstunde> tmp_einheiten = new Vector<Arbeitsstunde>();
@@ -1113,29 +1127,118 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
             tmp_einheiten.add(einheiten.elementAt(i));
       }
 
-      if (rechnungData.initRechnung(this.rechnung.getKlienten_id(),
-            this.rechnung.getAdresse(), this.rechnung.getTexdatei(),
-            tmp_einheiten, heute, this.rechnung.getDatum(),
-            this.rechnung.getZahldatum(), this.rechnung.getRechnungnr(), z1,
-            z2, this.stunden_vorhanden, this.zusammenfassungen_erlauben)) {
+      PdfCreator rechnungData;
+      try {
+         rechnungData = new PdfCreator(this.rechnung);
 
-         int pdf_ergebnis = rechnungData.makePdf();
+         rechnungData.setUnterschrift(jCheckBoxUnterschrift.isSelected());
+         
+         int pdf_ergebnis = rechnungData.makePdf(einstellungen);
          if (pdf_ergebnis == 0) {
             if (JOptionPane.showConfirmDialog(null,
                   "Soll diese Rechnung so gespeichert werden?", "Speichern?",
                   JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
-               rechnungData.speichern();
+               speichern(einstellungen);
+               
                pchListeners.firePropertyChange(ERSTELLT, false, true);
             }
-            rechnungData.showPdf();
+            rechnungData.showPdf(einstellungen);
          }
-      } else {
-         logger.debug("initRechnung nicht erfolgreich!");
+         
+      } catch (FileNotFoundException e) {
+         JOptionPane.showMessageDialog(this, "Datei " + rechnung.getTexdatei() + "\nkonnte nicht gefunden werden!\nAbbruch!", "Datei nicht gefunden", JOptionPane.ERROR_MESSAGE);
       }
+      
       this.setVisible(false);
       this.dispose();
-   }// GEN-LAST:event_jButtonErstellenActionPerformed
+   }
 
+   /**
+    * Speichert die Rechnung und Details in der Datenbank
+    * @param optionen 
+    */
+   public int speichern(Options optionen) {
+
+      // zuerst die tex und pdf-Datei ins andere Verzeichnis kopieren und
+      // umbenennen
+      String dateiname = "";
+      String sql = "SELECT Auftraggeber FROM klienten WHERE klienten_id="
+            + rechnung.getKlienten_id();
+      logger.debug("RechnungenData:speichern : " + sql);
+      
+      try {
+
+         ResultSet auftraggeber = verbindung.query(sql);
+         if (auftraggeber.first()) {
+            dateiname = auftraggeber.getString("Auftraggeber") + "_"
+                  + rechnung.getRechnungnr();
+            dateiname = dateiname.replace(" ", "_");
+         } else {
+            // sql nicht erfolgreich
+            dateiname = rechnung.getRechnungnr();
+            dateiname = dateiname.replace(" ", "_");
+         }
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+      java.lang.Process proc;
+      int ergebnis = 0;
+      String new_pdf = dateiname + ".pdf";
+
+      String befehl = "mv " + rechnung.getPdfdatei() + " "
+            + optionen.getTargetDir() + File.separator + new_pdf;
+      logger.debug("RechnungenData:speichern(565): " + befehl);
+      try {
+         // proc = Runtime.getRuntime().exec(befehl);
+         proc = new ProcessBuilder("sh", "-c", befehl).start();
+         try {
+            BufferedReader procout = new BufferedReader(
+                  new InputStreamReader(proc.getErrorStream()));
+            String line;
+            while ((line = procout.readLine()) != null) {
+               logger.debug("  ERROR> " + line);
+            }
+            proc.waitFor();
+            logger.debug("mv pdf Exit-Value(570): " + proc.exitValue());
+            ergebnis = proc.exitValue();
+            if (ergebnis == 0) {
+
+               // Texdatei auch kopieren, wenn pdf erfolgreich kopiert wurde.
+               befehl = "mv " + rechnung.getTexdatei() + " "
+                     + optionen.getTargetDir() + File.separator + dateiname + ".tex";
+               
+               logger.debug("RechnungenData:speichern: " + befehl);
+
+               try {
+                  // proc = Runtime.getRuntime().exec(befehl);
+                  proc = new ProcessBuilder("sh", "-c", befehl).start();
+                  try {
+                     proc.waitFor();
+                     logger.debug("mv tex Exit-Value(589): " + proc.exitValue());
+                     ergebnis = proc.exitValue();
+                  } catch (InterruptedException e2) {
+                     logger.debug("waitfor pdflatex");
+                  }
+               } catch (java.io.IOException exp) {
+                  logger.warn("Fehler in ProcessBuilder", exp);
+               }
+               
+            }
+
+         } catch (InterruptedException e2) {
+            logger.debug("waitfor pdflatex");
+         }
+      } catch (java.io.IOException exp) {
+         exp.printStackTrace();
+      }
+      
+      if (ergebnis == 0) {
+         Rechnung newRechn = new Rechnung.Builder().build();
+         persister.insertOrUpdateRechnung(newRechn);
+      }
+      
+      return ergebnis;
+   }
    private void jTextRechnungsnummerActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jTextRechnungsnummerActionPerformed
       this.rechnung.setRechnungnr(jTextRechnungsnummer.getText());
    }// GEN-LAST:event_jTextRechnungsnummerActionPerformed
@@ -1166,8 +1269,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       this.stunden_vorhanden = this.jCheckBoxStundenzahl.isSelected();
       makeTable();
    }
-
-   private void jCheckBoxUnterschriftActionPerformed(ActionEvent evt) {}
 
    @Override
    public void addPropertyChangeListener(PropertyChangeListener listener) {
