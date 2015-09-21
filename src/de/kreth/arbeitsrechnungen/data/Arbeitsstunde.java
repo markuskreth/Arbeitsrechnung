@@ -11,11 +11,11 @@ import java.util.Vector;
 
 public interface Arbeitsstunde extends Serializable {
 
-   public Integer getID();
+   public int getID();
 
-   public Integer getKlientenID();
+   public int getKlientenID();
 
-   public Integer getAngeboteID();
+   public int getAngeboteID();
 
    public Date getDatum();
 
@@ -59,13 +59,13 @@ public interface Arbeitsstunde extends Serializable {
 
    public void setPreisAenderung(double aenderung);
 
-   public Boolean isVerschickt();
+   public boolean isVerschickt();
 
    public Date getVerschicktDatum();
 
    public void setVerschicktDatum(Date datum);
 
-   public Boolean isBezahlt();
+   public boolean isBezahlt();
 
    public Date getBezahltDatum();
 

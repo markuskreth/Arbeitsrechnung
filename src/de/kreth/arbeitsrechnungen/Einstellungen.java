@@ -6,9 +6,11 @@ package de.kreth.arbeitsrechnungen;
  */
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class Einstellungen {
 
-    public Properties getEinstellungen(){
+    public Options getEinstellungen(){
         Properties optionen = new Properties();
         java.util.Properties sysprops = System.getProperties();
         java.io.File optionfile  = new java.io.File(sysprops.getProperty("user.home") + sysprops.getProperty("file.separator") + ".arbeitrechnungen"
@@ -16,10 +18,12 @@ public class Einstellungen {
 
         try{
             optionen.load(new java.io.FileInputStream(optionfile));
-            return optionen;
+            Options.Build builder = new Options.Build(optionen);
+            return builder.build();
         }catch(Exception e){
-            System.err.println("ArbeitsstundenTabelle.java: Options-Datei konnte nicht geladen werden.");
+           Logger.getLogger(getClass()).error("Options-Datei konnte nicht geladen werden.", e);
             return null;
         }
     }
+    
 }

@@ -14,10 +14,14 @@ package de.kreth.arbeitsrechnungen.gui.jframes;
  * @author markus
  */
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.GregorianCalendar;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -28,14 +32,15 @@ import org.apache.log4j.Logger;
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.mySqlDate;
+import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.MySqlDate;
 
 public class Einheit_einzel extends JFrame {
 
    private static final long serialVersionUID = 3963303174102985288L;
    Logger logger = Logger.getLogger(getClass());
          
-   private Properties optionen = new Properties();
+   private Options optionen;
 
    private int klient;
    private int einheit = -1;
@@ -64,7 +69,7 @@ public class Einheit_einzel extends JFrame {
       // Bestehenden Datensatz edieren
       optionen = new Einstellungen().getEinstellungen();
 
-      verbindung = new Verbindung_mysql(optionen);
+      verbindung = new Verbindung_mysql(optionen.getProperties());
 
       this.klient = klient;
       initComponents();
@@ -138,7 +143,7 @@ public class Einheit_einzel extends JFrame {
                      + "\nDatensatz-Klient: " + daten.getInt("klienten_id") + "\nKonstruktor-Klient: " + this.klient);
             }
             // Set Angebot-Combobox
-            this.jComboBoxAngebot.setSelectedIndex(this.angeboteliste.indexOf(daten.getInt("angebote_id")));
+            this.jComboBoxAngebot.setSelectedIndex(this.angeboteliste.indexOf(Integer.valueOf(daten.getInt("angebote_id"))));
             // Set Uhrzeit Beginn
             java.util.Date zeit = daten.getTimestamp("Beginn");
             String stzeit = DateFormat.getTimeInstance().format(zeit);
@@ -182,7 +187,7 @@ public class Einheit_einzel extends JFrame {
             String datensatz;
             datensatz = daten.getString("Inhalt") + "|" + daten.getString("Preis") + "€";
             this.jComboBoxAngebot.addItem(datensatz);
-            this.angeboteliste.addElement(daten.getInt("angebote_id"));
+            this.angeboteliste.addElement(Integer.valueOf(daten.getInt("angebote_id")));
          }
       } catch (Exception e) {
          logger.error("Einheit_einzel.initangebote: ", e);
@@ -197,31 +202,33 @@ public class Einheit_einzel extends JFrame {
       double preis = 0.0;
       long dauer = 0;
 
-      mySqlDate tmpdate = new mySqlDate(this.jDateChooserDatum.getDate());
+      MySqlDate tmpdate = new MySqlDate(this.jDateChooserDatum.getDate());
       String datum = tmpdate.getSqlDate();
 
-      java.sql.Date sqldate2 = new java.sql.Date(0);
       String eingereichtDatum = "NULL";
       int isEingereicht = 0;
       String bezahltDatum = "NULL";
       int isBezahlt = 0;
 
+      String sqlBeginn;
+      String sqlEnde;
+      
       if (this.jDateChooserEingereicht.getDate() != null) {
          logger.debug("Eingereicht: " + DateFormat.getDateInstance().format(this.jDateChooserEingereicht.getDate()));
-         sqldate2.setTime(this.jDateChooserEingereicht.getDate().getTime());
-         eingereichtDatum = sqldate2.toString();
+         tmpdate = new MySqlDate(this.jDateChooserEingereicht.getDate());
+         eingereichtDatum = tmpdate.getSqlDate();
          isEingereicht = 1;
       }
 
       if (this.jDateChooserBezahlt.getDate() != null) {
          logger.debug("Bezahlt: " + DateFormat.getDateInstance().format(this.jDateChooserBezahlt.getDate()));
-         sqldate2.setTime(this.jDateChooserBezahlt.getDate().getTime());
-         bezahltDatum = sqldate2.toString();
+         tmpdate = new MySqlDate(this.jDateChooserBezahlt.getDate());
+         bezahltDatum = tmpdate.getSqlDate();
          isBezahlt = 1;
       }
 
       // Setzten der Angebot-Elemente für diese Einheit
-      int angebot_id = this.angeboteliste.elementAt(this.jComboBoxAngebot.getSelectedIndex());
+      int angebot_id = this.angeboteliste.elementAt(this.jComboBoxAngebot.getSelectedIndex()).intValue();
       sqltext = "SELECT Preis, preis_pro_stunde FROM angebote WHERE angebote_id=" + angebot_id + ";";
 
       try {
@@ -246,6 +253,9 @@ public class Einheit_einzel extends JFrame {
             endecal.add(GregorianCalendar.HOUR, Integer.parseInt(endefeld[0]));
             endecal.add(GregorianCalendar.MINUTE, Integer.parseInt(endefeld[1]));
 
+            sqlBeginn = new MySqlDate(startcal).getSqlDate();
+            sqlEnde = new MySqlDate(endecal).getSqlDate();
+            
             dauer = Math.round(((double) endecal.getTime().getTime() - startcal.getTime().getTime()) / (60. * 1000.));
             
             preis = Math.round(((double) dauer / 60 * preis) * 100);
@@ -266,10 +276,7 @@ public class Einheit_einzel extends JFrame {
                   + ",\""
                   + datum
                   + "\",\""
-                  + datum
-                  + " "
-                  + this.jFormattedTextFieldStart.getText()
-                  + ":00"
+                  + sqlBeginn
                   + "\",\""
                   + datum
                   + " "
@@ -443,18 +450,20 @@ public class Einheit_einzel extends JFrame {
 
       jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
       jButton1.setName("jButton1"); // NOI18N
-      jButton1.addActionListener(new java.awt.event.ActionListener() {
+      jButton1.addActionListener(new ActionListener() {
 
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+         @Override
+         public void actionPerformed(ActionEvent evt) {
             jButton1ActionPerformed(evt);
          }
       });
 
       jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
       jButton2.setName("jButton2"); // NOI18N
-      jButton2.addActionListener(new java.awt.event.ActionListener() {
+      jButton2.addActionListener(new ActionListener() {
 
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+         @Override
+         public void actionPerformed(ActionEvent evt) {
             jButton2ActionPerformed(evt);
          }
       });
@@ -611,13 +620,13 @@ public class Einheit_einzel extends JFrame {
       pack();
    }// </editor-fold>//GEN-END:initComponents
 
-   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
+   private void jButton2ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
       // TODO Kontrolle der Eingaben auf vollständigkeit und richtigkeit
 
       saveData();
    }// GEN-LAST:event_jButton2ActionPerformed
 
-   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+   private void jButton1ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
       // Fenster schließen
       this.setVisible(false);
       this.dispose();

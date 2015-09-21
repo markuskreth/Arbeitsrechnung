@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.kreth.arbeitsrechnungen;
 
 /**
@@ -10,25 +5,28 @@ package de.kreth.arbeitsrechnungen;
  * @author markus
  */
 
+import java.text.DateFormat;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
 
-public class mySqlDate {
+public class MySqlDate {
 
-	Calendar cal;
+   private static DateFormat sdf = 
+     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	public mySqlDate(java.util.Date datum) {
+	private Calendar cal;
+
+	public MySqlDate(java.util.Date datum) {
 		cal = new GregorianCalendar();
 		cal.setTime(datum);
 	}
 
-	public mySqlDate(GregorianCalendar cal) {
+	public MySqlDate(GregorianCalendar cal) {
 		this.cal = cal;
 	}
 
 	public String getSqlDate() {
-		java.sql.Timestamp sqldate = new java.sql.Timestamp(cal.getTimeInMillis());
-		return (sqldate.toString());
+	   return sdf.format(cal.getTime());
 	}
 
 	public int getYear() {

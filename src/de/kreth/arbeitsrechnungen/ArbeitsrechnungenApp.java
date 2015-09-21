@@ -11,16 +11,18 @@ import de.kreth.arbeitsrechnungen.gui.jframes.StartFenster;
  */
 public class ArbeitsrechnungenApp {
 
-    /**
-     * Main method launching the application.
-     */
-    public static void main(String[] args) {
+   /**
+    * Main method launching the application.
+    */
+   public static void main(String[] args) {
 
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-			   ArbeitRechnungFactoryProductiv.init();
-				new StartFenster().setVisible(true);
-			}
-		});
-    }
+      java.awt.EventQueue.invokeLater(new Runnable() {
+
+         @Override
+         public void run() {
+            ArbeitRechnungFactoryProductiv.init();
+            new StartFenster().setVisible(true);
+         }
+      });
+   }
 }
