@@ -179,6 +179,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
             .texdatei(optionen.getStdTexFile())
             .datum(heute)
             .zahldatum(zahldatum)
+            .einheiten(this.einheiten)
             .rechnungnr(generateRechnungsnr(heute))
             .klienten_id(this.klient.getKlienten_id())
             .zusatz1(klient.hasZusatz1())
@@ -1111,8 +1112,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    private void jButtonErstellenActionPerformed(ActionEvent evt) {
       Options einstellungen = new Einstellungen().getEinstellungen();
       
-
-
       this.rechnung.setZusatz1(this.jCheckBoxZusatz1.isSelected());
       this.rechnung.setZusatz2(this.jCheckBoxZusatz2.isSelected());
 
@@ -1127,9 +1126,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
             tmp_einheiten.add(einheiten.elementAt(i));
       }
 
-      PdfCreator rechnungData;
       try {
-         rechnungData = new PdfCreator(this.rechnung);
+         PdfCreator rechnungData = new PdfCreator(this.rechnung);
 
          rechnungData.setUnterschrift(jCheckBoxUnterschrift.isSelected());
          

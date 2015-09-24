@@ -85,9 +85,9 @@ public class KlientenEditorPersister implements Persister {
     * @param Feld
     * @param Wert
     */
-   public void speicherWert(int klientenId, String Feld, String Wert) {
+   public void speicherWert(int klientenId, String Feld, Object Wert) {
       try {
-         String sql = "UPDATE klienten SET " + Feld + "=\"" + Wert + "\" WHERE klienten_id=" + klientenId + ";";
+         String sql = "UPDATE klienten SET " + Feld + "=" + Wert + " WHERE klienten_id=" + klientenId + ";";
          verbindung.sql(sql);
          logger.debug(sql);
       } catch (Exception e) {

@@ -30,7 +30,7 @@ import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.ArbeitsstundeImpl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
-import de.kreth.arbeitsrechnungen.gui.jframes.Einheit_einzel;
+import de.kreth.arbeitsrechnungen.gui.jframes.EinheitEinzelFrame;
    
 @SuppressWarnings("boxing")
 public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
@@ -935,7 +935,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
 
    private void jButtonNeuerDatensatzActionPerformed(
          ActionEvent evt) {// GEN-FIRST:event_jButtonNeuerDatensatzActionPerformed
-      Einheit_einzel fenster = new Einheit_einzel(this.klient);
+      EinheitEinzelFrame fenster = new EinheitEinzelFrame(this.klient);
       fenster.addWindowListener(this);
       fenster.setVisible(true);
    }// GEN-LAST:event_jButtonNeuerDatensatzActionPerformed
@@ -953,7 +953,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
                "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
       } else {
          einheit_id = this.Arbeitsstunden.elementAt(einheit_id).getID();
-         Einheit_einzel fenster = new Einheit_einzel(this.klient, einheit_id);
+         EinheitEinzelFrame fenster = new EinheitEinzelFrame(this.klient, einheit_id);
          fenster.addWindowListener(this);
          fenster.setVisible(true);
       }

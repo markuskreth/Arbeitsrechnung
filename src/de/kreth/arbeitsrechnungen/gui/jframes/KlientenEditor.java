@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
@@ -62,6 +61,8 @@ public class KlientenEditor extends JDialog {
    private FocusTraversalPolicy policy = new FocusTraversalPolicyImpl();
    private KlientenEditorPersister persister;
 
+   private LabledStringValueNoneditableTableModel angeboteTableModel;
+
    /**
     * Creates new form KlientenEditor
     * 
@@ -81,6 +82,13 @@ public class KlientenEditor extends JDialog {
       }
 
       initComponents();
+
+      int maxwidth = jTableAngebote.getColumnModel().getColumn(1).getMaxWidth();
+      
+      angeboteTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Inhalt", "Preis", "Beschreibung" });
+      jTableAngebote.setModel(angeboteTableModel);
+      jTableAngebote.getColumnModel().getColumn(1).setMaxWidth(maxwidth);
+      
       try {
          this.jTextFieldAPlz.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("#####")));
          this.jTextFieldKPlz.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("#####")));
@@ -1393,27 +1401,22 @@ public class KlientenEditor extends JDialog {
       java.text.NumberFormat zf;
       zf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
-      int maxwidth = jTableAngebote.getColumnModel().getColumn(1).getMaxWidth();
-      
       if(currentKlient != null)
          klientId = currentKlient.getKlienten_id();
 
       angebote = persister.getAngeboteForKlient(klientId);
 
-      DefaultTableModel mymodel = new LabledStringValueNoneditableTableModel(new String[] { "Inhalt", "Preis", "Beschreibung" });
-
-      for (Iterator<Angebot> iterator = angebote.iterator(); iterator.hasNext();) {
-         Angebot angebot = iterator.next();
-
+      angeboteTableModel.setRowCount(0);
+      
+      for (Angebot angebot : angebote) {
+         
          Vector<String> einVektor = new Vector<String>();
          einVektor.addElement(angebot.getInhalt());
          einVektor.addElement(zf.format(angebot.getPreis()));
          einVektor.addElement(angebot.getBeschreibung());
 
-         mymodel.addRow(einVektor);
+         angeboteTableModel.addRow(einVektor);
       }
-      jTableAngebote.setModel(mymodel);
-      jTableAngebote.getColumnModel().getColumn(1).setMaxWidth(maxwidth);
    }
 
    /**
@@ -1625,9 +1628,8 @@ public class KlientenEditor extends JDialog {
 
       dateiname.setVisible(true);
       if (dateiname.getFile() != null) {
-         persister.speicherWert(currentKlient.getKlienten_id(), "tex_datei", dateiname.getDirectory() + dateiname.getFile());
+         persister.speicherWert(currentKlient.getKlienten_id(), "tex_datei", "\"" + dateiname.getDirectory() + dateiname.getFile() + "\"");
          this.jTextFieldTex_datei.setText(currentKlient.getTex_datei());
-
       }
       dateiname.dispose();
    }
@@ -1653,20 +1655,19 @@ public class KlientenEditor extends JDialog {
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
          System.out.println("Text: " + tf.getText() + "\nName: " + tf.getName() + "\n");
-         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), tf.getText());
+         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");
          allKlienten = persister.getAllKlienten();
       }
       if (event.getSource() instanceof JCheckBox) {
          JCheckBox cb = (JCheckBox) event.getSource();
          if (cb.isSelected()) {
-            persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), "1");
+            persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), Integer.valueOf(1));
          } else {
-            persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), "0");
+            persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), Integer.valueOf(0));
          }
          allKlienten = persister.getAllKlienten();
       }
 
-      // System.out.println("Event.getSource: " + event.getSource());
    }
 
    /**
@@ -1692,13 +1693,13 @@ public class KlientenEditor extends JDialog {
 
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
-         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), tf.getText());
+         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");
          allKlienten = persister.getAllKlienten();
       }
 
       if (event.getSource() instanceof JTextArea) {
          JTextArea ta = (JTextArea) event.getSource();
-         persister.speicherWert(currentKlient.getKlienten_id(), ta.getName(), ta.getText());
+         persister.speicherWert(currentKlient.getKlienten_id(), ta.getName(), "\"" + ta.getText() + "\"");
          allKlienten = persister.getAllKlienten();
       }
    }
