@@ -523,8 +523,8 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    }// GEN-LAST:event_jButtonKlientenEditorActionPerformed
 
    private void openKlientenEditor(int KlientenID, StartTable Tabelle) {
-      KlientenEditor klienteneditor;
-      klienteneditor = new KlientenEditor(this);
+      
+      KlientenEditor klienteneditor = new KlientenEditor(this);
       klienteneditor.arbeitsstundenTabelle1.addPropertyChangeListener("ArbeitsstundenTabelle.Tabellendaten", this);
 
       if (Tabelle == StartTable.FORDERUNGEN)
@@ -582,7 +582,8 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
          jTableEinheitenSetSelection(evt);
       if (evt.getClickCount() > 1 && !evt.isPopupTrigger()) {
 
-         Integer elementAt = this.Einheiten_ids.elementAt(this.jTableEinheiten.getSelectedRow());
+         int selectedRow = this.jTableEinheiten.getSelectedRow();
+         Integer elementAt = this.Einheiten_ids.elementAt(selectedRow);
          openKlientenEditor(elementAt.intValue(), StartTable.EINHEITEN);
       }
 

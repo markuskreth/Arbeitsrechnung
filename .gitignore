@@ -5,6 +5,7 @@ target/
 .svn/
 output/
 pdf-speicher/
+tmpDir/
 
  
 # OS Files #
@@ -22,6 +23,10 @@ pdf-speicher/
 *.pdf
 *.aux
 *~
+
+# log Dateien
+*.log
+log.html
 
  
 ######################
