@@ -5,15 +5,15 @@ import java.util.*;
 
 public class Options {
 
-   private static final String STD_TEX_FILE = "stdtexdatei";
-   private static final String TEX_TEMPLATE_DIR = "verzeichnistexdateien";
-   private static final String PDF_PROG = "pdfprogramm";
-   private static final String DB_USER = "user";
-   private static final String DB_HOST = "sqlserver";
-   private static final String DB_DATABASE_NAME = "datenbank";
-   private static final String DB_PASSWORD = "password";
-   private static final String TARGET_DIR = "verzPdfFiles";
-   private static final String TMP_DIR = "arbeitsverzeichnis";
+   public static final String STD_TEX_FILE = "stdtexdatei";
+   public static final String TEX_TEMPLATE_DIR = "verzeichnistexdateien";
+   public static final String PDF_PROG = "pdfprogramm";
+   public static final String DB_USER = "user";
+   public static final String DB_HOST = "sqlserver";
+   public static final String DB_DATABASE_NAME = "datenbank";
+   public static final String DB_PASSWORD = "password";
+   public static final String TARGET_DIR = "verzPdfFiles";
+   public static final String TMP_DIR = "arbeitsverzeichnis";
    private Properties prop;
 
    private Options(Build build) {
@@ -84,15 +84,15 @@ public class Options {
       
       public Build(Properties properties) {
          this.properties = properties;
-         stdTexFile(properties.getProperty(STD_TEX_FILE));
-         texTemplatesDir(properties.getProperty(TEX_TEMPLATE_DIR));
-         pdfProg(properties.getProperty(PDF_PROG));
-         dbUser(properties.getProperty(DB_USER));
-         dbHost(properties.getProperty(DB_HOST));
-         dbDatabaseName(properties.getProperty(DB_DATABASE_NAME));
-         dbPassword(properties.getProperty(DB_PASSWORD));
-         targetDir(properties.getProperty(TARGET_DIR));
-         tmpDir(properties.getProperty(TMP_DIR));
+//         stdTexFile(properties.getProperty(STD_TEX_FILE));
+//         texTemplatesDir(properties.getProperty(TEX_TEMPLATE_DIR));
+//         pdfProg(properties.getProperty(PDF_PROG));
+//         dbUser(properties.getProperty(DB_USER));
+//         dbHost(properties.getProperty(DB_HOST));
+//         dbDatabaseName(properties.getProperty(DB_DATABASE_NAME));
+//         dbPassword(properties.getProperty(DB_PASSWORD));
+//         targetDir(properties.getProperty(TARGET_DIR));
+//         tmpDir(properties.getProperty(TMP_DIR));
       }
       
       public Build stdTexFile(String stdTexFile) {
