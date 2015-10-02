@@ -15,10 +15,9 @@ package de.kreth.arbeitsrechnungen.gui.dialogs;
  */
 
 import java.awt.Component;
+import java.awt.Container;
 import java.io.*;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -87,35 +86,40 @@ public class OptionenDialog extends JDialog {
       }
    }
 
-   private void setTexts(JComponent component, String propname) {
-      
-      for (int i = 0; i < component.getComponentCount(); i++) {
-         
-         Component comp = component.getComponent(i);
-         
-         if (comp instanceof JPanel || comp instanceof JTabbedPane) {
-//            logger.debug(propname + ": " + comp.getClass() + "(" + comp.getName() + ") " + "--> setTexts");
-            setTexts((JComponent) comp, propname);
-         }
-         
-         if (comp instanceof JTextField) {
-            logger.debug(((JTextField) comp).getName());
-            if (((JTextField) comp).getName().matches(propname)) {
-               ((JTextField) comp).setText(einstellungen.getProperty(propname));
-               i = component.getComponentCount();
-            }
-         }
-      }
-   }
-
    private void loadoptions() {
       logger.debug("Optionen werden geladen...");
+
+      Container contentPane = this.getContentPane();
+      Map<String, JTextField> components = new HashMap<>();
+      
+      fillComponentMap(components, contentPane);
+      
       Enumeration<?> propnames = einstellungen.propertyNames();
 
       // für jedes Property zugehöriges Textfeld
       while (propnames.hasMoreElements()) {
          String propname = (String) propnames.nextElement();
-         setTexts((JComponent) this.getContentPane(), propname);
+
+         Component comp = components.get(propname);
+         
+         if (comp instanceof JTextField) {
+            if (((JTextField) comp).getName().matches(propname)) {
+               ((JTextField) comp).setText(einstellungen.getProperty(propname));
+            }
+         }
+      }
+   }
+
+   private void fillComponentMap(Map<String, JTextField> components, Container contentPane) {
+
+      for (int i = 0, count=contentPane.getComponentCount(); i < count; i++) {
+
+         Component comp = contentPane.getComponent(i);
+         
+         if (comp instanceof JPanel || comp instanceof JTabbedPane) {
+            fillComponentMap(components, (Container) comp);
+         } else if (comp instanceof JTextField)
+            components.put(comp.getName(), (JTextField)comp);
       }
    }
 

@@ -1,7 +1,5 @@
 package de.kreth.arbeitsrechnungen.data;
 
-import static de.kreth.arbeitsrechnungen.PdfCreator.TEXUMBRUCH;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Field;
@@ -389,8 +387,8 @@ public class Rechnung {
          assert validate.isEmpty();
       }
 
-      public Builder betrag(double betrag) {
-         this.betrag = BigDecimal.valueOf(betrag);
+      public Builder betrag(BigDecimal bigDecimal) {
+         this.betrag = bigDecimal;
          mustBeSet.remove(BETRAG);
          return this;
       }
@@ -422,20 +420,9 @@ public class Rechnung {
       }
 
       public Builder adresse(String adresse) {
-         this.adresse = trimAdressAndTexify(adresse);
+         this.adresse = adresse;
          mustBeSet.remove("adresse");
          return this;
-      }
-
-      private String trimAdressAndTexify(String adresse) {
-         String retval = adresse;
-         if (retval.endsWith("\n"))
-            retval = retval.substring(0, retval.lastIndexOf("\n"));
-
-         retval = retval.replaceAll("\n\n", TEXUMBRUCH + TEXUMBRUCH + "\n");
-         retval = retval.replaceAll("\n", TEXUMBRUCH + TEXUMBRUCH + "\n");
-
-         return retval;
       }
 
       public Builder texdatei(String texdatei) {
@@ -508,11 +495,7 @@ public class Rechnung {
       public Rechnung build() {
          if(mustBeSet.contains(BETRAG)){
 
-            double summe = 0;
-            for (Arbeitsstunde einheit : einheiten) {
-               summe += einheit.getPreis().doubleValue();
-            }
-            this.betrag(summe);
+            this.betrag(getSummeFromEinheiten(einheiten));
          }
          if (hasUnsetFields()) {
             throw new IllegalStateException("Alle Werte müssen gesetzt werden! Offen: " + mustBeSet);
@@ -523,9 +506,32 @@ public class Rechnung {
       private boolean hasUnsetFields() {
          return !mustBeSet.isEmpty();
       }
+
+      public Builder betrag(double betragWert) {
+         return betrag(BigDecimal.valueOf(betragWert));
+      }
    }
 
+   private static BigDecimal getSummeFromEinheiten(Vector<Arbeitsstunde> einheiten) {
+
+      BigDecimal summe = BigDecimal.ZERO;
+      for (Arbeitsstunde einheit : einheiten) {
+         summe = summe.add(einheit.getPreis());
+      }
+      
+      return summe;
+   }
+   
    public boolean isNew() {
       return isNew;
+   }
+
+   public void setEinheiten(Vector<Arbeitsstunde> einheiten) {
+      this.einheiten = einheiten;
+      this.betrag = getSummeFromEinheiten(einheiten);
+   }
+
+   public void setRechnungId(int rechnungId) {
+      this.rechnungen_id = rechnungId;
    }
 }

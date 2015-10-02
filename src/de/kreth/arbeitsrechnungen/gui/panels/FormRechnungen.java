@@ -25,7 +25,8 @@ import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
-import de.kreth.arbeitsrechnungen.data.Rechnung;
+import de.kreth.arbeitsrechnungen.business.RechnungSystemExecutionService;
+import de.kreth.arbeitsrechnungen.data.*;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
@@ -49,7 +50,6 @@ public class FormRechnungen extends JPanel {
 
    private int klienten_id;
    private Vector<Rechnung> rechnungen = new Vector<Rechnung>();
-   private Properties sysprops = System.getProperties();
    private Window owner;
 
    /**
@@ -96,9 +96,9 @@ public class FormRechnungen extends JPanel {
                zahlDatum.setTimeInMillis(res_rechnungen.getDate("zahldatum").getTime());
   
             }
-            
+            final int rechnungenId = res_rechnungen.getInt("rechnungen_id");
             Builder builder = new Rechnung.Builder()
-                  .rechnungen_id(res_rechnungen.getInt("rechnungen_id"))
+                  .rechnungen_id(rechnungenId)
                   .klienten_id(res_rechnungen.getInt("klienten_id"))
                   .datum(rechnungsDatum)
                   .rechnungnr(res_rechnungen.getString("rechnungnr"))
@@ -109,6 +109,7 @@ public class FormRechnungen extends JPanel {
                   .zusatz1(res_rechnungen.getBoolean("zusatz1"))
                   .zusatz2(res_rechnungen.getBoolean("zusatz2"))
                   .zusammenfassungenErlauben(res_rechnungen.getBoolean("zusammenfassungen"))
+                  
                   .zahldatum(zahlDatum);
 
             if (res_rechnungen.getDate("geldeingang") != null) {
@@ -118,6 +119,8 @@ public class FormRechnungen extends JPanel {
                builder.geldeingang(kalender3);
             }
 
+            Vector<Arbeitsstunde> einheiten = loadEinheitenForRechnung(rechnungenId);
+            builder.einheiten(einheiten);
             this.rechnungen.add(builder.build());
          }
          
@@ -126,6 +129,45 @@ public class FormRechnungen extends JPanel {
       } catch (SQLException e) {
          logger.error(e.getSQLState(), e);
       }
+   }
+
+   private Vector<Arbeitsstunde> loadEinheitenForRechnung(int rechnungenId) {
+
+      String sql = "SELECT einheiten_id, angebote_id, Beginn, Bezahlt, Bezahlt_Datum, Datum, Dauer, Ende, Preis, Preisänderung, Rechnung_Datum, rechnung_id, Rechnung_verschickt"
+            + ", zusatz1, zusatz2, klienten_id FROM Arbeitrechnungen.einheiten where rechnung_id=" + rechnungenId;
+
+      logger.debug("FormRechnungen: update: " + sql);
+
+      Vector<Arbeitsstunde> result = new Vector<>();
+      
+      try {
+         ResultSet rs = verbindung.query(sql);
+
+         while (rs.next()) {
+            final int einheiten_id = rs.getInt("einheiten_id");
+            final int klienten_id2 = rs.getInt("klienten_id");
+            final int angebote_id = rs.getInt("angebote_id");
+            ArbeitsstundeImpl.Builder std = new ArbeitsstundeImpl.Builder(einheiten_id, klienten_id2, angebote_id)
+                           .beginn(rs.getDate("Beginn"))
+                           .datum(rs.getDate("Datum"))
+                           .bezahlt(rs.getDate("Bezahlt_Datum"))
+                           .dauerInMinuten(rs.getInt("Dauer"))
+                           .ende(rs.getDate("Ende"))
+                           .preis(rs.getDouble("Preis"))
+                           .preisaenderung(rs.getDouble("Preisänderung"))
+                           .zusatz1(rs.getString("zusatz1"))
+                           .zusatz2(rs.getString("zusatz2"));
+            
+            if(rs.getBoolean("Bezahlt"))
+               std.bezahlt(rs.getDate("Bezahlt_Datum"));
+            
+            result.add(std.build());
+         }
+      } catch (SQLException e) {
+         logger.error(e.getSQLState(), e);
+      }
+         
+      return result;
    }
 
    public void update(int klienten_id) {
@@ -277,27 +319,16 @@ public class FormRechnungen extends JPanel {
     * 
     * @param evt
     */
-   private void jButtonAnsehenActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonAnsehenActionPerformed
-      String befehl = this.optionen.getPdfProg();
+   private void jButtonAnsehenActionPerformed(ActionEvent evt) {
+
       if (this.jTable1.getSelectedRow() >= 0) {
-         logger.error("Selected Row: " + this.jTable1.getSelectedRow());
-
-         befehl += " " + this.optionen.getTargetDir();
-         if (!befehl.endsWith(sysprops.getProperty("file.separator"))) {
-            befehl += sysprops.getProperty("file.separator");
-         }
-         befehl += this.rechnungen.elementAt(jTable1.getSelectedRow()).getPdfdatei();
-         logger.debug("FormRechnungen: " + befehl);
-
-         try {
-            Runtime.getRuntime().exec(befehl);
-         } catch (java.io.IOException e) {
-            logger.error("FormRechnungen: PDFansehen: ", e);
-         }
+         RechnungSystemExecutionService fileService = new RechnungSystemExecutionService(optionen);
+         final Rechnung rechnungToShow = this.rechnungen.elementAt(jTable1.getSelectedRow());
+         fileService.showRechnung(rechnungToShow);         
       } else {
          JOptionPane.showMessageDialog(null, "Zum Anzeigen bitte eine Rechnung auswählen.");
       }
-   }// GEN-LAST:event_jButtonAnsehenActionPerformed
+   }
 
    private void jButtonAendernActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonAendernActionPerformed
       int rechnung_id = this.rechnungen.elementAt(this.jTable1.getSelectedRow()).getRechnungen_id();

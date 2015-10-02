@@ -213,10 +213,10 @@ public class RechnungDialogPersister implements Persister {
 
       // dann die Rechnung in die Datenbank
       if (rechnung.isNew()) { // Bei neuer Rechnung INSERT
-         sql.append("INSERT INTO rechnungen (klienten_id, datum, rechnungnr, betrag, texdatei, pdfdatei, adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum)")
+         sql.append("INSERT INTO rechnungen (klienten_id, datum, rechnungnr, betrag, texdatei, pdfdatei, adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, timestamp)")
                .append("VALUES (").append(rechnung.getKlienten_id()).append(", \"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", \"")
-               .append(rechnung.getRechnungnr()).append("\", ").append(rechnung.getBetrag().toPlainString()).append(", \"").append(rechnung.getTexdatei()).append(", \"")
-               .append(rechnung.getPdfdatei()).append(", \"").append(rechnung.getAdresse()).append("\", ");
+               .append(rechnung.getRechnungnr()).append("\", ").append(rechnung.getBetrag().toPlainString()).append(", \"").append(rechnung.getTexdatei()).append("\", \"")
+               .append(rechnung.getPdfdatei()).append("\", \"").append(rechnung.getAdresse()).append("\", ");
 
          if (rechnung.getZusatz1_name() == null)
             sql.append("0");
@@ -233,7 +233,7 @@ public class RechnungDialogPersister implements Persister {
          else
             sql.append(", 0");
 
-         sql.append(", \"").append(sqlDateFormat.format(rechnung.getZahldatum().getTime())).append("\");");
+         sql.append(", \"").append(sqlDateFormat.format(rechnung.getZahldatum().getTime())).append("\" , \"" + sqlDateFormat.format(new Date()) + "\");");
 
       } else {
          // Bei vorhandener Rechnung UPDATE
@@ -260,6 +260,14 @@ public class RechnungDialogPersister implements Persister {
       logger.debug("Rechnung speichern: " + sql);
       try {
          if (verbindung.sql(sql.toString())) {
+            int lastInsertId = 0;
+            final ResultSet rs = verbindung.query("SELECT LAST_INSERT_ID() AS id");
+            if(rs.next())
+               lastInsertId = rs.getInt("id");
+            rs.close();
+            sql.setLength(0);
+            rechnung.setRechnungId(lastInsertId);
+            
             // Elemente in "einheiten" werden in WHERE-bedinung aufgenommen
             String in_bedingung = "(" + rechnung.getEinheiten().elementAt(0).getID();
 
@@ -273,7 +281,7 @@ public class RechnungDialogPersister implements Persister {
             // einheiten ändern
             if (rechnung.isNew()) {
                logger.debug("LAST_INSERT_ID wird benutzt...");
-               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", ").append("rechnung_id=LAST_INSERT_ID()");
+               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", ").append("rechnung_id=").append(lastInsertId);
                sql.append(" WHERE einheiten_id IN ");
             } else {
                sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", ").append("rechnung_id=").append((rechnung.getRechnungen_id()));
