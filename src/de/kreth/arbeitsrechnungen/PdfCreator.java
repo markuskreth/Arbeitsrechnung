@@ -142,7 +142,7 @@ public class PdfCreator {
 
 		// Ersetzungen vornehmen
 
-      latexcode = latexcode.replaceAll("%%adresse%%\n", rechnung.getAdresse());
+      latexcode = latexcode.replaceAll("%%adresse%%\n", trimAdressAndTexify(rechnung.getAdresse()));
 
 		String rexp = "..setkomavar.date..%%datum%%.";
 		String repl = "\\\\setkomavar{date}{"
@@ -154,11 +154,11 @@ public class PdfCreator {
 		String closing = "Mit freundlichen Grüßen";
 		if (this.unterschrift) {
 			closing += TEXUMBRUCH + "\\\\includegraphics[width=3.5cm]{"
-					+ optionen.getTexTemplatesDir()
+					+ optionen.getTexTemplatesDir() + File.separator
 					+ "Sign.jpg}";
 			String rep = PdfCreator.TEXUMBRUCH
 					+ "\\\\includegraphics[width=3.5cm]{"
-					+ optionen.getTexTemplatesDir()
+					+ optionen.getTexTemplatesDir() + File.separator
 					+ "Sign.jpg}";
 			latexcode = latexcode.replaceAll("%Unterschrift", rep);
 		}
@@ -278,6 +278,16 @@ public class PdfCreator {
 		return ergebnis; // Ergebnis von pdflatex wird zurückgegeben
 	}
 
+   private String trimAdressAndTexify(String adresse) {
+      String retval = adresse;
+      if (retval.endsWith("\n"))
+         retval = retval.substring(0, retval.lastIndexOf("\n"));
+
+      retval = retval.replaceAll("\n\n", TEXUMBRUCH + TEXUMBRUCH + "\n");
+      retval = retval.replaceAll("\n", TEXUMBRUCH + TEXUMBRUCH + "\n");
+
+      return retval;
+   }
 	
    public File getPdfFile() {
       return new File(pdf);
@@ -515,31 +525,5 @@ public class PdfCreator {
          }
       }
    }
-
-   public void showPdf(Options optionen) {
-		String pdfProg = optionen.getPdfProg();
-		if (pdfProg != null) {
-			if (this.latexergebnis == 0 && this.pdf != null) {
-				String befehl = "";
-				befehl = pdfProg + " " + this.pdf;
-				File pdf_datei = new File(this.pdf);
-				if (pdf_datei.canRead()) {
-					logger.setLevel(Level.INFO);
-					logger.info("showPdf: " + befehl);
-					try {
-						// Runtime.getRuntime().exec("sh -c " + befehl);
-						Runtime.getRuntime().exec(befehl);
-					} catch (Exception e) {
-						logger.debug("showPdf Runtime error:", e);
-					}
-				} else {
-					System.err.println("Pdfdatei existiert nicht: " + this.pdf);
-					System.err.println("Pdfdatei existiert nicht: "	+ pdf_datei.getAbsolutePath());
-				}
-			}
-		} else {
-			logger.debug("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
-		}
-	}
 
 }

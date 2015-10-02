@@ -15,7 +15,8 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 import java.util.*;
 
@@ -30,6 +31,7 @@ import org.apache.log4j.Logger;
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.*;
+import de.kreth.arbeitsrechnungen.business.RechnungSystemExecutionService;
 import de.kreth.arbeitsrechnungen.data.*;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
@@ -1126,6 +1128,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
             tmp_einheiten.add(einheiten.elementAt(i));
       }
 
+      this.rechnung.setEinheiten(tmp_einheiten);
+      
       try {
          PdfCreator rechnungData = new PdfCreator(this.rechnung);
 
@@ -1136,11 +1140,33 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
             if (JOptionPane.showConfirmDialog(null,
                   "Soll diese Rechnung so gespeichert werden?", "Speichern?",
                   JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
+               rechnung.setPdfdatei(rechnungData.getPdfFile().getAbsolutePath());
+               rechnung.setTexdatei(rechnungData.getTexFile().getAbsolutePath());
                speichern(einstellungen);
-               
-               pchListeners.firePropertyChange(ERSTELLT, false, true);
+
+               String pdfProg = einstellungen.getPdfProg();
+               if (pdfProg != null) {
+                  String befehl = "";
+                  befehl = pdfProg + " " + rechnung.getPdfdatei();
+                  File pdf_datei = new File(rechnung.getPdfdatei());
+                  if (pdf_datei.canRead()) {
+                     logger.setLevel(Level.INFO);
+                     logger.info("showPdf: " + befehl);
+                     try {
+                        // Runtime.getRuntime().exec("sh -c " + befehl);
+                        Runtime.getRuntime().exec(befehl);
+                     } catch (Exception e) {
+                        logger.debug("showPdf Runtime error:", e);
+                     }
+                  } else {
+                     System.err.println("Pdfdatei existiert nicht: " + pdf_datei.getAbsolutePath());
+                  }
+               } else {
+                  logger.debug("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
+               }
+            
+               pchListeners.firePropertyChange(ERSTELLT, 0, rechnung.getRechnungen_id());
             }
-            rechnungData.showPdf(einstellungen);
          }
          
       } catch (FileNotFoundException e) {
@@ -1179,64 +1205,22 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       } catch (Exception e) {
          e.printStackTrace();
       }
-      java.lang.Process proc;
-      int ergebnis = 0;
-      String new_pdf = dateiname + ".pdf";
-
-      String befehl = "mv " + rechnung.getPdfdatei() + " "
-            + optionen.getTargetDir() + File.separator + new_pdf;
-      logger.debug("RechnungenData:speichern(565): " + befehl);
-      try {
-         // proc = Runtime.getRuntime().exec(befehl);
-         proc = new ProcessBuilder("sh", "-c", befehl).start();
-         try {
-            BufferedReader procout = new BufferedReader(
-                  new InputStreamReader(proc.getErrorStream()));
-            String line;
-            while ((line = procout.readLine()) != null) {
-               logger.debug("  ERROR> " + line);
-            }
-            proc.waitFor();
-            logger.debug("mv pdf Exit-Value(570): " + proc.exitValue());
-            ergebnis = proc.exitValue();
-            if (ergebnis == 0) {
-
-               // Texdatei auch kopieren, wenn pdf erfolgreich kopiert wurde.
-               befehl = "mv " + rechnung.getTexdatei() + " "
-                     + optionen.getTargetDir() + File.separator + dateiname + ".tex";
-               
-               logger.debug("RechnungenData:speichern: " + befehl);
-
-               try {
-                  // proc = Runtime.getRuntime().exec(befehl);
-                  proc = new ProcessBuilder("sh", "-c", befehl).start();
-                  try {
-                     proc.waitFor();
-                     logger.debug("mv tex Exit-Value(589): " + proc.exitValue());
-                     ergebnis = proc.exitValue();
-                  } catch (InterruptedException e2) {
-                     logger.debug("waitfor pdflatex");
-                  }
-               } catch (java.io.IOException exp) {
-                  logger.warn("Fehler in ProcessBuilder", exp);
-               }
-               
-            }
-
-         } catch (InterruptedException e2) {
-            logger.debug("waitfor pdflatex");
-         }
-      } catch (java.io.IOException exp) {
-         exp.printStackTrace();
+      
+      RechnungSystemExecutionService fileService = new RechnungSystemExecutionService(optionen);
+      
+      int ergebnis = fileService.movePdf(rechnung, dateiname);
+      
+      if (ergebnis == 0) {
+            ergebnis = fileService.moveTex(rechnung, dateiname);
       }
       
       if (ergebnis == 0) {
-         Rechnung newRechn = new Rechnung.Builder().build();
-         persister.insertOrUpdateRechnung(newRechn);
+         persister.insertOrUpdateRechnung(rechnung);
       }
       
       return ergebnis;
    }
+   
    private void jTextRechnungsnummerActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jTextRechnungsnummerActionPerformed
       this.rechnung.setRechnungnr(jTextRechnungsnummer.getText());
    }// GEN-LAST:event_jTextRechnungsnummerActionPerformed

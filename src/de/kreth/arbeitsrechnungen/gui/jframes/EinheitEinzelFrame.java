@@ -18,9 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.text.DateFormat;
-import java.util.GregorianCalendar;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -137,6 +135,7 @@ public class EinheitEinzelFrame extends JFrame {
          String sqltext = "SELECT einheiten_id,klienten_id,angebote_id,Datum,Beginn,Ende,Preisänderung,zusatz1,zusatz2,Rechnung_Datum,Bezahlt_Datum " + "FROM einheiten "
                + "WHERE einheiten_id=" + this.einheit + ";";
          logger.info("Einheit_einzel.setEinheit: " + sqltext);
+         
          try {
             ResultSet daten = verbindung.query(sqltext);
             daten.first();
@@ -204,7 +203,9 @@ public class EinheitEinzelFrame extends JFrame {
       double preis = 0.0;
       long dauer = 0;
 
-      MySqlDate tmpdate = new MySqlDate(this.jDateChooserDatum.getDate());
+      final Calendar einheitDate = this.jDateChooserDatum.getCalendar();
+      
+      MySqlDate tmpdate = new MySqlDate(einheitDate);
       String datum = tmpdate.getSqlDate();
 
       String eingereichtDatum = "NULL";
@@ -238,22 +239,23 @@ public class EinheitEinzelFrame extends JFrame {
          daten.first();
          preis = Math.round((daten.getDouble("Preis") + Double.parseDouble(this.jTextFieldPreisAenderung.getText())) * 100);
          preis = preis / 100;
+         
          if (daten.getBoolean("preis_pro_stunde")) {
             GregorianCalendar startcal = new GregorianCalendar();
-            startcal.setTime(this.jDateChooserDatum.getDate());
+            startcal.setTime(einheitDate.getTime());
             String starttext = this.jFormattedTextFieldStart.getText();
             String[] startfeld = starttext.split(":");
 
-            startcal.add(GregorianCalendar.HOUR, Integer.parseInt(startfeld[0]));
-            startcal.add(GregorianCalendar.MINUTE, Integer.parseInt(startfeld[1]));
+            startcal.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(startfeld[0]));
+            startcal.set(GregorianCalendar.MINUTE, Integer.parseInt(startfeld[1]));
 
             GregorianCalendar endecal = new GregorianCalendar();
-            endecal.setTime(this.jDateChooserDatum.getDate());
+            endecal.setTime(einheitDate.getTime());
             String endetext = this.jFormattedTextFieldEnde.getText();
             String[] endefeld = endetext.split(":");
 
-            endecal.add(GregorianCalendar.HOUR, Integer.parseInt(endefeld[0]));
-            endecal.add(GregorianCalendar.MINUTE, Integer.parseInt(endefeld[1]));
+            endecal.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(endefeld[0]));
+            endecal.set(GregorianCalendar.MINUTE, Integer.parseInt(endefeld[1]));
 
             sqlBeginn = new MySqlDate(startcal).getSqlDate();
             sqlEnde = new MySqlDate(endecal).getSqlDate();
@@ -264,7 +266,6 @@ public class EinheitEinzelFrame extends JFrame {
             preis = preis / 100;
             logger.debug("Dauer: " + dauer + " Minuten\n"+"Dauer: " + (double) dauer / 60 + " Stunden\n Preis: " + preis);
        
-
             if (this.einheit == -1) {
                if ((isEingereicht != 0) && (isBezahlt != 0)) {
                   sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer,"
@@ -318,7 +319,7 @@ public class EinheitEinzelFrame extends JFrame {
                }
             } else {
                sqltext = "UPDATE einheiten set " + "angebote_id=" + this.angeboteliste.elementAt(this.jComboBoxAngebot.getSelectedIndex()) + ",Datum=\"" + datum + "\"" + ",Beginn=\""
-                     + datum + " " + this.jFormattedTextFieldStart.getText() + ":00\"" + ",Ende=\"" + sqlEnde + ",zusatz1=\""
+                     + sqlBeginn + "\",Ende=\"" + sqlEnde + "\",zusatz1=\""
                      + this.jTextFieldZusatz1.getText().trim() + "\"" + ",zusatz2=\"" + this.jTextFieldZusatz2.getText().trim() + "\"" + ",Preis=" + preis + ",Dauer=" + dauer;
                if (isEingereicht != 0) {
                   sqltext = sqltext + ",Rechnung_verschickt=\"" + isEingereicht + "\"" + ",Rechnung_Datum=\"" + eingereichtDatum + "\"";
@@ -366,6 +367,13 @@ public class EinheitEinzelFrame extends JFrame {
       jFormattedTextFieldStart = new javax.swing.JFormattedTextField();
       jFormattedTextFieldEnde = new javax.swing.JFormattedTextField();
       jDateChooserDatum = new com.toedter.calendar.JDateChooser();
+      Calendar now = new GregorianCalendar();
+      now.set(Calendar.HOUR_OF_DAY, 0);
+      now.set(Calendar.MINUTE, 0);
+      now.set(Calendar.SECOND, 0);
+      now.set(Calendar.MILLISECOND, 0);
+      jDateChooserDatum.setCalendar(now);
+      
       jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
       jTextFieldZusatz2 = new javax.swing.JTextField();
