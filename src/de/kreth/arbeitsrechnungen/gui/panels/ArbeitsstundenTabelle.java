@@ -1294,17 +1294,13 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                if (evt.getPropertyName().matches(RechnungDialog.ERSTELLT)) {
-                  neue_rechnung();
+                  
                }
             }
          });
          dialog.setVisible(true);
       }
       this.updateTable();
-   }
-
-   private void neue_rechnung() {
-      this.firePropertyChange(RechnungDialog.ERSTELLT, 0, 1);
    }
 
    private void jTable1MouseClicked(MouseEvent evt) {// GEN-FIRST:event_jTable1MouseClicked

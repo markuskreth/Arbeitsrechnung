@@ -68,15 +68,15 @@ public class Options {
 
       private Properties properties = null;
       
-      Set<String> toSet = new HashSet<>(Arrays.asList("stdTexFile"
-            , "texTemplatesDir"
-            , "pdfProg"
-            , "dbUser"
-            , "dbHost"
-            , "dbDatabaseName"
-            , "dbPassword"
-            , "targetDir"
-            , "tmpDir"));
+      Set<String> toSet = new HashSet<>(Arrays.asList(STD_TEX_FILE
+            , TEX_TEMPLATE_DIR
+            , PDF_PROG
+            , DB_USER
+            , DB_HOST
+            , DB_DATABASE_NAME
+            , DB_PASSWORD
+            , TARGET_DIR
+            , TMP_DIR));
       
       public Build() {
          this.properties = new Properties();
@@ -84,6 +84,7 @@ public class Options {
       
       public Build(Properties properties) {
          this.properties = properties;
+         toSet.clear();
 //         stdTexFile(properties.getProperty(STD_TEX_FILE));
 //         texTemplatesDir(properties.getProperty(TEX_TEMPLATE_DIR));
 //         pdfProg(properties.getProperty(PDF_PROG));
@@ -97,7 +98,7 @@ public class Options {
       
       public Build stdTexFile(String stdTexFile) {
          properties.setProperty(STD_TEX_FILE, stdTexFile);
-         toSet.remove("stdTexFile");
+         toSet.remove(STD_TEX_FILE);
          return this;
       }
       
@@ -105,7 +106,7 @@ public class Options {
          if(texTemplatesDir == null)
             throw new IllegalArgumentException("texTemplatesDir must not be null!");
          properties.setProperty(TEX_TEMPLATE_DIR, texTemplatesDir);
-         toSet.remove("texTemplatesDir");
+         toSet.remove(TEX_TEMPLATE_DIR);
          return this;
       }
 
@@ -113,7 +114,7 @@ public class Options {
          if(pdfProg == null)
             throw new IllegalArgumentException("pdfProg must not be null!");
          properties.setProperty(PDF_PROG, pdfProg);
-         toSet.remove("pdfProg");
+         toSet.remove(PDF_PROG);
          return this;
       }
 
@@ -121,7 +122,7 @@ public class Options {
          if(dbUser == null)
             throw new IllegalArgumentException("dbUser must not be null!");
          properties.setProperty(DB_USER, dbUser);
-         toSet.remove("dbUser");
+         toSet.remove(DB_USER);
          return this;
       }
 
@@ -129,7 +130,7 @@ public class Options {
          if(dbHost == null)
             throw new IllegalArgumentException("dbHost must not be null!");
          properties.setProperty(DB_HOST, dbHost);
-         toSet.remove("dbHost");
+         toSet.remove(DB_HOST);
          return this;
       }
 
@@ -137,7 +138,7 @@ public class Options {
          if(dbDatabaseName == null)
             throw new IllegalArgumentException("dbDatabaseName must not be null!");
          properties.setProperty(DB_DATABASE_NAME, dbDatabaseName);
-         toSet.remove("dbDatabaseName");
+         toSet.remove(DB_DATABASE_NAME);
          return this;
       }
 
@@ -145,7 +146,7 @@ public class Options {
          if(dbPassword == null)
             throw new IllegalArgumentException("dbPassword must not be null!");
          properties.setProperty(DB_PASSWORD, dbPassword);
-         toSet.remove("dbPassword");
+         toSet.remove(DB_PASSWORD);
          return this;
       }
 
@@ -153,7 +154,7 @@ public class Options {
          if(targetDir == null)
             throw new IllegalArgumentException("targetDir must not be null!");
          properties.setProperty(TARGET_DIR, targetDir);
-         toSet.remove("targetDir");
+         toSet.remove(TARGET_DIR);
          return this;
       }
 
@@ -162,7 +163,7 @@ public class Options {
          if(tmpDir == null)
             throw new IllegalArgumentException("tmpDir must not be null!");
          properties.setProperty(TMP_DIR, tmpDir);
-         toSet.remove("tmpDir");
+         toSet.remove(TMP_DIR);
          return this;
       }
 
