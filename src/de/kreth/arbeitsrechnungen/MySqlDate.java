@@ -21,7 +21,7 @@ public class MySqlDate {
 		cal.setTime(datum);
 	}
 
-	public MySqlDate(GregorianCalendar cal) {
+	public MySqlDate(Calendar cal) {
 		this.cal = cal;
 	}
 
