@@ -457,20 +457,20 @@ public class OptionenDialog extends JDialog {
       pack();
    }
 
-   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
       this.setVisible(false);
       this.dispose();
       if (firststart) {
          logger.debug("Progamm wird beendet. Optionen nicht gespeichert.");
          System.exit(-1);
       }
-   }// GEN-LAST:event_jButton1ActionPerformed
+   }
 
-   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
+   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
       saveoptions();
       this.setVisible(false);
       this.dispose();
-   }// GEN-LAST:event_jButton2ActionPerformed
+   }
 
    private void jButtonArbVerzActionPerformed(java.awt.event.ActionEvent evt) {
       String arb_verz = this.jTextFieldArbeitsverzeichnis.getText();
@@ -493,7 +493,7 @@ public class OptionenDialog extends JDialog {
          this.jTextFieldVerzeichnisTexDateien.setText("");
    }
 
-   private void jButtonTexDateiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonTexDateiActionPerformed
+   private void jButtonTexDateiActionPerformed(java.awt.event.ActionEvent evt) {
       String tex_datei = jTextFieldStdTexDatei.getText();
       java.awt.FileDialog dateiname = new java.awt.FileDialog(this, "Tex-Datei", java.awt.FileDialog.LOAD);
       int endindex = tex_datei.lastIndexOf("/");
@@ -528,7 +528,7 @@ public class OptionenDialog extends JDialog {
 
    }
 
-   private void jButtonDialogPdfVerzActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonDialogPdfVerzActionPerformed
+   private void jButtonDialogPdfVerzActionPerformed(java.awt.event.ActionEvent evt) {
 
       String pdfVerzName = this.jTextFieldPdfFiles.getText();
       File selectedFile = openFileChooserForDirectory(pdfVerzName, "pdf-Verzeichnis");

@@ -63,7 +63,8 @@ public class Kalenderauswahl extends JDialog {
 		jButtonOK.setText(resourceMap.getString("jButtonOK.text")); // NOI18N
 		jButtonOK.setName("jButtonOK"); // NOI18N
 		jButtonOK.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+			@Override
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jButtonOKActionPerformed(evt);
 			}
 		});
@@ -71,7 +72,8 @@ public class Kalenderauswahl extends JDialog {
 		jButtonCancel.setText(resourceMap.getString("jButtonCancel.text")); // NOI18N
 		jButtonCancel.setName("jButtonCancel"); // NOI18N
 		jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+			@Override
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jButtonCancelActionPerformed(evt);
 			}
 		});
@@ -81,7 +83,8 @@ public class Kalenderauswahl extends JDialog {
 		jButtonDatumLoeschen.setName("jButtonDatumLoeschen"); // NOI18N
 		jButtonDatumLoeschen
 				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
+					@Override
+               public void actionPerformed(java.awt.event.ActionEvent evt) {
 						jButtonDatumLoeschenActionPerformed(evt);
 					}
 				});
@@ -151,23 +154,23 @@ public class Kalenderauswahl extends JDialog {
 		return datum;
 	}
 
-	private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonOKActionPerformed
+	private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {
 		datum = this.jCalendar1.getDate();
 		bestaetigt = true;
 		this.setVisible(false);
-	}// GEN-LAST:event_jButtonOKActionPerformed
+	}
 
-	private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonCancelActionPerformed
+	private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {
 		datum = null;
 		this.setVisible(false);
-	}// GEN-LAST:event_jButtonCancelActionPerformed
+	}
 
 	private void jButtonDatumLoeschenActionPerformed(
-			java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonDatumLoeschenActionPerformed
+			java.awt.event.ActionEvent evt) {
 		datum = null;
 		bestaetigt = true;
 		this.setVisible(false);
-	}// GEN-LAST:event_jButtonDatumLoeschenActionPerformed
+	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private JButton jButton1;

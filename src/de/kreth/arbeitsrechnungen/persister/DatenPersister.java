@@ -123,8 +123,7 @@ public class DatenPersister implements Persister {
 			return auftraggeber + "(" + anzahl + "): " + klientenpreis + " €";
 		}
 	}
-
-   @Override
+	@Override
    public Verbindung connectToDb(Options optionen) {
       return new DatabaseConnector(optionen.getProperties()).getVerbindung();
    }

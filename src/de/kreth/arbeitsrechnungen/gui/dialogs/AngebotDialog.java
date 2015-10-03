@@ -337,23 +337,23 @@ public class AngebotDialog extends javax.swing.JDialog {
 		}
 	}
 
-	private void jTextFieldPreisFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_jTextFieldPreisFocusGained
+	private void jTextFieldPreisFocusGained(java.awt.event.FocusEvent evt) {
 		if (evt.getSource() instanceof javax.swing.JTextField) {
 			javax.swing.JTextField tf = (javax.swing.JTextField) evt
 					.getSource();
 			tf.setSelectionStart(0);
 			tf.setSelectionEnd(tf.getText().length());
 		}
-	}// GEN-LAST:event_jTextFieldPreisFocusGained
+	}
 
-	private void jTextFieldBeschreibungFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_jTextFieldBeschreibungFocusGained
+	private void jTextFieldBeschreibungFocusGained(java.awt.event.FocusEvent evt) {
 		if (evt.getSource() instanceof javax.swing.JTextField) {
 			javax.swing.JTextField tf = (javax.swing.JTextField) evt
 					.getSource();
 			tf.setSelectionStart(0);
 			tf.setSelectionEnd(tf.getText().length());
 		}
-	}// GEN-LAST:event_jTextFieldBeschreibungFocusGained
+	}
 
 	/*
 	 * public static void main(String args[]) {

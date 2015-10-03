@@ -50,22 +50,31 @@ public class EinheitEinzelFrame extends JFrame {
    private Verbindung verbindung;
    private KlientPersister klientPersister;
 
-   /** Creates new form Einheit_einzel */
+   /**
+    * Sollte nicht benutzt werden!
+    * Oder nur in Kombination mit setKlient()
+    * 
+    * Creates new form Einheit_einzel 
+    * */
    public EinheitEinzelFrame() {
-      // Sollte nicht benutzt werden!
-      // Oder nur in Kombination mit setKlient()
       this(1, 2);
    }
 
-   /** Creates new form Einheit_einzel */
+   /**
+    * Neuen Datensatz anlegen
+    * Creates new form Einheit_einzel
+    * */
    public EinheitEinzelFrame(int klient) {
-      // Neuen Datensatz anlegen
       this(klient, -1);
    }
 
-   /** Creates new form Einheit_einzel */
+   /**
+    * Bestehenden Datensatz edieren
+    *  
+    * Creates new form Einheit_einzel 
+    * */
    public EinheitEinzelFrame(int klient, int einheit) {
-      // Bestehenden Datensatz edieren
+
       optionen = new Einstellungen().getEinstellungen();
 
       verbindung = new Verbindung_mysql(optionen.getProperties());
