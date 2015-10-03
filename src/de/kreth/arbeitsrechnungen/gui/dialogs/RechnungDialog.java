@@ -37,8 +37,7 @@ import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
 
-public class RechnungDialog extends JDialog implements PropertyChangeListener,
-      DocumentListener {
+public class RechnungDialog extends JDialog implements PropertyChangeListener, DocumentListener {
 
    private static final long serialVersionUID = 3906049054488142992L;
    private Logger logger = Logger.getLogger(getClass());
@@ -69,9 +68,9 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    private RechnungDialog(Options optionen, Window parent) {
       super(parent);
       setModal(true);
-      
+
       verbindung = new Verbindung_mysql(optionen.getProperties());
-      
+
       logger.setLevel(Level.DEBUG);
       initComponents();
       klientenPersister = (KlientenEditorPersister) ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class, optionen);
@@ -81,7 +80,9 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    }
 
    /**
-    * Erstellt einen neuen RechnungsDialog für die übergebene RechnungsId. Die alte Rechnung wird angezeigt.
+    * Erstellt einen neuen RechnungsDialog für die übergebene RechnungsId. Die
+    * alte Rechnung wird angezeigt.
+    * 
     * @param optionen
     * @param parent
     * @param rechnungId
@@ -104,7 +105,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       this.jCheckBoxStundenzahl.setVisible(this.stunden_vorhanden);
 
       werteVonRechnungInFormularEintragen();
-      
+
       // Zusatz-Checkboxen konfigurieren
       if (rechnung.hasZusatz1()) {
          this.jCheckBoxZusatz1.setText(klient.getZusatz1_Name());
@@ -136,7 +137,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
 
       this.jToggleButtonDetails.setSelected(false);
       toggleDetails();
-      
+
       if (this.klient.hasZusatz1()) {
          this.jCheckBoxZusatz1.setText(this.klient.getZusatz1_Name());
       } else {
@@ -152,49 +153,39 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
 
    /**
     * Erstellt eine neue Rechnung für die übergebenen Einheiten.
+    * 
     * @param optionen
     * @param parent
     * @param einheiten
     */
-   public RechnungDialog(Options optionen, Window parent,
-         Vector<Integer> einheiten) {
+   public RechnungDialog(Options optionen, Window parent, Vector<Integer> einheiten) {
       this(optionen, parent);
 
       logger.setLevel(Level.DEBUG);
 
-      zusammenfassungen_erlauben = this.jToggleButtonZusammenfassungen
-            .isSelected();
+      zusammenfassungen_erlauben = this.jToggleButtonZusammenfassungen.isSelected();
 
       this.einheiten = persister.getEinheitenByIds(einheiten);
 
       if (this.einheiten.size() > 0)
-         this.klient = klientenPersister.getKlientById(this.einheiten.get(0)
-               .getKlientenID());
+         this.klient = klientenPersister.getKlientById(this.einheiten.get(0).getKlientenID());
       else
          throw new IllegalArgumentException("Einheiten dürfen nicht leer sein");
 
       Calendar zahldatum = new GregorianCalendar();
       zahldatum.setTime(heute.getTime());
       zahldatum.add(Calendar.MONTH, 1);
-      
-      Builder reBuilder = new Rechnung.Builder()
-            .texdatei(optionen.getStdTexFile())
-            .datum(heute)
-            .zahldatum(zahldatum)
-            .einheiten(this.einheiten)
-            .rechnungnr(generateRechnungsnr(heute))
-            .klienten_id(this.klient.getKlienten_id())
-            .zusatz1(klient.hasZusatz1())
-            .zusatz2(klient.hasZusatz2())
-            .zusatz1Name(klient.getZusatz1_Name())
-            .zusatz2Name(klient.getZusatz2_Name());
+
+      Builder reBuilder = new Rechnung.Builder().texdatei(optionen.getStdTexFile()).datum(heute).zahldatum(zahldatum).einheiten(this.einheiten)
+            .rechnungnr(generateRechnungsnr(heute)).klienten_id(this.klient.getKlienten_id()).zusatz1(klient.hasZusatz1()).zusatz2(klient.hasZusatz2())
+            .zusatz1Name(klient.getZusatz1_Name()).zusatz2Name(klient.getZusatz2_Name());
 
       setAdresse(reBuilder);
 
       if (klient.getTex_datei() != null && !klient.getTex_datei().isEmpty()) {
          reBuilder.texdatei(klient.getTex_datei());
       }
-      
+
       rechnung = reBuilder.build();
 
       werteVonRechnungInFormularEintragen();
@@ -217,8 +208,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    public void propertyChange(PropertyChangeEvent e) {
       JComponent quelle = (JComponent) e.getSource();
 
-      logger.debug("Neuer Wert bei " + quelle.getName() + ": "
-            + e.getNewValue());
+      logger.debug("Neuer Wert bei " + quelle.getName() + ": " + e.getNewValue());
       if (quelle.getName().matches(jDateRechnungsdatum.getName())) {
          rechnung.setDatum(this.jDateRechnungsdatum.getCalendar());
       }
@@ -245,8 +235,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    private void changeText(DocumentEvent e) {
       logger.debug(e.getDocument().getProperty("name"));
       logger.debug(" wurde geändert!");
-      logger.debug("DefaultRootElement: "
-            + e.getDocument().getDefaultRootElement());
+      logger.debug("DefaultRootElement: " + e.getDocument().getDefaultRootElement());
       if (e.getDocument().equals(this.jTextKlient.getDocument())) {
          logger.debug("Adresse geändert!");
          this.rechnung.setAdresse(this.jTextKlient.getText());
@@ -267,7 +256,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       spalten.add(ArbeitsstundenSpalten.Checkbox);
       spalten.add(ArbeitsstundenSpalten.Datum);
       spalten.add(ArbeitsstundenSpalten.Inhalt);
-      
+
       // TableModel instanzieren mit Titeln und 0 Zeilen
 
       if (this.jCheckBoxStundenzahl.isSelected()) {
@@ -280,22 +269,22 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
          spalten.add(ArbeitsstundenSpalten.Zusatz2);
       }
       spalten.add(ArbeitsstundenSpalten.Preis);
-      
+
       String[] spaltentitel = new String[spalten.size()];
       spaltentitel[0] = "";
-      
+
       for (int i = 1; i < spalten.size(); i++) {
          ArbeitsstundenSpalten tableColumn = spalten.get(i);
-         if(tableColumn == ArbeitsstundenSpalten.Zusatz1){
+         if (tableColumn == ArbeitsstundenSpalten.Zusatz1) {
             spaltentitel[i] = this.klient.getZusatz1_Name();
-         } else if(tableColumn == ArbeitsstundenSpalten.Zusatz2){
+         } else if (tableColumn == ArbeitsstundenSpalten.Zusatz2) {
             spaltentitel[i] = this.klient.getZusatz2_Name();
          } else {
             spaltentitel[i] = tableColumn.toString();
          }
 
       }
-      
+
       DefaultTableModel mymodel = new DefaultTableModel(spaltentitel, 0) {
 
          /**
@@ -332,7 +321,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
             Boolean tmp_bool = Boolean.valueOf(jTable1.getValueAt(i, 0).toString());
             tabellenzeile.add(tmp_bool);
          }
-         
+
          tabellenzeile.add(einheiten.elementAt(i).getDatum());
          tabellenzeile.add(einheiten.elementAt(i).getInhalt());
          if (this.jCheckBoxStundenzahl.isSelected())
@@ -356,10 +345,11 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
    /**
     * Ermittelnt aufgrund der Adresse und Rechnngsdatum automatisch die
     * Rechnungsnummer
-    * @return 
+    * 
+    * @return
     */
    private String generateRechnungsnr(Calendar rechnungsdatum) {
-      
+
       String rechnungsnr = persister.getRechnungsnummer(rechnung, klient);
 
       logger.debug("rechnungsnr: " + rechnungsnr);
@@ -386,14 +376,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
     */
    private void setAdresse(Rechnung.Builder reBuilder) {
 
-      String adresse = klient.getAuftraggeber()
-            + "\n"
-            + "\n"
-            + klient.getAAdress1()
-            + "\n"
-            + ((klient.getAAdress2() == null || klient.getAAdress2().isEmpty()) ? ""
-                  : klient.getAAdress2() + "\n") + klient.getAPlz() + " "
-            + klient.getAOrt();
+      String adresse = klient.getAuftraggeber() + "\n" + "\n" + klient.getAAdress1() + "\n"
+            + ((klient.getAAdress2() == null || klient.getAAdress2().isEmpty()) ? "" : klient.getAAdress2() + "\n") + klient.getAPlz() + " " + klient.getAOrt();
 
       reBuilder.adresse(adresse);
    }
@@ -409,8 +393,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       if (this.jSplitPane1.getRightComponent() == null) {
          // Details einschalten
          this.setSize(this.getWidth(), this.getHeight() + hoehe);
-         this.jPanelunten.setSize(this.jPaneloben.getWidth(),
-               this.jPaneloben.getHeight());
+         this.jPanelunten.setSize(this.jPaneloben.getWidth(), this.jPaneloben.getHeight());
          this.jSplitPane1.setRightComponent(this.jPanelunten);
          this.jSplitPane1.setDividerLocation(driverlocation);
       } else {
@@ -460,8 +443,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
 
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-      ResourceBundle resourceMap = ResourceBundle.getBundle(getClass()
-            .getSimpleName());
+      ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
 
       setTitle(resourceMap.getString("Form.title")); // NOI18N
       setMinimumSize(new Dimension(446, 322));
@@ -484,9 +466,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jScrollPane2.setMinimumSize(new Dimension(22, 0));
       jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-      jTable1.setModel(new DefaultTableModel(new Object[][] {
-            { null, null, null, null }, { null, null, null, null },
-            { null, null, null, null }, { null, null, null, null } },
+      jTable1.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } },
             new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
       jTable1.setMinimumSize(new Dimension(60, 0));
       jTable1.setName("jTable1"); // NOI18N
@@ -494,32 +474,17 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jTable1.getColumnModel().getColumn(0).setMinWidth(20);
       jTable1.getColumnModel().getColumn(0).setPreferredWidth(20);
       jTable1.getColumnModel().getColumn(0).setMaxWidth(20);
-      jTable1
-            .getColumnModel()
-            .getColumn(0)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title0")); // NOI18N
-      jTable1
-            .getColumnModel()
-            .getColumn(1)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title1")); // NOI18N
-      jTable1
-            .getColumnModel()
-            .getColumn(2)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title2")); // NOI18N
-      jTable1
-            .getColumnModel()
-            .getColumn(3)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title3")); // NOI18N
+      jTable1.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTable1.columnModel.title0")); // NOI18N
+      jTable1.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("jTable1.columnModel.title1")); // NOI18N
+      jTable1.getColumnModel().getColumn(2).setHeaderValue(resourceMap.getString("jTable1.columnModel.title2")); // NOI18N
+      jTable1.getColumnModel().getColumn(3).setHeaderValue(resourceMap.getString("jTable1.columnModel.title3")); // NOI18N
 
-      jTabbedPane1.addTab(
-            resourceMap.getString("jScrollPane2.TabConstraints.tabTitle"),
-            jScrollPane2); // NOI18N
+      jTabbedPane1.addTab(resourceMap.getString("jScrollPane2.TabConstraints.tabTitle"), jScrollPane2); // NOI18N
 
       jPanel1.setName("jPanel1"); // NOI18N
 
       jTextTexDatei.setText(resourceMap.getString("jTextTexDatei.text")); // NOI18N
-      jTextTexDatei.setToolTipText(resourceMap
-            .getString("jTextTexDatei.toolTipText")); // NOI18N
+      jTextTexDatei.setToolTipText(resourceMap.getString("jTextTexDatei.toolTipText")); // NOI18N
       jTextTexDatei.setName("jTextTexDatei"); // NOI18N
 
       jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
@@ -528,15 +493,12 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
       jButton3.setName("jButton3"); // NOI18N
 
-      jCheckBoxVorschau
-            .setText(resourceMap.getString("jCheckBoxVorschau.text")); // NOI18N
+      jCheckBoxVorschau.setText(resourceMap.getString("jCheckBoxVorschau.text")); // NOI18N
       jCheckBoxVorschau.setName("jCheckBoxVorschau"); // NOI18N
 
       jToggleButtonZusammenfassungen.setSelected(true);
-      jToggleButtonZusammenfassungen.setText(resourceMap
-            .getString("jToggleButtonZusammenfassungen.text")); // NOI18N
-      jToggleButtonZusammenfassungen.setToolTipText(resourceMap
-            .getString("jToggleButtonZusammenfassungen.toolTipText")); // NOI18N
+      jToggleButtonZusammenfassungen.setText(resourceMap.getString("jToggleButtonZusammenfassungen.text")); // NOI18N
+      jToggleButtonZusammenfassungen.setToolTipText(resourceMap.getString("jToggleButtonZusammenfassungen.toolTipText")); // NOI18N
       jToggleButtonZusammenfassungen.setName("jToggleButtonZusammenfassungen"); // NOI18N
       jToggleButtonZusammenfassungen.addActionListener(new ActionListener() {
 
@@ -551,90 +513,43 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
 
       GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
       jPanel1.setLayout(jPanel1Layout);
-      jPanel1Layout
-            .setHorizontalGroup(jPanel1Layout
-                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+      jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            jPanel1Layout
+                  .createSequentialGroup()
                   .addGroup(
                         jPanel1Layout
-                              .createSequentialGroup()
+                              .createParallelGroup(GroupLayout.Alignment.LEADING)
+                              .addComponent(jLabel6)
                               .addGroup(
-                                    jPanel1Layout
-                                          .createParallelGroup(
-                                                GroupLayout.Alignment.LEADING)
-                                          .addComponent(jLabel6)
-                                          .addGroup(
-                                                GroupLayout.Alignment.TRAILING,
-                                                jPanel1Layout
-                                                      .createSequentialGroup()
-                                                      .addComponent(
-                                                            jTextTexDatei,
-                                                            GroupLayout.DEFAULT_SIZE,
-                                                            528,
-                                                            Short.MAX_VALUE)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addComponent(
-                                                            jButton3,
-                                                            GroupLayout.PREFERRED_SIZE,
-                                                            19,
-                                                            GroupLayout.PREFERRED_SIZE))
-                                          .addGroup(
-                                                jPanel1Layout
-                                                      .createSequentialGroup()
-                                                      .addContainerGap()
-                                                      .addComponent(
-                                                            jCheckBoxVorschau))
-                                          .addGroup(
-                                                jPanel1Layout
-                                                      .createSequentialGroup()
-                                                      .addContainerGap()
-                                                      .addComponent(
-                                                            jToggleButtonZusammenfassungen)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addComponent(jLabel7)))
-                              .addContainerGap()));
-      jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
-            GroupLayout.Alignment.LEADING).addGroup(
+                                    GroupLayout.Alignment.TRAILING,
+                                    jPanel1Layout.createSequentialGroup().addComponent(jTextTexDatei, GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                          .addComponent(jButton3, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+                              .addGroup(jPanel1Layout.createSequentialGroup().addContainerGap().addComponent(jCheckBoxVorschau))
+                              .addGroup(
+                                    jPanel1Layout.createSequentialGroup().addContainerGap().addComponent(jToggleButtonZusammenfassungen)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel7))).addContainerGap()));
+      jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
             jPanel1Layout
                   .createSequentialGroup()
                   .addComponent(jLabel6)
                   .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                   .addGroup(
-                        jPanel1Layout
-                              .createParallelGroup(
-                                    GroupLayout.Alignment.BASELINE)
-                              .addComponent(jTextTexDatei,
-                                    GroupLayout.PREFERRED_SIZE,
-                                    GroupLayout.DEFAULT_SIZE,
-                                    GroupLayout.PREFERRED_SIZE)
-                              .addComponent(jButton3,
-                                    GroupLayout.PREFERRED_SIZE, 19,
-                                    GroupLayout.PREFERRED_SIZE))
-                  .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                  .addComponent(jCheckBoxVorschau)
-                  .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                  .addGroup(
-                        jPanel1Layout
-                              .createParallelGroup(
-                                    GroupLayout.Alignment.BASELINE)
-                              .addComponent(jToggleButtonZusammenfassungen)
-                              .addComponent(jLabel7))
+                        jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                              .addComponent(jTextTexDatei, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                              .addComponent(jButton3, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                  .addComponent(jCheckBoxVorschau).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                  .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jToggleButtonZusammenfassungen).addComponent(jLabel7))
                   .addContainerGap(70, Short.MAX_VALUE)));
 
-      jTabbedPane1.addTab(
-            resourceMap.getString("jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
+      jTabbedPane1.addTab(resourceMap.getString("jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
 
       GroupLayout jPaneluntenLayout = new GroupLayout(jPanelunten);
       jPanelunten.setLayout(jPaneluntenLayout);
-      jPaneluntenLayout
-            .setHorizontalGroup(jPaneluntenLayout.createParallelGroup(
-                  GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1,
-                  GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE));
-      jPaneluntenLayout.setVerticalGroup(jPaneluntenLayout.createParallelGroup(
-            GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1,
-            GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 201,
+      jPaneluntenLayout.setHorizontalGroup(jPaneluntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1, GroupLayout.DEFAULT_SIZE, 570,
             Short.MAX_VALUE));
+      jPaneluntenLayout.setVerticalGroup(jPaneluntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1, GroupLayout.Alignment.TRAILING,
+            GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE));
 
       jSplitPane1.setRightComponent(jPanelunten);
 
@@ -663,14 +578,13 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jDateRechnungsdatum.setMinimumSize(new Dimension(15, 19));
       jDateRechnungsdatum.setName("rechnungsdatum"); // NOI18N
       jDateRechnungsdatum.setPreferredSize(new Dimension(130, 19));
-      jDateRechnungsdatum
-            .addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+      jDateRechnungsdatum.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 
-               @Override
-               public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                  jDateRechnungsdatumPropertyChange(evt);
-               }
-            });
+         @Override
+         public void propertyChange(java.beans.PropertyChangeEvent evt) {
+            jDateRechnungsdatumPropertyChange(evt);
+         }
+      });
 
       jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
       jLabel4.setMaximumSize(new Dimension(2147483647, 30));
@@ -684,8 +598,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jLabel5.setName("jLabel5"); // NOI18N
       jLabel5.setPreferredSize(new Dimension(130, 19));
 
-      jTextRechnungsnummer.setText(resourceMap
-            .getString("rechnungsnummer.text")); // NOI18N
+      jTextRechnungsnummer.setText(resourceMap.getString("rechnungsnummer.text")); // NOI18N
       jTextRechnungsnummer.setEnabled(false);
       jTextRechnungsnummer.setMaximumSize(new Dimension(2147483647, 30));
       jTextRechnungsnummer.setMinimumSize(new Dimension(15, 19));
@@ -723,18 +636,13 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       jDateZahlDatum.setName("zahlungsdatum"); // NOI18N
       jDateZahlDatum.setPreferredSize(new Dimension(130, 19));
 
-      jToggleButtonDetails.setIcon(getIcon(resourceMap
-            .getString("jToggleDetails.icon"))); // NOI18N
+      jToggleButtonDetails.setIcon(getIcon(resourceMap.getString("jToggleDetails.icon"))); // NOI18N
       jToggleButtonDetails.setSelected(true);
-      jToggleButtonDetails
-            .setText(resourceMap.getString("jToggleDetails.text")); // NOI18N
-      jToggleButtonDetails.setToolTipText(resourceMap
-            .getString("jToggleDetails.toolTipText")); // NOI18N
-      jToggleButtonDetails.setDisabledIcon(getIcon(resourceMap
-            .getString("jToggleDetails.disabledIcon"))); // NOI18N
+      jToggleButtonDetails.setText(resourceMap.getString("jToggleDetails.text")); // NOI18N
+      jToggleButtonDetails.setToolTipText(resourceMap.getString("jToggleDetails.toolTipText")); // NOI18N
+      jToggleButtonDetails.setDisabledIcon(getIcon(resourceMap.getString("jToggleDetails.disabledIcon"))); // NOI18N
       jToggleButtonDetails.setName("jToggleDetails"); // NOI18N
-      jToggleButtonDetails.setSelectedIcon(getIcon(resourceMap
-            .getString("jToggleDetails.selectedIcon"))); // NOI18N
+      jToggleButtonDetails.setSelectedIcon(getIcon(resourceMap.getString("jToggleDetails.selectedIcon"))); // NOI18N
       jToggleButtonDetails.addActionListener(new ActionListener() {
 
          @Override
@@ -765,8 +673,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
          }
       });
 
-      jCheckBoxStundenzahl.setText(resourceMap
-            .getString("jCheckBoxStundenzahl.text")); // NOI18N
+      jCheckBoxStundenzahl.setText(resourceMap.getString("jCheckBoxStundenzahl.text")); // NOI18N
       jCheckBoxStundenzahl.setName("jCheckBoxStundenzahl"); // NOI18N
       jCheckBoxStundenzahl.addActionListener(new ActionListener() {
 
@@ -776,202 +683,82 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
          }
       });
 
-      jCheckBoxUnterschrift.setText(resourceMap
-            .getString("jCheckBoxUnterschrift.text")); // NOI18N
-      jCheckBoxUnterschrift.setActionCommand(resourceMap
-            .getString("jCheckBoxUnterschrift.actionCommand")); // NOI18N
+      jCheckBoxUnterschrift.setText(resourceMap.getString("jCheckBoxUnterschrift.text")); // NOI18N
+      jCheckBoxUnterschrift.setActionCommand(resourceMap.getString("jCheckBoxUnterschrift.actionCommand")); // NOI18N
       jCheckBoxUnterschrift.setName("jCheckBoxUnterschrift"); // NOI18N
-      
+
       GroupLayout jPanelobenLayout = new GroupLayout(jPaneloben);
       jPaneloben.setLayout(jPanelobenLayout);
-      jPanelobenLayout
-            .setHorizontalGroup(jPanelobenLayout
-                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+      jPanelobenLayout.setHorizontalGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            jPanelobenLayout
+                  .createSequentialGroup()
                   .addGroup(
                         jPanelobenLayout
-                              .createSequentialGroup()
+                              .createParallelGroup(GroupLayout.Alignment.LEADING)
                               .addGroup(
+                                    jPanelobenLayout.createSequentialGroup().addComponent(jCheckBoxZusatz1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                          .addComponent(jCheckBoxZusatz2).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jCheckBoxStundenzahl)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jCheckBoxUnterschrift))
+                              .addGroup(
+                                    GroupLayout.Alignment.TRAILING,
                                     jPanelobenLayout
-                                          .createParallelGroup(
-                                                GroupLayout.Alignment.LEADING)
+                                          .createSequentialGroup()
                                           .addGroup(
                                                 jPanelobenLayout
-                                                      .createSequentialGroup()
-                                                      .addComponent(
-                                                            jCheckBoxZusatz1)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addComponent(
-                                                            jCheckBoxZusatz2)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addComponent(
-                                                            jCheckBoxStundenzahl)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.UNRELATED)
-                                                      .addComponent(
-                                                            jCheckBoxUnterschrift))
+                                                      .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                      .addGroup(
+                                                            jPanelobenLayout.createSequentialGroup().addContainerGap()
+                                                                  .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE))
+                                                      .addGroup(
+                                                            jPanelobenLayout.createSequentialGroup()
+                                                                  .addComponent(jToggleButtonDetails, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+                                                                  .addGap(241, 241, 241)))
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                           .addGroup(
-                                                GroupLayout.Alignment.TRAILING,
                                                 jPanelobenLayout
-                                                      .createSequentialGroup()
+                                                      .createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                       .addGroup(
                                                             jPanelobenLayout
-                                                                  .createParallelGroup(
-                                                                        GroupLayout.Alignment.LEADING)
-                                                                  .addGroup(
-                                                                        jPanelobenLayout
-                                                                              .createSequentialGroup()
-                                                                              .addContainerGap()
-                                                                              .addComponent(
-                                                                                    jScrollPane1,
-                                                                                    GroupLayout.DEFAULT_SIZE,
-                                                                                    425,
-                                                                                    Short.MAX_VALUE))
-                                                                  .addGroup(
-                                                                        jPanelobenLayout
-                                                                              .createSequentialGroup()
-                                                                              .addComponent(
-                                                                                    jToggleButtonDetails,
-                                                                                    GroupLayout.PREFERRED_SIZE,
-                                                                                    31,
-                                                                                    GroupLayout.PREFERRED_SIZE)
-                                                                              .addGap(
-                                                                                    241,
-                                                                                    241,
-                                                                                    241)))
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addGroup(
-                                                            jPanelobenLayout
-                                                                  .createParallelGroup(
-                                                                        GroupLayout.Alignment.TRAILING)
-                                                                  .addGroup(
-                                                                        jPanelobenLayout
-                                                                              .createParallelGroup(
-                                                                                    GroupLayout.Alignment.TRAILING)
-                                                                              .addComponent(
-                                                                                    jLabel3,
-                                                                                    GroupLayout.PREFERRED_SIZE,
-                                                                                    GroupLayout.DEFAULT_SIZE,
-                                                                                    GroupLayout.PREFERRED_SIZE)
-                                                                              .addComponent(
-                                                                                    jLabel5,
-                                                                                    GroupLayout.PREFERRED_SIZE,
-                                                                                    GroupLayout.DEFAULT_SIZE,
-                                                                                    GroupLayout.PREFERRED_SIZE)
-                                                                              .addComponent(
-                                                                                    jDateZahlDatum,
-                                                                                    GroupLayout.PREFERRED_SIZE,
-                                                                                    GroupLayout.DEFAULT_SIZE,
-                                                                                    GroupLayout.PREFERRED_SIZE)
-                                                                              .addComponent(
-                                                                                    jLabel4,
-                                                                                    GroupLayout.Alignment.LEADING,
-                                                                                    GroupLayout.PREFERRED_SIZE,
-                                                                                    GroupLayout.DEFAULT_SIZE,
-                                                                                    GroupLayout.PREFERRED_SIZE)
-                                                                              .addComponent(
-                                                                                    jTextRechnungsnummer,
-                                                                                    GroupLayout.PREFERRED_SIZE,
-                                                                                    GroupLayout.DEFAULT_SIZE,
-                                                                                    GroupLayout.PREFERRED_SIZE))
-                                                                  .addComponent(
-                                                                        jDateRechnungsdatum,
-                                                                        GroupLayout.PREFERRED_SIZE,
-                                                                        GroupLayout.DEFAULT_SIZE,
-                                                                        GroupLayout.PREFERRED_SIZE)))
-                                          .addGroup(
-                                                jPanelobenLayout
-                                                      .createSequentialGroup()
-                                                      .addContainerGap()
-                                                      .addComponent(jLabel2)))
-                              .addContainerGap()));
-      jPanelobenLayout
-            .setVerticalGroup(jPanelobenLayout
-                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                                  .createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                                  .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                                  .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                                  .addComponent(jDateZahlDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                                  .addComponent(jLabel4, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                                        GroupLayout.PREFERRED_SIZE)
+                                                                  .addComponent(jTextRechnungsnummer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                                        GroupLayout.PREFERRED_SIZE))
+                                                      .addComponent(jDateRechnungsdatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                              .addGroup(jPanelobenLayout.createSequentialGroup().addContainerGap().addComponent(jLabel2))).addContainerGap()));
+      jPanelobenLayout.setVerticalGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            jPanelobenLayout
+                  .createSequentialGroup()
+                  .addContainerGap()
+                  .addComponent(jLabel2)
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                   .addGroup(
                         jPanelobenLayout
-                              .createSequentialGroup()
-                              .addContainerGap()
-                              .addComponent(jLabel2)
-                              .addPreferredGap(
-                                    LayoutStyle.ComponentPlacement.RELATED)
+                              .createParallelGroup(GroupLayout.Alignment.LEADING)
+                              .addGroup(
+                                    jPanelobenLayout.createSequentialGroup()
+                                          .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                          .addComponent(jDateRechnungsdatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addGap(12, 12, 12)
+                                          .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                          .addComponent(jDateZahlDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                          .addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                          .addComponent(jTextRechnungsnummer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addContainerGap())
                               .addGroup(
                                     jPanelobenLayout
-                                          .createParallelGroup(
-                                                GroupLayout.Alignment.LEADING)
+                                          .createSequentialGroup()
+                                          .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                           .addGroup(
-                                                jPanelobenLayout
-                                                      .createSequentialGroup()
-                                                      .addComponent(
-                                                            jLabel3,
-                                                            GroupLayout.PREFERRED_SIZE,
-                                                            GroupLayout.DEFAULT_SIZE,
-                                                            GroupLayout.PREFERRED_SIZE)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addComponent(
-                                                            jDateRechnungsdatum,
-                                                            GroupLayout.PREFERRED_SIZE,
-                                                            GroupLayout.DEFAULT_SIZE,
-                                                            GroupLayout.PREFERRED_SIZE)
-                                                      .addGap(12, 12, 12)
-                                                      .addComponent(
-                                                            jLabel5,
-                                                            GroupLayout.PREFERRED_SIZE,
-                                                            GroupLayout.DEFAULT_SIZE,
-                                                            GroupLayout.PREFERRED_SIZE)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addComponent(
-                                                            jDateZahlDatum,
-                                                            GroupLayout.PREFERRED_SIZE,
-                                                            GroupLayout.DEFAULT_SIZE,
-                                                            GroupLayout.PREFERRED_SIZE)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.UNRELATED)
-                                                      .addComponent(
-                                                            jLabel4,
-                                                            GroupLayout.PREFERRED_SIZE,
-                                                            GroupLayout.DEFAULT_SIZE,
-                                                            GroupLayout.PREFERRED_SIZE)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addComponent(
-                                                            jTextRechnungsnummer,
-                                                            GroupLayout.PREFERRED_SIZE,
-                                                            GroupLayout.DEFAULT_SIZE,
-                                                            GroupLayout.PREFERRED_SIZE)
-                                                      .addContainerGap())
-                                          .addGroup(
-                                                jPanelobenLayout
-                                                      .createSequentialGroup()
-                                                      .addComponent(
-                                                            jScrollPane1,
-                                                            GroupLayout.DEFAULT_SIZE,
-                                                            229,
-                                                            Short.MAX_VALUE)
-                                                      .addPreferredGap(
-                                                            LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addGroup(
-                                                            jPanelobenLayout
-                                                                  .createParallelGroup(
-                                                                        GroupLayout.Alignment.BASELINE)
-                                                                  .addComponent(
-                                                                        jCheckBoxZusatz1)
-                                                                  .addComponent(
-                                                                        jCheckBoxZusatz2)
-                                                                  .addComponent(
-                                                                        jCheckBoxStundenzahl)
-                                                                  .addComponent(
-                                                                        jCheckBoxUnterschrift))
-                                                      .addGap(18, 18, 18)
-                                                      .addComponent(
-                                                            jToggleButtonDetails,
-                                                            GroupLayout.PREFERRED_SIZE,
-                                                            24,
-                                                            GroupLayout.PREFERRED_SIZE)))));
+                                                jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jCheckBoxZusatz1).addComponent(jCheckBoxZusatz2)
+                                                      .addComponent(jCheckBoxStundenzahl).addComponent(jCheckBoxUnterschrift)).addGap(18, 18, 18)
+                                          .addComponent(jToggleButtonDetails, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)))));
 
       jSplitPane1.setLeftComponent(jPaneloben);
 
@@ -997,48 +784,24 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
 
       GroupLayout layout = new GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
-      layout.setHorizontalGroup(layout
-            .createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(
-                  layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(
-                              layout.createParallelGroup(
-                                    GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jSplitPane1,
-                                          GroupLayout.Alignment.LEADING,
-                                          GroupLayout.DEFAULT_SIZE, 572,
-                                          Short.MAX_VALUE)
-                                    .addGroup(
-                                          GroupLayout.Alignment.LEADING,
-                                          layout.createParallelGroup(
-                                                GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel1)
-                                                .addGroup(
-                                                      GroupLayout.Alignment.TRAILING,
-                                                      layout.createSequentialGroup()
-                                                            .addComponent(
-                                                                  jButtonErstellen)
-                                                            .addPreferredGap(
-                                                                  LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(
-                                                                  jButton1))))
-                        .addContainerGap()));
-      layout.setVerticalGroup(layout.createParallelGroup(
-            GroupLayout.Alignment.LEADING).addGroup(
+      layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
             layout.createSequentialGroup()
                   .addContainerGap()
-                  .addComponent(jLabel1)
-                  .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                  .addComponent(jSplitPane1, GroupLayout.DEFAULT_SIZE, 542,
-                        Short.MAX_VALUE)
-                  .addGap(18, 18, 18)
                   .addGroup(
-                        layout.createParallelGroup(
-                              GroupLayout.Alignment.BASELINE)
-                              .addComponent(jButton1)
-                              .addComponent(jButtonErstellen))
-                  .addContainerGap()));
+                        layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                              .addComponent(jSplitPane1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
+                              .addGroup(
+                                    GroupLayout.Alignment.LEADING,
+                                    layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                          .addComponent(jLabel1)
+                                          .addGroup(
+                                                GroupLayout.Alignment.TRAILING,
+                                                layout.createSequentialGroup().addComponent(jButtonErstellen).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                      .addComponent(jButton1)))).addContainerGap()));
+      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                  .addComponent(jSplitPane1, GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addGap(18, 18, 18)
+                  .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jButton1).addComponent(jButtonErstellen)).addContainerGap()));
 
       pack();
    }
@@ -1051,25 +814,19 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       toggleDetails();
    }
 
-   private void jDateRechnungsdatumPropertyChange(
-         java.beans.PropertyChangeEvent evt) {
+   private void jDateRechnungsdatumPropertyChange(java.beans.PropertyChangeEvent evt) {
       if (evt.getPropertyName().matches("date")) {
          Calendar datum;
          datum = new GregorianCalendar();
-         com.toedter.calendar.JDateChooser tmp = (com.toedter.calendar.JDateChooser) evt
-               .getSource();
+         com.toedter.calendar.JDateChooser tmp = (com.toedter.calendar.JDateChooser) evt.getSource();
          if (tmp.getName().matches("jDateRechnungsdatum")) {
             datum.setTime(this.jDateRechnungsdatum.getDate());
             this.rechnung.setDatum(datum);
             String generateRechnungsnr = generateRechnungsnr(datum);
             this.jTextRechnungsnummer.setText(generateRechnungsnr);
-            
+
             if (!this.useCreateinsteadUpdate)
-               JOptionPane
-                     .showMessageDialog(
-                           this,
-                           "Die Rechnungsnummer wurde auf den Standard-Wert zurückgesetzt!",
-                           "Achtung!", JOptionPane.WARNING_MESSAGE);
+               JOptionPane.showMessageDialog(this, "Die Rechnungsnummer wurde auf den Standard-Wert zurückgesetzt!", "Achtung!", JOptionPane.WARNING_MESSAGE);
          }
          if (tmp.getName().matches("jDateZahlDatum")) {
             datum.setTime(this.jDateZahlDatum.getDate());
@@ -1083,8 +840,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       if (evt.getClickCount() > 1) {
          jTextRechnungsnummer.setEnabled(true);
          jTextRechnungsnummer.requestFocusInWindow();
-         jTextRechnungsnummer.setCaretPosition(jTextRechnungsnummer.getText()
-               .length());
+         jTextRechnungsnummer.setCaretPosition(jTextRechnungsnummer.getText().length());
       }
    }
 
@@ -1113,7 +869,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
     */
    private void jButtonErstellenActionPerformed(ActionEvent evt) {
       Options einstellungen = new Einstellungen().getEinstellungen();
-      
+
       this.rechnung.setZusatz1(this.jCheckBoxZusatz1.isSelected());
       this.rechnung.setZusatz2(this.jCheckBoxZusatz2.isSelected());
 
@@ -1129,17 +885,15 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       }
 
       this.rechnung.setEinheiten(tmp_einheiten);
-      
+
       try {
          PdfCreator rechnungData = new PdfCreator(this.rechnung);
 
          rechnungData.setUnterschrift(jCheckBoxUnterschrift.isSelected());
-         
+
          int pdf_ergebnis = rechnungData.makePdf(einstellungen);
          if (pdf_ergebnis == 0) {
-            if (JOptionPane.showConfirmDialog(null,
-                  "Soll diese Rechnung so gespeichert werden?", "Speichern?",
-                  JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
+            if (JOptionPane.showConfirmDialog(null, "Soll diese Rechnung so gespeichert werden?", "Speichern?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
                rechnung.setPdfdatei(rechnungData.getPdfFile().getAbsolutePath());
                rechnung.setTexdatei(rechnungData.getTexFile().getAbsolutePath());
                speichern(einstellungen);
@@ -1164,38 +918,37 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
                } else {
                   logger.debug("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
                }
-            
+
                pchListeners.firePropertyChange(ERSTELLT, 0, rechnung.getRechnungen_id());
             }
          }
-         
+
       } catch (FileNotFoundException e) {
          JOptionPane.showMessageDialog(this, "Datei " + rechnung.getTexdatei() + "\nkonnte nicht gefunden werden!\nAbbruch!", "Datei nicht gefunden", JOptionPane.ERROR_MESSAGE);
       }
-      
+
       this.setVisible(false);
       this.dispose();
    }
 
    /**
     * Speichert die Rechnung und Details in der Datenbank
-    * @param optionen 
+    * 
+    * @param optionen
     */
    public int speichern(Options optionen) {
 
       // zuerst die tex und pdf-Datei ins andere Verzeichnis kopieren und
       // umbenennen
       String dateiname = "";
-      String sql = "SELECT Auftraggeber FROM klienten WHERE klienten_id="
-            + rechnung.getKlienten_id();
+      String sql = "SELECT Auftraggeber FROM klienten WHERE klienten_id=" + rechnung.getKlienten_id();
       logger.debug("RechnungenData:speichern : " + sql);
-      
+
       try {
 
          ResultSet auftraggeber = verbindung.query(sql);
          if (auftraggeber.first()) {
-            dateiname = auftraggeber.getString("Auftraggeber") + "_"
-                  + rechnung.getRechnungnr();
+            dateiname = auftraggeber.getString("Auftraggeber") + "_" + rechnung.getRechnungnr();
             dateiname = dateiname.replace(" ", "_");
          } else {
             // sql nicht erfolgreich
@@ -1205,22 +958,22 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       } catch (Exception e) {
          e.printStackTrace();
       }
-      
+
       RechnungSystemExecutionService fileService = new RechnungSystemExecutionService(optionen);
-      
+
       int ergebnis = fileService.movePdf(rechnung, dateiname);
-      
+
       if (ergebnis == 0) {
-            ergebnis = fileService.moveTex(rechnung, dateiname);
+         ergebnis = fileService.moveTex(rechnung, dateiname);
       }
-      
+
       if (ergebnis == 0) {
          persister.insertOrUpdateRechnung(rechnung);
       }
-      
+
       return ergebnis;
    }
-   
+
    private void jTextRechnungsnummerActionPerformed(ActionEvent evt) {
       this.rechnung.setRechnungnr(jTextRechnungsnummer.getText());
    }
@@ -1238,8 +991,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
 
    private void jToggleButtonZusammenfassungenActionPerformed(ActionEvent evt) {
       // Zusammenfassungen geändert!
-      this.zusammenfassungen_erlauben = jToggleButtonZusammenfassungen
-            .isSelected();
+      this.zusammenfassungen_erlauben = jToggleButtonZusammenfassungen.isSelected();
       if (this.zusammenfassungen_erlauben) {
          this.jLabel7.setText("erlauben!");
       } else {

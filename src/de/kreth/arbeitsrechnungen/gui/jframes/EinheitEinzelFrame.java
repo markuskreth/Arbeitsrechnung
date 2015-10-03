@@ -38,7 +38,7 @@ public class EinheitEinzelFrame extends JFrame {
 
    private static final long serialVersionUID = 3963303174102985288L;
    Logger logger = Logger.getLogger(getClass());
-         
+
    private Options optionen;
 
    private int klient;
@@ -54,9 +54,8 @@ public class EinheitEinzelFrame extends JFrame {
    /**
     * Sollte nicht benutzt werden!
     * Oder nur in Kombination mit setKlient()
-    * 
-    * Creates new form Einheit_einzel 
-    * */
+    * Creates new form Einheit_einzel
+    */
    public EinheitEinzelFrame() {
       this(1, 2);
    }
@@ -64,16 +63,15 @@ public class EinheitEinzelFrame extends JFrame {
    /**
     * Neuen Datensatz anlegen
     * Creates new form Einheit_einzel
-    * */
+    */
    public EinheitEinzelFrame(int klient) {
       this(klient, -1);
    }
 
    /**
     * Bestehenden Datensatz edieren
-    *  
-    * Creates new form Einheit_einzel 
-    * */
+    * Creates new form Einheit_einzel
+    */
    public EinheitEinzelFrame(int klient, int einheit) {
 
       optionen = new Einstellungen().getEinstellungen();
@@ -119,7 +117,7 @@ public class EinheitEinzelFrame extends JFrame {
    }
 
    private void setAuftraggeber() {
-      
+
       // Id und Name des übergebenen auftraggebers einfügen
       String sqltext = "SELECT Auftraggeber, Zusatz1, Zusatz2, Zusatz1_Name, Zusatz2_Name  FROM klienten WHERE klienten_id=" + this.klient + ";";
       logger.info("Einheit_einzel.setAuftraggeber: " + sqltext);
@@ -145,18 +143,17 @@ public class EinheitEinzelFrame extends JFrame {
          Einheit e = klientPersister.getEinheitById(this.einheit);
 
          if (e.getKlientenId() != this.klient) {
-            String msg = "Achtung!!!\n" + "Klienten_id des Konstruktors stimmt nicht mit der des übegebenen" + " Datensatzes überein!"
-                  + "\nDatensatz-Klient: " + e.getKlientenId() + "\nKonstruktor-Klient: " + klient;
+            String msg = "Achtung!!!\n" + "Klienten_id des Konstruktors stimmt nicht mit der des übegebenen" + " Datensatzes überein!" + "\nDatensatz-Klient: " + e.getKlientenId()
+                  + "\nKonstruktor-Klient: " + klient;
             JOptionPane.showMessageDialog(this, msg);
          }
          // Set Angebot-Combobox
          this.jComboBoxAngebot.setSelectedIndex(this.angeboteliste.indexOf(Integer.valueOf(e.getAngebotId())));
-         
+
          // Set Uhrzeit Beginn
          String stzeit = DateFormat.getTimeInstance().format(e.getBeginn());
          stzeit = stzeit.substring(0, stzeit.length() - 2);
          this.jFormattedTextFieldStart.setText(stzeit);
-
 
          // Set Uhrzeit Ende
          stzeit = DateFormat.getTimeInstance().format(e.getEnde());
@@ -203,7 +200,7 @@ public class EinheitEinzelFrame extends JFrame {
       long dauer = 0;
 
       final Calendar einheitDate = this.jDateChooserDatum.getCalendar();
-      
+
       MySqlDate tmpdate = new MySqlDate(einheitDate);
       String datum = tmpdate.getSqlDate();
 
@@ -214,7 +211,7 @@ public class EinheitEinzelFrame extends JFrame {
 
       String sqlBeginn;
       String sqlEnde;
-      
+
       if (this.jDateChooserEingereicht.getDate() != null) {
          logger.debug("Eingereicht: " + DateFormat.getDateInstance().format(this.jDateChooserEingereicht.getDate()));
          tmpdate = new MySqlDate(this.jDateChooserEingereicht.getDate());
@@ -238,7 +235,7 @@ public class EinheitEinzelFrame extends JFrame {
          daten.first();
          preis = Math.round((daten.getDouble("Preis") + Double.parseDouble(this.jTextFieldPreisAenderung.getText())) * 100);
          preis = preis / 100;
-         
+
          if (daten.getBoolean("preis_pro_stunde")) {
             GregorianCalendar startcal = new GregorianCalendar();
             startcal.setTime(einheitDate.getTime());
@@ -258,13 +255,13 @@ public class EinheitEinzelFrame extends JFrame {
 
             sqlBeginn = new MySqlDate(startcal).getSqlDate();
             sqlEnde = new MySqlDate(endecal).getSqlDate();
-            
+
             dauer = Math.round(((double) endecal.getTime().getTime() - startcal.getTime().getTime()) / (60. * 1000.));
-            
+
             preis = Math.round(((double) dauer / 60 * preis) * 100);
             preis = preis / 100;
-            logger.debug("Dauer: " + dauer + " Minuten\n"+"Dauer: " + (double) dauer / 60 + " Stunden\n Preis: " + preis);
-       
+            logger.debug("Dauer: " + dauer + " Minuten\n" + "Dauer: " + (double) dauer / 60 + " Stunden\n Preis: " + preis);
+
             if (this.einheit == -1) {
                if ((isEingereicht != 0) && (isBezahlt != 0)) {
                   sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer,"
@@ -290,10 +287,7 @@ public class EinheitEinzelFrame extends JFrame {
                         + eingereichtDatum
                         + "\",\""
                         + isBezahlt
-                        + "\",\""
-                        + bezahltDatum
-                        + "\",\""
-                        + this.jTextFieldPreisAenderung.getText() + "\");";
+                        + "\",\"" + bezahltDatum + "\",\"" + this.jTextFieldPreisAenderung.getText() + "\");";
                } else if (isEingereicht != 0) {
                   sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer,"
                         + "Rechnung_verschickt,Rechnung_Datum,Preisänderung) VALUES " + "("
@@ -310,16 +304,25 @@ public class EinheitEinzelFrame extends JFrame {
                         + this.jTextFieldZusatz1.getText().trim()
                         + "\",\""
                         + this.jTextFieldZusatz2.getText().trim()
-                        + "\",\"" + preis + "\",\"" + dauer + "\",\"" + isEingereicht + "\",\"" + eingereichtDatum + "\",\"" + this.jTextFieldPreisAenderung.getText().trim() + "\");";
+                        + "\",\""
+                        + preis
+                        + "\",\""
+                        + dauer
+                        + "\",\""
+                        + isEingereicht
+                        + "\",\""
+                        + eingereichtDatum
+                        + "\",\""
+                        + this.jTextFieldPreisAenderung.getText().trim() + "\");";
                } else {
-                  sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer," + "Preisänderung) VALUES " + "(" + this.klient + ","
-                        + angebot_id + ",\"" + datum + "\",\"" + sqlBeginn + "\",\"" + sqlEnde + "\",\"" + this.jTextFieldZusatz1.getText().trim() + "\",\"" + this.jTextFieldZusatz2.getText().trim()
-                        + "\",\"" + preis + "\",\"" + dauer + "\",\"" + this.jTextFieldPreisAenderung.getText() + "\");";
+                  sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer," + "Preisänderung) VALUES " + "(" + this.klient
+                        + "," + angebot_id + ",\"" + datum + "\",\"" + sqlBeginn + "\",\"" + sqlEnde + "\",\"" + this.jTextFieldZusatz1.getText().trim() + "\",\""
+                        + this.jTextFieldZusatz2.getText().trim() + "\",\"" + preis + "\",\"" + dauer + "\",\"" + this.jTextFieldPreisAenderung.getText() + "\");";
                }
             } else {
-               sqltext = "UPDATE einheiten set " + "angebote_id=" + this.angeboteliste.elementAt(this.jComboBoxAngebot.getSelectedIndex()) + ",Datum=\"" + datum + "\"" + ",Beginn=\""
-                     + sqlBeginn + "\",Ende=\"" + sqlEnde + "\",zusatz1=\""
-                     + this.jTextFieldZusatz1.getText().trim() + "\"" + ",zusatz2=\"" + this.jTextFieldZusatz2.getText().trim() + "\"" + ",Preis=" + preis + ",Dauer=" + dauer;
+               sqltext = "UPDATE einheiten set " + "angebote_id=" + this.angeboteliste.elementAt(this.jComboBoxAngebot.getSelectedIndex()) + ",Datum=\"" + datum + "\""
+                     + ",Beginn=\"" + sqlBeginn + "\",Ende=\"" + sqlEnde + "\",zusatz1=\"" + this.jTextFieldZusatz1.getText().trim() + "\"" + ",zusatz2=\""
+                     + this.jTextFieldZusatz2.getText().trim() + "\"" + ",Preis=" + preis + ",Dauer=" + dauer;
                if (isEingereicht != 0) {
                   sqltext = sqltext + ",Rechnung_verschickt=\"" + isEingereicht + "\"" + ",Rechnung_Datum=\"" + eingereichtDatum + "\"";
                } else {
@@ -331,11 +334,11 @@ public class EinheitEinzelFrame extends JFrame {
                   sqltext = sqltext + ",Bezahlt=NULL" + ",Bezahlt_Datum=NULL";
                }
                sqltext = sqltext + " ,Preisänderung=" + this.jTextFieldPreisAenderung.getText() + " WHERE einheiten_id=" + this.einheit + ";";
-               
+
             }
 
             logger.info("Einheit_einzel.jButton2ActionPerformed: \n" + sqltext);
-            
+
             verbindung.sql(sqltext);
          }
       } catch (Exception e) {
@@ -372,7 +375,7 @@ public class EinheitEinzelFrame extends JFrame {
       now.set(Calendar.SECOND, 0);
       now.set(Calendar.MILLISECOND, 0);
       jDateChooserDatum.setCalendar(now);
-      
+
       jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
       jTextFieldZusatz2 = new javax.swing.JTextField();

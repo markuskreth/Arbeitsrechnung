@@ -371,7 +371,8 @@ public class Rechnung {
       private boolean stunden = false;
       private Vector<Arbeitsstunde> einheiten = new Vector<>();
 
-      private Set<String> mustBeSet = new HashSet<>(Arrays.asList("klienten_id", "datum", "einheiten", "rechnungnr", "texdatei", "zahldatum", "adresse", "zusatz1", "zusatz2", BETRAG));
+      private Set<String> mustBeSet = new HashSet<>(Arrays.asList("klienten_id", "datum", "einheiten", "rechnungnr", "texdatei", "zahldatum", "adresse", "zusatz1", "zusatz2",
+            BETRAG));
 
       public Builder() {
          datum = new GregorianCalendar();
@@ -396,7 +397,7 @@ public class Rechnung {
       public Builder rechnungen_id(int rechnungen_id) {
          this.rechnungen_id = rechnungen_id;
          mustBeSet.remove("rechnungen_id");
-         if(rechnungen_id != -1)
+         if (rechnungen_id != -1)
             isNew = false;
          return this;
       }
@@ -493,7 +494,7 @@ public class Rechnung {
 
       @Override
       public Rechnung build() {
-         if(mustBeSet.contains(BETRAG)){
+         if (mustBeSet.contains(BETRAG)) {
 
             this.betrag(getSummeFromEinheiten(einheiten));
          }
@@ -518,10 +519,10 @@ public class Rechnung {
       for (Arbeitsstunde einheit : einheiten) {
          summe = summe.add(einheit.getPreis());
       }
-      
+
       return summe;
    }
-   
+
    public boolean isNew() {
       return isNew;
    }

@@ -523,7 +523,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    }
 
    private void openKlientenEditor(int KlientenID, StartTable Tabelle) {
-      
+
       KlientenEditor klienteneditor = new KlientenEditor(this);
       klienteneditor.arbeitsstundenTabelle1.addPropertyChangeListener("ArbeitsstundenTabelle.Tabellendaten", this);
 

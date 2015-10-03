@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 
-
 public class RechnungSystemExecutionService {
 
    private Options options;
@@ -25,7 +24,7 @@ public class RechnungSystemExecutionService {
       int ergebnis = -1;
 
       String new_pdf = dateiname + ".pdf";
-      
+
       final String pdfDateiName = "'" + options.getTargetDir() + File.separator + new_pdf + "'";
       String befehl = "mv '" + rechnung.getPdfdatei() + "' " + pdfDateiName;
       logger.debug("RechnungenData:speichern: " + befehl);
@@ -34,8 +33,7 @@ public class RechnungSystemExecutionService {
          // proc = Runtime.getRuntime().exec(befehl);
          Process proc = new ProcessBuilder("sh", "-c", befehl).start();
          try {
-            BufferedReader procout = new BufferedReader(
-                  new InputStreamReader(proc.getErrorStream()));
+            BufferedReader procout = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
             String line;
             while ((line = procout.readLine()) != null) {
                logger.debug("  ERROR> " + line);
@@ -50,7 +48,7 @@ public class RechnungSystemExecutionService {
       } catch (java.io.IOException exp) {
          exp.printStackTrace();
       }
-      if(ergebnis == 0) {
+      if (ergebnis == 0) {
          rechnung.setPdfdatei(pdfDateiName);
       }
       return ergebnis;
@@ -62,7 +60,7 @@ public class RechnungSystemExecutionService {
       // Texdatei auch kopieren, wenn pdf erfolgreich kopiert wurde.
       final String texDateiName = "'" + options.getTargetDir() + File.separator + dateiname + ".tex'";
       String befehl = "mv '" + rechnung.getTexdatei() + "' " + texDateiName;
-      
+
       logger.debug("RechnungenData:speichern: " + befehl);
 
       try {
@@ -72,7 +70,7 @@ public class RechnungSystemExecutionService {
             proc.waitFor();
             logger.debug("mv tex Exit-Value(589): " + proc.exitValue());
             ergebnis = proc.exitValue();
-            if(ergebnis == 0 )
+            if (ergebnis == 0)
                rechnung.setTexdatei(texDateiName);
          } catch (InterruptedException e2) {
             logger.debug("waitfor pdflatex");
@@ -80,7 +78,7 @@ public class RechnungSystemExecutionService {
       } catch (java.io.IOException exp) {
          logger.warn("Fehler in ProcessBuilder", exp);
       }
-   
+
       return ergebnis;
    }
 
@@ -94,7 +92,7 @@ public class RechnungSystemExecutionService {
       } catch (java.io.IOException e) {
          logger.error("FormRechnungen: PDFansehen: ", e);
       }
-      
+
    }
 
 }

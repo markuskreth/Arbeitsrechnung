@@ -35,17 +35,17 @@ public class FormRechnungen extends JPanel {
 
    /** PropertyChangeEvent: eine Rechnung wurde geändert. */
    public static final String GEAENDERT = "FromRechnungen_geändert";
-   
+
    /** PropertyChangeEvent: eine Rechnung wurde gelöscht. */
    public static final String GELOESCHT = "FromRechnungen_gelöscht";
-   
+
    private static final long serialVersionUID = 5348708429129926664L;
-   
+
    private Logger logger = Logger.getLogger(getClass());
-   
+
    private Verbindung verbindung;
    private Options optionen;
-   
+
    private PropertyChangeSupport pchListeners = new PropertyChangeSupport(this);
 
    private int klienten_id;
@@ -71,45 +71,36 @@ public class FormRechnungen extends JPanel {
    private void update() {
       this.rechnungen.removeAllElements();
 
-      String sql = "SELECT rechnungen_id, klienten_id, datum, rechnungnr, betrag, texdatei, pdfdatei," 
-            + "adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, geldeingang"
+      String sql = "SELECT rechnungen_id, klienten_id, datum, rechnungnr, betrag, texdatei, pdfdatei," + "adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, geldeingang"
             + " FROM rechnungen WHERE klienten_id=" + this.klienten_id;
 
       logger.debug("FormRechnungen: update: " + sql);
 
       try {
          ResultSet res_rechnungen = verbindung.query(sql);
-         
+
          while (res_rechnungen.next()) {
 
             Calendar rechnungsDatum = null;
-            
+
             if (res_rechnungen.getDate("datum") != null) {
                rechnungsDatum = new GregorianCalendar();
                rechnungsDatum.setTimeInMillis(res_rechnungen.getDate("datum").getTime());
             }
 
             Calendar zahlDatum = null;
-            
-            if(res_rechnungen.getDate("zahldatum") != null) {
+
+            if (res_rechnungen.getDate("zahldatum") != null) {
                zahlDatum = new GregorianCalendar();
                zahlDatum.setTimeInMillis(res_rechnungen.getDate("zahldatum").getTime());
-  
+
             }
             final int rechnungenId = res_rechnungen.getInt("rechnungen_id");
-            Builder builder = new Rechnung.Builder()
-                  .rechnungen_id(rechnungenId)
-                  .klienten_id(res_rechnungen.getInt("klienten_id"))
-                  .datum(rechnungsDatum)
-                  .rechnungnr(res_rechnungen.getString("rechnungnr"))
-                  .betrag(res_rechnungen.getDouble("betrag"))
-                  .texdatei(res_rechnungen.getString("texdatei"))
-                  .pdfDatei(res_rechnungen.getString("pdfdatei"))
-                  .adresse(res_rechnungen.getString("adresse"))
-                  .zusatz1(res_rechnungen.getBoolean("zusatz1"))
-                  .zusatz2(res_rechnungen.getBoolean("zusatz2"))
-                  .zusammenfassungenErlauben(res_rechnungen.getBoolean("zusammenfassungen"))
-                  
+            Builder builder = new Rechnung.Builder().rechnungen_id(rechnungenId).klienten_id(res_rechnungen.getInt("klienten_id")).datum(rechnungsDatum)
+                  .rechnungnr(res_rechnungen.getString("rechnungnr")).betrag(res_rechnungen.getDouble("betrag")).texdatei(res_rechnungen.getString("texdatei"))
+                  .pdfDatei(res_rechnungen.getString("pdfdatei")).adresse(res_rechnungen.getString("adresse")).zusatz1(res_rechnungen.getBoolean("zusatz1"))
+                  .zusatz2(res_rechnungen.getBoolean("zusatz2")).zusammenfassungenErlauben(res_rechnungen.getBoolean("zusammenfassungen"))
+
                   .zahldatum(zahlDatum);
 
             if (res_rechnungen.getDate("geldeingang") != null) {
@@ -123,9 +114,9 @@ public class FormRechnungen extends JPanel {
             builder.einheiten(einheiten);
             this.rechnungen.add(builder.build());
          }
-         
+
          makeTable();
-         
+
       } catch (SQLException e) {
          logger.error(e.getSQLState(), e);
       }
@@ -139,7 +130,7 @@ public class FormRechnungen extends JPanel {
       logger.debug("FormRechnungen: update: " + sql);
 
       Vector<Arbeitsstunde> result = new Vector<>();
-      
+
       try {
          ResultSet rs = verbindung.query(sql);
 
@@ -147,26 +138,19 @@ public class FormRechnungen extends JPanel {
             final int einheiten_id = rs.getInt("einheiten_id");
             final int klienten_id2 = rs.getInt("klienten_id");
             final int angebote_id = rs.getInt("angebote_id");
-            ArbeitsstundeImpl.Builder std = new ArbeitsstundeImpl.Builder(einheiten_id, klienten_id2, angebote_id)
-                           .beginn(rs.getDate("Beginn"))
-                           .datum(rs.getDate("Datum"))
-                           .bezahlt(rs.getDate("Bezahlt_Datum"))
-                           .dauerInMinuten(rs.getInt("Dauer"))
-                           .ende(rs.getDate("Ende"))
-                           .preis(rs.getDouble("Preis"))
-                           .preisaenderung(rs.getDouble("Preisänderung"))
-                           .zusatz1(rs.getString("zusatz1"))
-                           .zusatz2(rs.getString("zusatz2"));
-            
-            if(rs.getBoolean("Bezahlt"))
+            ArbeitsstundeImpl.Builder std = new ArbeitsstundeImpl.Builder(einheiten_id, klienten_id2, angebote_id).beginn(rs.getDate("Beginn")).datum(rs.getDate("Datum"))
+                  .bezahlt(rs.getDate("Bezahlt_Datum")).dauerInMinuten(rs.getInt("Dauer")).ende(rs.getDate("Ende")).preis(rs.getDouble("Preis"))
+                  .preisaenderung(rs.getDouble("Preisänderung")).zusatz1(rs.getString("zusatz1")).zusatz2(rs.getString("zusatz2"));
+
+            if (rs.getBoolean("Bezahlt"))
                std.bezahlt(rs.getDate("Bezahlt_Datum"));
-            
+
             result.add(std.build());
          }
       } catch (SQLException e) {
          logger.error(e.getSQLState(), e);
       }
-         
+
       return result;
    }
 
@@ -324,7 +308,7 @@ public class FormRechnungen extends JPanel {
       if (this.jTable1.getSelectedRow() >= 0) {
          RechnungSystemExecutionService fileService = new RechnungSystemExecutionService(optionen);
          final Rechnung rechnungToShow = this.rechnungen.elementAt(jTable1.getSelectedRow());
-         fileService.showRechnung(rechnungToShow);         
+         fileService.showRechnung(rechnungToShow);
       } else {
          JOptionPane.showMessageDialog(null, "Zum Anzeigen bitte eine Rechnung auswählen.");
       }

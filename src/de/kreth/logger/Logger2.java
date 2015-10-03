@@ -2,11 +2,10 @@ package de.kreth.logger;
 
 import org.apache.log4j.Logger;
 
-
 public class Logger2 {
 
    Logger log;
-   
+
    public Logger2(Class<?> clazz) {
       log = Logger.getLogger(clazz);
    }
@@ -62,5 +61,5 @@ public class Logger2 {
    public void warn(Object message, Throwable t) {
       log.warn(message, t);
    }
-   
+
 }

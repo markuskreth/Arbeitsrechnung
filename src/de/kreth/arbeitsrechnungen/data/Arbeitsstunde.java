@@ -75,7 +75,8 @@ public interface Arbeitsstunde extends Serializable {
 
    /**
     * Dauer der Trainingsstunde in Minuten
-    * @return  minuten
+    * 
+    * @return minuten
     */
    public int getDauerInMinutes();
 

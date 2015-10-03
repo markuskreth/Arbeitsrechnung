@@ -15,19 +15,18 @@ import org.apache.log4j.Logger;
 
 import java.awt.GridLayout;
 
-
 public class OptionsDialog extends JDialog {
 
    private static final long serialVersionUID = -527076543127705929L;
 
    private static final String programmverzeichnis = ".arbeitrechnungen";
-   
+
    private Logger logger = Logger.getLogger(getClass());
 
    private Properties einstellungen = new Properties();
 
-//   private final String programmverzeichnis = ".arbeitrechnungen";
-   
+   // private final String programmverzeichnis = ".arbeitrechnungen";
+
    private File optiondatei;
 
    private final JPanel contentPanel = new JPanel();
@@ -63,7 +62,7 @@ public class OptionsDialog extends JDialog {
       setBounds(100, 100, 450, 300);
       getContentPane().setLayout(new BorderLayout());
       contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-      
+
       getContentPane().add(contentPanel, BorderLayout.CENTER);
       contentPanel.setLayout(new BorderLayout(0, 0));
       {
@@ -173,7 +172,7 @@ public class OptionsDialog extends JDialog {
             tabbedPane.addTab("EinheitenArten", null, panel, null);
          }
       }
-      
+
       {
          JPanel buttonPane = new JPanel();
          buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -193,7 +192,6 @@ public class OptionsDialog extends JDialog {
       loadoptions();
    }
 
-
    private void loadoptions() {
 
       Properties sysprops = System.getProperties();
@@ -204,7 +202,7 @@ public class OptionsDialog extends JDialog {
       } catch (Exception e) {
          logger.error("Optionen.java: Options-Datei konnte nicht geladen werden.", e);
       }
-      
+
       logger.debug("Optionen werden geladen...");
       Enumeration<?> propnames = einstellungen.propertyNames();
 
@@ -216,16 +214,17 @@ public class OptionsDialog extends JDialog {
    }
 
    private void setTexts(JComponent component, String propname) {
-      
+
       for (int i = 0; i < component.getComponentCount(); i++) {
-         
+
          Component comp = component.getComponent(i);
-         
+
          if (comp instanceof JPanel || comp instanceof JTabbedPane) {
-//            logger.debug(propname + ": " + comp.getClass() + "(" + comp.getName() + ") " + "--> setTexts");
+            // logger.debug(propname + ": " + comp.getClass() + "(" +
+            // comp.getName() + ") " + "--> setTexts");
             setTexts((JComponent) comp, propname);
          }
-         
+
          if (comp instanceof JTextField) {
             logger.debug(((JTextField) comp).getName());
             if (((JTextField) comp).getName() != null && ((JTextField) comp).getName().matches(propname)) {
@@ -238,7 +237,7 @@ public class OptionsDialog extends JDialog {
 
    @Override
    public void dispose() {
-      
+
       super.dispose();
    }
 }
