@@ -37,6 +37,8 @@ public class OptionenDialog extends JDialog {
    private File optiondatei;
    private boolean firststart;
 
+   private JLabel jLabelLogLevel;
+
    /**
     * Launch the Dialog.
     */
@@ -183,6 +185,8 @@ public class OptionenDialog extends JDialog {
       jButton1 = new JButton();
       jButton2 = new JButton();
 
+      jLabelLogLevel = new JLabel();
+
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
       ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
@@ -218,6 +222,9 @@ public class OptionenDialog extends JDialog {
       jPasswordFieldPassword.setText(resourceMap.getString("password.text")); // NOI18N
       jPasswordFieldPassword.setName("password"); // NOI18N
 
+      jLabelLogLevel.setText(resourceMap.getString("jLabelLogLevel.text"));
+      jLabelLogLevel.setName("jLabelLogLevel");
+      
       GroupLayout jPanelDatenbankLayout = new GroupLayout(jPanelDatenbank);
       jPanelDatenbank.setLayout(jPanelDatenbankLayout);
       jPanelDatenbankLayout.setHorizontalGroup(jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(

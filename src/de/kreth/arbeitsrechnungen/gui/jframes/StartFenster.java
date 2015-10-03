@@ -51,8 +51,6 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    /** Creates new form StartFenster */
    public StartFenster() {
       logger = Logger.getLogger(getClass());
-      logger.setLevel(Level.DEBUG);
-      logger.info("current Loglevel: " + logger.getLevel());
 
       loadOrCreateOptions();
 

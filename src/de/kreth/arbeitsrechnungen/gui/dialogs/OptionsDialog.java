@@ -1,8 +1,6 @@
 package de.kreth.arbeitsrechnungen.gui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Enumeration;
