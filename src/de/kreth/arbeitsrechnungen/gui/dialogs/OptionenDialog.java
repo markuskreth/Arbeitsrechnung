@@ -16,12 +16,16 @@ package de.kreth.arbeitsrechnungen.gui.dialogs;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class OptionenDialog extends JDialog {
@@ -38,6 +42,10 @@ public class OptionenDialog extends JDialog {
    private boolean firststart;
 
    private JLabel jLabelLogLevel;
+
+   private JPanel jPanelSettings;
+
+   private JTextField jTextFieldLogLevel;
 
    /**
     * Launch the Dialog.
@@ -110,6 +118,12 @@ public class OptionenDialog extends JDialog {
             }
          }
       }
+      
+      Level level = logger.getLevel();
+      if(level == null)
+         level = logger.getEffectiveLevel();
+      
+      jTextFieldLogLevel.setText(level.toString());
    }
 
    private void fillComponentMap(Map<String, JTextField> components, Container contentPane) {
@@ -185,8 +199,25 @@ public class OptionenDialog extends JDialog {
       jButton1 = new JButton();
       jButton2 = new JButton();
 
+      jPanelSettings = new JPanel();
       jLabelLogLevel = new JLabel();
+      jTextFieldLogLevel = new JTextField();
+      jTextFieldLogLevel.setEditable(false);
+      jTextFieldLogLevel.addMouseListener(new MouseAdapter() {
+         
+         @Override
+         public void mouseClicked(MouseEvent e) {
 
+            logger.info("Neue Logger haben Level: " + Logger.getLogger("TestLoger").getEffectiveLevel());
+            Level[] alle = {Level.ALL, Level.DEBUG, Level.INFO, Level.WARN, Level.ERROR, Level.FATAL, Level.OFF};
+            Level selected = (Level) JOptionPane.showInputDialog(null, "Level zur Auswahl:", "Setzen des Loglevels", JOptionPane.QUESTION_MESSAGE, null, alle, logger.getEffectiveLevel());
+            Logger.getRootLogger().setLevel(selected);
+            logger.setLevel(selected);
+            jTextFieldLogLevel.setText(selected.toString());
+            logger.info("Neue Logger haben nun Level: " + Logger.getLogger("TestLoger").getEffectiveLevel());
+         }
+      });
+      
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
       ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
@@ -462,6 +493,12 @@ public class OptionenDialog extends JDialog {
                   .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jButton1).addComponent(jButton2)).addContainerGap()));
 
       pack();
+      
+      jPanelSettings.setLayout(new GridLayout(1,2,15,15));
+      jPanelSettings.add(jLabelLogLevel);
+      jPanelSettings.add(jTextFieldLogLevel);
+      
+      jTabbedPane1.addTab(resourceMap.getString("jPanelSettings.TabConstraints.tabTitle"), jPanelSettings);
    }
 
    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
