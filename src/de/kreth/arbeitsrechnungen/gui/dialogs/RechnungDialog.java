@@ -1047,12 +1047,12 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       return new ImageIcon("icons/" + fileName);
    }
 
-   private void jToggleButtonDetailsActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jToggleButtonDetailsActionPerformed
+   private void jToggleButtonDetailsActionPerformed(ActionEvent evt) {
       toggleDetails();
-   }// GEN-LAST:event_jToggleButtonDetailsActionPerformed
+   }
 
    private void jDateRechnungsdatumPropertyChange(
-         java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_jDateRechnungsdatumPropertyChange
+         java.beans.PropertyChangeEvent evt) {
       if (evt.getPropertyName().matches("date")) {
          Calendar datum;
          datum = new GregorianCalendar();
@@ -1076,9 +1076,9 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
             this.rechnung.setZahldatum(datum);
          }
       }
-   }// GEN-LAST:event_jDateRechnungsdatumPropertyChange
+   }
 
-   private void jTextRechnungsnummerMouseClicked(MouseEvent evt) {// GEN-FIRST:event_jTextRechnungsnummerMouseClicked
+   private void jTextRechnungsnummerMouseClicked(MouseEvent evt) {
 
       if (evt.getClickCount() > 1) {
          jTextRechnungsnummer.setEnabled(true);
@@ -1086,25 +1086,25 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
          jTextRechnungsnummer.setCaretPosition(jTextRechnungsnummer.getText()
                .length());
       }
-   }// GEN-LAST:event_jTextRechnungsnummerMouseClicked
+   }
 
    /**
     * Abbrechen gedrückt - Fenster wird ohne Aktion geschlossen.
     * 
     * @param evt
     */
-   private void jButton1ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+   private void jButton1ActionPerformed(ActionEvent evt) {
       this.setVisible(false);
       this.dispose();
-   }// GEN-LAST:event_jButton1ActionPerformed
+   }
 
-   private void jCheckBoxZusatz1ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jCheckBoxZusatz1ActionPerformed
+   private void jCheckBoxZusatz1ActionPerformed(ActionEvent evt) {
       makeTable();
-   }// GEN-LAST:event_jCheckBoxZusatz1ActionPerformed
+   }
 
-   private void jCheckBoxZusatz2ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jCheckBoxZusatz2ActionPerformed
+   private void jCheckBoxZusatz2ActionPerformed(ActionEvent evt) {
       makeTable();
-   }// GEN-LAST:event_jCheckBoxZusatz2ActionPerformed
+   }
 
    /**
     * OK-Button gedrückt - Rechnung wird erstellt
@@ -1221,22 +1221,22 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       return ergebnis;
    }
    
-   private void jTextRechnungsnummerActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jTextRechnungsnummerActionPerformed
+   private void jTextRechnungsnummerActionPerformed(ActionEvent evt) {
       this.rechnung.setRechnungnr(jTextRechnungsnummer.getText());
-   }// GEN-LAST:event_jTextRechnungsnummerActionPerformed
+   }
 
-   private void jTextRechnungsnummerFocusLost(FocusEvent evt) {// GEN-FIRST:event_jTextRechnungsnummerFocusLost
+   private void jTextRechnungsnummerFocusLost(FocusEvent evt) {
       this.prevComponent.requestFocusInWindow();
       this.rechnung.setRechnungnr(jTextRechnungsnummer.getText());
       jTextRechnungsnummer.setEnabled(false);
       prevComponent = null;
-   }// GEN-LAST:event_jTextRechnungsnummerFocusLost
+   }
 
-   private void jTextRechnungsnummerFocusGained(FocusEvent evt) {// GEN-FIRST:event_jTextRechnungsnummerFocusGained
+   private void jTextRechnungsnummerFocusGained(FocusEvent evt) {
       this.prevComponent = evt.getOppositeComponent();
-   }// GEN-LAST:event_jTextRechnungsnummerFocusGained
+   }
 
-   private void jToggleButtonZusammenfassungenActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jToggleButtonZusammenfassungenActionPerformed
+   private void jToggleButtonZusammenfassungenActionPerformed(ActionEvent evt) {
       // Zusammenfassungen geändert!
       this.zusammenfassungen_erlauben = jToggleButtonZusammenfassungen
             .isSelected();
@@ -1245,7 +1245,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener,
       } else {
          this.jLabel7.setText("nicht erlauben!");
       }
-   }// GEN-LAST:event_jToggleButtonZusammenfassungenActionPerformed
+   }
 
    private void jCheckBoxStundenzahlActionPerformed(ActionEvent evt) {
       this.stunden_vorhanden = this.jCheckBoxStundenzahl.isSelected();

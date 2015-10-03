@@ -934,16 +934,16 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    }
 
    private void jButtonNeuerDatensatzActionPerformed(
-         ActionEvent evt) {// GEN-FIRST:event_jButtonNeuerDatensatzActionPerformed
+         ActionEvent evt) {
       EinheitEinzelFrame fenster = new EinheitEinzelFrame(this.klient);
       fenster.addWindowListener(this);
       fenster.setVisible(true);
-   }// GEN-LAST:event_jButtonNeuerDatensatzActionPerformed
+   }
 
-   private void jButtonBearbeitenActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonBearbeitenActionPerformed
+   private void jButtonBearbeitenActionPerformed(ActionEvent evt) {
       // Datensatz bearbeiten
       editEinheit();
-   }// GEN-LAST:event_jButtonBearbeitenActionPerformed
+   }
 
    private void editEinheit() {
       int einheit_id = this.jTable1.getSelectedRow();
@@ -959,7 +959,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       }
    }
 
-   private void jButtonDeleteActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonDeleteActionPerformed
+   private void jButtonDeleteActionPerformed(ActionEvent evt) {
       // Datensatz löschen
 
       int einheit_id[] = this.jTable1.getSelectedRows();
@@ -1040,7 +1040,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
                   true, false);
          }
       }
-   }// GEN-LAST:event_jButtonDeleteActionPerformed
+   }
 
    // private String rechnungStart(){
    // String inputfile =
@@ -1294,16 +1294,18 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                if (evt.getPropertyName().matches(RechnungDialog.ERSTELLT)) {
-                  
+                  System.out.println("Rechnung fertig: " + evt);
                }
             }
          });
+         
          dialog.setVisible(true);
       }
+      
       this.updateTable();
    }
 
-   private void jTable1MouseClicked(MouseEvent evt) {// GEN-FIRST:event_jTable1MouseClicked
+   private void jTable1MouseClicked(MouseEvent evt) {
       
       if (this.jTable1.getSelectedRowCount() == 0)
          jTable1SetSelection(evt);
@@ -1315,7 +1317,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          this.jPopupMenu1.show(jTable1, evt.getX(), evt.getY());
          
       }
-   }// GEN-LAST:event_jTable1MouseClicked
+   }
 
    /**
     * In der Tabelle wird die Zeile auf die geklickt wurde ausgwählt.
@@ -1328,33 +1330,33 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       this.jTable1.getSelectionModel().setSelectionInterval(zeile, zeile);
    }
 
-   private void jRadioButtonAlleItemStateChanged(ItemEvent evt) {// GEN-FIRST:event_jRadioButtonAlleItemStateChanged
+   private void jRadioButtonAlleItemStateChanged(ItemEvent evt) {
       setFilter();
       update(this.klient);
-   }// GEN-LAST:event_jRadioButtonAlleItemStateChanged
+   }
 
    private void jRadioButtonNichtEingereichteItemStateChanged(
-         ItemEvent evt) {// GEN-FIRST:event_jRadioButtonNichtEingereichteItemStateChanged
+         ItemEvent evt) {
       setFilter();
       update(this.klient);
-   }// GEN-LAST:event_jRadioButtonNichtEingereichteItemStateChanged
+   }
 
    private void jRadioButtonNichtBezahlteItemStateChanged(
-         ItemEvent evt) {// GEN-FIRST:event_jRadioButtonNichtBezahlteItemStateChanged
+         ItemEvent evt) {
       setFilter();
       update(this.klient);
-   }// GEN-LAST:event_jRadioButtonNichtBezahlteItemStateChanged
+   }
 
    private void jRadioButtonAbgeschlosseneItemStateChanged(
-         ItemEvent evt) {// GEN-FIRST:event_jRadioButtonAbgeschlosseneItemStateChanged
+         ItemEvent evt) {
       setFilter();
       update(this.klient);
-   }// GEN-LAST:event_jRadioButtonAbgeschlosseneItemStateChanged
+   }
 
-   private void jRadioButtonOffeneItemStateChanged(ItemEvent evt) {// GEN-FIRST:event_jRadioButtonOffeneItemStateChanged
+   private void jRadioButtonOffeneItemStateChanged(ItemEvent evt) {
       setFilter();
       update(this.klient);
-   }// GEN-LAST:event_jRadioButtonOffeneItemStateChanged
+   }
 
    private void setFilter() {
       if (buttonGroupFilter.getSelection() != null) {
@@ -1392,29 +1394,29 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       }
    }
 
-   private void jTable1MousePressed(MouseEvent evt) {// GEN-FIRST:event_jTable1MousePressed
+   private void jTable1MousePressed(MouseEvent evt) {
       if (this.jTable1.getSelectedRowCount() == 0)
          jTable1SetSelection(evt);
       if (evt.isPopupTrigger()) {
          this.jPopupMenu1.show(jTable1, evt.getX(), evt.getY());
       }
-   }// GEN-LAST:event_jTable1MousePressed
+   }
 
    private void jMenuItembearbeitenActionPerformed(
-         ActionEvent evt) {// GEN-FIRST:event_jMenuItembearbeitenActionPerformed
+         ActionEvent evt) {
       editEinheit();
       this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true,
             false);
-   }// GEN-LAST:event_jMenuItembearbeitenActionPerformed
+   }
 
    private void jMenuItemBezahltDatumActionPerformed(
-         ActionEvent evt) {// GEN-FIRST:event_jMenuItemBezahltDatumActionPerformed
+         ActionEvent evt) {
       // Setzt das Bezahlt_Datum
       setDatumOnField("Bezahlt_Datum", "Bezahlt");
       update(klient);
       this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true,
             false);
-   }// GEN-LAST:event_jMenuItemBezahltDatumActionPerformed
+   }
 
    private boolean setDatumOnField(String feld, String feld2) {
       // Sowohl das Datum-Feld (feld) als auch das Boolean-Feld (feld2) müssen
@@ -1474,25 +1476,25 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    }
 
    private void jDateChooserBisDatumPropertyChange(
-         java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_jDateChooserBisDatumPropertyChange
+         java.beans.PropertyChangeEvent evt) {
       // Läd Liste mit neuem Filter
       setFilter();
       update(this.klient);
-   }// GEN-LAST:event_jDateChooserBisDatumPropertyChange
+   }
 
    private void jMenuItemRechnungDatumActionPerformed(
-         ActionEvent evt) {// GEN-FIRST:event_jMenuItemRechnungDatumActionPerformed
+         ActionEvent evt) {
       // Setzt das Rechnung_Datum
       if (setDatumOnField("Rechnung_Datum", "Rechnung_verschickt")) {
          update(klient);
          this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true,
                false);
       }
-   }// GEN-LAST:event_jMenuItemRechnungDatumActionPerformed
+   }
 
-   private void jMenuItem1ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jMenuItem1ActionPerformed
+   private void jMenuItem1ActionPerformed(ActionEvent evt) {
       this.jTable1.clearSelection();
-   }// GEN-LAST:event_jMenuItem1ActionPerformed
+   }
 
    @Override
    public void windowActivated(WindowEvent evt) {

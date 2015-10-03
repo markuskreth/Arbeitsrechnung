@@ -518,9 +518,9 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       pack();
    }// </editor-fold>//GEN-END:initComponents
 
-   private void jButtonKlientenEditorActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonKlientenEditorActionPerformed
+   private void jButtonKlientenEditorActionPerformed(ActionEvent evt) {
       openKlientenEditor(-1, null);
-   }// GEN-LAST:event_jButtonKlientenEditorActionPerformed
+   }
 
    private void openKlientenEditor(int KlientenID, StartTable Tabelle) {
       
@@ -553,12 +553,12 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       }
    }
 
-   private void jButton1ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+   private void jButton1ActionPerformed(ActionEvent evt) {
       Arbeitsstunden arbeitsstunden = new Arbeitsstunden(optionen);
       arbeitsstunden.setVisible(true);
-   }// GEN-LAST:event_jButton1ActionPerformed
+   }
 
-   private void jTableForderungenMouseClicked(MouseEvent evt) {// GEN-FIRST:event_jTableForderungenMouseClicked
+   private void jTableForderungenMouseClicked(MouseEvent evt) {
       // System.out.println("Mouse geklickt! Anzahl: " + evt.getClickCount());
       if (this.jTableForderungen.getSelectedRowCount() == 0)
          jTableForderungenSetSelection(evt);
@@ -574,9 +574,9 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
        * if (evt.isPopupTrigger()) { this.jPopupMenu1.show(jTable1,
        * evt.getX(), evt.getY()); System.out.println("Rechtsklick!"); }
        */
-   }// GEN-LAST:event_jTableForderungenMouseClicked
+   }
 
-   private void jTableEinheitenMouseClicked(MouseEvent evt) {// GEN-FIRST:event_jTableEinheitenMouseClicked
+   private void jTableEinheitenMouseClicked(MouseEvent evt) {
       // System.out.println("Mouse geklickt! Anzahl: " + evt.getClickCount());
       if (this.jTableForderungen.getSelectedRowCount() == 0)
          jTableEinheitenSetSelection(evt);
@@ -587,7 +587,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
          openKlientenEditor(elementAt.intValue(), StartTable.EINHEITEN);
       }
 
-   }// GEN-LAST:event_jTableEinheitenMouseClicked
+   }
 
    private void jMenuItemOptionActionPerformed(ActionEvent evt) {
       // Öffne Options-Fenster
@@ -595,10 +595,10 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       optionwindow.setVisible(true);
    }
 
-   private void jSplitPane1PropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_jSplitPane1PropertyChange
+   private void jSplitPane1PropertyChange(java.beans.PropertyChangeEvent evt) {
 
       this.jLabel3.setText("Divider: " + this.jSplitPane1.getDividerLocation());
-   }// GEN-LAST:event_jSplitPane1PropertyChange
+   }
 
    private void jTableEinheitenSetSelection(MouseEvent evt) {
       // System.out.println("Zeile wird selectiert.");

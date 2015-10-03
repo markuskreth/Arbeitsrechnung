@@ -1531,14 +1531,14 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonEditAngebotActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonEditAngebotActionPerformed
+   private void jButtonEditAngebotActionPerformed(ActionEvent evt) {
 
       if (this.jTableAngebote.getSelectedRow() == -1) {
          JOptionPane.showMessageDialog(this, "Bearbeitung abgebrochen!\nEin Eintrag muss ausgewählt sein!");
       } else {
          openAngebotDialogForSelected();
       }
-   }// GEN-LAST:event_jButtonEditAngebotActionPerformed
+   }
 
    private void openAngebotDialogForSelected() {
 
@@ -1557,7 +1557,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonDeleteAngebotActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonDeleteAngebotActionPerformed
+   private void jButtonDeleteAngebotActionPerformed(ActionEvent evt) {
       if (this.jTableAngebote.getSelectedRow() == -1) {
          JOptionPane.showMessageDialog(this, "Bearbeitung abgebrochen!\nEin Eintrag muss ausgewählt sein!");
       } else {
@@ -1576,7 +1576,7 @@ public class KlientenEditor extends JDialog {
             e.printStackTrace();
          }
       }
-   }// GEN-LAST:event_jButtonDeleteAngebotActionPerformed
+   }
 
    /**
     * Maus auf Angebot-Tabelle geklickt. Bei Doppelklick wird markierter
@@ -1584,7 +1584,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jTableAngeboteMouseClicked(MouseEvent evt) {// GEN-FIRST:event_jTableAngeboteMouseClicked
+   private void jTableAngeboteMouseClicked(MouseEvent evt) {
       if (evt.getClickCount() > 1) { // Bei mehr als Einfach-Klick
          if (this.jTableAngebote.getSelectedRow() == -1) { // Wenn keine Zeile
                                                            // markiert ist
@@ -1594,7 +1594,7 @@ public class KlientenEditor extends JDialog {
 
          openAngebotDialogForSelected();
       }
-   }// GEN-LAST:event_jTableAngeboteMouseClicked
+   }
 
    private void jButtonfindeTexDateiActionPerformed(ActionEvent evt) {
 
