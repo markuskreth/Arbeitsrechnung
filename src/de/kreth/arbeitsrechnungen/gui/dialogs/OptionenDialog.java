@@ -33,7 +33,7 @@ public class OptionenDialog extends JDialog {
    private Properties einstellungen = new Properties();
 
    private final String programmverzeichnis = ".arbeitrechnungen";
-   
+
    private File optiondatei;
    private boolean firststart;
 
@@ -49,7 +49,7 @@ public class OptionenDialog extends JDialog {
          e.printStackTrace();
       }
    }
-   
+
    public OptionenDialog() {
       super();
 
@@ -67,7 +67,7 @@ public class OptionenDialog extends JDialog {
          loadoptions();
       }
    }
-   
+
    /** Creates new form Optionen */
    public OptionenDialog(JFrame parent, boolean firststart) {
       super(parent, true);
@@ -91,9 +91,9 @@ public class OptionenDialog extends JDialog {
 
       Container contentPane = this.getContentPane();
       Map<String, JTextField> components = new HashMap<>();
-      
+
       fillComponentMap(components, contentPane);
-      
+
       Enumeration<?> propnames = einstellungen.propertyNames();
 
       // für jedes Property zugehöriges Textfeld
@@ -101,7 +101,7 @@ public class OptionenDialog extends JDialog {
          String propname = (String) propnames.nextElement();
 
          Component comp = components.get(propname);
-         
+
          if (comp instanceof JTextField) {
             if (((JTextField) comp).getName().matches(propname)) {
                ((JTextField) comp).setText(einstellungen.getProperty(propname));
@@ -112,14 +112,14 @@ public class OptionenDialog extends JDialog {
 
    private void fillComponentMap(Map<String, JTextField> components, Container contentPane) {
 
-      for (int i = 0, count=contentPane.getComponentCount(); i < count; i++) {
+      for (int i = 0, count = contentPane.getComponentCount(); i < count; i++) {
 
          Component comp = contentPane.getComponent(i);
-         
+
          if (comp instanceof JPanel || comp instanceof JTabbedPane) {
             fillComponentMap(components, (Container) comp);
          } else if (comp instanceof JTextField)
-            components.put(comp.getName(), (JTextField)comp);
+            components.put(comp.getName(), (JTextField) comp);
       }
    }
 

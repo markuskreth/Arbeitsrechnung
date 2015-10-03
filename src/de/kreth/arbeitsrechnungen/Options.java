@@ -55,55 +55,49 @@ public class Options {
    public File getTmpDir() {
       return new File(prop.getProperty(TMP_DIR));
    }
-   
+
    /**
-    * Eigenschaften als Properties - änderungen haben keinen Einfluss auf dieses Objekt.
+    * Eigenschaften als Properties - änderungen haben keinen Einfluss auf dieses
+    * Objekt.
+    * 
     * @return Eigenschaften als Properties.
     */
    public Properties getProperties() {
       return (Properties) prop.clone();
    }
-   
+
    public static class Build implements Builder<Options> {
 
       private Properties properties = null;
-      
-      Set<String> toSet = new HashSet<>(Arrays.asList(STD_TEX_FILE
-            , TEX_TEMPLATE_DIR
-            , PDF_PROG
-            , DB_USER
-            , DB_HOST
-            , DB_DATABASE_NAME
-            , DB_PASSWORD
-            , TARGET_DIR
-            , TMP_DIR));
-      
+
+      Set<String> toSet = new HashSet<>(Arrays.asList(STD_TEX_FILE, TEX_TEMPLATE_DIR, PDF_PROG, DB_USER, DB_HOST, DB_DATABASE_NAME, DB_PASSWORD, TARGET_DIR, TMP_DIR));
+
       public Build() {
          this.properties = new Properties();
       }
-      
+
       public Build(Properties properties) {
          this.properties = properties;
          toSet.clear();
-//         stdTexFile(properties.getProperty(STD_TEX_FILE));
-//         texTemplatesDir(properties.getProperty(TEX_TEMPLATE_DIR));
-//         pdfProg(properties.getProperty(PDF_PROG));
-//         dbUser(properties.getProperty(DB_USER));
-//         dbHost(properties.getProperty(DB_HOST));
-//         dbDatabaseName(properties.getProperty(DB_DATABASE_NAME));
-//         dbPassword(properties.getProperty(DB_PASSWORD));
-//         targetDir(properties.getProperty(TARGET_DIR));
-//         tmpDir(properties.getProperty(TMP_DIR));
+         // stdTexFile(properties.getProperty(STD_TEX_FILE));
+         // texTemplatesDir(properties.getProperty(TEX_TEMPLATE_DIR));
+         // pdfProg(properties.getProperty(PDF_PROG));
+         // dbUser(properties.getProperty(DB_USER));
+         // dbHost(properties.getProperty(DB_HOST));
+         // dbDatabaseName(properties.getProperty(DB_DATABASE_NAME));
+         // dbPassword(properties.getProperty(DB_PASSWORD));
+         // targetDir(properties.getProperty(TARGET_DIR));
+         // tmpDir(properties.getProperty(TMP_DIR));
       }
-      
+
       public Build stdTexFile(String stdTexFile) {
          properties.setProperty(STD_TEX_FILE, stdTexFile);
          toSet.remove(STD_TEX_FILE);
          return this;
       }
-      
+
       public Build texTemplatesDir(String texTemplatesDir) {
-         if(texTemplatesDir == null)
+         if (texTemplatesDir == null)
             throw new IllegalArgumentException("texTemplatesDir must not be null!");
          properties.setProperty(TEX_TEMPLATE_DIR, texTemplatesDir);
          toSet.remove(TEX_TEMPLATE_DIR);
@@ -111,7 +105,7 @@ public class Options {
       }
 
       public Build pdfProg(String pdfProg) {
-         if(pdfProg == null)
+         if (pdfProg == null)
             throw new IllegalArgumentException("pdfProg must not be null!");
          properties.setProperty(PDF_PROG, pdfProg);
          toSet.remove(PDF_PROG);
@@ -119,7 +113,7 @@ public class Options {
       }
 
       public Build dbUser(String dbUser) {
-         if(dbUser == null)
+         if (dbUser == null)
             throw new IllegalArgumentException("dbUser must not be null!");
          properties.setProperty(DB_USER, dbUser);
          toSet.remove(DB_USER);
@@ -127,7 +121,7 @@ public class Options {
       }
 
       public Build dbHost(String dbHost) {
-         if(dbHost == null)
+         if (dbHost == null)
             throw new IllegalArgumentException("dbHost must not be null!");
          properties.setProperty(DB_HOST, dbHost);
          toSet.remove(DB_HOST);
@@ -135,7 +129,7 @@ public class Options {
       }
 
       public Build dbDatabaseName(String dbDatabaseName) {
-         if(dbDatabaseName == null)
+         if (dbDatabaseName == null)
             throw new IllegalArgumentException("dbDatabaseName must not be null!");
          properties.setProperty(DB_DATABASE_NAME, dbDatabaseName);
          toSet.remove(DB_DATABASE_NAME);
@@ -143,7 +137,7 @@ public class Options {
       }
 
       public Build dbPassword(String dbPassword) {
-         if(dbPassword == null)
+         if (dbPassword == null)
             throw new IllegalArgumentException("dbPassword must not be null!");
          properties.setProperty(DB_PASSWORD, dbPassword);
          toSet.remove(DB_PASSWORD);
@@ -151,16 +145,15 @@ public class Options {
       }
 
       public Build targetDir(String targetDir) {
-         if(targetDir == null)
+         if (targetDir == null)
             throw new IllegalArgumentException("targetDir must not be null!");
          properties.setProperty(TARGET_DIR, targetDir);
          toSet.remove(TARGET_DIR);
          return this;
       }
 
-      
       public Build tmpDir(String tmpDir) {
-         if(tmpDir == null)
+         if (tmpDir == null)
             throw new IllegalArgumentException("tmpDir must not be null!");
          properties.setProperty(TMP_DIR, tmpDir);
          toSet.remove(TMP_DIR);
@@ -169,10 +162,10 @@ public class Options {
 
       @Override
       public Options build() {
-         if(toSet.size()>0)
+         if (toSet.size() > 0)
             throw new IllegalStateException("Alle Optionen müssen gesetzt sein! Offen: " + toSet);
          return new Options(this);
       }
-      
+
    }
 }

@@ -262,29 +262,31 @@ public class RechnungDialogPersister implements Persister {
          if (verbindung.sql(sql.toString())) {
             int lastInsertId = 0;
             final ResultSet rs = verbindung.query("SELECT LAST_INSERT_ID() AS id");
-            if(rs.next())
+            if (rs.next())
                lastInsertId = rs.getInt("id");
             rs.close();
             sql.setLength(0);
             rechnung.setRechnungId(lastInsertId);
-            
+
             // Elemente in "einheiten" werden in WHERE-bedinung aufgenommen
             String in_bedingung = "(" + rechnung.getEinheiten().elementAt(0).getID();
 
             for (int i = 1; i < rechnung.getEinheiten().size(); i++) {
                in_bedingung += ", " + rechnung.getEinheiten().elementAt(i).getID();
             }
-            
+
             in_bedingung += ")";
-            
+
             // Rechnung_verschickt, Rechnungsdatum und rechnung_id bei
             // einheiten ändern
             if (rechnung.isNew()) {
                logger.debug("LAST_INSERT_ID wird benutzt...");
-               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", ").append("rechnung_id=").append(lastInsertId);
+               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", ")
+                     .append("rechnung_id=").append(lastInsertId);
                sql.append(" WHERE einheiten_id IN ");
             } else {
-               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", ").append("rechnung_id=").append((rechnung.getRechnungen_id()));
+               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", ")
+                     .append("rechnung_id=").append((rechnung.getRechnungen_id()));
                sql.append(" WHERE einheiten_id IN ");
             }
             sql.append(in_bedingung).append(";");

@@ -84,11 +84,11 @@ public class KlientenEditor extends JDialog {
       initComponents();
 
       int maxwidth = jTableAngebote.getColumnModel().getColumn(1).getMaxWidth();
-      
+
       angeboteTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Inhalt", "Preis", "Beschreibung" });
       jTableAngebote.setModel(angeboteTableModel);
       jTableAngebote.getColumnModel().getColumn(1).setMaxWidth(maxwidth);
-      
+
       try {
          this.jTextFieldAPlz.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("#####")));
          this.jTextFieldKPlz.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("#####")));
@@ -538,7 +538,7 @@ public class KlientenEditor extends JDialog {
     * Aktualisiert den Klienten und die Buttons
     */
    private void updateKlient() {
-      if(currentKlient != null) {
+      if (currentKlient != null) {
          jTextFieldAuftraggeber.setText(currentKlient.getAuftraggeber());
          jTextFieldAAdress1.setText(currentKlient.getAAdress1());
          jTextFieldAAdress2.setText(currentKlient.getAAdress2());
@@ -555,7 +555,7 @@ public class KlientenEditor extends JDialog {
          jTextFieldKEmail.setText(currentKlient.getKEmail());
          jTextAreaBemerkungen.setText(currentKlient.getBemerkungen());
          jTextFieldTex_datei.setText(currentKlient.getTex_datei());
-   
+
          jCheckBoxZusatz1.setSelected(currentKlient.hasZusatz1());
          jCheckBoxZusatz2.setSelected(currentKlient.hasZusatz2());
          jTextFieldZusatzBezeichnung1.setText(currentKlient.getZusatz1_Name());
@@ -581,7 +581,7 @@ public class KlientenEditor extends JDialog {
          if (currentKlient.equals(allKlienten.get(0))) {
             jButtonZurueck.setEnabled(false);
             jButtonZumAnfang.setEnabled(false);
-         } 
+         }
          if (currentKlient.equals(allKlienten.get(allKlienten.size() - 1))) {
             jButtonVor.setEnabled(false);
             jButtonZumEnde.setEnabled(false);
@@ -1351,7 +1351,7 @@ public class KlientenEditor extends JDialog {
    }
 
    private void toNextKlientIfPossible() {
-      if (currentIndex+1 < allKlienten.size()) {
+      if (currentIndex + 1 < allKlienten.size()) {
          currentIndex++;
          currentKlient = allKlienten.get(currentIndex);
          updateComponents();
@@ -1401,15 +1401,15 @@ public class KlientenEditor extends JDialog {
       java.text.NumberFormat zf;
       zf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
-      if(currentKlient != null)
+      if (currentKlient != null)
          klientId = currentKlient.getKlienten_id();
 
       angebote = persister.getAngeboteForKlient(klientId);
 
       angeboteTableModel.setRowCount(0);
-      
+
       for (Angebot angebot : angebote) {
-         
+
          Vector<String> einVektor = new Vector<String>();
          einVektor.addElement(angebot.getInhalt());
          einVektor.addElement(zf.format(angebot.getPreis()));

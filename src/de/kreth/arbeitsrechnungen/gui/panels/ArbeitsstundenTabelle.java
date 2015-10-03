@@ -31,10 +31,9 @@ import de.kreth.arbeitsrechnungen.data.ArbeitsstundeImpl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.EinheitEinzelFrame;
-   
+
 @SuppressWarnings("boxing")
-public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
-      WindowListener {
+public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowListener {
 
    private static final long serialVersionUID = 8161115991876323549L;
 
@@ -71,7 +70,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    public ArbeitsstundenTabelle(javax.swing.JFrame parent) {
       // Füllt die Tabelle mit den Feuerwehr-Arbeitsstunden
       this(parent, 1);
-      logger.debug("ArbeitsstundenTabelle(javax.swing.JFrame parent)");      
+      logger.debug("ArbeitsstundenTabelle(javax.swing.JFrame parent)");
    }
 
    public ArbeitsstundenTabelle() {
@@ -119,16 +118,13 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             + "einheiten.angebote_id, Datum, Beginn, Ende, einheiten.zusatz1, einheiten.zusatz2, Preisänderung, Rechnung_verschickt, "
             + "Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.preis_pro_stunde, "
             + "klienten.Zusatz1 AS bool1, klienten.Zusatz2 AS bool2, klienten.Zusatz1_Name, klienten.Zusatz2_Name FROM einheiten, "
-            + "angebote, klienten WHERE einheiten.klienten_id=" + klienten_id
-            + " AND einheiten.angebote_id=angebote.angebote_id"
-            + " AND einheiten.klienten_id=klienten.klienten_id"
-            + " AND " + filter 
-            + " ORDER BY Datum, Preis;";
-      
+            + "angebote, klienten WHERE einheiten.klienten_id=" + klienten_id + " AND einheiten.angebote_id=angebote.angebote_id"
+            + " AND einheiten.klienten_id=klienten.klienten_id" + " AND " + filter + " ORDER BY Datum, Preis;";
+
       logger.info(getClass().getSimpleName() + ".readList: " + sqltext);
 
       Arbeitsstunden = new Vector<Arbeitsstunde>();
-      
+
       try {
          ResultSet daten = verbindung.query(sqltext);
          while (daten.next()) {
@@ -151,28 +147,19 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
                stundenzahl += daten.getDouble("Dauer");
             }
 
-            ArbeitsstundeImpl.Builder stunde = new ArbeitsstundeImpl.Builder(id,
-                  klienten_id, angebote_id).datum(daten.getDate("Datum"))
-                  .inhalt(daten.getString("Inhalt"))
-                  .beginn(daten.getTimestamp("Beginn"))
-                  .ende(daten.getTimestamp("Ende"))
-                  .preis(daten.getDouble("Preis"))
-                  .zusatz1(daten.getString("zusatz1"))
-                  .zusatz2(daten.getString("zusatz2"))
-                  .preisaenderung(daten.getDouble("Preisänderung"))
-                  .dauerInMinuten(daten.getInt("Dauer"));
+            ArbeitsstundeImpl.Builder stunde = new ArbeitsstundeImpl.Builder(id, klienten_id, angebote_id).datum(daten.getDate("Datum")).inhalt(daten.getString("Inhalt"))
+                  .beginn(daten.getTimestamp("Beginn")).ende(daten.getTimestamp("Ende")).preis(daten.getDouble("Preis")).zusatz1(daten.getString("zusatz1"))
+                  .zusatz2(daten.getString("zusatz2")).preisaenderung(daten.getDouble("Preisänderung")).dauerInMinuten(daten.getInt("Dauer"));
             try {
                stunde.setVerschickt(daten.getDate("Rechnung_Datum"));
             } catch (Exception e) {
-               logger.info(daten.getInt("einheiten.einheiten_id")
-                     + ": Rechnung Datum nicht gesetzt!", e);
+               logger.info(daten.getInt("einheiten.einheiten_id") + ": Rechnung Datum nicht gesetzt!", e);
                stunde.setVerschickt(null);
             }
             try {
                stunde.bezahlt(daten.getDate("Bezahlt_Datum"));
             } catch (Exception e) {
-               logger.info(daten.getInt("einheiten.einheiten_id")
-                     + ": Bezahlt Datum nicht gesetzt!", e);
+               logger.info(daten.getInt("einheiten.einheiten_id") + ": Bezahlt Datum nicht gesetzt!", e);
                stunde.bezahlt(null);
             }
             try {
@@ -220,12 +207,9 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
                  // Einschübe addiert.
       for (int i = 0; i < this.jTable1.getColumnModel().getColumnCount(); i++) {
          breite[i + j] = this.jTable1.getColumnModel().getColumn(i).getWidth();
-         breitenMax[i + j] = this.jTable1.getColumnModel().getColumn(i)
-               .getMaxWidth();
-         breitenOpt[i + j] = this.jTable1.getColumnModel().getColumn(i)
-               .getPreferredWidth();
-         breitenMin[i + j] = this.jTable1.getColumnModel().getColumn(i)
-               .getMinWidth();
+         breitenMax[i + j] = this.jTable1.getColumnModel().getColumn(i).getMaxWidth();
+         breitenOpt[i + j] = this.jTable1.getColumnModel().getColumn(i).getPreferredWidth();
+         breitenMin[i + j] = this.jTable1.getColumnModel().getColumn(i).getMinWidth();
          if (i == 4) {
             if (this.geloeschte_spalten[0] != null) {
                j += 1;
@@ -244,10 +228,11 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          }
       }
       // Model mit Überschriften erstellen
-      javax.swing.table.DefaultTableModel mymodel = new javax.swing.table.DefaultTableModel(
-            new Object[][] {}, new String[] { ArbeitsstundenSpalten.Datum.toString(), ArbeitsstundenSpalten.Inhalt.toString(), ArbeitsstundenSpalten.Start.toString(),
-                  ArbeitsstundenSpalten.Ende.toString(), ArbeitsstundenSpalten.Preis.toString(), this.zusatz1_name, this.zusatz2_name,
-                  ArbeitsstundenSpalten.Preisänderung.toString(), ArbeitsstundenSpalten.Eingereicht.toString(), ArbeitsstundenSpalten.Bezahlt.toString() }) {
+      javax.swing.table.DefaultTableModel mymodel = new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] { ArbeitsstundenSpalten.Datum.toString(),
+            ArbeitsstundenSpalten.Inhalt.toString(), ArbeitsstundenSpalten.Start.toString(), ArbeitsstundenSpalten.Ende.toString(), ArbeitsstundenSpalten.Preis.toString(),
+            this.zusatz1_name, this.zusatz2_name, ArbeitsstundenSpalten.Preisänderung.toString(), ArbeitsstundenSpalten.Eingereicht.toString(),
+            ArbeitsstundenSpalten.Bezahlt.toString() }) {
+
          private static final long serialVersionUID = 1913170267962749520L;
 
          @Override
@@ -265,15 +250,15 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       DecimalFormat df = new DecimalFormat("0.00");
 
       for (int i = 0; i < Arbeitsstunden.size(); i++) {
-            Arbeitsstunde elementAt = this.Arbeitsstunden.elementAt(i);
-            Vector<Object> daten = elementAt.toVector();
-            daten.removeElementAt(0);
-            daten.removeElementAt(0);
-            daten.removeElementAt(0);
-            String preis = df.format(daten.elementAt(4)) + " €";
-            daten.removeElementAt(4);
-            daten.add(4, preis);
-            mymodel.addRow(daten);
+         Arbeitsstunde elementAt = this.Arbeitsstunden.elementAt(i);
+         Vector<Object> daten = elementAt.toVector();
+         daten.removeElementAt(0);
+         daten.removeElementAt(0);
+         daten.removeElementAt(0);
+         String preis = df.format(daten.elementAt(4)) + " €";
+         daten.removeElementAt(4);
+         daten.add(4, preis);
+         mymodel.addRow(daten);
       }
 
       jTable1.setModel(mymodel);
@@ -355,61 +340,52 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jPopupMenu1.setInvoker(jTable1);
       jPopupMenu1.setName("jPopupMenu1"); // NOI18N
 
-      ResourceBundle resourceMap = ResourceBundle.getBundle(getClass()
-            .getSimpleName());
+      ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
 
-      jMenuItembearbeiten.setText(resourceMap
-            .getString("jMenuItembearbeiten.text")); // NOI18N
+      jMenuItembearbeiten.setText(resourceMap.getString("jMenuItembearbeiten.text")); // NOI18N
       jMenuItembearbeiten.setFocusPainted(true);
       jMenuItembearbeiten.setName("jMenuItembearbeiten"); // NOI18N
-      jMenuItembearbeiten
-            .addActionListener(new ActionListener() {
+      jMenuItembearbeiten.addActionListener(new ActionListener() {
 
-               @Override
-               public void actionPerformed(ActionEvent evt) {
-                  jMenuItembearbeitenActionPerformed(evt);
-               }
-            });
+         @Override
+         public void actionPerformed(ActionEvent evt) {
+            jMenuItembearbeitenActionPerformed(evt);
+         }
+      });
       jPopupMenu1.add(jMenuItembearbeiten);
 
       jSeparator1.setName("jSeparator1"); // NOI18N
       jPopupMenu1.add(jSeparator1);
 
       jMenuItemEditAll.setText(resourceMap.getString("jMenuItemEditAll.text")); // NOI18N
-      jMenuItemEditAll.setToolTipText(resourceMap
-            .getString("jMenuItemEditAll.toolTipText")); // NOI18N
+      jMenuItemEditAll.setToolTipText(resourceMap.getString("jMenuItemEditAll.toolTipText")); // NOI18N
       jMenuItemEditAll.setName("jMenuItemEditAll"); // NOI18N
       jPopupMenu1.add(jMenuItemEditAll);
 
-      jMenuItemRechnungDatum.setText(resourceMap
-            .getString("jMenuItemRechnungDatum.text")); // NOI18N
+      jMenuItemRechnungDatum.setText(resourceMap.getString("jMenuItemRechnungDatum.text")); // NOI18N
       jMenuItemRechnungDatum.setName("jMenuItemRechnungDatum"); // NOI18N
-      jMenuItemRechnungDatum
-            .addActionListener(new ActionListener() {
+      jMenuItemRechnungDatum.addActionListener(new ActionListener() {
 
-               @Override
-               public void actionPerformed(ActionEvent evt) {
-                  jMenuItemRechnungDatumActionPerformed(evt);
-               }
-            });
+         @Override
+         public void actionPerformed(ActionEvent evt) {
+            jMenuItemRechnungDatumActionPerformed(evt);
+         }
+      });
       jPopupMenu1.add(jMenuItemRechnungDatum);
 
-      jMenuItemBezahltDatum.setText(resourceMap
-            .getString("jMenuItemBezahltDatum.text")); // NOI18N
+      jMenuItemBezahltDatum.setText(resourceMap.getString("jMenuItemBezahltDatum.text")); // NOI18N
       jMenuItemBezahltDatum.setName("jMenuItemBezahltDatum"); // NOI18N
-      jMenuItemBezahltDatum
-            .addActionListener(new ActionListener() {
+      jMenuItemBezahltDatum.addActionListener(new ActionListener() {
 
-               @Override
-               public void actionPerformed(ActionEvent evt) {
-                  jMenuItemBezahltDatumActionPerformed(evt);
-               }
-            });
+         @Override
+         public void actionPerformed(ActionEvent evt) {
+            jMenuItemBezahltDatumActionPerformed(evt);
+         }
+      });
       jPopupMenu1.add(jMenuItemBezahltDatum);
 
       jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
-      jMenuItem1.setActionCommand(resourceMap
-            .getString("jMenuItem1.actionCommand")); // NOI18N
+      jMenuItem1.setActionCommand(resourceMap.getString("jMenuItem1.actionCommand")); // NOI18N
       jMenuItem1.setName("jMenuItem1"); // NOI18N
       jMenuItem1.addActionListener(new ActionListener() {
 
@@ -425,24 +401,16 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jScrollPane1.setName("jScrollPane1"); // NOI18N
 
       jTable1.setAutoCreateRowSorter(true);
-      jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object[][] { { "13.12.09", null, "13:50", "14:50", "25,50",
-                  null, null, "", "25.12.09", "30.12.09" } }, new String[] {
-                  "Datum", "Inhalt", "Start", "Ende", "Preis", "Zusatz1",
-                  "Zusatz2", "Preisänderung", "Eingereicht", "Bezahlt" }) {
+      jTable1.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { "13.12.09", null, "13:50", "14:50", "25,50", null, null, "", "25.12.09", "30.12.09" } },
+            new String[] { "Datum", "Inhalt", "Start", "Ende", "Preis", "Zusatz1", "Zusatz2", "Preisänderung", "Eingereicht", "Bezahlt" }) {
 
          /**
 			 * 
 			 */
          private static final long serialVersionUID = 516135999448412054L;
-         Class<?>[] types = new Class[] { java.lang.String.class,
-               java.lang.String.class, java.lang.String.class,
-               java.lang.String.class, java.lang.String.class,
-               java.lang.String.class, java.lang.String.class,
-               java.lang.String.class, java.lang.String.class,
-               java.lang.String.class };
-         boolean[] canEdit = new boolean[] { false, false, false, false, false,
-               false, false, false, false, false };
+         Class<?>[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
+               java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class };
+         boolean[] canEdit = new boolean[] { false, false, false, false, false, false, false, false, false, false };
 
          @Override
          public Class<?> getColumnClass(int columnIndex) {
@@ -473,68 +441,38 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jTable1.getColumnModel().getColumn(0).setMinWidth(80);
       jTable1.getColumnModel().getColumn(0).setPreferredWidth(80);
       jTable1.getColumnModel().getColumn(0).setMaxWidth(120);
-      jTable1
-            .getColumnModel()
-            .getColumn(0)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title0")); // NOI18N
-      jTable1
-            .getColumnModel()
-            .getColumn(1)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title8")); // NOI18N
+      jTable1.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTable1.columnModel.title0")); // NOI18N
+      jTable1.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("jTable1.columnModel.title8")); // NOI18N
       jTable1.getColumnModel().getColumn(2).setMinWidth(30);
       jTable1.getColumnModel().getColumn(2).setPreferredWidth(55);
       jTable1.getColumnModel().getColumn(2).setMaxWidth(75);
-      jTable1
-            .getColumnModel()
-            .getColumn(2)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title1")); // NOI18N
+      jTable1.getColumnModel().getColumn(2).setHeaderValue(resourceMap.getString("jTable1.columnModel.title1")); // NOI18N
       jTable1.getColumnModel().getColumn(3).setMinWidth(30);
       jTable1.getColumnModel().getColumn(3).setPreferredWidth(55);
       jTable1.getColumnModel().getColumn(3).setMaxWidth(75);
-      jTable1
-            .getColumnModel()
-            .getColumn(3)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title2")); // NOI18N
+      jTable1.getColumnModel().getColumn(3).setHeaderValue(resourceMap.getString("jTable1.columnModel.title2")); // NOI18N
       jTable1.getColumnModel().getColumn(4).setMinWidth(30);
       jTable1.getColumnModel().getColumn(4).setPreferredWidth(60);
       jTable1.getColumnModel().getColumn(4).setMaxWidth(70);
-      jTable1
-            .getColumnModel()
-            .getColumn(4)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title3")); // NOI18N
+      jTable1.getColumnModel().getColumn(4).setHeaderValue(resourceMap.getString("jTable1.columnModel.title3")); // NOI18N
       jTable1.getColumnModel().getColumn(5).setMinWidth(30);
       jTable1.getColumnModel().getColumn(5).setPreferredWidth(50);
-      jTable1
-            .getColumnModel()
-            .getColumn(5)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title8")); // NOI18N
+      jTable1.getColumnModel().getColumn(5).setHeaderValue(resourceMap.getString("jTable1.columnModel.title8")); // NOI18N
       jTable1.getColumnModel().getColumn(6).setMinWidth(30);
       jTable1.getColumnModel().getColumn(6).setPreferredWidth(50);
-      jTable1
-            .getColumnModel()
-            .getColumn(6)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title9")); // NOI18N
+      jTable1.getColumnModel().getColumn(6).setHeaderValue(resourceMap.getString("jTable1.columnModel.title9")); // NOI18N
       jTable1.getColumnModel().getColumn(7).setMinWidth(30);
       jTable1.getColumnModel().getColumn(7).setPreferredWidth(60);
       jTable1.getColumnModel().getColumn(7).setMaxWidth(70);
-      jTable1
-            .getColumnModel()
-            .getColumn(7)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title4")); // NOI18N
+      jTable1.getColumnModel().getColumn(7).setHeaderValue(resourceMap.getString("jTable1.columnModel.title4")); // NOI18N
       jTable1.getColumnModel().getColumn(8).setMinWidth(80);
       jTable1.getColumnModel().getColumn(8).setPreferredWidth(80);
       jTable1.getColumnModel().getColumn(8).setMaxWidth(120);
-      jTable1
-            .getColumnModel()
-            .getColumn(8)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title5")); // NOI18N
+      jTable1.getColumnModel().getColumn(8).setHeaderValue(resourceMap.getString("jTable1.columnModel.title5")); // NOI18N
       jTable1.getColumnModel().getColumn(9).setMinWidth(80);
       jTable1.getColumnModel().getColumn(9).setPreferredWidth(80);
       jTable1.getColumnModel().getColumn(9).setMaxWidth(120);
-      jTable1
-            .getColumnModel()
-            .getColumn(9)
-            .setHeaderValue(resourceMap.getString("jTable1.columnModel.title6")); // NOI18N
+      jTable1.getColumnModel().getColumn(9).setHeaderValue(resourceMap.getString("jTable1.columnModel.title6")); // NOI18N
 
       jButtonDelete.setText(resourceMap.getString("jButtonDelete.text")); // NOI18N
       jButtonDelete.setName("jButtonDelete"); // NOI18N
@@ -546,8 +484,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          }
       });
 
-      jButtonBearbeiten
-            .setText(resourceMap.getString("jButtonBearbeiten.text")); // NOI18N
+      jButtonBearbeiten.setText(resourceMap.getString("jButtonBearbeiten.text")); // NOI18N
       jButtonBearbeiten.setName("jButtonBearbeiten"); // NOI18N
       jButtonBearbeiten.addActionListener(new ActionListener() {
 
@@ -557,67 +494,55 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          }
       });
 
-      jButtonNeuerDatensatz.setText(resourceMap
-            .getString("jButtonNeuerDatensatz.text")); // NOI18N
+      jButtonNeuerDatensatz.setText(resourceMap.getString("jButtonNeuerDatensatz.text")); // NOI18N
       jButtonNeuerDatensatz.setName("jButtonNeuerDatensatz"); // NOI18N
-      jButtonNeuerDatensatz
-            .addActionListener(new ActionListener() {
+      jButtonNeuerDatensatz.addActionListener(new ActionListener() {
 
-               @Override
-               public void actionPerformed(ActionEvent evt) {
-                  jButtonNeuerDatensatzActionPerformed(evt);
-               }
-            });
+         @Override
+         public void actionPerformed(ActionEvent evt) {
+            jButtonNeuerDatensatzActionPerformed(evt);
+         }
+      });
 
       buttonGroupFilter.add(jRadioButtonAbgeschlossene);
-      jRadioButtonAbgeschlossene.setText(resourceMap
-            .getString("jRadioButtonAbgeschlossene.text")); // NOI18N
-      jRadioButtonAbgeschlossene.setActionCommand(resourceMap
-            .getString("jRadioButtonAbgeschlossene.actionCommand")); // NOI18N
+      jRadioButtonAbgeschlossene.setText(resourceMap.getString("jRadioButtonAbgeschlossene.text")); // NOI18N
+      jRadioButtonAbgeschlossene.setActionCommand(resourceMap.getString("jRadioButtonAbgeschlossene.actionCommand")); // NOI18N
       jRadioButtonAbgeschlossene.setName("jRadioButtonAbgeschlossene"); // NOI18N
-      jRadioButtonAbgeschlossene
-            .addItemListener(new ItemListener() {
+      jRadioButtonAbgeschlossene.addItemListener(new ItemListener() {
 
-               @Override
-               public void itemStateChanged(ItemEvent evt) {
-                  jRadioButtonAbgeschlosseneItemStateChanged(evt);
-               }
-            });
+         @Override
+         public void itemStateChanged(ItemEvent evt) {
+            jRadioButtonAbgeschlosseneItemStateChanged(evt);
+         }
+      });
 
       buttonGroupFilter.add(jRadioButtonNichtBezahlte);
-      jRadioButtonNichtBezahlte.setText(resourceMap
-            .getString("jRadioButtonNichtBezahlte.text")); // NOI18N
-      jRadioButtonNichtBezahlte.setActionCommand(resourceMap
-            .getString("jRadioButtonNichtBezahlte.actionCommand")); // NOI18N
+      jRadioButtonNichtBezahlte.setText(resourceMap.getString("jRadioButtonNichtBezahlte.text")); // NOI18N
+      jRadioButtonNichtBezahlte.setActionCommand(resourceMap.getString("jRadioButtonNichtBezahlte.actionCommand")); // NOI18N
       jRadioButtonNichtBezahlte.setName("jRadioButtonNichtBezahlte"); // NOI18N
-      jRadioButtonNichtBezahlte
-            .addItemListener(new ItemListener() {
+      jRadioButtonNichtBezahlte.addItemListener(new ItemListener() {
 
-               @Override
-               public void itemStateChanged(ItemEvent evt) {
-                  jRadioButtonNichtBezahlteItemStateChanged(evt);
-               }
-            });
+         @Override
+         public void itemStateChanged(ItemEvent evt) {
+            jRadioButtonNichtBezahlteItemStateChanged(evt);
+         }
+      });
 
       buttonGroupFilter.add(jRadioButtonNichtEingereichte);
-      jRadioButtonNichtEingereichte.setText(resourceMap
-            .getString("jRadioButtonNichtEingereichte.text")); // NOI18N
-      jRadioButtonNichtEingereichte.setActionCommand(resourceMap
-            .getString("jRadioButtonNichtEingereichte.actionCommand")); // NOI18N
+      jRadioButtonNichtEingereichte.setText(resourceMap.getString("jRadioButtonNichtEingereichte.text")); // NOI18N
+      jRadioButtonNichtEingereichte.setActionCommand(resourceMap.getString("jRadioButtonNichtEingereichte.actionCommand")); // NOI18N
       jRadioButtonNichtEingereichte.setName("jRadioButtonNichtEingereichte"); // NOI18N
-      jRadioButtonNichtEingereichte
-            .addItemListener(new ItemListener() {
+      jRadioButtonNichtEingereichte.addItemListener(new ItemListener() {
 
-               @Override
-               public void itemStateChanged(ItemEvent evt) {
-                  jRadioButtonNichtEingereichteItemStateChanged(evt);
-               }
-            });
+         @Override
+         public void itemStateChanged(ItemEvent evt) {
+            jRadioButtonNichtEingereichteItemStateChanged(evt);
+         }
+      });
 
       buttonGroupFilter.add(jRadioButtonAlle);
       jRadioButtonAlle.setText(resourceMap.getString("jRadioButtonAlle.text")); // NOI18N
-      jRadioButtonAlle.setActionCommand(resourceMap
-            .getString("jRadioButtonAlle.actionCommand")); // NOI18N
+      jRadioButtonAlle.setActionCommand(resourceMap.getString("jRadioButtonAlle.actionCommand")); // NOI18N
       jRadioButtonAlle.setName("jRadioButtonAlle"); // NOI18N
       jRadioButtonAlle.addItemListener(new ItemListener() {
 
@@ -642,10 +567,8 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
 
       buttonGroupFilter.add(jRadioButtonOffene);
       jRadioButtonOffene.setSelected(true);
-      jRadioButtonOffene.setText(resourceMap
-            .getString("jRadioButtonOffene.text")); // NOI18N
-      jRadioButtonOffene.setActionCommand(resourceMap
-            .getString("jRadioButtonOffene.actionCommand")); // NOI18N
+      jRadioButtonOffene.setText(resourceMap.getString("jRadioButtonOffene.text")); // NOI18N
+      jRadioButtonOffene.setActionCommand(resourceMap.getString("jRadioButtonOffene.actionCommand")); // NOI18N
       jRadioButtonOffene.setName("jRadioButtonOffene"); // NOI18N
       jRadioButtonOffene.addItemListener(new ItemListener() {
 
@@ -672,24 +595,22 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jTextFieldAnzahl.setName("jTextFieldAnzahl"); // NOI18N
 
       jDateChooserVonDatum.setName("jDateChooserVonDatum"); // NOI18N
-      jDateChooserVonDatum
-            .addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+      jDateChooserVonDatum.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 
-               @Override
-               public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                  jDateChooserVonDatumPropertyChange(evt);
-               }
-            });
+         @Override
+         public void propertyChange(java.beans.PropertyChangeEvent evt) {
+            jDateChooserVonDatumPropertyChange(evt);
+         }
+      });
 
       jDateChooserBisDatum.setName("jDateChooserBisDatum"); // NOI18N
-      jDateChooserBisDatum
-            .addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+      jDateChooserBisDatum.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 
-               @Override
-               public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                  jDateChooserBisDatumPropertyChange(evt);
-               }
-            });
+         @Override
+         public void propertyChange(java.beans.PropertyChangeEvent evt) {
+            jDateChooserBisDatumPropertyChange(evt);
+         }
+      });
 
       jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
       jLabel4.setName("jLabel4"); // NOI18N
@@ -698,8 +619,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       jLabel5.setName("jLabel5"); // NOI18N
 
       jTextFieldStundenzahl.setEditable(false);
-      jTextFieldStundenzahl.setText(resourceMap
-            .getString("jTextFieldStundenzahl.text")); // NOI18N
+      jTextFieldStundenzahl.setText(resourceMap.getString("jTextFieldStundenzahl.text")); // NOI18N
       jTextFieldStundenzahl.setFocusable(false);
       jTextFieldStundenzahl.setName("jTextFieldStundenzahl"); // NOI18N
 
@@ -713,228 +633,104 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       this.setLayout(layout);
       layout.setHorizontalGroup(layout
             .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE,
-                  697, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
             .addGroup(
-                  layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonRechnung)
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonNeuerDatensatz,
-                              javax.swing.GroupLayout.PREFERRED_SIZE, 87,
-                              javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonBearbeiten,
-                              javax.swing.GroupLayout.PREFERRED_SIZE, 111,
-                              javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonDelete,
-                              javax.swing.GroupLayout.PREFERRED_SIZE, 99,
-                              javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(162, Short.MAX_VALUE))
+                  layout.createSequentialGroup().addContainerGap().addComponent(jButtonRechnung).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonNeuerDatensatz, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonBearbeiten, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(162, Short.MAX_VALUE))
             .addGroup(
                   layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(
-                              layout.createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.TRAILING)
+                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(
-                                          layout.createSequentialGroup()
-                                                .addComponent(
-                                                      jRadioButtonNichtEingereichte)
-                                                .addPreferredGap(
-                                                      javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(
-                                                      jRadioButtonAbgeschlossene))
+                                          layout.createSequentialGroup().addComponent(jRadioButtonNichtEingereichte)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jRadioButtonAbgeschlossene))
                                     .addGroup(
-                                          layout.createSequentialGroup()
-                                                .addComponent(jLabel1)
-                                                .addPreferredGap(
-                                                      javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jRadioButtonAlle)
-                                                .addPreferredGap(
-                                                      javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(
-                                                      jRadioButtonNichtBezahlte)))
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          layout.createSequentialGroup().addComponent(jLabel1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jRadioButtonAlle).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jRadioButtonNichtBezahlte)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(
-                              layout.createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.TRAILING)
+                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(
                                           layout.createSequentialGroup()
-                                                .addComponent(
-                                                      jRadioButtonOffene)
-                                                .addPreferredGap(
-                                                      javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(
-                                                      jDateChooserVonDatum,
-                                                      javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                      javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                .addComponent(jRadioButtonOffene)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jDateChooserVonDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
                                                       javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(
-                                          jDateChooserBisDatum,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE,
-                                          javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(
-                              layout.createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
+                                    .addComponent(jDateChooserBisDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                          javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jLabel4).addComponent(jLabel5))
                         .addContainerGap(89, Short.MAX_VALUE))
             .addGroup(
                   javax.swing.GroupLayout.Alignment.TRAILING,
-                  layout.createSequentialGroup()
-                        .addContainerGap(217, Short.MAX_VALUE)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldStundenzahl,
-                              javax.swing.GroupLayout.PREFERRED_SIZE,
-                              javax.swing.GroupLayout.DEFAULT_SIZE,
-                              javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldAnzahl,
-                              javax.swing.GroupLayout.PREFERRED_SIZE,
-                              javax.swing.GroupLayout.DEFAULT_SIZE,
-                              javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldSumme,
-                              javax.swing.GroupLayout.PREFERRED_SIZE,
-                              javax.swing.GroupLayout.DEFAULT_SIZE,
-                              javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING,
-                  javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
+                  layout.createSequentialGroup().addContainerGap(217, Short.MAX_VALUE).addComponent(jLabel6).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldStundenzahl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldAnzahl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldSumme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
 
-      layout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
-            new java.awt.Component[] { jButtonBearbeiten, jButtonDelete,
-                  jButtonNeuerDatensatz });
+      layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] { jButtonBearbeiten, jButtonDelete, jButtonNeuerDatensatz });
 
-      layout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
-            new java.awt.Component[] { jRadioButtonAbgeschlossene,
-                  jRadioButtonAlle, jRadioButtonNichtBezahlte,
-                  jRadioButtonNichtEingereichte });
+      layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] { jRadioButtonAbgeschlossene, jRadioButtonAlle, jRadioButtonNichtBezahlte,
+            jRadioButtonNichtEingereichte });
 
-      layout.setVerticalGroup(layout
-            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(
-                  javax.swing.GroupLayout.Alignment.TRAILING,
-                  layout.createSequentialGroup()
-                        .addComponent(jScrollPane1,
-                              javax.swing.GroupLayout.DEFAULT_SIZE, 384,
-                              Short.MAX_VALUE)
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(
-                              layout.createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(
-                                          jTextFieldSumme,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE,
-                                          javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(
-                                          jTextFieldAnzahl,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE,
-                                          javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(
-                                          jTextFieldStundenzahl,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE,
-                                          javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))
-                        .addGap(13, 13, 13)
-                        .addGroup(
-                              layout.createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.LEADING,
-                                    false)
-                                    .addGroup(
-                                          layout.createSequentialGroup()
-                                                .addGroup(
-                                                      layout.createParallelGroup(
-                                                            javax.swing.GroupLayout.Alignment.BASELINE)
-                                                            .addComponent(
-                                                                  jRadioButtonAlle)
-                                                            .addComponent(
-                                                                  jLabel1)
-                                                            .addComponent(
-                                                                  jRadioButtonNichtBezahlte)
-                                                            .addComponent(
-                                                                  jRadioButtonOffene))
-                                                .addPreferredGap(
-                                                      javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(
-                                                      layout.createParallelGroup(
-                                                            javax.swing.GroupLayout.Alignment.BASELINE)
-                                                            .addComponent(
-                                                                  jRadioButtonNichtEingereichte)
-                                                            .addComponent(
-                                                                  jRadioButtonAbgeschlossene))
-                                                .addPreferredGap(
-                                                      javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                      2,
-                                                      javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(
-                                          javax.swing.GroupLayout.Alignment.TRAILING,
-                                          layout.createSequentialGroup()
-                                                .addPreferredGap(
-                                                      javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                      4,
-                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGroup(
-                                                      layout.createParallelGroup(
-                                                            javax.swing.GroupLayout.Alignment.TRAILING)
-                                                            .addComponent(
-                                                                  jLabel4)
-                                                            .addComponent(
-                                                                  jDateChooserVonDatum,
-                                                                  javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                  javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                  javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(
-                                                      javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(
-                                                      layout.createParallelGroup(
-                                                            javax.swing.GroupLayout.Alignment.TRAILING)
-                                                            .addComponent(
-                                                                  jDateChooserBisDatum,
-                                                                  javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                  javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                  javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                            .addComponent(
-                                                                  jLabel5))))
-                        .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(
-                              layout.createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButtonRechnung)
-                                    .addComponent(jButtonNeuerDatensatz)
-                                    .addComponent(jButtonBearbeiten)
-                                    .addComponent(jButtonDelete))
-                        .addGap(12, 12, 12).addComponent(jLabel7)));
+      layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+            javax.swing.GroupLayout.Alignment.TRAILING,
+            layout.createSequentialGroup()
+                  .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                  .addGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                              .addComponent(jTextFieldSumme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addComponent(jLabel2)
+                              .addComponent(jTextFieldAnzahl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addComponent(jLabel3)
+                              .addComponent(jTextFieldStundenzahl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel6))
+                  .addGap(13, 13, 13)
+                  .addGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                              .addGroup(
+                                    layout.createSequentialGroup()
+                                          .addGroup(
+                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonAlle).addComponent(jLabel1)
+                                                      .addComponent(jRadioButtonNichtBezahlte).addComponent(jRadioButtonOffene))
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addGroup(
+                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonNichtEingereichte)
+                                                      .addComponent(jRadioButtonAbgeschlossene))
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 2, javax.swing.GroupLayout.PREFERRED_SIZE))
+                              .addGroup(
+                                    javax.swing.GroupLayout.Alignment.TRAILING,
+                                    layout.createSequentialGroup()
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                          .addGroup(
+                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                      .addComponent(jLabel4)
+                                                      .addComponent(jDateChooserVonDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE))
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addGroup(
+                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                      .addComponent(jDateChooserBisDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel5))))
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                  .addGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButtonRechnung).addComponent(jButtonNeuerDatensatz)
+                              .addComponent(jButtonBearbeiten).addComponent(jButtonDelete)).addGap(12, 12, 12).addComponent(jLabel7)));
 
    }
 
-   private void jButtonNeuerDatensatzActionPerformed(
-         ActionEvent evt) {
+   private void jButtonNeuerDatensatzActionPerformed(ActionEvent evt) {
       EinheitEinzelFrame fenster = new EinheitEinzelFrame(this.klient);
       fenster.addWindowListener(this);
       fenster.setVisible(true);
@@ -948,9 +744,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
    private void editEinheit() {
       int einheit_id = this.jTable1.getSelectedRow();
       if (einheit_id == -1) {
-         JOptionPane.showMessageDialog(this,
-               "Bitte wählen Sie einen Datensatz aus der Tabelle zum Edieren!",
-               "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
+         JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Datensatz aus der Tabelle zum Edieren!", "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
       } else {
          einheit_id = this.Arbeitsstunden.elementAt(einheit_id).getID();
          EinheitEinzelFrame fenster = new EinheitEinzelFrame(this.klient, einheit_id);
@@ -973,20 +767,17 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
 
       String sqltext = "";
       if (this.jTable1.getSelectedRowCount() == 0) {
-         JOptionPane.showMessageDialog(this,
-               "Bitte wählen Sie einen Datensatz aus der Tabelle zum Löschen!",
-               "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
+         JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Datensatz aus der Tabelle zum Löschen!", "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
       } else {
-         sqltext = "SELECT * FROM einheiten WHERE einheiten_id in ("
-               + einheit_id[0];
+         sqltext = "SELECT * FROM einheiten WHERE einheiten_id in (" + einheit_id[0];
 
          for (int i = 1; i < einheit_id.length; i++) {
             sqltext = sqltext + ", " + einheit_id[i];
          }
          sqltext = sqltext + ");";
-         
+
          logger.info("Arbeitsrechnungen::JButton1ActionPerformed: " + sqltext);
-         
+
          Date datum[] = new Date[einheit_id.length];
          try {
             ResultSet einheit = verbindung.query(sqltext);
@@ -1004,11 +795,9 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             for (i = 1; i < einheit_id.length; i++) {
                frageText += ", " + einheit_id[i];
             }
-            frageText += "\" vom "
-                  + DateFormat.getDateInstance().format(datum[0]);
+            frageText += "\" vom " + DateFormat.getDateInstance().format(datum[0]);
             for (i = 1; i < datum.length; i++) {
-               frageText += ", "
-                     + DateFormat.getDateInstance().format(datum[i]);
+               frageText += ", " + DateFormat.getDateInstance().format(datum[i]);
             }
             frageText += " wirklich gelöscht werden?";
 
@@ -1025,8 +814,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          selection = JOptionPane.showConfirmDialog(this, frageText);
          if (selection == JOptionPane.YES_OPTION) {
             for (int i = 0; i < einheit_id.length; i++) {
-               sqltext = "DELETE FROM einheiten WHERE einheiten_id="
-                     + einheit_id[i] + ";";
+               sqltext = "DELETE FROM einheiten WHERE einheiten_id=" + einheit_id[i] + ";";
                logger.info(sqltext);
                try {
                   verbindung.sql(sqltext);
@@ -1036,8 +824,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
 
             }
             this.update(klient);
-            this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten",
-                  true, false);
+            this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true, false);
          }
       }
    }
@@ -1269,26 +1056,20 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
 
       Vector<Integer> einheitenIDs = new Vector<Integer>();
       for (int i = 0; i < this.Arbeitsstunden.size(); i++) {
-         if ((!this.Arbeitsstunden.elementAt(i).isVerschickt())
-               && (!this.Arbeitsstunden.elementAt(i).isBezahlt()))
+         if ((!this.Arbeitsstunden.elementAt(i).isVerschickt()) && (!this.Arbeitsstunden.elementAt(i).isBezahlt()))
             einheitenIDs.add(this.Arbeitsstunden.elementAt(i).getID());
          else {
-            String nachricht = "Die Einheit vom "
-                  + this.Arbeitsstunden.elementAt(i).getDatum()
-                  + " ist bereits verschickt oder bezahlt!\n"
+            String nachricht = "Die Einheit vom " + this.Arbeitsstunden.elementAt(i).getDatum() + " ist bereits verschickt oder bezahlt!\n"
                   + "Erstellung der Rechnung abgebrochen.";
             isAnySubmitted = true;
             einheitenIDs.removeAllElements();
             i = this.Arbeitsstunden.size();
-            javax.swing.JOptionPane.showMessageDialog(parent, nachricht,
-                  "Einheit bereits abgerechnet",
-                  javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(parent, nachricht, "Einheit bereits abgerechnet", javax.swing.JOptionPane.ERROR_MESSAGE);
          }
       }
 
       if (!isAnySubmitted) {
-         RechnungDialog dialog = new RechnungDialog(optionen, this.parent,
-               einheitenIDs);
+         RechnungDialog dialog = new RechnungDialog(optionen, this.parent, einheitenIDs);
          dialog.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -1298,15 +1079,15 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
                }
             }
          });
-         
+
          dialog.setVisible(true);
       }
-      
+
       this.updateTable();
    }
 
    private void jTable1MouseClicked(MouseEvent evt) {
-      
+
       if (this.jTable1.getSelectedRowCount() == 0)
          jTable1SetSelection(evt);
       if (this.jPopupMenu1.isVisible())
@@ -1315,7 +1096,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          editEinheit();
       if (evt.isPopupTrigger()) {
          this.jPopupMenu1.show(jTable1, evt.getX(), evt.getY());
-         
+
       }
    }
 
@@ -1335,20 +1116,17 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       update(this.klient);
    }
 
-   private void jRadioButtonNichtEingereichteItemStateChanged(
-         ItemEvent evt) {
+   private void jRadioButtonNichtEingereichteItemStateChanged(ItemEvent evt) {
       setFilter();
       update(this.klient);
    }
 
-   private void jRadioButtonNichtBezahlteItemStateChanged(
-         ItemEvent evt) {
+   private void jRadioButtonNichtBezahlteItemStateChanged(ItemEvent evt) {
       setFilter();
       update(this.klient);
    }
 
-   private void jRadioButtonAbgeschlosseneItemStateChanged(
-         ItemEvent evt) {
+   private void jRadioButtonAbgeschlosseneItemStateChanged(ItemEvent evt) {
       setFilter();
       update(this.klient);
    }
@@ -1363,14 +1141,12 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          filter = buttonGroupFilter.getSelection().getActionCommand();
 
          if (this.jDateChooserVonDatum.getDate() != null) {
-            MySqlDate tmpdate = new MySqlDate(
-                  this.jDateChooserVonDatum.getDate());
+            MySqlDate tmpdate = new MySqlDate(this.jDateChooserVonDatum.getDate());
             filter = filter + " AND Datum>=\"" + tmpdate.getSqlDate() + "\"";
          }
 
          if (this.jDateChooserBisDatum.getDate() != null) {
-            MySqlDate tmpdate = new MySqlDate(
-                  this.jDateChooserBisDatum.getDate());
+            MySqlDate tmpdate = new MySqlDate(this.jDateChooserBisDatum.getDate());
             filter = filter + " AND Datum<=\"" + tmpdate.getSqlDate() + "\"";
          }
          logger.debug("filter: " + filter);
@@ -1402,20 +1178,16 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       }
    }
 
-   private void jMenuItembearbeitenActionPerformed(
-         ActionEvent evt) {
+   private void jMenuItembearbeitenActionPerformed(ActionEvent evt) {
       editEinheit();
-      this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true,
-            false);
+      this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true, false);
    }
 
-   private void jMenuItemBezahltDatumActionPerformed(
-         ActionEvent evt) {
+   private void jMenuItemBezahltDatumActionPerformed(ActionEvent evt) {
       // Setzt das Bezahlt_Datum
       setDatumOnField("Bezahlt_Datum", "Bezahlt");
       update(klient);
-      this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true,
-            false);
+      this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true, false);
    }
 
    private boolean setDatumOnField(String feld, String feld2) {
@@ -1428,7 +1200,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       dialog.setVisible(true);
 
       if (dialog.isBestaetigt()) {
-         
+
          datum = dialog.getDatum(); // Wenn Dialog nicht abgebrochen wurde,
                                     // setzte Datum (auch null)
          dialog.dispose();
@@ -1436,8 +1208,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          // ID der Datensätze herausfinden
          int einheit_id[] = this.jTable1.getSelectedRows();
          for (int i = 0; i < einheit_id.length; i++) {
-            einheit_id[i] = this.Arbeitsstunden.elementAt(einheit_id[i])
-                  .getID();
+            einheit_id[i] = this.Arbeitsstunden.elementAt(einheit_id[i]).getID();
          }
 
          // SQL-Text erstellen
@@ -1449,8 +1220,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
             wahr = 1;
          }
 
-         sqltext = "UPDATE einheiten SET " + feld + "=" + sqltext + ", "
-               + feld2 + "=" + wahr + " WHERE einheiten_id IN (";
+         sqltext = "UPDATE einheiten SET " + feld + "=" + sqltext + ", " + feld2 + "=" + wahr + " WHERE einheiten_id IN (";
          for (int i = 0; i < einheit_id.length; i++) {
             sqltext = sqltext + einheit_id[i] + ",";
             if (i == einheit_id.length - 1)
@@ -1469,26 +1239,22 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
          return false;
    }
 
-   private void jDateChooserVonDatumPropertyChange(
-         java.beans.PropertyChangeEvent evt) {
+   private void jDateChooserVonDatumPropertyChange(java.beans.PropertyChangeEvent evt) {
       // Läd Liste mit neuem Filter
       setFilter();
    }
 
-   private void jDateChooserBisDatumPropertyChange(
-         java.beans.PropertyChangeEvent evt) {
+   private void jDateChooserBisDatumPropertyChange(java.beans.PropertyChangeEvent evt) {
       // Läd Liste mit neuem Filter
       setFilter();
       update(this.klient);
    }
 
-   private void jMenuItemRechnungDatumActionPerformed(
-         ActionEvent evt) {
+   private void jMenuItemRechnungDatumActionPerformed(ActionEvent evt) {
       // Setzt das Rechnung_Datum
       if (setDatumOnField("Rechnung_Datum", "Rechnung_verschickt")) {
          update(klient);
-         this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true,
-               false);
+         this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true, false);
       }
    }
 
@@ -1506,8 +1272,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
       // Ein Fenster, dass Daten modifiziert hat wurde geschlossen, Tabelle wird
       // neu geladen
       update(klient);
-      this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true,
-            false);
+      this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true, false);
    }
 
    @Override
@@ -1522,12 +1287,12 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements
 
    @Override
    public void windowDeiconified(WindowEvent evt) {
-      // Nothing to do here      
+      // Nothing to do here
    }
 
    @Override
    public void windowIconified(WindowEvent evt) {
-      // Nothing to do here      
+      // Nothing to do here
    }
 
    @Override

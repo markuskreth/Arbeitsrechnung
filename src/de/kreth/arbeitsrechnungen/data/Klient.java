@@ -144,19 +144,6 @@ public class Klient {
       return rechnungnummer_bezeichnung;
    }
 
-//   public static Klient createKlient(int klienten_id, String auftraggeber,
-//         String aEmail, String aTelefon, String aOrt, String aPlz,
-//         String aAdress2, String aAdress1, String kunde, String kEmail,
-//         String kTelefon, String kOrt, String kPlz, String kAdress2,
-//         String kAdress1, String bemerkungen, String tex_datei,
-//         boolean zusatz1, String zusatz1_Name, boolean zusatz2,
-//         String zusatz2_Name, String rechnungnummer_bezeichnung) {
-//
-//      Klient k = new Klient();
-//
-//      return k;
-//   }
-
    @Override
    public int hashCode() {
       final int prime = 31;
@@ -167,10 +154,8 @@ public class Klient {
       result = prime * result + ((aOrt == null) ? 0 : aOrt.hashCode());
       result = prime * result + ((aPlz == null) ? 0 : aPlz.hashCode());
       result = prime * result + ((aTelefon == null) ? 0 : aTelefon.hashCode());
-      result = prime * result
-            + ((auftraggeber == null) ? 0 : auftraggeber.hashCode());
-      result = prime * result
-            + ((bemerkungen == null) ? 0 : bemerkungen.hashCode());
+      result = prime * result + ((auftraggeber == null) ? 0 : auftraggeber.hashCode());
+      result = prime * result + ((bemerkungen == null) ? 0 : bemerkungen.hashCode());
       result = prime * result + ((kAdress1 == null) ? 0 : kAdress1.hashCode());
       result = prime * result + ((kAdress2 == null) ? 0 : kAdress2.hashCode());
       result = prime * result + ((kEmail == null) ? 0 : kEmail.hashCode());
@@ -179,18 +164,12 @@ public class Klient {
       result = prime * result + ((kTelefon == null) ? 0 : kTelefon.hashCode());
       result = prime * result + klienten_id;
       result = prime * result + ((kunde == null) ? 0 : kunde.hashCode());
-      result = prime
-            * result
-            + ((rechnungnummer_bezeichnung == null) ? 0
-                  : rechnungnummer_bezeichnung.hashCode());
-      result = prime * result
-            + ((tex_datei == null) ? 0 : tex_datei.hashCode());
+      result = prime * result + ((rechnungnummer_bezeichnung == null) ? 0 : rechnungnummer_bezeichnung.hashCode());
+      result = prime * result + ((tex_datei == null) ? 0 : tex_datei.hashCode());
       result = prime * result + (zusatz1 ? 1231 : 1237);
-      result = prime * result
-            + ((zusatz1_Name == null) ? 0 : zusatz1_Name.hashCode());
+      result = prime * result + ((zusatz1_Name == null) ? 0 : zusatz1_Name.hashCode());
       result = prime * result + (zusatz2 ? 1231 : 1237);
-      result = prime * result
-            + ((zusatz2_Name == null) ? 0 : zusatz2_Name.hashCode());
+      result = prime * result + ((zusatz2_Name == null) ? 0 : zusatz2_Name.hashCode());
       return result;
    }
 
@@ -283,8 +262,7 @@ public class Klient {
       if (rechnungnummer_bezeichnung == null) {
          if (other.rechnungnummer_bezeichnung != null)
             return false;
-      } else if (!rechnungnummer_bezeichnung
-            .equals(other.rechnungnummer_bezeichnung))
+      } else if (!rechnungnummer_bezeichnung.equals(other.rechnungnummer_bezeichnung))
          return false;
       if (tex_datei == null) {
          if (other.tex_datei != null)
@@ -335,8 +313,7 @@ public class Klient {
       private String zusatz2_Name;
       private String rechnungnummer_bezeichnung;
 
-      public Builder(int klient_id, String auftraggeber2, String aAdresse1,
-            String plz, String ort) {
+      public Builder(int klient_id, String auftraggeber2, String aAdresse1, String plz, String ort) {
          this.klienten_id = klient_id;
          this.auftraggeber = auftraggeber2;
          this.aAdress1 = aAdresse1;
@@ -344,103 +321,86 @@ public class Klient {
          this.aOrt = ort;
       }
 
-      
       public Builder aEmail(String aEmail) {
          this.aEmail = aEmail;
          return this;
       }
 
-      
       public Builder aTelefon(String aTelefon) {
          this.aTelefon = aTelefon;
          return this;
       }
 
-      
       public Builder aAdress2(String aAdress2) {
          this.aAdress2 = aAdress2;
          return this;
       }
 
-      
       public Builder kunde(String kunde) {
          this.kunde = kunde;
          return this;
       }
 
-      
       public Builder kEmail(String kEmail) {
          this.kEmail = kEmail;
          return this;
       }
 
-      
       public Builder kTelefon(String kTelefon) {
          this.kTelefon = kTelefon;
          return this;
       }
 
-      
       public Builder kOrt(String kOrt) {
          this.kOrt = kOrt;
          return this;
       }
 
-      
       public Builder kPlz(String kPlz) {
          this.kPlz = kPlz;
          return this;
       }
 
-      
       public Builder kAdress2(String kAdress2) {
          this.kAdress2 = kAdress2;
          return this;
       }
 
-      
       public Builder kAdress1(String kAdress1) {
          this.kAdress1 = kAdress1;
          return this;
       }
 
-      
       public Builder bemerkungen(String bemerkungen) {
          this.bemerkungen = bemerkungen;
          return this;
       }
 
-      
       public Builder tex_datei(String tex_datei) {
          this.tex_datei = tex_datei;
          return this;
       }
 
-      
       public Builder zusatz1(boolean zusatz1) {
          this.zusatz1 = zusatz1;
          return this;
       }
 
-      
       public Builder zusatz1_Name(String zusatz1_Name) {
          this.zusatz1_Name = zusatz1_Name;
          return this;
       }
 
-      
       public Builder zusatz2(boolean zusatz2) {
          this.zusatz2 = zusatz2;
          return this;
       }
 
-      
       public Builder zusatz2_Name(String zusatz2_Name) {
          this.zusatz2_Name = zusatz2_Name;
          return this;
       }
 
-      
       public Builder rechnungnummer_bezeichnung(String rechnungnummer_bezeichnung) {
          this.rechnungnummer_bezeichnung = rechnungnummer_bezeichnung;
          return this;

@@ -80,7 +80,7 @@ public class Einheit {
       return auftraggeber + "(" + anzahl + "): " + klientenpreis + " €";
    }
 
-   public static class Builder {
+   public static class Builder implements de.kreth.arbeitsrechnungen.Builder<Einheit> {
 
       private String auftraggeber;
       private int anzahl;
@@ -167,6 +167,7 @@ public class Einheit {
          return this;
       }
 
+      @Override
       public Einheit build() {
          return new Einheit(this);
       }

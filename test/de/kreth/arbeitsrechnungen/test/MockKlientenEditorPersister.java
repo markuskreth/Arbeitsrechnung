@@ -19,7 +19,7 @@ public class MockKlientenEditorPersister extends KlientenEditorPersister {
    public Verbindung connectToDb(Options optionen) {
       return null;
    }
-   
+
    @Override
    public Klient getKlientById(int klient_id) {
       return new Klient.Builder(1, "Test", "", "", "").build();
