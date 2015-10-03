@@ -4,7 +4,41 @@ import org.apache.log4j.Logger;
 
 public class Logger2 {
 
-   Logger log;
+   private Logger log;
+   public enum Level {
+      /**
+       * Level 0: Kein Logging.
+       */
+      OFF,
+      /**
+       * Level 100: Nur fatale Fehler, die Programmabbruch bedingen.
+       */
+      FATAL,
+      /**
+       * Level 200: Alle Fehler.
+       */
+      ERROR,
+      /**
+       * Level 300: Alle Fehler und Warnungen.
+       */
+      WARN,
+      /**
+       * Level 400: Ausführliches Logging.
+       */
+      INFO,
+      /**
+       * Level 500: Sehr viele Ablauf Informationen - Debugging.
+       */
+      DEBUG,
+      /**
+       * Level 600: Fast alles loggen
+       */
+      TRACE,
+      /**
+       * Level 1000: Alles loggen.
+       */
+      ALL, 
+   }
 
    public Logger2(Class<?> clazz) {
       log = Logger.getLogger(clazz);
@@ -14,6 +48,14 @@ public class Logger2 {
       log = Logger.getLogger(name);
    }
 
+   public void setLevel(Level level) {
+      log.setLevel(org.apache.log4j.Level.toLevel(level.name()));
+   }
+   
+   public Level getCurrentLevel() {
+      return Level.valueOf(log.getLevel().toString());
+   }
+   
    public void trace(Object message) {
       log.trace(message);
    }
