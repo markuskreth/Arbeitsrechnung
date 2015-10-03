@@ -31,6 +31,7 @@ import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.MySqlDate;
 import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.data.Einheit;
 import de.kreth.arbeitsrechnungen.persister.KlientPersister;
 
 public class EinheitEinzelFrame extends JFrame {
@@ -141,43 +142,32 @@ public class EinheitEinzelFrame extends JFrame {
       // Füllt das Formular mit existierenden Feldern
       if (this.einheit > -1) {
 
-         String sqltext = "SELECT einheiten_id,klienten_id,angebote_id,Datum,Beginn,Ende,Preisänderung,zusatz1,zusatz2,Rechnung_Datum,Bezahlt_Datum " + "FROM einheiten "
-               + "WHERE einheiten_id=" + this.einheit + ";";
-         logger.info("Einheit_einzel.setEinheit: " + sqltext);
-         
-         try {
-            ResultSet daten = verbindung.query(sqltext);
-            daten.first();
-            if (daten.getInt("klienten_id") != this.klient) {
-               JOptionPane.showMessageDialog(this, "Achtung!!!\n" + "Klienten_id des Konstruktors stimmt nicht mit der des übegebenen" + " Datensatzes überein!"
-                     + "\nDatensatz-Klient: " + daten.getInt("klienten_id") + "\nKonstruktor-Klient: " + this.klient);
-            }
-            // Set Angebot-Combobox
-            this.jComboBoxAngebot.setSelectedIndex(this.angeboteliste.indexOf(Integer.valueOf(daten.getInt("angebote_id"))));
-            // Set Uhrzeit Beginn
-            java.util.Date zeit = daten.getTimestamp("Beginn");
-            String stzeit = DateFormat.getTimeInstance().format(zeit);
+         Einheit e = klientPersister.getEinheitById(this.einheit);
 
-            stzeit = stzeit.substring(0, stzeit.length() - 2);
-
-            this.jFormattedTextFieldStart.setText(stzeit);
-
-            // Set Uhrzeit Ende
-            zeit = daten.getTimestamp("Ende");
-            stzeit = DateFormat.getTimeInstance().format(zeit);
-
-            stzeit = stzeit.substring(0, stzeit.length() - 2);
-
-            this.jFormattedTextFieldEnde.setText(stzeit);
-            this.jDateChooserDatum.setDate(daten.getDate("Datum"));
-            this.jTextFieldPreisAenderung.setText(daten.getString("Preisänderung"));
-            this.jTextFieldZusatz1.setText(daten.getString("zusatz1"));
-            this.jTextFieldZusatz2.setText(daten.getString("zusatz2"));
-            this.jDateChooserEingereicht.setDate(daten.getDate("Rechnung_Datum"));
-            this.jDateChooserBezahlt.setDate(daten.getDate("Bezahlt_Datum"));
-         } catch (Exception e) {
-            logger.error("Einheit_einzel.setEinheit: ", e);
+         if (e.getKlientenId() != this.klient) {
+            String msg = "Achtung!!!\n" + "Klienten_id des Konstruktors stimmt nicht mit der des übegebenen" + " Datensatzes überein!"
+                  + "\nDatensatz-Klient: " + e.getKlientenId() + "\nKonstruktor-Klient: " + klient;
+            JOptionPane.showMessageDialog(this, msg);
          }
+         // Set Angebot-Combobox
+         this.jComboBoxAngebot.setSelectedIndex(this.angeboteliste.indexOf(Integer.valueOf(e.getAngebotId())));
+         
+         // Set Uhrzeit Beginn
+         String stzeit = DateFormat.getTimeInstance().format(e.getBeginn());
+         stzeit = stzeit.substring(0, stzeit.length() - 2);
+         this.jFormattedTextFieldStart.setText(stzeit);
+
+
+         // Set Uhrzeit Ende
+         stzeit = DateFormat.getTimeInstance().format(e.getEnde());
+         stzeit = stzeit.substring(0, stzeit.length() - 2);
+         this.jFormattedTextFieldEnde.setText(stzeit);
+         this.jDateChooserDatum.setDate(e.getDatum());
+         this.jTextFieldPreisAenderung.setText(String.valueOf(e.getPreisAenderung()));
+         this.jTextFieldZusatz1.setText(e.getZusatz1());
+         this.jTextFieldZusatz2.setText(e.getZusatz2());
+         this.jDateChooserEingereicht.setDate(e.getRechnungDatum());
+         this.jDateChooserBezahlt.setDate(e.getBezahltDatum());
       } else {
          JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Datensatz aus der Tabelle zum Edieren!", "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
          this.setVisible(false);

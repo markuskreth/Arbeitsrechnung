@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.data.Einheit;
 
 public class DatenPersister implements Persister {
 
@@ -64,11 +65,12 @@ public class DatenPersister implements Persister {
 		try {
 			ResultSet daten = verbindung.query(sqltext);
 			while (daten.next()) {
-				Einheit f = new Einheit();
-				f.auftraggeber = daten.getString("auftraggeber");
-				f.anzahl = daten.getInt("anzahl");
-				f.klientenpreis = daten.getDouble("klientpreis");
-				f.id = daten.getInt("id");
+				Einheit f = new Einheit.Builder()
+				   .auftraggeber(daten.getString("auftraggeber"))
+				   .anzahl(daten.getInt("anzahl"))
+				   .klientenpreis(daten.getDouble("klientpreis"))
+				   .id(daten.getInt("id"))
+				   .build();
 				result.add(f);
 			}
 		} catch (Exception e) {
@@ -101,28 +103,6 @@ public class DatenPersister implements Persister {
 		}
 	}
 	
-	public class Einheit{
-		String auftraggeber;
-		int anzahl;
-		double klientenpreis;
-		int id;
-		public String getAuftraggeber() {
-			return auftraggeber;
-		}
-		public int getAnzahl() {
-			return anzahl;
-		}
-		public double getKlientenpreis() {
-			return klientenpreis;
-		}
-		public int getId() {
-			return id;
-		}
-		@Override
-		public String toString() {
-			return auftraggeber + "(" + anzahl + "): " + klientenpreis + " €";
-		}
-	}
 	@Override
    public Verbindung connectToDb(Options optionen) {
       return new DatabaseConnector(optionen.getProperties()).getVerbindung();

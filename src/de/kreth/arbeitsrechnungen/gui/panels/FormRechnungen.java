@@ -330,23 +330,18 @@ public class FormRechnungen extends JPanel {
       }
    }
 
-   private void jButtonAendernActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonAendernActionPerformed
+   private void jButtonAendernActionPerformed(ActionEvent evt) {
       int rechnung_id = this.rechnungen.elementAt(this.jTable1.getSelectedRow()).getRechnungen_id();
-      // System.out.println("Elemente in rechnungen: " +
-      // this.rechnungen.size());
-      // System.out.println("Selected Column: " +
-      // this.jTable1.getSelectedColumn());
-      // System.out.println("Geefundene Rechnung_id: " + rechnung_id);
       RechnungDialog dialog = new RechnungDialog(optionen, getOwner(), rechnung_id);
       dialog.setVisible(true);
       pchListeners.fireIndexedPropertyChange(GEAENDERT, rechnung_id, true, false);
-   }// GEN-LAST:event_jButtonAendernActionPerformed
+   }
 
    private Window getOwner() {
       return this.owner;
    }
 
-   private void jButtonLoeschenActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonLoeschenActionPerformed
+   private void jButtonLoeschenActionPerformed(ActionEvent evt) {
       int rechnung_id = this.rechnungen.elementAt(this.jTable1.getSelectedRow()).getRechnungen_id();
 
       if (JOptionPane.showConfirmDialog(this.getParent(), "Wollen Sie die gewählte Rechnung endgültig löschen?", "Endgültige Löschung!", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -371,9 +366,9 @@ public class FormRechnungen extends JPanel {
             JOptionPane.showMessageDialog(this.getParent(), sql);
          }
       }
-   }// GEN-LAST:event_jButtonLoeschenActionPerformed
+   }
 
-   private void jButtonBezahltActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jButtonBezahltActionPerformed
+   private void jButtonBezahltActionPerformed(ActionEvent evt) {
 
       if (this.jTable1.getSelectedColumnCount() == 0) {
          JOptionPane.showMessageDialog(this, "Bitte wählen sie eine oder mehrere Rechnungen aus, um den Zahlungseingang zu bestätigen", "Keine Rechnung ausgewählt!",
@@ -419,7 +414,7 @@ public class FormRechnungen extends JPanel {
             }
          }
       }
-   }// GEN-LAST:event_jButtonBezahltActionPerformed
+   }
 
    private String buildInClauseForRechnungen(int[] rechnung) {
       String inClause = "(" + this.rechnungen.elementAt(rechnung[0]).getRechnungen_id();

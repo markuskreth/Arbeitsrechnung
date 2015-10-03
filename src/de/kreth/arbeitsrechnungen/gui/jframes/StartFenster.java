@@ -23,10 +23,10 @@ import org.apache.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.StartFensterTableCellRenderer;
+import de.kreth.arbeitsrechnungen.data.Einheit;
 import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.starttablemodels.LabledStringValueNoneditableTableModel;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister;
-import de.kreth.arbeitsrechnungen.persister.DatenPersister.Einheit;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister.Forderung;
 
 public class StartFenster extends JFrame implements PropertyChangeListener {
