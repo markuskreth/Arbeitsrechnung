@@ -868,7 +868,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
     * @param evt
     */
    private void jButtonErstellenActionPerformed(ActionEvent evt) {
-      Options einstellungen = new Einstellungen().getEinstellungen();
+      Options einstellungen = Einstellungen.getInstance().getEinstellungen();
 
       this.rechnung.setZusatz1(this.jCheckBoxZusatz1.isSelected());
       this.rechnung.setZusatz2(this.jCheckBoxZusatz2.isSelected());

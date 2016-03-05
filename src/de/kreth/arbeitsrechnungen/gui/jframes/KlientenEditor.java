@@ -71,7 +71,7 @@ public class KlientenEditor extends JDialog {
    public KlientenEditor(Frame arg0) {
       super(arg0, "Klienteneditor");
 
-      optionen = new Einstellungen().getEinstellungen();
+      optionen = Einstellungen.getInstance().getEinstellungen();
       persister = new KlientenEditorPersister(optionen);
 
       allKlienten = persister.getAllKlienten();

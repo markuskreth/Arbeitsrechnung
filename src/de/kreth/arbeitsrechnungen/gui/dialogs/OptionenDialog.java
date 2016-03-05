@@ -28,17 +28,16 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import de.kreth.arbeitsrechnungen.Einstellungen;
+import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.Options.Build;
+
 public class OptionenDialog extends JDialog {
 
    private static final long serialVersionUID = -527076543127705929L;
 
    private Logger logger = Logger.getLogger(getClass());
 
-   private Properties einstellungen = new Properties();
-
-   private final String programmverzeichnis = ".arbeitrechnungen";
-
-   private File optiondatei;
    private boolean firststart;
 
    private JLabel jLabelLogLevel;
@@ -46,6 +45,10 @@ public class OptionenDialog extends JDialog {
    private JPanel jPanelSettings;
 
    private JTextField jTextFieldLogLevel;
+
+   private Options options;
+
+   private Build optionBuilder;
 
    /**
     * Launch the Dialog.
@@ -65,14 +68,7 @@ public class OptionenDialog extends JDialog {
 
       this.firststart = false;
       initComponents();
-      Properties sysprops = System.getProperties();
-      String homedir = sysprops.getProperty("user.home");
-      optiondatei = new File(homedir + sysprops.getProperty("file.separator") + programmverzeichnis + sysprops.getProperty("file.separator") + "optionen.ini");
-      try {
-         einstellungen.load(new FileInputStream(optiondatei));
-      } catch (Exception e) {
-         logger.error("Optionen.java: Options-Datei konnte nicht geladen werden.", e);
-      }
+      
       if (!firststart) {
          loadoptions();
       }
@@ -83,14 +79,7 @@ public class OptionenDialog extends JDialog {
       super(parent, true);
       this.firststart = firststart;
       initComponents();
-      Properties sysprops = System.getProperties();
-      String homedir = sysprops.getProperty("user.home");
-      optiondatei = new File(homedir + sysprops.getProperty("file.separator") + programmverzeichnis + sysprops.getProperty("file.separator") + "optionen.ini");
-      try {
-         einstellungen.load(new FileInputStream(optiondatei));
-      } catch (Exception e) {
-         logger.error("Optionen.java: Options-Datei konnte nicht geladen werden.", e);
-      }
+
       if (!firststart) {
          loadoptions();
       }
@@ -104,17 +93,21 @@ public class OptionenDialog extends JDialog {
 
       fillComponentMap(components, contentPane);
 
-      Enumeration<?> propnames = einstellungen.propertyNames();
+      options = Einstellungen.getInstance().getEinstellungen();
+      Properties properties = options.getProperties();
+      
+      List<String> propnames = Options.PROPERTIES;
 
       // für jedes Property zugehöriges Textfeld
-      while (propnames.hasMoreElements()) {
-         String propname = (String) propnames.nextElement();
+      for(String propname : propnames) {
 
          Component comp = components.get(propname);
 
          if (comp instanceof JTextField) {
-            if (((JTextField) comp).getName().matches(propname)) {
-               ((JTextField) comp).setText(einstellungen.getProperty(propname));
+            final JTextField jTextField = (JTextField) comp;
+            if (jTextField.getName().matches(propname)) {
+               String propValue = properties.getProperty(propname);
+               jTextField.setText(propValue);
             }
          }
       }
@@ -140,15 +133,19 @@ public class OptionenDialog extends JDialog {
    }
 
    private void getTexts(JComponent component) {
+      optionBuilder = new Options.Build();
+      
       for (int i = 0; i < component.getComponentCount(); i++) {
-         if (component.getComponent(i) instanceof JComponent) {
-            // logger.debug(component.getComponent(i).getClass() +
-            // "--> setTexts");
-            getTexts((JComponent) component.getComponent(i));
+         
+         Component component2 = component.getComponent(i);
+         
+         if (component2 instanceof JComponent) {
+            getTexts((JComponent) component2);
          }
-         if (component.getComponent(i) instanceof JTextField) {
-            einstellungen.setProperty(((JTextField) component.getComponent(i)).getName(), ((JTextField) component.getComponent(i)).getText());
-            logger.debug(((JTextField) component.getComponent(i)).getName());
+         if (component2 instanceof JTextField) {
+            final JTextField jTextField = (JTextField) component2;
+            optionBuilder.setProperty(jTextField.getName(), jTextField.getText());
+            logger.debug(jTextField.getName());
          }
       }
    }
@@ -156,7 +153,7 @@ public class OptionenDialog extends JDialog {
    private void saveoptions() {
       getTexts((JComponent) this.getContentPane());
       try {
-         einstellungen.store(new FileOutputStream(optiondatei), "Eigene Optionen");
+         Einstellungen.getInstance().store(optionBuilder.build());
       } catch (Exception e) {
          System.err.println("Optionen.java: Options-Datei konnte nicht gespeichert werden.");
          e.printStackTrace();
@@ -202,6 +199,7 @@ public class OptionenDialog extends JDialog {
       jPanelSettings = new JPanel();
       jLabelLogLevel = new JLabel();
       jTextFieldLogLevel = new JTextField();
+      jTextFieldLogLevel.setName("LogLevel");
       jTextFieldLogLevel.setEditable(false);
       jTextFieldLogLevel.addMouseListener(new MouseAdapter() {
          

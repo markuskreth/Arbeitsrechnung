@@ -43,7 +43,7 @@ public class AngebotDialog extends javax.swing.JDialog {
       setModal(true);
       initComponents();
 
-      optionen = new Einstellungen().getEinstellungen();
+      optionen = Einstellungen.getInstance().getEinstellungen();
       persister = new AngebotPersister(optionen);
       nf.setMaximumFractionDigits(2);
 
