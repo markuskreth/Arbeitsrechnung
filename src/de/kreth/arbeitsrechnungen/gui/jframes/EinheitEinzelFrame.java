@@ -74,7 +74,7 @@ public class EinheitEinzelFrame extends JFrame {
     */
    public EinheitEinzelFrame(int klient, int einheit) {
 
-      optionen = new Einstellungen().getEinstellungen();
+      optionen = Einstellungen.getInstance().getEinstellungen();
 
       verbindung = new Verbindung_mysql(optionen.getProperties());
       klientPersister = new KlientPersister(verbindung);

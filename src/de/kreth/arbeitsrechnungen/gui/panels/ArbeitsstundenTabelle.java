@@ -81,7 +81,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
    /** Creates new form ArbeitsstundenTabelle */
    public ArbeitsstundenTabelle(Window parent, int klienten_id) {
       // Optionen mit Datenbankeinstellungen laden
-      optionen = new Einstellungen().getEinstellungen();
+      optionen = Einstellungen.getInstance().getEinstellungen();
 
       verbindung = new Verbindung_mysql(optionen.getProperties());
 

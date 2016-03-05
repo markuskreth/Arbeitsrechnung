@@ -18,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 
 import mouseoverhintmanager.MouseOverHintManager;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.Options;

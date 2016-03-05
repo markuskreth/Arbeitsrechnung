@@ -60,7 +60,7 @@ public class FormRechnungen extends JPanel {
    public FormRechnungen(Window owner, int klienten_id) {
       super();
       this.owner = owner;
-      optionen = new Einstellungen().getEinstellungen();
+      optionen = Einstellungen.getInstance().getEinstellungen();
       verbindung = new Verbindung_mysql(optionen.getProperties());
       this.klienten_id = klienten_id;
       initComponents();
