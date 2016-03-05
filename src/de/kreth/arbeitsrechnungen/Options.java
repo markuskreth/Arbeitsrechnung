@@ -14,6 +14,21 @@ public class Options {
    public static final String DB_PASSWORD = "password";
    public static final String TARGET_DIR = "verzPdfFiles";
    public static final String TMP_DIR = "arbeitsverzeichnis";
+   
+   public static final List<String> PROPERTIES;
+   static {
+      PROPERTIES = new ArrayList<>();
+      PROPERTIES.add(STD_TEX_FILE);
+      PROPERTIES.add(TEX_TEMPLATE_DIR);
+      PROPERTIES.add(PDF_PROG);
+      PROPERTIES.add(DB_USER);
+      PROPERTIES.add(DB_HOST);
+      PROPERTIES.add(DB_DATABASE_NAME);
+      PROPERTIES.add(DB_PASSWORD);
+      PROPERTIES.add(TARGET_DIR);
+      PROPERTIES.add(TMP_DIR);
+   }
+   
    private Properties prop;
 
    private Options(Build build) {
@@ -79,15 +94,6 @@ public class Options {
       public Build(Properties properties) {
          this.properties = properties;
          toSet.clear();
-         // stdTexFile(properties.getProperty(STD_TEX_FILE));
-         // texTemplatesDir(properties.getProperty(TEX_TEMPLATE_DIR));
-         // pdfProg(properties.getProperty(PDF_PROG));
-         // dbUser(properties.getProperty(DB_USER));
-         // dbHost(properties.getProperty(DB_HOST));
-         // dbDatabaseName(properties.getProperty(DB_DATABASE_NAME));
-         // dbPassword(properties.getProperty(DB_PASSWORD));
-         // targetDir(properties.getProperty(TARGET_DIR));
-         // tmpDir(properties.getProperty(TMP_DIR));
       }
 
       public Build stdTexFile(String stdTexFile) {
@@ -167,5 +173,13 @@ public class Options {
          return new Options(this);
       }
 
+      public void setProperty(String name, String value) {
+         if(!PROPERTIES.contains(name))
+            throw new IllegalArgumentException("Property Key " + name + " unknown!");
+         
+      }
+
    }
+
+   
 }
