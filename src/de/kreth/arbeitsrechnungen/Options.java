@@ -5,6 +5,8 @@ import java.util.*;
 
 public class Options {
 
+   public static final String BENUTZERVERZEICHNIS = ".arbeitrechnungen";
+   
    public static final String STD_TEX_FILE = "stdtexdatei";
    public static final String TEX_TEMPLATE_DIR = "verzeichnistexdateien";
    public static final String PDF_PROG = "pdfprogramm";
@@ -81,6 +83,13 @@ public class Options {
       return (Properties) prop.clone();
    }
 
+   @Override
+   public String toString() {
+      if(prop != null)
+         return prop.toString();
+      return "[]";
+   }
+   
    public static class Build implements Builder<Options> {
 
       private Properties properties = null;
