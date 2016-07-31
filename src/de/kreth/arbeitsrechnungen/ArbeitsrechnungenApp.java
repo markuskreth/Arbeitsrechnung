@@ -20,7 +20,7 @@ public class ArbeitsrechnungenApp {
 
          @Override
          public void run() {
-            ArbeitRechnungFactoryProductiv.init();
+            ArbeitRechnungFactoryProductiv.init();            
             new StartFenster().setVisible(true);
          }
       });

@@ -41,17 +41,23 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
    private Vector<Integer> forderungen_ids = new Vector<Integer>();
    private Vector<Integer> Einheiten_ids = new Vector<Integer>();
-   private Options optionen;
+   private Options optionen = null;
    private MouseOverHintManager hintman;
-   private DefaultTableModel forderungenTableModel;
-   private DefaultTableModel einheitenTableModel;
+   private LabledStringValueNoneditableTableModel forderungenTableModel;
+   private LabledStringValueNoneditableTableModel einheitenTableModel;
    private DatenPersister persister;
 
-   /** Creates new form StartFenster */
    public StartFenster() {
+      this(null);
+   }
+   
+   public StartFenster(Options options) {
       logger = Logger.getLogger(getClass());
 
-      loadOrCreateOptions();
+      if(options == null)
+         loadOrCreateOptions();
+      else
+         this.optionen = options;
 
       persister = new DatenPersister(optionen);
 
@@ -80,12 +86,12 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       hintman.enableHints(this);
    }
 
-   private void loadOrCreateOptions() {
+   protected void loadOrCreateOptions() {
       // Testen ob das arbeitsverzeichnis im home-verzeichnis existiert
       File homeverzeichnis;
       Properties sysprops = System.getProperties();
       String homedir = sysprops.getProperty("user.home");
-      homeverzeichnis = new File(homedir + sysprops.getProperty("file.separator") + ".arbeitrechnungen");
+      homeverzeichnis = new File(homedir + sysprops.getProperty("file.separator") + Options.BENUTZERVERZEICHNIS);
 
       if (!homeverzeichnis.exists()) {
          // Verzeichnis anlegen
@@ -93,7 +99,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
          homeverzeichnis.mkdirs();
       }
 
-      File optionfile = new File(homedir + sysprops.getProperty("file.separator") + ".arbeitrechnungen" + sysprops.getProperty("file.separator") + "optionen.ini");
+      File optionfile = new File(homedir + sysprops.getProperty("file.separator") + Options.BENUTZERVERZEICHNIS + sysprops.getProperty("file.separator") + "optionen.ini");
 
       createOptionsfileIfNotExisting(optionfile);
 
@@ -121,13 +127,14 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    }
 
    private void loadOptions(File optionfile) {
-
-      try {
-         Properties prop = new Properties();
-         prop.load(new FileInputStream(optionfile));
-         optionen = new Options.Build(prop).build();
-      } catch (Exception e) {
-         logger.error("Startfenster.java: Options-Datei konnte nicht geladen werden.", e);
+      if(optionen == null) {
+         try {
+            Properties prop = new Properties();
+            prop.load(new FileInputStream(optionfile));
+            optionen = new Options.Build(prop).build();
+         } catch (Exception e) {
+            logger.error("Startfenster.java: Options-Datei konnte nicht geladen werden.", e);
+         }
       }
    }
 

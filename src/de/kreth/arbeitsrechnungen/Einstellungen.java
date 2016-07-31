@@ -3,9 +3,7 @@ package de.kreth.arbeitsrechnungen;
 /**
  * @author markus
  */
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -13,17 +11,33 @@ import org.apache.log4j.Logger;
 public class Einstellungen {
 
    protected static Einstellungen instance; 
-   private final static String programmverzeichnis = ".arbeitrechnungen";
+   
    private final String propertyPath;
    private Options opt;
 
+   private Logger logger;
+
    protected Einstellungen() {
+
+      logger = Logger.getLogger(getClass());
       Properties optionen = new Properties();
       java.util.Properties sysprops = System.getProperties();
+      // Testen ob das arbeitsverzeichnis im home-verzeichnis existiert
+      File homeverzeichnis;
+      
+      String homedir = sysprops.getProperty("user.home");
+      homeverzeichnis = new File(homedir + sysprops.getProperty("file.separator") + Options.BENUTZERVERZEICHNIS);
+
+      if (!homeverzeichnis.exists()) {
+         // Verzeichnis anlegen
+         logger.info(homeverzeichnis.getAbsolutePath() + " existiert nicht!\nwird angelegt...");
+         homeverzeichnis.mkdirs();
+      }
+
       StringBuilder bld = new StringBuilder();
       bld.append(sysprops.getProperty("user.home"));
       bld.append(sysprops.getProperty("file.separator"));
-      bld.append(programmverzeichnis);
+      bld.append(Options.BENUTZERVERZEICHNIS);
       bld.append(sysprops.getProperty("file.separator"));
       bld.append("optionen.ini");
       
@@ -38,6 +52,8 @@ public class Einstellungen {
          } catch (Exception e) {
             Logger.getLogger(getClass()).error("Options-Datei konnte nicht geladen werden.", e);
          }
+      } else {
+         
       }
    }
    

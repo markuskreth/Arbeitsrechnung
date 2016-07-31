@@ -11,19 +11,17 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.log4j.Logger;
 
+import de.kreth.arbeitsrechnungen.Options;
+
 import java.awt.GridLayout;
 
 public class OptionsDialog extends JDialog {
 
    private static final long serialVersionUID = -527076543127705929L;
 
-   private static final String programmverzeichnis = ".arbeitrechnungen";
-
    private Logger logger = Logger.getLogger(getClass());
 
    private Properties einstellungen = new Properties();
-
-   // private final String programmverzeichnis = ".arbeitrechnungen";
 
    private File optiondatei;
 
@@ -194,7 +192,7 @@ public class OptionsDialog extends JDialog {
 
       Properties sysprops = System.getProperties();
       String homedir = sysprops.getProperty("user.home");
-      optiondatei = new File(homedir + sysprops.getProperty("file.separator") + programmverzeichnis + sysprops.getProperty("file.separator") + "optionen.ini");
+      optiondatei = new File(homedir + sysprops.getProperty("file.separator") + Options.BENUTZERVERZEICHNIS + sysprops.getProperty("file.separator") + "optionen.ini");
       try {
          einstellungen.load(new FileInputStream(optiondatei));
       } catch (Exception e) {
