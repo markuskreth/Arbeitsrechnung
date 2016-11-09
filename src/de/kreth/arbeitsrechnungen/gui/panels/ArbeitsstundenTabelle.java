@@ -19,12 +19,12 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
+import com.toedter.calendar.*;
 
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsabrechnungendataclass.Verbindung_mysql;
@@ -66,14 +66,14 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    public static final int NICHTEINGEREICHTE = 2;
    public static final int OFFENE = 3;
 
-   public void setParent(javax.swing.JFrame parent) {
+   public void setParent(JFrame parent) {
       this.parent = parent;
    }
 
-   public ArbeitsstundenTabelle(javax.swing.JFrame parent) {
+   public ArbeitsstundenTabelle(JFrame parent) {
       // Füllt die Tabelle mit den Feuerwehr-Arbeitsstunden
       this(parent, 1);
-      logger.debug("ArbeitsstundenTabelle(javax.swing.JFrame parent)");
+      logger.debug("ArbeitsstundenTabelle(JFrame parent)");
    }
 
    public ArbeitsstundenTabelle() {
@@ -303,37 +303,37 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
     */
    private void initComponents() {
 
-      buttonGroupFilter = new javax.swing.ButtonGroup();
-      jPopupMenu1 = new javax.swing.JPopupMenu();
-      jMenuItembearbeiten = new javax.swing.JMenuItem();
-      jSeparator1 = new javax.swing.JSeparator();
-      jMenuItemEditAll = new javax.swing.JMenuItem();
-      jMenuItemRechnungDatum = new javax.swing.JMenuItem();
-      jMenuItemBezahltDatum = new javax.swing.JMenuItem();
-      jMenuItem1 = new javax.swing.JMenuItem();
-      jScrollPane1 = new javax.swing.JScrollPane();
-      jTable1 = new javax.swing.JTable();
-      jButtonDelete = new javax.swing.JButton();
-      jButtonBearbeiten = new javax.swing.JButton();
-      jButtonNeuerDatensatz = new javax.swing.JButton();
-      jRadioButtonAbgeschlossene = new javax.swing.JRadioButton();
-      jRadioButtonNichtBezahlte = new javax.swing.JRadioButton();
-      jRadioButtonNichtEingereichte = new javax.swing.JRadioButton();
-      jRadioButtonAlle = new javax.swing.JRadioButton();
-      jLabel1 = new javax.swing.JLabel();
-      jButtonRechnung = new javax.swing.JButton();
-      jRadioButtonOffene = new javax.swing.JRadioButton();
-      jTextFieldSumme = new javax.swing.JTextField();
-      jLabel2 = new javax.swing.JLabel();
-      jLabel3 = new javax.swing.JLabel();
-      jTextFieldAnzahl = new javax.swing.JTextField();
-      jDateChooserVonDatum = new com.toedter.calendar.JDateChooser();
-      jDateChooserBisDatum = new com.toedter.calendar.JDateChooser();
-      jLabel4 = new javax.swing.JLabel();
-      jLabel5 = new javax.swing.JLabel();
-      jTextFieldStundenzahl = new javax.swing.JTextField();
-      jLabel6 = new javax.swing.JLabel();
-      jLabel7 = new javax.swing.JLabel();
+      buttonGroupFilter = new ButtonGroup();
+      jPopupMenu1 = new JPopupMenu();
+      jMenuItembearbeiten = new JMenuItem();
+      jSeparator1 = new JSeparator();
+      jMenuItemEditAll = new JMenuItem();
+      jMenuItemRechnungDatum = new JMenuItem();
+      jMenuItemBezahltDatum = new JMenuItem();
+      jMenuItem1 = new JMenuItem();
+      jScrollPane1 = new JScrollPane();
+      jTable1 = new JTable();
+      jButtonDelete = new JButton();
+      jButtonBearbeiten = new JButton();
+      jButtonNeuerDatensatz = new JButton();
+      jRadioButtonAbgeschlossene = new JRadioButton();
+      jRadioButtonNichtBezahlte = new JRadioButton();
+      jRadioButtonNichtEingereichte = new JRadioButton();
+      jRadioButtonAlle = new JRadioButton();
+      jLabel1 = new JLabel();
+      jButtonRechnung = new JButton();
+      jRadioButtonOffene = new JRadioButton();
+      jTextFieldSumme = new JTextField();
+      jLabel2 = new JLabel();
+      jLabel3 = new JLabel();
+      jTextFieldAnzahl = new JTextField();
+      jDateChooserVonDatum = new JDateChooser();
+      jDateChooserBisDatum = new JDateChooser();
+      jLabel4 = new JLabel();
+      jLabel5 = new JLabel();
+      jTextFieldStundenzahl = new JTextField();
+      jLabel6 = new JLabel();
+      jLabel7 = new JLabel();
 
       jPopupMenu1.setInvoker(jTable1);
       jPopupMenu1.setName("jPopupMenu1"); // NOI18N
@@ -627,103 +627,103 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
       jLabel7.setName("jLabel7"); // NOI18N
 
-      javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+      GroupLayout layout = new GroupLayout(this);
       this.setLayout(layout);
       layout.setHorizontalGroup(layout
-            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
+            .createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
             .addGroup(
-                  layout.createSequentialGroup().addContainerGap().addComponent(jButtonRechnung).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonNeuerDatensatz, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonBearbeiten, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(162, Short.MAX_VALUE))
+                  layout.createSequentialGroup().addContainerGap().addComponent(jButtonRechnung).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonNeuerDatensatz, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonBearbeiten, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonDelete, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE).addContainerGap(162, Short.MAX_VALUE))
             .addGroup(
                   layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(
-                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                              layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                     .addGroup(
                                           layout.createSequentialGroup().addComponent(jRadioButtonNichtEingereichte)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jRadioButtonAbgeschlossene))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jRadioButtonAbgeschlossene))
                                     .addGroup(
-                                          layout.createSequentialGroup().addComponent(jLabel1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jRadioButtonAlle).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          layout.createSequentialGroup().addComponent(jLabel1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jRadioButtonAlle).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jRadioButtonNichtBezahlte)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(
-                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                              layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                     .addGroup(
                                           layout.createSequentialGroup()
                                                 .addComponent(jRadioButtonOffene)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jDateChooserVonDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                      javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jDateChooserBisDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jLabel4).addComponent(jLabel5))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jDateChooserVonDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                      GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jDateChooserBisDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                          GroupLayout.PREFERRED_SIZE)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jLabel4).addComponent(jLabel5))
                         .addContainerGap(89, Short.MAX_VALUE))
             .addGroup(
-                  javax.swing.GroupLayout.Alignment.TRAILING,
-                  layout.createSequentialGroup().addContainerGap(217, Short.MAX_VALUE).addComponent(jLabel6).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldStundenzahl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldAnzahl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldSumme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
+                  GroupLayout.Alignment.TRAILING,
+                  layout.createSequentialGroup().addContainerGap(217, Short.MAX_VALUE).addComponent(jLabel6).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldStundenzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jLabel3)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldAnzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel2)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldSumme, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLabel7, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
 
-      layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] { jButtonBearbeiten, jButtonDelete, jButtonNeuerDatensatz });
+      layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] { jButtonBearbeiten, jButtonDelete, jButtonNeuerDatensatz });
 
-      layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] { jRadioButtonAbgeschlossene, jRadioButtonAlle, jRadioButtonNichtBezahlte,
+      layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] { jRadioButtonAbgeschlossene, jRadioButtonAlle, jRadioButtonNichtBezahlte,
             jRadioButtonNichtEingereichte });
 
-      layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            javax.swing.GroupLayout.Alignment.TRAILING,
+      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            GroupLayout.Alignment.TRAILING,
             layout.createSequentialGroup()
-                  .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                   .addGroup(
-                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                              .addComponent(jTextFieldSumme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                              .addComponent(jTextFieldSumme, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                               .addComponent(jLabel2)
-                              .addComponent(jTextFieldAnzahl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addComponent(jTextFieldAnzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                               .addComponent(jLabel3)
-                              .addComponent(jTextFieldStundenzahl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel6))
+                              .addComponent(jTextFieldStundenzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                    GroupLayout.PREFERRED_SIZE).addComponent(jLabel6))
                   .addGap(13, 13, 13)
                   .addGroup(
-                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                               .addGroup(
                                     layout.createSequentialGroup()
                                           .addGroup(
-                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonAlle).addComponent(jLabel1)
+                                                layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonAlle).addComponent(jLabel1)
                                                       .addComponent(jRadioButtonNichtBezahlte).addComponent(jRadioButtonOffene))
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                           .addGroup(
-                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonNichtEingereichte)
+                                                layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonNichtEingereichte)
                                                       .addComponent(jRadioButtonAbgeschlossene))
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 2, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 2, GroupLayout.PREFERRED_SIZE))
                               .addGroup(
-                                    javax.swing.GroupLayout.Alignment.TRAILING,
+                                    GroupLayout.Alignment.TRAILING,
                                     layout.createSequentialGroup()
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 4, GroupLayout.PREFERRED_SIZE)
                                           .addGroup(
-                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                       .addComponent(jLabel4)
-                                                      .addComponent(jDateChooserVonDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE))
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                      .addComponent(jDateChooserVonDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                            GroupLayout.PREFERRED_SIZE))
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                           .addGroup(
-                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                      .addComponent(jDateChooserBisDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel5))))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                      .addComponent(jDateChooserBisDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                            GroupLayout.PREFERRED_SIZE).addComponent(jLabel5))))
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                   .addGroup(
-                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButtonRechnung).addComponent(jButtonNeuerDatensatz)
+                        layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jButtonRechnung).addComponent(jButtonNeuerDatensatz)
                               .addComponent(jButtonBearbeiten).addComponent(jButtonDelete)).addGap(12, 12, 12).addComponent(jLabel7)));
 
    }
@@ -1062,7 +1062,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
             isAnySubmitted = true;
             einheitenIDs.removeAllElements();
             i = this.Arbeitsstunden.size();
-            javax.swing.JOptionPane.showMessageDialog(parent, nachricht, "Einheit bereits abgerechnet", javax.swing.JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(parent, nachricht, "Einheit bereits abgerechnet", JOptionPane.ERROR_MESSAGE);
          }
       }
 
@@ -1299,36 +1299,36 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    }
 
    // Variables declaration - do not modify//GEN-BEGIN:variables
-   private javax.swing.ButtonGroup buttonGroupFilter;
-   private javax.swing.JButton jButtonBearbeiten;
-   private javax.swing.JButton jButtonDelete;
-   private javax.swing.JButton jButtonNeuerDatensatz;
-   private javax.swing.JButton jButtonRechnung;
-   private com.toedter.calendar.JDateChooser jDateChooserBisDatum;
-   private com.toedter.calendar.JDateChooser jDateChooserVonDatum;
-   private javax.swing.JLabel jLabel1;
-   private javax.swing.JLabel jLabel2;
-   private javax.swing.JLabel jLabel3;
-   private javax.swing.JLabel jLabel4;
-   private javax.swing.JLabel jLabel5;
-   private javax.swing.JLabel jLabel6;
-   private javax.swing.JLabel jLabel7;
-   private javax.swing.JMenuItem jMenuItem1;
-   private javax.swing.JMenuItem jMenuItemBezahltDatum;
-   private javax.swing.JMenuItem jMenuItemEditAll;
-   private javax.swing.JMenuItem jMenuItemRechnungDatum;
-   private javax.swing.JMenuItem jMenuItembearbeiten;
-   private javax.swing.JPopupMenu jPopupMenu1;
-   private javax.swing.JRadioButton jRadioButtonAbgeschlossene;
-   private javax.swing.JRadioButton jRadioButtonAlle;
-   private javax.swing.JRadioButton jRadioButtonNichtBezahlte;
-   private javax.swing.JRadioButton jRadioButtonNichtEingereichte;
-   private javax.swing.JRadioButton jRadioButtonOffene;
-   private javax.swing.JScrollPane jScrollPane1;
-   private javax.swing.JSeparator jSeparator1;
-   private javax.swing.JTable jTable1;
-   private javax.swing.JTextField jTextFieldAnzahl;
-   private javax.swing.JTextField jTextFieldStundenzahl;
-   private javax.swing.JTextField jTextFieldSumme;
+   private ButtonGroup buttonGroupFilter;
+   private JButton jButtonBearbeiten;
+   private JButton jButtonDelete;
+   private JButton jButtonNeuerDatensatz;
+   private JButton jButtonRechnung;
+   private JDateChooser jDateChooserBisDatum;
+   private JDateChooser jDateChooserVonDatum;
+   private JLabel jLabel1;
+   private JLabel jLabel2;
+   private JLabel jLabel3;
+   private JLabel jLabel4;
+   private JLabel jLabel5;
+   private JLabel jLabel6;
+   private JLabel jLabel7;
+   private JMenuItem jMenuItem1;
+   private JMenuItem jMenuItemBezahltDatum;
+   private JMenuItem jMenuItemEditAll;
+   private JMenuItem jMenuItemRechnungDatum;
+   private JMenuItem jMenuItembearbeiten;
+   private JPopupMenu jPopupMenu1;
+   private JRadioButton jRadioButtonAbgeschlossene;
+   private JRadioButton jRadioButtonAlle;
+   private JRadioButton jRadioButtonNichtBezahlte;
+   private JRadioButton jRadioButtonNichtEingereichte;
+   private JRadioButton jRadioButtonOffene;
+   private JScrollPane jScrollPane1;
+   private JSeparator jSeparator1;
+   private JTable jTable1;
+   private JTextField jTextFieldAnzahl;
+   private JTextField jTextFieldStundenzahl;
+   private JTextField jTextFieldSumme;
    // End of variables declaration//GEN-END:variables
 }
