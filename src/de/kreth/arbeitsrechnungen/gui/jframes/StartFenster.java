@@ -14,9 +14,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
-import mouseoverhintmanager.MouseOverHintManager;
 
 import org.apache.log4j.Logger;
 
@@ -24,9 +21,10 @@ import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.StartFensterTableCellRenderer;
 import de.kreth.arbeitsrechnungen.data.Einheit;
 import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
-import de.kreth.arbeitsrechnungen.gui.jframes.starttablemodels.LabledStringValueNoneditableTableModel;
+import de.kreth.arbeitsrechnungen.gui.jframes.starttablemodels.LabeledTableModel;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister.Forderung;
+import mouseoverhintmanager.MouseOverHintManager;
 
 public class StartFenster extends JFrame implements PropertyChangeListener {
 
@@ -37,14 +35,12 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    private static final long serialVersionUID = -1175489292478287196L;
    private Logger logger;
 
-   DecimalFormat df = new DecimalFormat("0.00");
+   private DecimalFormat df = new DecimalFormat("0.00");
 
-   private Vector<Integer> forderungen_ids = new Vector<Integer>();
-   private Vector<Integer> Einheiten_ids = new Vector<Integer>();
    private Options optionen = null;
    private MouseOverHintManager hintman;
-   private LabledStringValueNoneditableTableModel forderungenTableModel;
-   private LabledStringValueNoneditableTableModel einheitenTableModel;
+   private StartTableModel forderungenTableModel;
+   private StartTableModel einheitenTableModel;
    private DatenPersister persister;
 
    public StartFenster() {
@@ -62,10 +58,14 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       persister = new DatenPersister(optionen);
 
       // Model mit Überschriften erstellen
-      einheitenTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Firma", "Einsätze", "Summe" });
-      forderungenTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Firma", "Rechnungsdatum", "Forderung" });
+//      einheitenTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Firma", "Einsätze", "Summe" });
+      einheitenTableModel = new StartTableModel(new String[] { "Firma", "Einsätze", "Summe" });
+      forderungenTableModel = new StartTableModel(new String[] { "Firma", "Rechnungsdatum", "Forderung" });
 
       initComponents();
+      
+      jTableForderungen.setDefaultRenderer(String.class, new StartFensterTableCellRenderer());
+      
       initForderungen();
       initEinheiten();
       initHintman();
@@ -152,27 +152,27 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
       for (Iterator<Forderung> iterator = forderungen.iterator(); iterator.hasNext();) {
          Forderung forderung = iterator.next();
-         Vector<String> datensatz;
-         datensatz = new Vector<String>();
-         datensatz.add(forderung.getAuftraggeber());
-         datensatz.add(dateFormat.format(forderung.getDatum().getTime()));
-         datensatz.add(df.format(forderung.getSumme()) + "€");
+         Element e = new Element();
+         e.name = forderung.getAuftraggeber();
+         e.count = dateFormat.format(forderung.getDatum().getTime());
+         e.price = df.format(forderung.getSumme()) + "€";
+         e.id = forderung.getId();
+         
          summe += forderung.getSumme();
-         forderungenTableModel.addRow(datensatz);
-         forderungen_ids.add(Integer.valueOf(forderung.getId()));
+         forderungenTableModel.add(e);
       }
 
       // In der letzten Zeile die Summe ausgeben
-      Vector<String> datensatz;
-      datensatz = new Vector<String>();
-      datensatz.add("Summe");
-      datensatz.add("");
-      datensatz.add(df.format(summe) + " €");
-      forderungenTableModel.addRow(datensatz);
+      Element e = new Element();
+      e.name = "Summe";
+      e.count = "";
+      e.price = df.format(summe) + " €";
+      e.id = -1;
+      
+      forderungenTableModel.add(e);
 
       restoreSpaltenBreiten(jTableForderungen, spaltenBreiten);
 
-      jTableForderungen.setDefaultRenderer(String.class, new StartFensterTableCellRenderer());
    }
 
    private void restoreSpaltenBreiten(JTable tab, int[][] spaltenBreiten) {
@@ -217,27 +217,24 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
       for (Iterator<Einheit> iterator = einheiten.iterator(); iterator.hasNext();) {
          Einheit einheit = iterator.next();
-         Einheiten_ids.add(Integer.valueOf(einheit.getId()));
 
          summe += einheit.getKlientenpreis();
 
-         Vector<String> datensatz;
-         datensatz = new Vector<String>();
-
-         datensatz.add(einheit.getAuftraggeber());
-         datensatz.add(String.valueOf(einheit.getAnzahl()));
-         datensatz.add(df.format(einheit.getKlientenpreis()) + " €");
-         einheitenTableModel.addRow(datensatz);
+         Element e = new Element();
+         e.id = einheit.getId();
+         e.name = einheit.getAuftraggeber();
+         e.count = String.valueOf(einheit.getAnzahl());
+         e.price = df.format(einheit.getKlientenpreis()) + " €";
+         einheitenTableModel.add(e);
       }
 
       // In der letzten Zeile die Summe ausgeben
-      Vector<String> datensatz;
-      datensatz = new Vector<String>();
-      datensatz.add("Summe");
-      datensatz.add("");
-
-      datensatz.add(df.format(summe) + " €");
-      einheitenTableModel.addRow(datensatz);
+      Element e = new Element();
+      e.name = "Summe";
+      e.count = "";
+      e.price = df.format(summe) + " €";
+      
+      einheitenTableModel.add(e);
 
       restoreSpaltenBreiten(jTableEinheiten, spaltenBreiten);
 
@@ -253,35 +250,78 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    // desc="Generated Code">//GEN-BEGIN:initComponents
    private void initComponents() {
 
-      jButtonKlientenEditor = new javax.swing.JButton();
-      jButtonBeenden = new javax.swing.JButton();
-      jButtonArtenEinheiten = new javax.swing.JButton();
-      jButton1 = new javax.swing.JButton();
-      jPanel1 = new javax.swing.JPanel();
-      Status_links = new javax.swing.JLabel();
-      jLabel3 = new javax.swing.JLabel();
-      jSplitPane1 = new javax.swing.JSplitPane();
-      jPanel2 = new javax.swing.JPanel();
-      jScrollPane1 = new javax.swing.JScrollPane();
-      jTableForderungen = new javax.swing.JTable();
-      jLabel1 = new javax.swing.JLabel();
-      jPanel3 = new javax.swing.JPanel();
-      jLabel2 = new javax.swing.JLabel();
-      jScrollPane2 = new javax.swing.JScrollPane();
-      jTableEinheiten = new javax.swing.JTable();
-      jMenuBar1 = new javax.swing.JMenuBar();
-      jMenuDatei = new javax.swing.JMenu();
-      jMenuItemBeenden = new javax.swing.JMenuItem();
-      jMenuBearbeiten = new javax.swing.JMenu();
-      jMenuItemOption = new javax.swing.JMenuItem();
-      jMenuHilfe = new javax.swing.JMenu();
+      jButtonKlientenEditor = new JButton();
+      jButtonBeenden = new JButton();
+      jButtonArtenEinheiten = new JButton();
+      jButton1 = new JButton();
+      jPanel1 = new JPanel();
+      Status_links = new JLabel();
+      jLabel3 = new JLabel();
+      jSplitPane1 = new JSplitPane();
+      jPanel2 = new JPanel();
+      jScrollPane1 = new JScrollPane();
+      jTableForderungen = new JTable();
+      jLabel1 = new JLabel();
+      jPanel3 = new JPanel();
+      jLabel2 = new JLabel();
+      jScrollPane2 = new JScrollPane();
+      jTableEinheiten = new JTable();
+      jMenuBar1 = new JMenuBar();
+      jMenuDatei = new JMenu();
+      jMenuItemBeenden = new JMenuItem();
+      jMenuBearbeiten = new JMenu();
+      jMenuItemOption = new JMenuItem();
+      jMenuHilfe = new JMenu();
 
-      setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+      setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
       ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
       setTitle(resourceMap.getString("Form.title")); // NOI18N
       setName("Form"); // NOI18N
 
+      addWindowListener(new WindowListener() {
+         
+         @Override
+         public void windowOpened(WindowEvent e) {
+            // TODO Auto-generated method stub
+            
+         }
+         
+         @Override
+         public void windowIconified(WindowEvent e) {
+            // TODO Auto-generated method stub
+            
+         }
+         
+         @Override
+         public void windowDeiconified(WindowEvent e) {
+            // TODO Auto-generated method stub
+            
+         }
+         
+         @Override
+         public void windowDeactivated(WindowEvent e) {
+            // TODO Auto-generated method stub
+            
+         }
+         
+         @Override
+         public void windowClosing(WindowEvent e) {
+            // TODO Auto-generated method stub
+            
+         }
+         
+         @Override
+         public void windowClosed(WindowEvent e) {
+            // TODO Auto-generated method stub
+            
+         }
+         
+         @Override
+         public void windowActivated(WindowEvent e) {
+            jFrameWindowActivated(e);
+         }
+      });
       jButtonKlientenEditor.setText(resourceMap.getString("jButtonKlientenEditor.text")); // NOI18N
       jButtonKlientenEditor.setMaximumSize(new java.awt.Dimension(500, 25));
       jButtonKlientenEditor.setMinimumSize(new java.awt.Dimension(120, 25));
@@ -309,7 +349,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       jButtonArtenEinheiten.setPreferredSize(new java.awt.Dimension(151, 25));
 
       jButton1.setText(resourceMap.getString("jButtonEinheiten.text")); // NOI18N
-      jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+      jButton1.setHorizontalTextPosition(SwingConstants.CENTER);
       jButton1.setMaximumSize(new java.awt.Dimension(500, 25));
       jButton1.setMinimumSize(new java.awt.Dimension(120, 25));
       jButton1.setName("jButtonEinheiten"); // NOI18N
@@ -331,18 +371,18 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
       jLabel3.setName("jLabel3"); // NOI18N
 
-      javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+      GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
       jPanel1.setLayout(jPanel1Layout);
-      jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            jPanel1Layout.createSequentialGroup().addComponent(Status_links).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 595, Short.MAX_VALUE)
+      jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            jPanel1Layout.createSequentialGroup().addComponent(Status_links).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 595, Short.MAX_VALUE)
                   .addComponent(jLabel3)));
-      jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+      jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
             jPanel1Layout
                   .createSequentialGroup()
                   .addGroup(
-                        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                              .addComponent(Status_links, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                              .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap()));
+                        jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                              .addComponent(Status_links, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+                              .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)).addContainerGap()));
 
       jSplitPane1.setDividerLocation(297);
       jSplitPane1.setResizeWeight(0.5);
@@ -385,28 +425,28 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       jTableForderungen.getColumnModel().getColumn(2).setMaxWidth(80);
       jTableForderungen.getColumnModel().getColumn(2).setHeaderValue(resourceMap.getString("jTableForderungen.columnModel.title2")); // NOI18N
 
-      jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
       jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
       jLabel1.setName("jLabel1"); // NOI18N
 
-      javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+      GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
       jPanel2.setLayout(jPanel2Layout);
       jPanel2Layout
             .setHorizontalGroup(jPanel2Layout
-                  .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                  .createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
                   .addGroup(
-                        jPanel2Layout.createSequentialGroup().addGap(12, 12, 12).addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                        jPanel2Layout.createSequentialGroup().addGap(12, 12, 12).addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                               .addContainerGap()));
-      jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            jPanel2Layout.createSequentialGroup().addComponent(jLabel1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)));
+      jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            jPanel2Layout.createSequentialGroup().addComponent(jLabel1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)));
 
       jSplitPane1.setLeftComponent(jPanel2);
 
       jPanel3.setName("jPanel3"); // NOI18N
 
-      jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
       jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
       jLabel2.setName("jLabel2"); // NOI18N
 
@@ -434,16 +474,16 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       jTableEinheiten.getColumnModel().getColumn(2).setMaxWidth(80);
       jTableEinheiten.getColumnModel().getColumn(2).setHeaderValue(resourceMap.getString("jTableEinheiten.columnModel.title2")); // NOI18N
 
-      javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+      GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
       jPanel3.setLayout(jPanel3Layout);
       jPanel3Layout.setHorizontalGroup(jPanel3Layout
-            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                  jPanel3Layout.createSequentialGroup().addContainerGap().addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE).addContainerGap())
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE));
-      jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            jPanel3Layout.createSequentialGroup().addComponent(jLabel2).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)));
+            .createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING,
+                  jPanel3Layout.createSequentialGroup().addContainerGap().addComponent(jLabel2, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE).addContainerGap())
+            .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE));
+      jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            jPanel3Layout.createSequentialGroup().addComponent(jLabel2).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)));
 
       jSplitPane1.setRightComponent(jPanel3);
 
@@ -481,46 +521,51 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
       setJMenuBar(jMenuBar1);
 
-      javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+      GroupLayout layout = new GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
       layout.setHorizontalGroup(layout
-            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(
                   layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(
-                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+                              layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jSplitPane1, GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
                                     .addGroup(
-                                          javax.swing.GroupLayout.Alignment.LEADING,
+                                          GroupLayout.Alignment.LEADING,
                                           layout.createSequentialGroup()
-                                                .addComponent(jButtonKlientenEditor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButtonArtenEinheiten, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButtonBeenden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                      javax.swing.GroupLayout.PREFERRED_SIZE))).addContainerGap()));
-      layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            javax.swing.GroupLayout.Alignment.TRAILING,
+                                                .addComponent(jButtonKlientenEditor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                      GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                      GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jButtonArtenEinheiten, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                      GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jButtonBeenden, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                      GroupLayout.PREFERRED_SIZE))).addContainerGap()));
+      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            GroupLayout.Alignment.TRAILING,
             layout.createSequentialGroup()
                   .addContainerGap()
                   .addGroup(
-                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, false)
-                              .addComponent(jButtonKlientenEditor, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                              .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                              .addComponent(jButtonArtenEinheiten, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                              .addComponent(jButtonBeenden, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                  .addGap(24, 24, 24).addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)));
+                        layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
+                              .addComponent(jButtonKlientenEditor, GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                              .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+                              .addComponent(jButtonArtenEinheiten, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+                              .addComponent(jButtonBeenden, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jSplitPane1, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                  .addGap(24, 24, 24).addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)));
 
       pack();
    }// </editor-fold>//GEN-END:initComponents
+
+   protected void jFrameWindowActivated(WindowEvent e) {
+      // TODO Auto-generated method stub
+      
+   }
 
    private void jButtonKlientenEditorActionPerformed(ActionEvent evt) {
       openKlientenEditor(-1, null);
@@ -570,8 +615,8 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
          // Doppelklick mit links -> Klienteneditor
          // SelectedRow wird in ID-Liste gesucht und gefundene ID an
          // Klienteneditor übergeben.
-         Integer elementAt = this.forderungen_ids.elementAt(this.jTableForderungen.getSelectedRow());
-         openKlientenEditor(elementAt.intValue(), StartTable.FORDERUNGEN);
+         Element e = forderungenTableModel.getItem(this.jTableForderungen.getSelectedRow());
+         openKlientenEditor(e.id, StartTable.FORDERUNGEN);
       }
       // Irgendwann ein Menü?
       /*
@@ -587,8 +632,8 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       if (evt.getClickCount() > 1 && !evt.isPopupTrigger()) {
 
          int selectedRow = this.jTableEinheiten.getSelectedRow();
-         Integer elementAt = this.Einheiten_ids.elementAt(selectedRow);
-         openKlientenEditor(elementAt.intValue(), StartTable.EINHEITEN);
+         Element selected = einheitenTableModel.getItem(selectedRow);
+         openKlientenEditor(selected.id, StartTable.EINHEITEN);
       }
 
    }
@@ -658,4 +703,42 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    private JTable jTableForderungen;
    // End of variables declaration//GEN-END:variables
 
+   private class Element {
+      StartTable type;
+      int id;
+      String name;
+      String count;
+      String price;
+   }
+   
+   private class StartTableModel extends LabeledTableModel<Element> {
+
+      public StartTableModel(String[] titles) {
+         super(titles);
+      }
+
+      @Override
+      public Class<?> getColumnClass(int columnIndex) {
+         return String.class;
+      }
+
+      @Override
+      public Object getValueAt(int rowIndex, int columnIndex) {
+         Element item = getItem(rowIndex);
+         switch (columnIndex) {
+            case 0:
+               return item.name;
+
+            case 1:
+               return item.count;
+
+            case 2:
+               return item.price;
+
+            default:
+               return null;
+         }
+      }
+      
+   }
 }

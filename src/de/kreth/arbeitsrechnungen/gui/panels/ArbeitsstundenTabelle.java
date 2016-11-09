@@ -20,6 +20,9 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
 
@@ -33,7 +36,7 @@ import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.EinheitEinzelFrame;
 
 @SuppressWarnings("boxing")
-public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowListener {
+public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
    private static final long serialVersionUID = 8161115991876323549L;
 
@@ -50,8 +53,8 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
    private boolean zusatz2 = false;
    private String zusatz1_name = "";
    private String zusatz2_name = "";
-   private javax.swing.table.TableColumn spalte5;
-   private javax.swing.table.TableColumn spalte6;
+   private TableColumn spalte5;
+   private TableColumn spalte6;
    private Integer[] geloeschte_spalten = new Integer[2];
 
    private String filter = "(ISNULL(Bezahlt) OR ISNULL(Rechnung_verschickt))";
@@ -194,6 +197,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
          this.jTextFieldStundenzahl.setVisible(false);
          this.jLabel6.setVisible(false);
       }
+
    }
 
    private void updateTable() {
@@ -228,10 +232,17 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
          }
       }
       // Model mit Überschriften erstellen
-      javax.swing.table.DefaultTableModel mymodel = new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] { ArbeitsstundenSpalten.Datum.toString(),
-            ArbeitsstundenSpalten.Inhalt.toString(), ArbeitsstundenSpalten.Start.toString(), ArbeitsstundenSpalten.Ende.toString(), ArbeitsstundenSpalten.Preis.toString(),
-            this.zusatz1_name, this.zusatz2_name, ArbeitsstundenSpalten.Preisänderung.toString(), ArbeitsstundenSpalten.Eingereicht.toString(),
-            ArbeitsstundenSpalten.Bezahlt.toString() }) {
+      DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {}, 
+            new String[] { ArbeitsstundenSpalten.Datum.toString(),
+                  ArbeitsstundenSpalten.Inhalt.toString(), 
+                  ArbeitsstundenSpalten.Start.toString(), 
+                  ArbeitsstundenSpalten.Ende.toString(), 
+                  ArbeitsstundenSpalten.Preis.toString(),
+                  this.zusatz1_name, 
+                  this.zusatz2_name, 
+                  ArbeitsstundenSpalten.Preisänderung.toString(), 
+                  ArbeitsstundenSpalten.Eingereicht.toString(),
+                  ArbeitsstundenSpalten.Bezahlt.toString() }) {
 
          private static final long serialVersionUID = 1913170267962749520L;
 
@@ -268,6 +279,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
          jTable1.getColumnModel().getColumn(i).setPreferredWidth(breitenOpt[i]);
          jTable1.getColumnModel().getColumn(i).setMinWidth(breitenMin[i]);
       }
+      
       if (!this.zusatz2) {
          this.geloeschte_spalten[1] = 6;
          this.spalte6 = jTable1.getColumnModel().getColumn(6);
@@ -279,24 +291,10 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
          this.geloeschte_spalten[0] = 5;
          this.spalte5 = jTable1.getColumnModel().getColumn(5);
          jTable1.removeColumn(jTable1.getColumnModel().getColumn(5));
-         /*
-          * jTable1.getColumnModel().getColumn(5).setWidth(0);
-          * jTable1.getColumnModel().getColumn(5).setResizable(false);
-          * jTable1.getColumnModel().getColumn(5).setMaxWidth(0);
-          * jTable1.getColumnModel().getColumn(5).setPreferredWidth(0);
-          * jTable1.getColumnModel().getColumn(5).setMinWidth(0);
-          */
       } else {
          this.geloeschte_spalten[0] = null;
       }
-      /*
-       * this.jLabel7.setText(
-       * "Breite 5: " + jTable1.getColumnModel().getColumn(5).getWidth() +
-       * ", Max: " + jTable1.getColumnModel().getColumn(5).getMaxWidth() +
-       * "  ;  Breite 6: " + jTable1.getColumnModel().getColumn(6).getWidth() +
-       * ", Max: " + jTable1.getColumnModel().getColumn(6).getMaxWidth()
-       * );
-       */
+      
    }
 
    /**
@@ -401,7 +399,7 @@ public class ArbeitsstundenTabelle extends javax.swing.JPanel implements WindowL
       jScrollPane1.setName("jScrollPane1"); // NOI18N
 
       jTable1.setAutoCreateRowSorter(true);
-      jTable1.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { "13.12.09", null, "13:50", "14:50", "25,50", null, null, "", "25.12.09", "30.12.09" } },
+      jTable1.setModel(new DefaultTableModel(new Object[][] { { "13.12.09", null, "13:50", "14:50", "25,50", null, null, "", "25.12.09", "30.12.09" } },
             new String[] { "Datum", "Inhalt", "Start", "Ende", "Preis", "Zusatz1", "Zusatz2", "Preisänderung", "Eingereicht", "Bezahlt" }) {
 
          /**
