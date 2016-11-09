@@ -24,7 +24,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
-import com.toedter.calendar.*;
+
+import com.toedter.calendar.JDateChooser;
 
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsabrechnungendataclass.Verbindung_mysql;

@@ -5,8 +5,8 @@ package de.kreth.arbeitsrechnungen;
  */
 
 import java.text.DateFormat;
-import java.util.GregorianCalendar;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class MySqlDate {
 

@@ -91,7 +91,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       File homeverzeichnis;
       Properties sysprops = System.getProperties();
       String homedir = sysprops.getProperty("user.home");
-      homeverzeichnis = new File(homedir + sysprops.getProperty("file.separator") + Options.BENUTZERVERZEICHNIS);
+      homeverzeichnis = new File(homedir, Options.BENUTZERVERZEICHNIS);
 
       if (!homeverzeichnis.exists()) {
          // Verzeichnis anlegen
@@ -704,7 +704,6 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    // End of variables declaration//GEN-END:variables
 
    private class Element {
-      StartTable type;
       int id;
       String name;
       String count;
