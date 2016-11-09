@@ -13,10 +13,12 @@ package de.kreth.arbeitsrechnungen;
  *         Die letzte Zeile wird mit SansSerif, fett, 12 formatiert und außerdem
  *         wird die Vorder- und Hintergrundfarbe getauscht
  */
+import java.awt.Component;
+import java.awt.Font;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
 
 public class StartFensterTableCellRenderer implements TableCellRenderer {
 

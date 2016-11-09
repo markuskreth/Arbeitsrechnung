@@ -1,13 +1,16 @@
 package de.kreth.arbeitsrechnungen.data;
 
-/**
- * @author markus
- */
-import java.util.*;
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
+/**
+ * @author markus
+ */
+import java.util.Date;
+import java.util.Locale;
+import java.util.Vector;
 
 public class ArbeitsstundeImpl implements Arbeitsstunde {
 

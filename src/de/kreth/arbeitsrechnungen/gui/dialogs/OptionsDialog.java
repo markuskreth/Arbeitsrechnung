@@ -13,8 +13,6 @@ import org.apache.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.Options;
 
-import java.awt.GridLayout;
-
 public class OptionsDialog extends JDialog {
 
    private static final long serialVersionUID = -527076543127705929L;

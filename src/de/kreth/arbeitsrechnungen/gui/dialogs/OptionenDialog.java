@@ -19,7 +19,8 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.*;
 
 import javax.swing.*;
