@@ -52,9 +52,7 @@ public class Einstellungen {
          } catch (Exception e) {
             Logger.getLogger(getClass()).error("Options-Datei konnte nicht geladen werden.", e);
          }
-      } else {
-         
-      }
+      } 
    }
    
    public static Einstellungen getInstance() {

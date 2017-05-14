@@ -16,10 +16,11 @@ public class Options {
    public static final String DB_PASSWORD = "password";
    public static final String TARGET_DIR = "verzPdfFiles";
    public static final String TMP_DIR = "arbeitsverzeichnis";
+   public static final String LOG_LEVEL = "LogLevel";
    
-   public static final List<String> PROPERTIES;
+   public static final Set<String> PROPERTIES;
    static {
-      PROPERTIES = new ArrayList<>();
+      PROPERTIES = new HashSet<>();
       PROPERTIES.add(STD_TEX_FILE);
       PROPERTIES.add(TEX_TEMPLATE_DIR);
       PROPERTIES.add(PDF_PROG);
@@ -29,6 +30,7 @@ public class Options {
       PROPERTIES.add(DB_PASSWORD);
       PROPERTIES.add(TARGET_DIR);
       PROPERTIES.add(TMP_DIR);
+      PROPERTIES.add(LOG_LEVEL);
    }
    
    private Properties prop;
@@ -96,6 +98,11 @@ public class Options {
 
       Set<String> toSet = new HashSet<>(Arrays.asList(STD_TEX_FILE, TEX_TEMPLATE_DIR, PDF_PROG, DB_USER, DB_HOST, DB_DATABASE_NAME, DB_PASSWORD, TARGET_DIR, TMP_DIR));
 
+      @Override
+      public String toString() {
+         return properties.toString();
+      }
+      
       public Build() {
          this.properties = new Properties();
       }
@@ -183,8 +190,12 @@ public class Options {
       }
 
       public void setProperty(String name, String value) {
-         if(!PROPERTIES.contains(name))
+         if(!PROPERTIES.contains(name)) {
             throw new IllegalArgumentException("Property Key " + name + " unknown!");
+         } else {
+            properties.setProperty(name, value);
+            toSet.remove(name);
+         }
          
       }
 

@@ -24,12 +24,33 @@ public class RechnungDialogPersister implements Persister {
       sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
    }
 
+   public int getKlientenIdForRechnungId(int rechnungs_id) {
+      String sql = "SELECT klienten_id FROM rechnungen WHERE rechnungen_id=" + rechnungs_id + ";";
+
+      logger.debug("getKlientenIdForRechnungId: " + sql);
+      
+      int result = 0;
+      
+      try {
+         ResultSet rs = verbindung.query(sql);
+         if(rs.next()) {
+            result = rs.getInt("klienten_id");
+            if(rs.next()) {
+               logger.warn("More than one Record found in Database for rechnungen_id=" + rechnungs_id);
+            }
+         }
+      } catch (SQLException e) {
+         logger.warn(sql, e);
+      }
+      return result;
+   }
+   
    public Builder getRechnungById(int rechnungs_id) {
 
       String sql = "SELECT rechnungen_id, klienten_id, datum, rechnungnr, betrag, texdatei, "
             + "pdfdatei, adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, geldeingang, timestamp " + "FROM rechnungen WHERE rechnungen_id=" + rechnungs_id + ";";
 
-      logger.debug("RechnungDialog: Konstruktor (2): " + sql);
+      logger.debug("getRechnungById: " + sql);
       Builder r = new Rechnung.Builder();
 
       try {
@@ -47,7 +68,7 @@ public class RechnungDialogPersister implements Persister {
                   .zusatz2(daten.getBoolean("zusatz2")).zusammenfassungenErlauben(daten.getBoolean("zusammenfassungen")).zahldatum(zahldatum).geldeingang(geldeingang);
          }
       } catch (SQLException e) {
-         logger.debug(sql, e);
+         logger.warn(sql, e);
       }
       return r;
    }

@@ -2,27 +2,110 @@ package de.kreth.arbeitsrechnungen.persister;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 
-public class AngebotPersister implements Persister {
-
-   private Logger logger = Logger.getLogger(getClass());
-   private Verbindung verbindung;
+public class AngebotPersister extends AbstractPersister {
 
    public AngebotPersister(Options optionen) {
-      verbindung = connectToDb(optionen);
+      super(optionen);
+   }
+
+   public void storeEinheit(int klient, int einheit, double preis, long dauer, String datum, String eingereichtDatum, 
+         int isEingereicht, String bezahltDatum, int isBezahlt, String sqlBeginn,
+         String sqlEnde, int angebot_id, String zusatz1, String zusatz2, String preisAenderung) throws SQLException {
+      String sqltext;
+      
+      if (einheit == -1) {
+         if ((isEingereicht != 0) && (isBezahlt != 0)) {
+            sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer,"
+                  + "Rechnung_verschickt,Rechnung_Datum,Bezahlt,Bezahlt_Datum,Preisänderung) VALUES " + "("
+                  + klient
+                  + ","
+                  + angebot_id
+                  + ",\""
+                  + datum
+                  + "\",\""
+                  + sqlBeginn
+                  + "\",\""
+                  + zusatz1
+                  + "\",\""
+                  + zusatz2
+                  + "\",\""
+                  + preis
+                  + "\",\""
+                  + dauer
+                  + "\",\""
+                  + isEingereicht
+                  + "\",\""
+                  + eingereichtDatum
+                  + "\",\""
+                  + isBezahlt
+                  + "\",\"" + bezahltDatum + "\",\"" + preisAenderung + "\");";
+         } else if (isEingereicht != 0) {
+            sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer,"
+                  + "Rechnung_verschickt,Rechnung_Datum,Preisänderung) VALUES " + "("
+                  + klient
+                  + ","
+                  + angebot_id
+                  + ",\""
+                  + datum
+                  + "\",\""
+                  + sqlBeginn
+                  + "\",\""
+                  + sqlEnde
+                  + "\",\""
+                  + zusatz1.trim()
+                  + "\",\""
+                  + zusatz2.trim()
+                  + "\",\""
+                  + preis
+                  + "\",\""
+                  + dauer
+                  + "\",\""
+                  + isEingereicht
+                  + "\",\""
+                  + eingereichtDatum
+                  + "\",\""
+                  + preisAenderung.trim() + "\");";
+         } else {
+            sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer," + "Preisänderung) VALUES " + "(" + klient
+                  + "," + angebot_id + ",\"" + datum + "\",\"" + sqlBeginn + "\",\"" + sqlEnde + "\",\"" + zusatz1.trim() + "\",\""
+                  + zusatz2.trim() + "\",\"" + preis + "\",\"" + dauer + "\",\"" + preisAenderung + "\");";
+         }
+      } else {
+         sqltext = "UPDATE einheiten set " + "angebote_id=" + angebot_id + ",Datum=\"" + datum + "\""
+               + ",Beginn=\"" + sqlBeginn + "\",Ende=\"" + sqlEnde + "\",zusatz1=\"" + zusatz1.trim() + "\"" + ",zusatz2=\""
+               + zusatz2.trim() + "\"" + ",Preis=" + preis + ",Dauer=" + dauer;
+         if (isEingereicht != 0) {
+            sqltext = sqltext + ",Rechnung_verschickt=\"" + isEingereicht + "\"" + ",Rechnung_Datum=\"" + eingereichtDatum + "\"";
+         } else {
+            sqltext = sqltext + ",Rechnung_verschickt=NULL" + ",Rechnung_Datum=NULL";
+         }
+         if ((isEingereicht != 0) && (isBezahlt != 0)) {
+            sqltext = sqltext + ",Bezahlt=\"" + isBezahlt + "\"" + ",Bezahlt_Datum=\"" + bezahltDatum + "\"";
+         } else {
+            sqltext = sqltext + ",Bezahlt=NULL" + ",Bezahlt_Datum=NULL";
+         }
+         sqltext = sqltext + " ,Preisänderung=" + preisAenderung + " WHERE einheiten_id=" + einheit + ";";
+
+      }
+
+      logger.info("Einheit_einzel.jButton2ActionPerformed: \n" + sqltext);
+
+      verbindung.sql(sqltext);
    }
 
    public Angebot getAngebot(int angebotId) {
       ResultSet rs;
+//      sqltext = "SELECT Preis, preis_pro_stunde FROM angebote WHERE angebote_id=" + angebot_id + ";";
+
       String sqltext = "SELECT angebote_id, klienten_id, Inhalt, Preis, preis_pro_stunde, Beschreibung  FROM angebote WHERE angebote_id=" + angebotId + ";";
 
-      System.out.println("AngebotDialog: " + sqltext);
+      logger.debug("Sql: " + sqltext);
 
       Angebot angebot = null;
 
@@ -37,7 +120,7 @@ public class AngebotPersister implements Persister {
 
          angebot = new Angebot.Builder(inhalt, preis).angebotId(angebotId).beschreibung(beschr).preis_pro_stunde(preisPHour).build();
       } catch (Exception e) {
-         e.printStackTrace();
+         logger.error("Unable to fetch angebot with id " + angebotId, e);
       }
       return angebot;
    }
@@ -49,11 +132,11 @@ public class AngebotPersister implements Persister {
       else
          sql = updateAngebot(klientId, angebot);
 
-      logger.info(sql);
+      logger.debug("insertOrUpdateAngebot:" + sql);
       try {
          verbindung.sql(sql);
       } catch (SQLException e) {
-         logger.error("insertOrUpdateAngebot", e);
+         logger.error("insertOrUpdateAngebot for klientId=" + klientId + "; Angebot=" + angebot, e);
       }
    }
 
@@ -75,9 +158,26 @@ public class AngebotPersister implements Persister {
       return sqltext;
    }
 
-   @Override
-   public Verbindung connectToDb(Options optionen) {
-      return new DatabaseConnector(optionen.getProperties()).getVerbindung();
+   public List<Angebot> getForKlient(int klient) {
+      String sqltext = "SELECT * FROM angebote WHERE klienten_id=" + klient + ";";
+      logger.debug("Einheit_einzel.initangebote: " + sqltext);
+      List<Angebot> result = new ArrayList<>();
+      
+      try {
+         ResultSet daten = verbindung.query(sqltext);
+         while (daten.next()) {
+            Angebot a = new Angebot.Builder(daten.getString("Inhalt"), daten.getFloat("Preis"))
+                  .beschreibung(daten.getString("Beschreibung"))
+                  .preis_pro_stunde(daten.getBoolean("preis_pro_stunde"))
+                  .angebotId(daten.getInt("angebote_id"))
+                  .build();
+            result.add(a);
+            logger.trace("added to AngebotList: " + a);
+         }
+      } catch (Exception e) {
+         logger.error("Einheit_einzel.initangebote: ", e);
+      }
+      return result;
    }
 
 }

@@ -18,7 +18,7 @@ import de.kreth.arbeitsrechnungen.data.Rechnung;
 
 public class PdfCreator {
 
-   private Logger logger = Logger.getLogger(PdfCreator.class);
+   private Logger logger = Logger.getLogger(getClass());
 
    public static final String TEXUMBRUCH = "\\\\\\\\";
    public static final String TEXLINE = "\\\\hline ";
@@ -247,10 +247,10 @@ public class PdfCreator {
                this.pdf = texFile.getAbsolutePath().replace(".tex", ".pdf");
             }
          } catch (InterruptedException e2) {
-            logger.debug("waitfor pdflatex");
+            logger.debug("waitfor pdflatex", e2);
          }
       } catch (Exception e) {
-         System.err.println(e.getMessage());
+         logger.error("Error executing pdflatex", e);
       }
       logger.debug("Pdflatex beendet!");
       return ergebnis; // Ergebnis von pdflatex wird zurückgegeben

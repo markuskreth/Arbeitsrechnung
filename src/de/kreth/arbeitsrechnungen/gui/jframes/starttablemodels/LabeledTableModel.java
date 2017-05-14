@@ -72,6 +72,7 @@ public abstract class LabeledTableModel<T> implements TableModel {
     */
    @Override
    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+      // Not Supported.
    }
 
    public T getItem(int rowIndex) {

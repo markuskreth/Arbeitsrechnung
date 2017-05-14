@@ -97,7 +97,7 @@ public class OptionenDialog extends JDialog {
       options = Einstellungen.getInstance().getEinstellungen();
       Properties properties = options.getProperties();
       
-      List<String> propnames = Options.PROPERTIES;
+      Collection<String> propnames = Options.PROPERTIES;
 
       // für jedes Property zugehöriges Textfeld
       for(String propname : propnames) {
@@ -134,7 +134,9 @@ public class OptionenDialog extends JDialog {
    }
 
    private void getTexts(JComponent component) {
-      optionBuilder = new Options.Build();
+      if(optionBuilder == null) {
+         optionBuilder = new Options.Build();
+      }
       
       for (int i = 0; i < component.getComponentCount(); i++) {
          
@@ -146,7 +148,7 @@ public class OptionenDialog extends JDialog {
          if (component2 instanceof JTextField) {
             final JTextField jTextField = (JTextField) component2;
             optionBuilder.setProperty(jTextField.getName(), jTextField.getText());
-            logger.debug(jTextField.getName());
+            logger.info(jTextField.getName() + " set to " + jTextField.getText());
          }
       }
    }
@@ -156,8 +158,7 @@ public class OptionenDialog extends JDialog {
       try {
          Einstellungen.getInstance().store(optionBuilder.build());
       } catch (Exception e) {
-         System.err.println("Optionen.java: Options-Datei konnte nicht gespeichert werden.");
-         e.printStackTrace();
+         logger.error("Optionen.java: Options-Datei konnte nicht gespeichert werden.", e);
       }
    }
 

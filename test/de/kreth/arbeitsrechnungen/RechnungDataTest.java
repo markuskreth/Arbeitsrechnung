@@ -146,7 +146,7 @@ public class RechnungDataTest {
          + "zur Inanspruchnahme eines städtischen Zuschusses zu den Personalkosten von Sportübungsleitern\\\\[.7cm]\n" + "\\end{scriptsize}\n" + "\n"
          + "\\parbox{0,49\\textwidth}{\n" + "\\begin{center}\n" + "\\hrulefill\\underline{Markus Kreth}\\hrulefill\\\\\n"
          + "Vor- u. Zuname des Übungsleiters/ der Übungsleiterin\n" + "\\end{center}\n" + "}\n" + "\\hfill\n" + "\\parbox{0,49\\textwidth}{\\begin{center}\n"
-         + "\\hrulefill\\underline{Lister Kirchweg 7; 30163 Hannover}\\hrulefill\\\\\n" + "Anschrift\\end{center}}\\\\[.7cm]\n" + "\\parbox{0,32\\textwidth}{\n"
+         + "\\hrulefill\\underline{Bütersworthstr. 17; 30161 Hannover}\\hrulefill\\\\\n" + "Anschrift\\end{center}}\\\\[.7cm]\n" + "\\parbox{0,32\\textwidth}{\n"
          + "\\begin{center}\n" + "\\hrulefill\\underline{SK Hannover}\\hrulefill\\\\\n" + "Bankverbindung\n" + "\\end{center}\n" + "}\n" + "\\hfill\n"
          + "\\parbox{0,32\\textwidth}{\n" + "\\begin{center}\n" + "\\hrulefill\\underline{37793160}\\hrulefill\\\\\n" + "Konto-Nr.\n" + "\\end{center}\n" + "}\n" + "\\hfill\n"
          + "\\parbox{0,32\\textwidth}{\n" + "\\begin{center}\n" + "\\hrulefill\\underline{25050180}\\hrulefill\\\\\n" + "BLZ\n" + "\\end{center}\n" + "}\n"
