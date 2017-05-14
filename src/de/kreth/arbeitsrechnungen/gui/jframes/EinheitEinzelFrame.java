@@ -16,8 +16,9 @@ package de.kreth.arbeitsrechnungen.gui.jframes;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 import javax.swing.JFrame;
@@ -26,18 +27,19 @@ import javax.swing.text.MaskFormatter;
 
 import org.apache.log4j.Logger;
 
-import arbeitsabrechnungendataclass.Verbindung;
-import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.MySqlDate;
 import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Einheit;
+import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
 import de.kreth.arbeitsrechnungen.persister.KlientPersister;
 
 public class EinheitEinzelFrame extends JFrame {
 
    private static final long serialVersionUID = 3963303174102985288L;
    Logger logger = Logger.getLogger(getClass());
+   private NumberFormat preisFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
    private Options optionen;
 
@@ -48,8 +50,8 @@ public class EinheitEinzelFrame extends JFrame {
    private String zusatz1_name = "";
    private String zusatz2_name = "";
    private Vector<Integer> angeboteliste;
-   private Verbindung verbindung;
    private KlientPersister klientPersister;
+   private AngebotPersister angebotPersister;
 
    /**
     * Sollte nicht benutzt werden!
@@ -76,8 +78,9 @@ public class EinheitEinzelFrame extends JFrame {
 
       optionen = Einstellungen.getInstance().getEinstellungen();
 
-      verbindung = new Verbindung_mysql(optionen.getProperties());
-      klientPersister = new KlientPersister(verbindung);
+      klientPersister = new KlientPersister(optionen);
+      angebotPersister = new AngebotPersister(optionen);
+      
       this.klient = klient;
       initComponents();
       MaskFormatter startmask;
@@ -118,21 +121,17 @@ public class EinheitEinzelFrame extends JFrame {
 
    private void setAuftraggeber() {
 
-      // Id und Name des übergebenen auftraggebers einfügen
-      String sqltext = "SELECT Auftraggeber, Zusatz1, Zusatz2, Zusatz1_Name, Zusatz2_Name  FROM klienten WHERE klienten_id=" + this.klient + ";";
-      logger.info("Einheit_einzel.setAuftraggeber: " + sqltext);
-      try {
-         ResultSet daten = verbindung.query(sqltext);
-         if (daten.first()) {
-            this.jTextField1.setText(String.valueOf(this.klient));
-            this.jTextField6.setText(daten.getString("Auftraggeber"));
-            this.zusatz1 = daten.getBoolean("Zusatz1");
-            this.zusatz2 = daten.getBoolean("Zusatz2");
-            this.zusatz1_name = daten.getString("Zusatz1_Name");
-            this.zusatz2_name = daten.getString("Zusatz2_Name");
-         }
-      } catch (Exception e) {
-         logger.error("Einheit_einzel.setAuftraggeber: ", e);
+      KlientPersister.Auftraggeber auftraggeber = klientPersister.getAuftraggeber(this.klient);
+
+      if(auftraggeber != null) {
+         this.jTextField1.setText(String.valueOf(this.klient));
+   
+         this.jTextField6.setText(auftraggeber.getName());
+         
+         this.zusatz1 = auftraggeber.hasZusatz1();
+         this.zusatz2 = auftraggeber.hasZustz2();
+         this.zusatz1_name = auftraggeber.getZusatz1();
+         this.zusatz2_name = auftraggeber.getZusatz2();
       }
    }
 
@@ -176,26 +175,22 @@ public class EinheitEinzelFrame extends JFrame {
       this.jComboBoxAngebot.removeAllItems();
       this.angeboteliste = new Vector<Integer>();
 
-      String sqltext = "SELECT * FROM angebote WHERE klienten_id=" + this.klient + ";";
-      logger.info("Einheit_einzel.initangebote: " + sqltext);
-      try {
-         ResultSet daten = verbindung.query(sqltext);
-         while (daten.next()) {
-            String datensatz;
-            datensatz = daten.getString("Inhalt") + "|" + daten.getString("Preis") + "€";
-            this.jComboBoxAngebot.addItem(datensatz);
-            this.angeboteliste.addElement(Integer.valueOf(daten.getInt("angebote_id")));
-         }
-      } catch (Exception e) {
-         logger.error("Einheit_einzel.initangebote: ", e);
+      List<Angebot> angebote = angebotPersister.getForKlient(this.klient);
+      
+      for (Angebot a: angebote) {
+
+         String datensatz;
+         datensatz = a.getInhalt() + "|" + preisFormat.format(a.getPreis());
+         this.jComboBoxAngebot.addItem(datensatz);
+         this.angeboteliste.addElement(Integer.valueOf(a.getAngebote_id()));
       }
+      
    }
 
    private void saveData() {
       // Wenn this.einheit = -1 dann existiert der Datensatz noch nicht und
       // muss angelegt werden.
 
-      String sqltext = "";
       double preis = 0.0;
       long dauer = 0;
 
@@ -228,15 +223,14 @@ public class EinheitEinzelFrame extends JFrame {
 
       // Setzten der Angebot-Elemente für diese Einheit
       int angebot_id = this.angeboteliste.elementAt(this.jComboBoxAngebot.getSelectedIndex()).intValue();
-      sqltext = "SELECT Preis, preis_pro_stunde FROM angebote WHERE angebote_id=" + angebot_id + ";";
+      
+      Angebot a = angebotPersister.getAngebot(angebot_id);
+      if(a != null) {
 
-      try {
-         ResultSet daten = verbindung.query(sqltext);
-         daten.first();
-         preis = Math.round((daten.getDouble("Preis") + Double.parseDouble(this.jTextFieldPreisAenderung.getText())) * 100);
+         preis = Math.round((a.getPreis() + Double.parseDouble(this.jTextFieldPreisAenderung.getText())) * 100);
          preis = preis / 100;
 
-         if (daten.getBoolean("preis_pro_stunde")) {
+         if (a.isPreis_pro_stunde()) {
             GregorianCalendar startcal = new GregorianCalendar();
             startcal.setTime(einheitDate.getTime());
             String starttext = this.jFormattedTextFieldStart.getText();
@@ -262,87 +256,15 @@ public class EinheitEinzelFrame extends JFrame {
             preis = preis / 100;
             logger.debug("Dauer: " + dauer + " Minuten\n" + "Dauer: " + (double) dauer / 60 + " Stunden\n Preis: " + preis);
 
-            if (this.einheit == -1) {
-               if ((isEingereicht != 0) && (isBezahlt != 0)) {
-                  sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer,"
-                        + "Rechnung_verschickt,Rechnung_Datum,Bezahlt,Bezahlt_Datum,Preisänderung) VALUES " + "("
-                        + this.klient
-                        + ","
-                        + angebot_id
-                        + ",\""
-                        + datum
-                        + "\",\""
-                        + sqlBeginn
-                        + "\",\""
-                        + this.jTextFieldZusatz1.getText()
-                        + "\",\""
-                        + this.jTextFieldZusatz2.getText()
-                        + "\",\""
-                        + preis
-                        + "\",\""
-                        + dauer
-                        + "\",\""
-                        + isEingereicht
-                        + "\",\""
-                        + eingereichtDatum
-                        + "\",\""
-                        + isBezahlt
-                        + "\",\"" + bezahltDatum + "\",\"" + this.jTextFieldPreisAenderung.getText() + "\");";
-               } else if (isEingereicht != 0) {
-                  sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer,"
-                        + "Rechnung_verschickt,Rechnung_Datum,Preisänderung) VALUES " + "("
-                        + this.klient
-                        + ","
-                        + angebot_id
-                        + ",\""
-                        + datum
-                        + "\",\""
-                        + sqlBeginn
-                        + "\",\""
-                        + sqlEnde
-                        + "\",\""
-                        + this.jTextFieldZusatz1.getText().trim()
-                        + "\",\""
-                        + this.jTextFieldZusatz2.getText().trim()
-                        + "\",\""
-                        + preis
-                        + "\",\""
-                        + dauer
-                        + "\",\""
-                        + isEingereicht
-                        + "\",\""
-                        + eingereichtDatum
-                        + "\",\""
-                        + this.jTextFieldPreisAenderung.getText().trim() + "\");";
-               } else {
-                  sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer," + "Preisänderung) VALUES " + "(" + this.klient
-                        + "," + angebot_id + ",\"" + datum + "\",\"" + sqlBeginn + "\",\"" + sqlEnde + "\",\"" + this.jTextFieldZusatz1.getText().trim() + "\",\""
-                        + this.jTextFieldZusatz2.getText().trim() + "\",\"" + preis + "\",\"" + dauer + "\",\"" + this.jTextFieldPreisAenderung.getText() + "\");";
-               }
-            } else {
-               sqltext = "UPDATE einheiten set " + "angebote_id=" + this.angeboteliste.elementAt(this.jComboBoxAngebot.getSelectedIndex()) + ",Datum=\"" + datum + "\""
-                     + ",Beginn=\"" + sqlBeginn + "\",Ende=\"" + sqlEnde + "\",zusatz1=\"" + this.jTextFieldZusatz1.getText().trim() + "\"" + ",zusatz2=\""
-                     + this.jTextFieldZusatz2.getText().trim() + "\"" + ",Preis=" + preis + ",Dauer=" + dauer;
-               if (isEingereicht != 0) {
-                  sqltext = sqltext + ",Rechnung_verschickt=\"" + isEingereicht + "\"" + ",Rechnung_Datum=\"" + eingereichtDatum + "\"";
-               } else {
-                  sqltext = sqltext + ",Rechnung_verschickt=NULL" + ",Rechnung_Datum=NULL";
-               }
-               if ((isEingereicht != 0) && (isBezahlt != 0)) {
-                  sqltext = sqltext + ",Bezahlt=\"" + isBezahlt + "\"" + ",Bezahlt_Datum=\"" + bezahltDatum + "\"";
-               } else {
-                  sqltext = sqltext + ",Bezahlt=NULL" + ",Bezahlt_Datum=NULL";
-               }
-               sqltext = sqltext + " ,Preisänderung=" + this.jTextFieldPreisAenderung.getText() + " WHERE einheiten_id=" + this.einheit + ";";
-
+            try {
+               
+               angebotPersister.storeEinheit(this.klient, this.einheit, preis, dauer, datum, 
+                     eingereichtDatum, isEingereicht, bezahltDatum, isBezahlt, sqlBeginn, sqlEnde, angebot_id
+                     , this.jTextFieldZusatz1.getText(), this.jTextFieldZusatz2.getText(), this.jTextFieldPreisAenderung.getText());
+            } catch (SQLException e) {
+               logger.error("Error storing Einheit", e);
             }
-
-            logger.info("Einheit_einzel.jButton2ActionPerformed: \n" + sqltext);
-
-            verbindung.sql(sqltext);
          }
-      } catch (Exception e) {
-         e.printStackTrace();
       }
 
       this.setVisible(false);

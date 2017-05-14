@@ -92,16 +92,22 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
    public RechnungDialog(Options optionen, Window parent, int rechnungId) {
       this(optionen, parent);
 
+      logger.info("Öffne Rechnungdialog mit RechnungId " + rechnungId);
       this.jToggleButtonDetails.setSelected(false);
       toggleDetails();
 
       this.useCreateinsteadUpdate = false;
 
+      int klienten_id = persister.getKlientenIdForRechnungId(rechnungId);
+
+      klient = klientenPersister.getKlientById(klienten_id);
+      logger.debug("found klient: " + klient);
       String z1 = klient.getZusatz1_Name();
       String z2 = klient.getZusatz2_Name();
       rechnung = persister.getRechnungById(rechnungId).zusatz1Name(z1).zusatz2Name(z2).build();
+      logger.debug("rechnung geladen: " + rechnung);
       einheiten = persister.getEinheiten(rechnungId);
-      klient = klientenPersister.getKlientById(rechnung.getKlienten_id());
+      logger.trace("Einheiten geladen: " + einheiten);
 
       this.jCheckBoxStundenzahl.setSelected(this.stunden_vorhanden);
       this.jCheckBoxStundenzahl.setVisible(this.stunden_vorhanden);
@@ -163,10 +169,9 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
    public RechnungDialog(Options optionen, Window parent, Vector<Integer> einheiten) {
       this(optionen, parent);
 
-      logger.setLevel(Level.DEBUG);
-
       zusammenfassungen_erlauben = this.jToggleButtonZusammenfassungen.isSelected();
 
+      logger.debug("Lade Rechnungen durch Einheiten");
       this.einheiten = persister.getEinheitenByIds(einheiten);
 
       if (this.einheiten.size() > 0)
@@ -190,6 +195,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
 
       rechnung = reBuilder.build();
 
+      logger.trace("Rechnungsobjekt instanziiert: " + rechnung);
       werteVonRechnungInFormularEintragen();
       makeTable();
       setListeners();

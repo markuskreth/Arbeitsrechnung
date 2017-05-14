@@ -5,19 +5,13 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.*;
 
-import org.apache.log4j.Logger;
-
-import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Einheit;
 
-public class DatenPersister implements Persister {
-
-   private Logger logger = Logger.getLogger(getClass());
-   private Verbindung verbindung;
+public class DatenPersister extends AbstractPersister {
 
    public DatenPersister(Options optionen) {
-      verbindung = connectToDb(optionen);
+      super(optionen);
    }
 
    public List<Forderung> getForderungen() {
@@ -95,11 +89,6 @@ public class DatenPersister implements Persister {
       public String toString() {
          return auftraggeber + ": " + summe + " €" + DateFormat.getDateInstance(Calendar.SHORT).format(datum.getTime());
       }
-   }
-
-   @Override
-   public Verbindung connectToDb(Options optionen) {
-      return new DatabaseConnector(optionen.getProperties()).getVerbindung();
    }
 
 }

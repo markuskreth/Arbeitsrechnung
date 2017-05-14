@@ -5,20 +5,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Klient;
 
-public class KlientenEditorPersister implements Persister {
-
-   private Logger logger = Logger.getLogger(getClass());
-   private Verbindung verbindung;
+public class KlientenEditorPersister extends AbstractPersister {
 
    public KlientenEditorPersister(Options optionen) {
-      verbindung = connectToDb(optionen);
+      super(optionen);
    }
 
    public Klient getKlientById(int klient_id) {
@@ -229,11 +223,6 @@ public class KlientenEditorPersister implements Persister {
       } catch (SQLException e) {
          logger.error("", e);
       }
-   }
-
-   @Override
-   public Verbindung connectToDb(Options optionen) {
-      return new DatabaseConnector(optionen.getProperties()).getVerbindung();
    }
 
 }

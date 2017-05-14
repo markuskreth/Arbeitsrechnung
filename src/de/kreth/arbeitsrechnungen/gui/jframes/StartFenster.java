@@ -24,7 +24,6 @@ import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.starttablemodels.LabeledTableModel;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister.Forderung;
-import mouseoverhintmanager.MouseOverHintManager;
 
 public class StartFenster extends JFrame implements PropertyChangeListener {
 
@@ -38,7 +37,6 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    private DecimalFormat df = new DecimalFormat("0.00");
 
    private Options optionen = null;
-   private MouseOverHintManager hintman;
    private StartTableModel forderungenTableModel;
    private StartTableModel einheitenTableModel;
    private DatenPersister persister;
@@ -75,15 +73,14 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
    private void initHintman() {
 
-      hintman = new MouseOverHintManager(this.Status_links);
-      hintman.addHintFor(this.jButtonKlientenEditor, "Startet den Klienteneditor, einen umfassenden Werkzeug für die meisten Programmfunktionen");
-      hintman.addHintFor(this.jTableEinheiten, "Geleistete Arbeitsstunden, noch nicht abgerechnet");
-      hintman.addHintFor(this.jTableForderungen, "Abgerechnete Arbeitsstunden, noch nicht bezahlt");
-      hintman.addHintFor(this.jButtonBeenden, "Beendet das Programm und schließt alle zugehörigen Fenster");
-      hintman.addHintFor(this.jButtonArtenEinheiten, "TODO: Einheitenarten");
-      hintman.addHintFor(this.jButton1, "Einfacher Editor für Arbeitsstunden");
-      hintman.addHintFor(this.jMenuItemBeenden, "Beendet das Programm und schließt alle zugehörigen Fenster");
-      hintman.enableHints(this);
+      
+      this.jButtonKlientenEditor.setToolTipText("Startet den Klienteneditor, einen umfassenden Werkzeug für die meisten Programmfunktionen");
+      this.jTableEinheiten.setToolTipText("Geleistete Arbeitsstunden, noch nicht abgerechnet");
+      this.jTableForderungen.setToolTipText("Abgerechnete Arbeitsstunden, noch nicht bezahlt");
+      this.jButtonBeenden.setToolTipText("Beendet das Programm und schließt alle zugehörigen Fenster");
+      this.jButtonArtenEinheiten.setToolTipText("TODO: Einheitenarten");
+      this.jButton1.setToolTipText("Einfacher Editor für Arbeitsstunden");
+      this.jMenuItemBeenden.setToolTipText("Beendet das Programm und schließt alle zugehörigen Fenster");
    }
 
    protected void loadOrCreateOptions() {
@@ -129,6 +126,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    private void loadOptions(File optionfile) {
       if(optionen == null) {
          try {
+            logger.debug("loading Option properties from "+ optionfile.getAbsolutePath());
             Properties prop = new Properties();
             prop.load(new FileInputStream(optionfile));
             optionen = new Options.Build(prop).build();
