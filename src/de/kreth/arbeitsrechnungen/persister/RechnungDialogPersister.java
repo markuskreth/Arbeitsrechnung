@@ -6,21 +6,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.apache.log4j.Logger;
-
-import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.*;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 
-public class RechnungDialogPersister implements Persister {
+public class RechnungDialogPersister extends AbstractPersister {
 
-   private Logger logger = Logger.getLogger(getClass());
-   private DateFormat sqlDateFormat;
-   private Verbindung verbindung;
+   private final DateFormat sqlDateFormat;
 
    public RechnungDialogPersister(Options optionen) {
-      verbindung = connectToDb(optionen);
+      super(optionen);
       sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
    }
 
@@ -63,7 +58,7 @@ public class RechnungDialogPersister implements Persister {
             Calendar geldeingang = new GregorianCalendar();
             geldeingang.setTimeInMillis(daten.getDate("geldeingang").getTime());
 
-            r = r.rechnungen_id(rechnungs_id).klienten_id(daten.getInt("klienten_id")).datum(datum).rechnungnr(daten.getString("rechnungnr")).betrag(daten.getDouble("betrag"))
+            r.rechnungen_id(rechnungs_id).klienten_id(daten.getInt("klienten_id")).datum(datum).rechnungnr(daten.getString("rechnungnr")).betrag(daten.getDouble("betrag"))
                   .texdatei(daten.getString("texdatei")).pdfDatei(daten.getString("pdfdatei")).adresse(daten.getString("adresse")).zusatz1(daten.getBoolean("zusatz1"))
                   .zusatz2(daten.getBoolean("zusatz2")).zusammenfassungenErlauben(daten.getBoolean("zusammenfassungen")).zahldatum(zahldatum).geldeingang(geldeingang);
          }
@@ -221,11 +216,6 @@ public class RechnungDialogPersister implements Persister {
       }
 
       return data;
-   }
-
-   @Override
-   public Verbindung connectToDb(Options optionen) {
-      return new DatabaseConnector(optionen.getProperties()).getVerbindung();
    }
 
    public void insertOrUpdateRechnung(Rechnung rechnung) {
