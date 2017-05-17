@@ -11,13 +11,10 @@ import java.awt.Window;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,14 +24,12 @@ import org.apache.log4j.Logger;
 
 import com.toedter.calendar.JDateChooser;
 
-import arbeitsabrechnungendataclass.Verbindung;
-import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.*;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
-import de.kreth.arbeitsrechnungen.data.ArbeitsstundeImpl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.EinheitEinzelFrame;
+import de.kreth.arbeitsrechnungen.persister.DatenPersister;
 
 @SuppressWarnings("boxing")
 public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
@@ -43,7 +38,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
    private Logger logger = Logger.getLogger(getClass());
 
-   private Vector<Arbeitsstunde> Arbeitsstunden;
+   private List<Arbeitsstunde> arbeitsstunden;
    private Options optionen;
    private Window parent = null;
    private int anzahl = 0;
@@ -59,7 +54,9 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    private Integer[] geloeschte_spalten = new Integer[2];
 
    private String filter = "(ISNULL(Bezahlt) OR ISNULL(Rechnung_verschickt))";
-   private Verbindung verbindung;
+
+   private DatenPersister datenPersister;
+
    public static final String TEXUMBRUCH = "\\\\\\\\";
    public static final String TEXLINE = "\\\\hline";
    public static final String TEXEURO = "\\\\officialeuro";
@@ -87,8 +84,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       // Optionen mit Datenbankeinstellungen laden
       optionen = Einstellungen.getInstance().getEinstellungen();
 
-      verbindung = new Verbindung_mysql(optionen.getProperties());
-
+      datenPersister = new DatenPersister(optionen);
       geloeschte_spalten[0] = null;
       geloeschte_spalten[1] = null;
 
@@ -114,69 +110,34 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
     */
    private void readList(int klienten_id) {
       this.klient = klienten_id;
+
       anzahl = 0;
       summe = 0.00;
       stundenzahl = null;
 
-      String sqltext = "SELECT DISTINCT einheiten.einheiten_id, einheiten.klienten_id, "
-            + "einheiten.angebote_id, Datum, Beginn, Ende, einheiten.zusatz1, einheiten.zusatz2, Preisänderung, Rechnung_verschickt, "
-            + "Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.preis_pro_stunde, "
-            + "klienten.Zusatz1 AS bool1, klienten.Zusatz2 AS bool2, klienten.Zusatz1_Name, klienten.Zusatz2_Name FROM einheiten, "
-            + "angebote, klienten WHERE einheiten.klienten_id=" + klienten_id + " AND einheiten.angebote_id=angebote.angebote_id"
-            + " AND einheiten.klienten_id=klienten.klienten_id" + " AND " + filter + " ORDER BY Datum, Preis;";
-
-      logger.info(getClass().getSimpleName() + ".readList: " + sqltext);
-
-      Arbeitsstunden = new Vector<Arbeitsstunde>();
-
+      arbeitsstunden.clear();
+      
       try {
-         ResultSet daten = verbindung.query(sqltext);
-         while (daten.next()) {
-            if ((daten.getBoolean("preis_pro_stunde")) && (stundenzahl == null)) {
+         arbeitsstunden.addAll(datenPersister.getEinheiten(klienten_id, filter));
+      } catch (SQLException e) {
+         logger.error("Failure fetching Arbeitsstunden", e);
+      }
+      
+      for (Arbeitsstunde std : arbeitsstunden) {
+
+         summe = summe + std.getPreis().doubleValue();
+         anzahl = anzahl + 1;
+         
+         if (std.isPreisProStunde()) {
+            if (stundenzahl == null) {
                stundenzahl = 0.0;
             }
-            this.zusatz1 = daten.getBoolean("bool1");
-            if (this.zusatz1)
-               this.zusatz1_name = daten.getString("Zusatz1_Name");
-            this.zusatz2 = daten.getBoolean("bool2");
-            if (this.zusatz2)
-               this.zusatz2_name = daten.getString("Zusatz2_Name");
-
-            int id = daten.getInt("einheiten_id");
-            int angebote_id = daten.getInt("angebote_id");
-
-            anzahl = anzahl + 1;
-            summe = summe + daten.getDouble("Preis");
-            if (daten.getBoolean("preis_pro_stunde")) {
-               stundenzahl += daten.getDouble("Dauer");
-            }
-
-            ArbeitsstundeImpl.Builder stunde = new ArbeitsstundeImpl.Builder(id, klienten_id, angebote_id).datum(daten.getDate("Datum")).inhalt(daten.getString("Inhalt"))
-                  .beginn(daten.getTimestamp("Beginn")).ende(daten.getTimestamp("Ende")).preis(daten.getDouble("Preis")).zusatz1(daten.getString("zusatz1"))
-                  .zusatz2(daten.getString("zusatz2")).preisaenderung(daten.getDouble("Preisänderung")).dauerInMinuten(daten.getInt("Dauer"));
-            try {
-               stunde.setVerschickt(daten.getDate("Rechnung_Datum"));
-            } catch (Exception e) {
-               logger.info(daten.getInt("einheiten.einheiten_id") + ": Rechnung Datum nicht gesetzt!", e);
-               stunde.setVerschickt(null);
-            }
-            try {
-               stunde.bezahlt(daten.getDate("Bezahlt_Datum"));
-            } catch (Exception e) {
-               logger.info(daten.getInt("einheiten.einheiten_id") + ": Bezahlt Datum nicht gesetzt!", e);
-               stunde.bezahlt(null);
-            }
-            try {
-               this.Arbeitsstunden.addElement(stunde.build());
-            } catch (Exception e) {
-               logger.error("ArbeitsstundenTabelle::readList: AddElement misslungen!", e);
-            }
+            stundenzahl += std.getDauerInMinutes();
          }
-      } catch (Exception e) {
-         logger.error("readList:", e);
       }
+      
       if (stundenzahl != null)
-         stundenzahl = stundenzahl / 60; // Minuten in Stunden umrechnen
+         stundenzahl = stundenzahl / 60.0; // Minuten in Stunden umrechnen
    }
 
    public void update(int klienten_id) {
@@ -261,8 +222,8 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       // Vektor aus Daten erstellen und einzeln zum Model hinzufügen
       DecimalFormat df = new DecimalFormat("0.00");
 
-      for (int i = 0; i < Arbeitsstunden.size(); i++) {
-         Arbeitsstunde elementAt = this.Arbeitsstunden.elementAt(i);
+      for (int i = 0; i < arbeitsstunden.size(); i++) {
+         Arbeitsstunde elementAt = this.arbeitsstunden.get(i);
          Vector<Object> daten = elementAt.toVector();
          daten.removeElementAt(0);
          daten.removeElementAt(0);
@@ -745,7 +706,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       if (einheit_id == -1) {
          JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Datensatz aus der Tabelle zum Edieren!", "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
       } else {
-         einheit_id = this.Arbeitsstunden.elementAt(einheit_id).getID();
+         einheit_id = this.arbeitsstunden.get(einheit_id).getID();
          EinheitEinzelFrame fenster = new EinheitEinzelFrame(this.klient, einheit_id);
          fenster.addWindowListener(this);
          fenster.setVisible(true);
@@ -760,68 +721,46 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       int selection = -10;
 
       for (int i = 0; i < einheit_id.length; i++) {
-         einheit_id[i] = this.Arbeitsstunden.elementAt(einheit_id[i]).getID();
+         einheit_id[i] = this.arbeitsstunden.get(einheit_id[i]).getID();
       }
       String frageText = "";
 
-      String sqltext = "";
       if (this.jTable1.getSelectedRowCount() == 0) {
          JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Datensatz aus der Tabelle zum Löschen!", "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
       } else {
-         sqltext = "SELECT * FROM einheiten WHERE einheiten_id in (" + einheit_id[0];
 
-         for (int i = 1; i < einheit_id.length; i++) {
-            sqltext = sqltext + ", " + einheit_id[i];
-         }
-         sqltext = sqltext + ");";
-
-         logger.info("Arbeitsrechnungen::JButton1ActionPerformed: " + sqltext);
-
-         Date datum[] = new Date[einheit_id.length];
+         List<Date> daten = datenPersister.getDatumForEinheiten(einheit_id);
+         
          try {
-            ResultSet einheit = verbindung.query(sqltext);
-            int i = 0;
-            while (einheit.next()) {
-               datum[i] = einheit.getDate("Datum");
-               i++;
-            }
-
             if (einheit_id.length == 1) {
                frageText = "Soll der Datensatz Nr. \"" + einheit_id[0];
             } else {
                frageText = "Sollen die Datensätze Nr. \"" + einheit_id[0];
             }
-            for (i = 1; i < einheit_id.length; i++) {
+            for (int i = 1; i < einheit_id.length; i++) {
                frageText += ", " + einheit_id[i];
             }
-            frageText += "\" vom " + DateFormat.getDateInstance().format(datum[0]);
-            for (i = 1; i < datum.length; i++) {
-               frageText += ", " + DateFormat.getDateInstance().format(datum[i]);
+            DateFormat dateInstance = DateFormat.getDateInstance();
+            for (int i=0; i<daten.size(); i++) {
+               if(i==0) {
+                  frageText += "\" vom " + dateInstance.format(daten.get(i));
+               } else {
+                  frageText += ", " + dateInstance.format(daten.get(i));
+               }
             }
+            
             frageText += " wirklich gelöscht werden?";
 
-            if (datum.length != einheit_id.length) {
+            if (daten.size() != einheit_id.length) {
                frageText += "\nAchtung! Anzahl der Id's und der Daten stimmt nicht überein!";
             }
          } catch (Exception e) {
             e.printStackTrace();
          }
-         // JOptionPane.showOptionDialog(this, frageText,
-         // "tool-text - einsetzen", JOptionPane.YES_NO_OPTION, WIDTH, icon,
-         // options, jLabel1);
-
+         
          selection = JOptionPane.showConfirmDialog(this, frageText);
          if (selection == JOptionPane.YES_OPTION) {
-            for (int i = 0; i < einheit_id.length; i++) {
-               sqltext = "DELETE FROM einheiten WHERE einheiten_id=" + einheit_id[i] + ";";
-               logger.info(sqltext);
-               try {
-                  verbindung.sql(sqltext);
-               } catch (SQLException e) {
-                  logger.error("Sqltext nicht erfolgreich: " + sqltext, e);
-               }
-
-            }
+            datenPersister.deleteEinheiten(einheit_id);
             this.update(klient);
             this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true, false);
          }
@@ -1054,15 +993,15 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       boolean isAnySubmitted = false;
 
       Vector<Integer> einheitenIDs = new Vector<Integer>();
-      for (int i = 0; i < this.Arbeitsstunden.size(); i++) {
-         if ((!this.Arbeitsstunden.elementAt(i).isVerschickt()) && (!this.Arbeitsstunden.elementAt(i).isBezahlt()))
-            einheitenIDs.add(this.Arbeitsstunden.elementAt(i).getID());
+      for (int i = 0; i < this.arbeitsstunden.size(); i++) {
+         if ((!this.arbeitsstunden.get(i).isVerschickt()) && (!this.arbeitsstunden.get(i).isBezahlt()))
+            einheitenIDs.add(this.arbeitsstunden.get(i).getID());
          else {
-            String nachricht = "Die Einheit vom " + this.Arbeitsstunden.elementAt(i).getDatum() + " ist bereits verschickt oder bezahlt!\n"
+            String nachricht = "Die Einheit vom " + this.arbeitsstunden.get(i).getDatum() + " ist bereits verschickt oder bezahlt!\n"
                   + "Erstellung der Rechnung abgebrochen.";
             isAnySubmitted = true;
             einheitenIDs.removeAllElements();
-            i = this.Arbeitsstunden.size();
+            i = this.arbeitsstunden.size();
             JOptionPane.showMessageDialog(parent, nachricht, "Einheit bereits abgerechnet", JOptionPane.ERROR_MESSAGE);
          }
       }
@@ -1207,33 +1146,10 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          // ID der Datensätze herausfinden
          int einheit_id[] = this.jTable1.getSelectedRows();
          for (int i = 0; i < einheit_id.length; i++) {
-            einheit_id[i] = this.Arbeitsstunden.elementAt(einheit_id[i]).getID();
+            einheit_id[i] = this.arbeitsstunden.get(einheit_id[i]).getID();
          }
-
-         // SQL-Text erstellen
-         String sqltext = "null";
-         int wahr = 0;
-         if (datum != null) {
-            MySqlDate tmpdate = new MySqlDate(datum);
-            sqltext = "\"" + tmpdate.getSqlDate() + "\"";
-            wahr = 1;
-         }
-
-         sqltext = "UPDATE einheiten SET " + feld + "=" + sqltext + ", " + feld2 + "=" + wahr + " WHERE einheiten_id IN (";
-         for (int i = 0; i < einheit_id.length; i++) {
-            sqltext = sqltext + einheit_id[i] + ",";
-            if (i == einheit_id.length - 1)
-               sqltext = sqltext.substring(0, sqltext.length() - 1) + ");";
-         }
-         logger.info("SQL-Text: " + sqltext);
-
-         // SQL ausführen
-         try {
-            verbindung.sql(sqltext);
-         } catch (SQLException e) {
-            logger.error("SQL-Text: " + sqltext, e);
-         }
-         return true;
+         
+         return datenPersister.updateFields(feld, feld2, datum, einheit_id);
       } else
          return false;
    }

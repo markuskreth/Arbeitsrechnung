@@ -12,26 +12,22 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeSupport;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-import arbeitsabrechnungendataclass.Verbindung;
-import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.business.RechnungSystemExecutionService;
-import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
-import de.kreth.arbeitsrechnungen.data.ArbeitsstundeImpl;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
-import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
+import de.kreth.arbeitsrechnungen.persister.RechnungPersister;
 
 public class FormRechnungen extends JPanel {
 
@@ -45,7 +41,6 @@ public class FormRechnungen extends JPanel {
 
    private Logger logger = Logger.getLogger(getClass());
 
-   private Verbindung verbindung;
    private Options optionen;
 
    private PropertyChangeSupport pchListeners = new PropertyChangeSupport(this);
@@ -53,6 +48,8 @@ public class FormRechnungen extends JPanel {
    private int klienten_id;
    private Vector<Rechnung> rechnungen = new Vector<Rechnung>();
    private Window owner;
+
+   private RechnungPersister rechnungPersister;
 
    /**
     * Creates new form FormRechnungen
@@ -63,7 +60,8 @@ public class FormRechnungen extends JPanel {
       super();
       this.owner = owner;
       optionen = Einstellungen.getInstance().getEinstellungen();
-      verbindung = new Verbindung_mysql(optionen.getProperties());
+      rechnungPersister = new RechnungPersister(optionen);
+
       this.klienten_id = klienten_id;
       initComponents();
       logger.debug("Konstruktor FormRechnungen ausgeführt!");
@@ -73,87 +71,10 @@ public class FormRechnungen extends JPanel {
    private void update() {
       this.rechnungen.removeAllElements();
 
-      String sql = "SELECT rechnungen_id, klienten_id, datum, rechnungnr, betrag, texdatei, pdfdatei," + "adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, geldeingang"
-            + " FROM rechnungen WHERE klienten_id=" + this.klienten_id;
+      this.rechnungen.addAll(rechnungPersister.getRechnungenForKlient(this.klienten_id));
 
-      logger.debug("FormRechnungen: update: " + sql);
+      makeTable();
 
-      try {
-         ResultSet res_rechnungen = verbindung.query(sql);
-
-         while (res_rechnungen.next()) {
-
-            Calendar rechnungsDatum = null;
-
-            if (res_rechnungen.getDate("datum") != null) {
-               rechnungsDatum = new GregorianCalendar();
-               rechnungsDatum.setTimeInMillis(res_rechnungen.getDate("datum").getTime());
-            }
-
-            Calendar zahlDatum = null;
-
-            if (res_rechnungen.getDate("zahldatum") != null) {
-               zahlDatum = new GregorianCalendar();
-               zahlDatum.setTimeInMillis(res_rechnungen.getDate("zahldatum").getTime());
-
-            }
-            final int rechnungenId = res_rechnungen.getInt("rechnungen_id");
-            Builder builder = new Rechnung.Builder().rechnungen_id(rechnungenId).klienten_id(res_rechnungen.getInt("klienten_id")).datum(rechnungsDatum)
-                  .rechnungnr(res_rechnungen.getString("rechnungnr")).betrag(res_rechnungen.getDouble("betrag")).texdatei(res_rechnungen.getString("texdatei"))
-                  .pdfDatei(res_rechnungen.getString("pdfdatei")).adresse(res_rechnungen.getString("adresse")).zusatz1(res_rechnungen.getBoolean("zusatz1"))
-                  .zusatz2(res_rechnungen.getBoolean("zusatz2")).zusammenfassungenErlauben(res_rechnungen.getBoolean("zusammenfassungen"))
-
-                  .zahldatum(zahlDatum);
-
-            if (res_rechnungen.getDate("geldeingang") != null) {
-               GregorianCalendar kalender3 = new GregorianCalendar();
-               kalender3.setTimeInMillis(res_rechnungen.getDate("geldeingang").getTime());
-
-               builder.geldeingang(kalender3);
-            }
-
-            Vector<Arbeitsstunde> einheiten = loadEinheitenForRechnung(rechnungenId);
-            builder.einheiten(einheiten);
-            this.rechnungen.add(builder.build());
-         }
-
-         makeTable();
-
-      } catch (SQLException e) {
-         logger.error(e.getSQLState(), e);
-      }
-   }
-
-   private Vector<Arbeitsstunde> loadEinheitenForRechnung(int rechnungenId) {
-
-      String sql = "SELECT einheiten_id, angebote_id, Beginn, Bezahlt, Bezahlt_Datum, Datum, Dauer, Ende, Preis, Preisänderung, Rechnung_Datum, rechnung_id, Rechnung_verschickt"
-            + ", zusatz1, zusatz2, klienten_id FROM Arbeitrechnungen.einheiten where rechnung_id=" + rechnungenId;
-
-      logger.debug("FormRechnungen: update: " + sql);
-
-      Vector<Arbeitsstunde> result = new Vector<>();
-
-      try {
-         ResultSet rs = verbindung.query(sql);
-
-         while (rs.next()) {
-            final int einheiten_id = rs.getInt("einheiten_id");
-            final int klienten_id2 = rs.getInt("klienten_id");
-            final int angebote_id = rs.getInt("angebote_id");
-            ArbeitsstundeImpl.Builder std = new ArbeitsstundeImpl.Builder(einheiten_id, klienten_id2, angebote_id).beginn(rs.getDate("Beginn")).datum(rs.getDate("Datum"))
-                  .bezahlt(rs.getDate("Bezahlt_Datum")).dauerInMinuten(rs.getInt("Dauer")).ende(rs.getDate("Ende")).preis(rs.getDouble("Preis"))
-                  .preisaenderung(rs.getDouble("Preisänderung")).zusatz1(rs.getString("zusatz1")).zusatz2(rs.getString("zusatz2"));
-
-            if (rs.getBoolean("Bezahlt"))
-               std.bezahlt(rs.getDate("Bezahlt_Datum"));
-
-            result.add(std.build());
-         }
-      } catch (SQLException e) {
-         logger.error(e.getSQLState(), e);
-      }
-
-      return result;
    }
 
    public void update(int klienten_id) {
@@ -328,29 +249,18 @@ public class FormRechnungen extends JPanel {
    }
 
    private void jButtonLoeschenActionPerformed(ActionEvent evt) {
-      int rechnung_id = this.rechnungen.elementAt(this.jTable1.getSelectedRow()).getRechnungen_id();
-
+      Rechnung rechn = this.rechnungen.elementAt(this.jTable1.getSelectedRow());
       if (JOptionPane.showConfirmDialog(this.getParent(), "Wollen Sie die gewählte Rechnung endgültig löschen?", "Endgültige Löschung!", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-         String sql = "UPDATE einheiten SET Rechnung_verschickt=null, Rechnung_Datum=null, rechnung_id=null" + " WHERE rechnung_id=" + rechnung_id + ";";
-         logger.info("FormRechnungen: jButtonLoeschenActionPerformed: " + sql);
-
-         try {
-            if (verbindung.sql(sql)) {
-               // Weiter nur, wenn update der einheiten erfolgreich war. Sollte
-               // - weshalb nicht?
-               sql = "DELETE from rechnungen WHERE rechnungen_id=" + rechnung_id + ";";
-               if (verbindung.sql(sql)) {
-                  sql = "Rechnung erfolgreich gelöscht!";
-                  pchListeners.fireIndexedPropertyChange(GELOESCHT, rechnung_id, true, false);
-               } else {
-                  sql = "Achtung! Rechnung konnte nicht gelöscht werden!";
-               }
-               JOptionPane.showMessageDialog(this.getParent(), sql);
-            }
-         } catch (SQLException e) {
-            sql = "Achtung! Rechnung konnte nicht gelöscht werden!";
-            JOptionPane.showMessageDialog(this.getParent(), sql);
+         
+         if(rechnungPersister.delete(rechn)) {
+            // gelöscht
+            JOptionPane.showMessageDialog(this.getParent(), "Rechnung erfolgreich gelöscht!");
+            pchListeners.fireIndexedPropertyChange(GELOESCHT, rechn.getRechnungen_id(), true, false);
+         } else {
+            // nicht gelöscht.
+            JOptionPane.showMessageDialog(this.getParent(), "Achtung! Rechnung konnte nicht gelöscht werden!");
          }
+         
       }
    }
 
@@ -363,41 +273,22 @@ public class FormRechnungen extends JPanel {
 
          int[] rechnung = this.jTable1.getSelectedRows();
          String in_klausel = buildInClauseForRechnungen(rechnung);
-         // Datum abfragen
-         java.sql.Date sql_date;
+
          Kalenderauswahl kalender = new Kalenderauswahl(null);
          kalender.setVisible(true);
-         if (kalender.isBestaetigt() && kalender.getDatum() != null) { // TODO
-                                                                       // Löschen
-                                                                       // einer
-                                                                       // Bezahlung
-                                                                       // nicht
-                                                                       // implementiert...
-            String sql;
-
-            sql_date = new java.sql.Date(kalender.getDatum().getTime());
-            sql = "UPDATE einheiten SET Bezahlt=1, Bezahlt_Datum=\"" + sql_date.toString() + "\" WHERE rechnung_id IN " + in_klausel + ";";
-
-            logger.info("FormRechnungen: jButtonBezahltAction: " + sql);
-            try {
-               if (verbindung.sql(sql)) {
-                  sql = "UPDATE rechnungen SET geldeingang=\"" + sql_date.toString() + "\" WHERE rechnungen_id IN " + in_klausel + ";";
-                  if (verbindung.sql(sql)) {
-                     JOptionPane.showMessageDialog(null, "Rechnung ist abgerechnet", "Rechnung bezahlt", JOptionPane.INFORMATION_MESSAGE);
-                     this.update();
-                     for (int i = 1; i < rechnung.length; i++) {
-                        pchListeners.fireIndexedPropertyChange(GEAENDERT, this.rechnungen.elementAt(rechnung[i]).getRechnungen_id(), true, false);
-                     }
-                  } else {
-                     JOptionPane
-                           .showMessageDialog(null, "Rechnung ist nicht abgerechnet!!!\nDie Einheiten aber schon!!! ", "Achtung! Achtung! Achtung!", JOptionPane.ERROR_MESSAGE);
-                  }
-               } else {
-                  JOptionPane.showMessageDialog(null, "Rechnung ist nicht abgerechnet", "Achtung!", JOptionPane.WARNING_MESSAGE);
+         // TODO Löschen einer Bezahlung nicht implementiert...
+         
+         if (kalender.isBestaetigt() && kalender.getDatum() != null) {
+            if(rechnungPersister.setRechnungBezahlt(rechnung, in_klausel, kalender)) {
+               JOptionPane.showMessageDialog(null, "Rechnung ist abgerechnet", "Rechnung bezahlt", JOptionPane.INFORMATION_MESSAGE);
+               this.update();
+               for (int i = 1; i < rechnung.length; i++) {
+                  pchListeners.fireIndexedPropertyChange(GEAENDERT, this.rechnungen.elementAt(rechnung[i]).getRechnungen_id(), true, false);
                }
-            } catch (SQLException e) {
-               JOptionPane.showMessageDialog(null, "Rechnung ist nicht abgerechnet", "Achtung!\n" + e.getLocalizedMessage(), JOptionPane.WARNING_MESSAGE);
-            }
+            } else {
+               JOptionPane
+               .showMessageDialog(null, "Rechnung ist nicht abgerechnet!!!\nDie Einheiten aber schon!!! ", "Achtung! Achtung! Achtung!", JOptionPane.ERROR_MESSAGE);
+      }
          }
       }
    }

@@ -20,4 +20,8 @@ public class AbstractPersister implements Persister {
       return new DatabaseConnector(optionen.getProperties()).getVerbindung();
    }
 
+   protected void debugLogSql(String sqltext) {
+      logger.debug(Thread.currentThread().getStackTrace()[2].getMethodName() + ": " + sqltext);
+   }
+
 }

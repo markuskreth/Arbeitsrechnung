@@ -17,7 +17,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.ResultSet;
 import java.util.*;
 
 import javax.swing.*;
@@ -28,8 +27,6 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import arbeitsabrechnungendataclass.Verbindung;
-import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.*;
 import de.kreth.arbeitsrechnungen.business.RechnungSystemExecutionService;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
@@ -65,19 +62,16 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
    private Rechnung rechnung = null;
    private Vector<Arbeitsstunde> einheiten;
    private Klient klient;
-   private Verbindung verbindung;
 
    private RechnungDialog(Options optionen, Window parent) {
       super(parent);
       setModal(true);
 
-      verbindung = new Verbindung_mysql(optionen.getProperties());
-
       logger.setLevel(Level.DEBUG);
       initComponents();
       klientenPersister = (KlientenEditorPersister) ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class, optionen);
       persister = (RechnungDialogPersister) ArbeitRechnungFactory.getInstance().getPersister(RechnungDialogPersister.class, optionen);
-
+      
       heute = new GregorianCalendar();
    }
 
@@ -946,27 +940,20 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
     */
    public int speichern(Options optionen) {
 
-      // zuerst die tex und pdf-Datei ins andere Verzeichnis kopieren und
-      // umbenennen
       String dateiname = "";
-      String sql = "SELECT Auftraggeber FROM klienten WHERE klienten_id=" + rechnung.getKlienten_id();
-      logger.debug("RechnungenData:speichern : " + sql);
 
-      try {
-
-         ResultSet auftraggeber = verbindung.query(sql);
-         if (auftraggeber.first()) {
-            dateiname = auftraggeber.getString("Auftraggeber") + "_" + rechnung.getRechnungnr();
-            dateiname = dateiname.replace(" ", "_");
-         } else {
-            // sql nicht erfolgreich
-            dateiname = rechnung.getRechnungnr();
-            dateiname = dateiname.replace(" ", "_");
-         }
-      } catch (Exception e) {
-         e.printStackTrace();
+      if (klient != null) {
+         klient = klientenPersister.getKlientById(rechnung.getKlienten_id());
       }
-
+      if (klient != null) {
+         dateiname = klient.getAuftraggeber() + "_" + rechnung.getRechnungnr();
+         dateiname = dateiname.replace(" ", "_");
+      } else {
+         // sql nicht erfolgreich
+         dateiname = rechnung.getRechnungnr();
+         dateiname = dateiname.replace(" ", "_");
+      }
+      
       RechnungSystemExecutionService fileService = new RechnungSystemExecutionService(optionen);
 
       int ergebnis = fileService.movePdf(rechnung, dateiname);
