@@ -23,8 +23,8 @@ public class DatenPersister extends AbstractPersister {
             + "AND ISNULL( einheiten.Bezahlt ) " + "GROUP BY einheiten.Rechnung_Datum,einheiten.klienten_id " + "ORDER BY einheiten.Rechnung_Datum;";
 
       List<Forderung> result = new Vector<>();
-
       debugLogSql(sqltext);
+      
       try {
          ResultSet daten = verbindung.query(sqltext);
          while (daten.next()) {

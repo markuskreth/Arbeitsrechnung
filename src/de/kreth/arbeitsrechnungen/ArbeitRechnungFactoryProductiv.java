@@ -1,5 +1,7 @@
 package de.kreth.arbeitsrechnungen;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 import de.kreth.arbeitsrechnungen.persister.Persister;
 import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
@@ -14,7 +16,12 @@ import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
  */
 public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 
-   private ArbeitRechnungFactoryProductiv() {}
+   private Logger logger;
+
+   protected ArbeitRechnungFactoryProductiv() {
+
+      logger = LogManager.getLogger(getClass());
+   }
 
    public static void init() {
       if (instance == null)

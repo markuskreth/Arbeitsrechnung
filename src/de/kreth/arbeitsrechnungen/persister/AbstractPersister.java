@@ -1,13 +1,14 @@
 package de.kreth.arbeitsrechnungen.persister;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.Options;
 
 public class AbstractPersister implements Persister {
 
-   protected final Logger logger = Logger.getLogger(getClass());
+   protected final Logger logger = LogManager.getLogger(getClass());
    protected final Verbindung verbindung;
 
    public AbstractPersister(Options optionen) {

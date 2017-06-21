@@ -3,6 +3,12 @@ package de.kreth.arbeitsrechnungen;
 import java.io.File;
 import java.util.*;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+
 public class Options {
 
    public static final String BENUTZERVERZEICHNIS = ".arbeitrechnungen";
@@ -37,6 +43,11 @@ public class Options {
 
    private Options(Build build) {
       prop = build.properties;
+      final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+      final Configuration config = ctx.getConfiguration();
+      LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+      String logLevel = build.properties.getProperty(LOG_LEVEL, "INFO");
+      loggerConfig.setLevel(Level.getLevel(logLevel));
    }
 
    public String getStdTexFile() {

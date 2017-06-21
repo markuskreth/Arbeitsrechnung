@@ -20,7 +20,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -36,7 +37,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
    private static final long serialVersionUID = 8161115991876323549L;
 
-   private Logger logger = Logger.getLogger(getClass());
+   private Logger logger = LogManager.getLogger(getClass());
 
    private List<Arbeitsstunde> arbeitsstunden;
    private Options optionen;

@@ -10,15 +10,15 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 
 public class PdfCreator {
 
-   private Logger logger = Logger.getLogger(getClass());
+   private Logger logger = LogManager.getLogger(getClass());
 
    public static final String TEXUMBRUCH = "\\\\\\\\";
    public static final String TEXLINE = "\\\\hline ";
@@ -74,7 +74,7 @@ public class PdfCreator {
     * @throws FileNotFoundException
     */
    public PdfCreator(Rechnung rechnung) throws FileNotFoundException {
-      logger.setLevel(Level.DEBUG);
+      
       this.rechnung = rechnung;
 
       openTexFile(); // Texfile wird geöffnet und in Variable

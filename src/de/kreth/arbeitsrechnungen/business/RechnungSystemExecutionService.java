@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
@@ -16,7 +17,7 @@ public class RechnungSystemExecutionService {
 
    public RechnungSystemExecutionService(Options optionen) {
       this.options = optionen;
-      this.logger = Logger.getLogger(getClass());
+      this.logger = LogManager.getLogger(getClass());
    }
 
    public int movePdf(Rechnung rechnung, String dateiname) {

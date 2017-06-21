@@ -6,7 +6,8 @@ package de.kreth.arbeitsrechnungen;
 import java.io.*;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Einstellungen {
 
@@ -19,7 +20,7 @@ public class Einstellungen {
 
    protected Einstellungen() {
 
-      logger = Logger.getLogger(getClass());
+      logger = LogManager.getLogger(getClass());
       Properties optionen = new Properties();
       java.util.Properties sysprops = System.getProperties();
       // Testen ob das arbeitsverzeichnis im home-verzeichnis existiert
@@ -50,7 +51,7 @@ public class Einstellungen {
             Options.Build builder = new Options.Build(optionen);
             opt = builder.build();
          } catch (Exception e) {
-            Logger.getLogger(getClass()).error("Options-Datei konnte nicht geladen werden.", e);
+            logger.error("Options-Datei konnte nicht geladen werden.", e);
          }
       } 
    }

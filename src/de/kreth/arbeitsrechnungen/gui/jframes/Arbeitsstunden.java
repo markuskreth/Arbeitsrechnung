@@ -17,7 +17,8 @@ import java.util.Vector;
 
 import javax.swing.*;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Klient;
@@ -26,7 +27,7 @@ import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 public class Arbeitsstunden extends JFrame {
 
    private static final long serialVersionUID = 4796722096135537141L;
-   private Logger logger = Logger.getLogger(getClass());
+   private Logger logger = LogManager.getLogger(getClass());
 
    private KlientenEditorPersister persister;
 
