@@ -20,7 +20,7 @@ public class DatenPersister extends AbstractPersister {
    public List<Forderung> getForderungen() {
       String sqltext = "SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, einheiten.Rechnung_Datum AS datum, SUM(einheiten.Preis) AS summe "
             + "FROM einheiten, klienten " + "WHERE einheiten.klienten_id = klienten.klienten_id " + "AND NOT (ISNULL( einheiten.Rechnung_verschickt )) "
-            + "AND ISNULL( einheiten.Bezahlt ) " + "GROUP BY einheiten.Rechnung_Datum,einheiten.klienten_id " + "ORDER BY einheiten.Rechnung_Datum;";
+            + "AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.Rechnung_Datum,einheiten.klienten_id ORDER BY einheiten.Rechnung_Datum;";
 
       List<Forderung> result = new Vector<>();
       debugLogSql(sqltext);
@@ -104,8 +104,8 @@ public class DatenPersister extends AbstractPersister {
             + "angebote, klienten WHERE einheiten.klienten_id=" + klienten_id + " AND einheiten.angebote_id=angebote.angebote_id"
             + " AND einheiten.klienten_id=klienten.klienten_id" + " AND " + filter + " ORDER BY Datum, Preis;";
 
-      logger.info(getClass().getSimpleName() + ".readList: " + sqltext);
-
+      this.debugLogSql(sqltext);
+      
       List<Arbeitsstunde> result = new ArrayList<>();
       
       ResultSet daten = verbindung.query(sqltext);
