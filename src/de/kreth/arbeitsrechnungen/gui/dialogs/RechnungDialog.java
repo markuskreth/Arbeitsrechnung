@@ -34,6 +34,10 @@ import de.kreth.arbeitsrechnungen.data.Rechnung;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
+import de.kreth.arbeitsrechnungen.report.ShowJasperRechnung;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
 
 public class RechnungDialog extends JDialog implements PropertyChangeListener, DocumentListener {
 
@@ -887,46 +891,45 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       this.rechnung.setEinheiten(tmp_einheiten);
 
       try {
-         PdfCreator rechnungData = new PdfCreator(this.rechnung);
+         ShowJasperRechnung rechn = new ShowJasperRechnung();
+         JRDataSource source = rechn.createSource(this.rechnung);
+         JasperPrint repo = rechn.compileAndShowReport(source);
+         
+         if (JOptionPane.showConfirmDialog(null, "Soll diese Rechnung so gespeichert werden?", "Speichern?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 
-         rechnungData.setUnterschrift(jCheckBoxUnterschrift.isSelected());
+            OutputStream outStream = new FileOutputStream(this.rechnung.getPdfdatei());
+            boolean successfull = rechn.store(repo, outStream);
+            
+            speichern(einstellungen);
 
-         int pdf_ergebnis = rechnungData.makePdf(einstellungen);
-         if (pdf_ergebnis == 0) {
-            if (JOptionPane.showConfirmDialog(null, "Soll diese Rechnung so gespeichert werden?", "Speichern?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
-               rechnung.setPdfdatei(rechnungData.getPdfFile().getAbsolutePath());
-               rechnung.setTexdatei(rechnungData.getTexFile().getAbsolutePath());
-               speichern(einstellungen);
-
-               String pdfProg = einstellungen.getPdfProg();
-               if (pdfProg != null) {
-                  String befehl = "";
-                  befehl = pdfProg + " " + rechnung.getPdfdatei();
-                  File pdf_datei = new File(rechnung.getPdfdatei());
-                  if (pdf_datei.canRead()) {
-                     logger.setLevel(Level.INFO);
-                     logger.info("showPdf: " + befehl);
-                     try {
-                        // Runtime.getRuntime().exec("sh -c " + befehl);
-                        Runtime.getRuntime().exec(befehl);
-                     } catch (Exception e) {
-                        logger.debug("showPdf Runtime error:", e);
-                     }
-                  } else {
-                     System.err.println("Pdfdatei existiert nicht: " + pdf_datei.getAbsolutePath());
+            String pdfProg = einstellungen.getPdfProg();
+            if (pdfProg != null) {
+               String befehl = "";
+               befehl = pdfProg + " " + rechnung.getPdfdatei();
+               File pdf_datei = new File(rechnung.getPdfdatei());
+               if (pdf_datei.canRead()) {
+                  logger.info("showPdf: " + befehl);
+                  try {
+                     // Runtime.getRuntime().exec("sh -c " + befehl);
+                     Runtime.getRuntime().exec(befehl);
+                  } catch (Exception e) {
+                     logger.debug("showPdf Runtime error:", e);
                   }
                } else {
                   System.err.println("Pdfdatei existiert nicht: " + pdf_datei.getAbsolutePath());
                }
-
-               pchListeners.firePropertyChange(ERSTELLT, 0, rechnung.getRechnungen_id());
             } else {
                logger.debug("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
             }
+
+            pchListeners.firePropertyChange(ERSTELLT, 0, rechnung.getRechnungen_id());
          }
 
       } catch (FileNotFoundException e) {
          JOptionPane.showMessageDialog(this, "Datei " + rechnung.getTexdatei() + "\nkonnte nicht gefunden werden!\nAbbruch!", "Datei nicht gefunden", JOptionPane.ERROR_MESSAGE);
+      } catch (JRException e1) {
+         logger.error("Error creating PDF", e1);
+         JOptionPane.showMessageDialog(this, "Rechnung vom " + rechnung.getDatum() + "\nkonnte nicht erstellt werden!\nAbbruch!\n" + e1.getMessage(), "PDF nicht erstellt", JOptionPane.ERROR_MESSAGE);
       }
 
       this.setVisible(false);
