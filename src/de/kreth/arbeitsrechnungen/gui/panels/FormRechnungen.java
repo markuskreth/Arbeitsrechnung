@@ -19,7 +19,8 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
@@ -39,7 +40,7 @@ public class FormRechnungen extends JPanel {
 
    private static final long serialVersionUID = 5348708429129926664L;
 
-   private Logger logger = Logger.getLogger(getClass());
+   private Logger logger = LogManager.getLogger(getClass());
 
    private Options optionen;
 

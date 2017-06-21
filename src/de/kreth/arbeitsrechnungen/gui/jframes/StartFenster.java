@@ -15,8 +15,10 @@ import java.util.*;
 
 import javax.swing.*;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.StartFensterTableCellRenderer;
 import de.kreth.arbeitsrechnungen.data.Einheit;
@@ -46,7 +48,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    }
    
    public StartFenster(Options options) {
-      logger = Logger.getLogger(getClass());
+      logger = LogManager.getLogger(getClass());
 
       if(options == null)
          loadOrCreateOptions();
@@ -73,7 +75,6 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
    private void initHintman() {
 
-      
       this.jButtonKlientenEditor.setToolTipText("Startet den Klienteneditor, einen umfassenden Werkzeug für die meisten Programmfunktionen");
       this.jTableEinheiten.setToolTipText("Geleistete Arbeitsstunden, noch nicht abgerechnet");
       this.jTableForderungen.setToolTipText("Abgerechnete Arbeitsstunden, noch nicht bezahlt");

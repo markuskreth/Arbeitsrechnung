@@ -15,8 +15,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -24,8 +23,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.*;
 import de.kreth.arbeitsrechnungen.business.RechnungSystemExecutionService;
@@ -39,7 +38,7 @@ import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
 public class RechnungDialog extends JDialog implements PropertyChangeListener, DocumentListener {
 
    private static final long serialVersionUID = 3906049054488142992L;
-   private Logger logger = Logger.getLogger(getClass());
+   private Logger logger = LogManager.getLogger(getClass());
 
    public static final String ERSTELLT = "Rechnung erstellt";
 
@@ -67,7 +66,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       super(parent);
       setModal(true);
 
-      logger.setLevel(Level.DEBUG);
       initComponents();
       klientenPersister = (KlientenEditorPersister) ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class, optionen);
       persister = (RechnungDialogPersister) ArbeitRechnungFactory.getInstance().getPersister(RechnungDialogPersister.class, optionen);
@@ -918,10 +916,12 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
                      System.err.println("Pdfdatei existiert nicht: " + pdf_datei.getAbsolutePath());
                   }
                } else {
-                  logger.debug("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
+                  System.err.println("Pdfdatei existiert nicht: " + pdf_datei.getAbsolutePath());
                }
 
                pchListeners.firePropertyChange(ERSTELLT, 0, rechnung.getRechnungen_id());
+            } else {
+               logger.debug("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
             }
          }
 
@@ -942,7 +942,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
 
       String dateiname = "";
 
-      if (klient != null) {
+      if (klient == null) {
          klient = klientenPersister.getKlientById(rechnung.getKlienten_id());
       }
       if (klient != null) {

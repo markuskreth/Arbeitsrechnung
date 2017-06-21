@@ -25,7 +25,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.MySqlDate;
@@ -38,7 +39,7 @@ import de.kreth.arbeitsrechnungen.persister.KlientPersister;
 public class EinheitEinzelFrame extends JFrame {
 
    private static final long serialVersionUID = 3963303174102985288L;
-   Logger logger = Logger.getLogger(getClass());
+   Logger logger = LogManager.getLogger(getClass());
    private NumberFormat preisFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
    private Options optionen;

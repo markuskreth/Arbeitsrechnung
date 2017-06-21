@@ -26,8 +26,12 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
@@ -37,7 +41,7 @@ public class OptionenDialog extends JDialog {
 
    private static final long serialVersionUID = -527076543127705929L;
 
-   private Logger logger = Logger.getLogger(getClass());
+   private Logger logger = LogManager.getLogger(getClass());
 
    private boolean firststart;
 
@@ -114,8 +118,6 @@ public class OptionenDialog extends JDialog {
       }
       
       Level level = logger.getLevel();
-      if(level == null)
-         level = logger.getEffectiveLevel();
       
       jTextFieldLogLevel.setText(level.toString());
    }
@@ -208,13 +210,23 @@ public class OptionenDialog extends JDialog {
          @Override
          public void mouseClicked(MouseEvent e) {
 
-            logger.info("Neue Logger haben Level: " + Logger.getLogger("TestLoger").getEffectiveLevel());
+            logger.info("Neue Logger haben Level: " + LogManager.getLogger("TestLoger").getLevel());
             Level[] alle = {Level.ALL, Level.DEBUG, Level.INFO, Level.WARN, Level.ERROR, Level.FATAL, Level.OFF};
-            Level selected = (Level) JOptionPane.showInputDialog(null, "Level zur Auswahl:", "Setzen des Loglevels", JOptionPane.QUESTION_MESSAGE, null, alle, logger.getEffectiveLevel());
-            Logger.getRootLogger().setLevel(selected);
-            logger.setLevel(selected);
-            jTextFieldLogLevel.setText(selected.toString());
-            logger.info("Neue Logger haben nun Level: " + Logger.getLogger("TestLoger").getEffectiveLevel());
+            Level selected = (Level) JOptionPane.showInputDialog(null, "Level zur Auswahl:", "Setzen des Loglevels", JOptionPane.QUESTION_MESSAGE, null, alle, logger.getLevel());
+
+            if(selected != null) {
+               LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+               Configuration config = ctx.getConfiguration();
+               LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME); 
+               loggerConfig.setLevel(selected);
+               ctx.updateLoggers();
+               
+               jTextFieldLogLevel.setText(selected.toString());
+               logger.info("Neue Logger haben nun Level: " + LogManager.getLogger("TestLoger").getLevel());
+            } else {
+               logger.info("Kein Level gesetzt.");
+            }
+            
          }
       });
       

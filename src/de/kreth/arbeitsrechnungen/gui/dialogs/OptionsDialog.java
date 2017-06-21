@@ -9,7 +9,8 @@ import java.util.Properties;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.Options;
 
@@ -17,7 +18,7 @@ public class OptionsDialog extends JDialog {
 
    private static final long serialVersionUID = -527076543127705929L;
 
-   private Logger logger = Logger.getLogger(getClass());
+   private Logger logger = LogManager.getLogger(getClass());
 
    private Properties einstellungen = new Properties();
 
