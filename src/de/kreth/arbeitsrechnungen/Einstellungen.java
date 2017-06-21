@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Einstellungen {
 
-   protected static Einstellungen instance; 
+   static Einstellungen instance; 
    
    private final String propertyPath;
    private Options opt;
@@ -67,7 +67,13 @@ public class Einstellungen {
    }
 
    public void store(Options opt) throws FileNotFoundException, IOException {
+      this.opt = opt;
       opt.getProperties().store(new FileOutputStream(propertyPath), "Eigene Optionen");
+   }
+
+   static void setOptions(Options optionen) {
+      instance = new Einstellungen();
+      instance.opt = optionen;
    }
 
 }

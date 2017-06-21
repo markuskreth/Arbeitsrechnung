@@ -16,7 +16,7 @@ public interface Arbeitsstunde extends Serializable {
    public int getKlientenID();
 
    public int getAngeboteID();
-
+   
    public Date getDatum();
 
    public void setDatum(Date datum);
