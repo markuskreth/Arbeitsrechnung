@@ -7,11 +7,11 @@ package de.kreth.arbeitsrechnungen.gui.jframes;
 import java.awt.Font;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileInputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.*;
 
@@ -85,56 +85,13 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    }
 
    protected void loadOrCreateOptions() {
-      // Testen ob das arbeitsverzeichnis im home-verzeichnis existiert
-      File homeverzeichnis;
-      Properties sysprops = System.getProperties();
-      String homedir = sysprops.getProperty("user.home");
-      homeverzeichnis = new File(homedir, Options.BENUTZERVERZEICHNIS);
-
-      if (!homeverzeichnis.exists()) {
-         // Verzeichnis anlegen
-         logger.info(homeverzeichnis.getAbsolutePath() + " existiert nicht!\nwird angelegt...");
-         homeverzeichnis.mkdirs();
-      }
-
-      File optionfile = new File(homedir + sysprops.getProperty("file.separator") + Options.BENUTZERVERZEICHNIS + sysprops.getProperty("file.separator") + "optionen.ini");
-
-      createOptionsfileIfNotExisting(optionfile);
-
-      loadOptions(optionfile);
-
+      optionen = Einstellungen.getInstance().getEinstellungen();
       if (optionen == null || optionen.getDbHost() == null) {
          // Property sqlserver nicht gefunden: optionen nicht gespeichert!
          OptionenDialog optionwindow = new OptionenDialog(null, true);
          optionwindow.setVisible(true);
       }
-   }
-
-   private void createOptionsfileIfNotExisting(File optionfile) {
-      boolean wasCreatedNew = false;
-      try {
-         wasCreatedNew = optionfile.createNewFile();
-         if (wasCreatedNew) {
-            logger.info("Options-Datei erfolgreich angelegt! Öffne " + OptionenDialog.class.getSimpleName());
-            OptionenDialog optionwindow = new OptionenDialog(null, true);
-            optionwindow.setVisible(true);
-         }
-      } catch (Exception e) {
-         logger.error("Options-Datei konnte nicht angelegt werden. CreatedNew=" + wasCreatedNew, e);
-      }
-   }
-
-   private void loadOptions(File optionfile) {
-      if(optionen == null) {
-         try {
-            logger.debug("loading Option properties from "+ optionfile.getAbsolutePath());
-            Properties prop = new Properties();
-            prop.load(new FileInputStream(optionfile));
-            optionen = new Options.Build(prop).build();
-         } catch (Exception e) {
-            logger.error("Startfenster.java: Options-Datei konnte nicht geladen werden.", e);
-         }
-      }
+      optionen = Einstellungen.getInstance().getEinstellungen();
    }
 
    /**
