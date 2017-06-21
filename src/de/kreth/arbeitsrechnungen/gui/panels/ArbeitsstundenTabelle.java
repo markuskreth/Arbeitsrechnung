@@ -57,10 +57,10 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    private String filter = "(ISNULL(Bezahlt) OR ISNULL(Rechnung_verschickt))";
 
    private DatenPersister datenPersister;
-
-   public static final String TEXUMBRUCH = "\\\\\\\\";
-   public static final String TEXLINE = "\\\\hline";
-   public static final String TEXEURO = "\\\\officialeuro";
+   
+//   public static final String TEXUMBRUCH = "\\\\\\\\";
+//   public static final String TEXLINE = "\\\\hline";
+//   public static final String TEXEURO = "\\\\officialeuro";
    public static final int EINGEREICHTE = 1;
    public static final int NICHTEINGEREICHTE = 2;
    public static final int OFFENE = 3;
@@ -98,6 +98,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          this.jTextFieldStundenzahl.setVisible(false);
          this.jLabel6.setVisible(false);
          this.parent = parent;
+         this.arbeitsstunden = new ArrayList<>();
          setFilter();
          update(klienten_id);
       }

@@ -15,7 +15,8 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import javax.swing.*;
@@ -898,13 +899,12 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
                rechnung.setTexdatei(rechnungData.getTexFile().getAbsolutePath());
                speichern(einstellungen);
 
+               File pdf_datei = new File(rechnung.getPdfdatei());
                String pdfProg = einstellungen.getPdfProg();
                if (pdfProg != null) {
                   String befehl = "";
                   befehl = pdfProg + " " + rechnung.getPdfdatei();
-                  File pdf_datei = new File(rechnung.getPdfdatei());
                   if (pdf_datei.canRead()) {
-                     logger.setLevel(Level.INFO);
                      logger.info("showPdf: " + befehl);
                      try {
                         // Runtime.getRuntime().exec("sh -c " + befehl);
