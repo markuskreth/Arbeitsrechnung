@@ -66,8 +66,6 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       
       jTableForderungen.setDefaultRenderer(String.class, new StartFensterTableCellRenderer());
       
-      initForderungen();
-      initEinheiten();
       initHintman();
       this.jButtonArtenEinheiten.setEnabled(false);
 
@@ -100,7 +98,8 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    private void initForderungen() {
       // Spaltenbreiten merken
       int[][] spaltenBreiten = getSpaltenBreiten(this.jTableForderungen);
-
+      forderungenTableModel.clear();
+      logger.info("Loading " + Forderung.class.getSimpleName());
       List<Forderung> forderungen = persister.getForderungen();
       // Ergebnise einzeln zum Model hinzufügen
       double summe = 0;
@@ -168,9 +167,11 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       int[][] spaltenBreiten = getSpaltenBreiten(jTableEinheiten);
 
       double summe = 0;
-
+      
+      logger.info("Loading " + Einheit.class.getSimpleName());
       List<Einheit> einheiten = persister.getEinheiten();
-
+      einheitenTableModel.clear();
+      
       for (Iterator<Einheit> iterator = einheiten.iterator(); iterator.hasNext();) {
          Einheit einheit = iterator.next();
 
@@ -235,47 +236,11 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       setTitle(resourceMap.getString("Form.title")); // NOI18N
       setName("Form"); // NOI18N
 
-      addWindowListener(new WindowListener() {
-         
-         @Override
-         public void windowOpened(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-         }
-         
-         @Override
-         public void windowIconified(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-         }
-         
-         @Override
-         public void windowDeiconified(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-         }
-         
-         @Override
-         public void windowDeactivated(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-         }
-         
-         @Override
-         public void windowClosing(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-         }
-         
-         @Override
-         public void windowClosed(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-         }
-         
+      addWindowListener(new WindowAdapter() {
          @Override
          public void windowActivated(WindowEvent e) {
-            jFrameWindowActivated(e);
+            super.windowActivated(e);
+            reloadContents();
          }
       });
       jButtonKlientenEditor.setText(resourceMap.getString("jButtonKlientenEditor.text")); // NOI18N
@@ -518,9 +483,9 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       pack();
    }// </editor-fold>//GEN-END:initComponents
 
-   protected void jFrameWindowActivated(WindowEvent e) {
-      // TODO Auto-generated method stub
-      
+   protected void reloadContents() {
+      initForderungen();
+      initEinheiten();
    }
 
    private void jButtonKlientenEditorActionPerformed(ActionEvent evt) {
