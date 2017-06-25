@@ -57,7 +57,7 @@ public class ShowJasperRechnung {
    public JasperPrint compileAndShowReport(JRDataSource source) throws JRException {
       JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("mtv_gross_buchholz.jrxml"));
       JasperPrint print = JasperFillManager.fillReport(report, new HashMap<>(), source);
-      JasperViewer.viewReport(print, true);
+      JasperViewer.viewReport(print, false);
       return print;
    }
 

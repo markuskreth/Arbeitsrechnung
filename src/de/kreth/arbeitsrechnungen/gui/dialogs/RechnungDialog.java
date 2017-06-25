@@ -73,7 +73,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       initComponents();
       klientenPersister = (KlientenEditorPersister) ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class, optionen);
       persister = (RechnungDialogPersister) ArbeitRechnungFactory.getInstance().getPersister(RechnungDialogPersister.class, optionen);
-      
+
       heute = new GregorianCalendar();
    }
 
@@ -292,8 +292,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       DefaultTableModel mymodel = new DefaultTableModel(spaltentitel, 0) {
 
          /**
-			 * 
-			 */
+          * 
+          */
          private static final long serialVersionUID = -5855242848142616562L;
 
          // Methoden überschreiben
@@ -517,32 +517,21 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
 
       GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
       jPanel1.setLayout(jPanel1Layout);
-      jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-            jPanel1Layout
-                  .createSequentialGroup()
-                  .addGroup(
-                        jPanel1Layout
-                              .createParallelGroup(GroupLayout.Alignment.LEADING)
-                              .addComponent(jLabel6)
-                              .addGroup(
-                                    GroupLayout.Alignment.TRAILING,
-                                    jPanel1Layout.createSequentialGroup().addComponent(jTextTexDatei, GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                          .addComponent(jButton3, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-                              .addGroup(jPanel1Layout.createSequentialGroup().addContainerGap().addComponent(jCheckBoxVorschau))
-                              .addGroup(
-                                    jPanel1Layout.createSequentialGroup().addContainerGap().addComponent(jToggleButtonZusammenfassungen)
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel7))).addContainerGap()));
-      jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-            jPanel1Layout
-                  .createSequentialGroup()
-                  .addComponent(jLabel6)
-                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(
-                        jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                              .addComponent(jTextTexDatei, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                              .addComponent(jButton3, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                  .addComponent(jCheckBoxVorschau).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+      jPanel1Layout
+            .setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                  .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jLabel6).addGroup(GroupLayout.Alignment.TRAILING,
+                              jPanel1Layout.createSequentialGroup().addComponent(jTextTexDatei, GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton3, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+                              .addGroup(jPanel1Layout.createSequentialGroup().addContainerGap().addComponent(jCheckBoxVorschau)).addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addContainerGap().addComponent(jToggleButtonZusammenfassungen).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel7)))
+                        .addContainerGap()));
+      jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup().addComponent(jLabel6).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextTexDatei, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jButton3,
+                              GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jCheckBoxVorschau).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                   .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jToggleButtonZusammenfassungen).addComponent(jLabel7))
                   .addContainerGap(70, Short.MAX_VALUE)));
 
@@ -550,8 +539,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
 
       GroupLayout jPaneluntenLayout = new GroupLayout(jPanelunten);
       jPanelunten.setLayout(jPaneluntenLayout);
-      jPaneluntenLayout.setHorizontalGroup(jPaneluntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1, GroupLayout.DEFAULT_SIZE, 570,
-            Short.MAX_VALUE));
+      jPaneluntenLayout
+            .setHorizontalGroup(jPaneluntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1, GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE));
       jPaneluntenLayout.setVerticalGroup(jPaneluntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1, GroupLayout.Alignment.TRAILING,
             GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE));
 
@@ -693,76 +682,45 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
 
       GroupLayout jPanelobenLayout = new GroupLayout(jPaneloben);
       jPaneloben.setLayout(jPanelobenLayout);
-      jPanelobenLayout.setHorizontalGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-            jPanelobenLayout
-                  .createSequentialGroup()
-                  .addGroup(
-                        jPanelobenLayout
-                              .createParallelGroup(GroupLayout.Alignment.LEADING)
-                              .addGroup(
-                                    jPanelobenLayout.createSequentialGroup().addComponent(jCheckBoxZusatz1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                          .addComponent(jCheckBoxZusatz2).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jCheckBoxStundenzahl)
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jCheckBoxUnterschrift))
-                              .addGroup(
-                                    GroupLayout.Alignment.TRAILING,
-                                    jPanelobenLayout
-                                          .createSequentialGroup()
-                                          .addGroup(
-                                                jPanelobenLayout
-                                                      .createParallelGroup(GroupLayout.Alignment.LEADING)
-                                                      .addGroup(
-                                                            jPanelobenLayout.createSequentialGroup().addContainerGap()
-                                                                  .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE))
-                                                      .addGroup(
-                                                            jPanelobenLayout.createSequentialGroup()
-                                                                  .addComponent(jToggleButtonDetails, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-                                                                  .addGap(241, 241, 241)))
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanelobenLayout
-                                                      .createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                      .addGroup(
-                                                            jPanelobenLayout
-                                                                  .createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                                  .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                  .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                  .addComponent(jDateZahlDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                  .addComponent(jLabel4, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-                                                                        GroupLayout.PREFERRED_SIZE)
-                                                                  .addComponent(jTextRechnungsnummer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-                                                                        GroupLayout.PREFERRED_SIZE))
-                                                      .addComponent(jDateRechnungsdatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+      jPanelobenLayout
+            .setHorizontalGroup(
+                  jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelobenLayout.createSequentialGroup().addGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                              .addGroup(jPanelobenLayout.createSequentialGroup()
+                                    .addComponent(jCheckBoxZusatz1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jCheckBoxZusatz2)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jCheckBoxStundenzahl)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jCheckBoxUnterschrift))
+                              .addGroup(GroupLayout.Alignment.TRAILING, jPanelobenLayout.createSequentialGroup().addGroup(jPanelobenLayout
+                                    .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanelobenLayout.createSequentialGroup().addContainerGap().addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE))
+                                    .addGroup(jPanelobenLayout.createSequentialGroup()
+                                          .addComponent(jToggleButtonDetails, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE).addGap(241, 241, 241)))
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                          .addGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jDateZahlDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel4, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                      GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jTextRechnungsnummer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                          .addComponent(jDateRechnungsdatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                               .addGroup(jPanelobenLayout.createSequentialGroup().addContainerGap().addComponent(jLabel2))).addContainerGap()));
-      jPanelobenLayout.setVerticalGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-            jPanelobenLayout
-                  .createSequentialGroup()
-                  .addContainerGap()
-                  .addComponent(jLabel2)
+      jPanelobenLayout.setVerticalGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(jPanelobenLayout.createSequentialGroup().addContainerGap()
+            .addComponent(jLabel2).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(jPanelobenLayout.createSequentialGroup()
+                  .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jDateRechnungsdatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addGap(12, 12, 12)
+                  .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jDateZahlDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                   .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(
-                        jPanelobenLayout
-                              .createParallelGroup(GroupLayout.Alignment.LEADING)
-                              .addGroup(
-                                    jPanelobenLayout.createSequentialGroup()
-                                          .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                          .addComponent(jDateRechnungsdatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addGap(12, 12, 12)
-                                          .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                          .addComponent(jDateZahlDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                          .addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                          .addComponent(jTextRechnungsnummer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addContainerGap())
-                              .addGroup(
-                                    jPanelobenLayout
-                                          .createSequentialGroup()
-                                          .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jCheckBoxZusatz1).addComponent(jCheckBoxZusatz2)
-                                                      .addComponent(jCheckBoxStundenzahl).addComponent(jCheckBoxUnterschrift)).addGap(18, 18, 18)
-                                          .addComponent(jToggleButtonDetails, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)))));
+                  .addComponent(jTextRechnungsnummer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addContainerGap())
+                  .addGroup(jPanelobenLayout.createSequentialGroup().addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelobenLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jCheckBoxZusatz1).addComponent(jCheckBoxZusatz2)
+                              .addComponent(jCheckBoxStundenzahl).addComponent(jCheckBoxUnterschrift))
+                        .addGap(18, 18, 18).addComponent(jToggleButtonDetails, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)))));
 
       jSplitPane1.setLeftComponent(jPaneloben);
 
@@ -788,22 +746,15 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
 
       GroupLayout layout = new GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
-      layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-            layout.createSequentialGroup()
-                  .addContainerGap()
-                  .addGroup(
-                        layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                              .addComponent(jSplitPane1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
-                              .addGroup(
-                                    GroupLayout.Alignment.LEADING,
-                                    layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                          .addComponent(jLabel1)
-                                          .addGroup(
-                                                GroupLayout.Alignment.TRAILING,
-                                                layout.createSequentialGroup().addComponent(jButtonErstellen).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                      .addComponent(jButton1)))).addContainerGap()));
-      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-            layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+      layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup().addContainerGap()
+                  .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                        .addComponent(jSplitPane1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE).addGroup(GroupLayout.Alignment.LEADING,
+                              layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jLabel1).addGroup(GroupLayout.Alignment.TRAILING,
+                                    layout.createSequentialGroup().addComponent(jButtonErstellen).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton1))))
+                  .addContainerGap()));
+      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                   .addComponent(jSplitPane1, GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addGap(18, 18, 18)
                   .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jButton1).addComponent(jButtonErstellen)).addContainerGap()));
 
@@ -894,19 +845,21 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
          ShowJasperRechnung rechn = new ShowJasperRechnung();
          JRDataSource source = rechn.createSource(this.rechnung);
          JasperPrint repo = rechn.compileAndShowReport(source);
-         
-         if (JOptionPane.showConfirmDialog(null, "Soll diese Rechnung so gespeichert werden?", "Speichern?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
+
+         if (JOptionPane.showConfirmDialog(null, "Soll diese Rechnung so gespeichert werden?", "Speichern?", JOptionPane.OK_CANCEL_OPTION,
+               JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 
             OutputStream outStream = new FileOutputStream(this.rechnung.getPdfdatei());
-            boolean successfull = rechn.store(repo, outStream);
-            
+            rechn.store(repo, outStream);
+
             speichern(einstellungen);
 
+            File pdf_datei = new File(rechnung.getPdfdatei());
             String pdfProg = einstellungen.getPdfProg();
             if (pdfProg != null) {
                String befehl = "";
                befehl = pdfProg + " " + rechnung.getPdfdatei();
-               File pdf_datei = new File(rechnung.getPdfdatei());
+
                if (pdf_datei.canRead()) {
                   logger.info("showPdf: " + befehl);
                   try {
@@ -929,7 +882,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
          JOptionPane.showMessageDialog(this, "Datei " + rechnung.getTexdatei() + "\nkonnte nicht gefunden werden!\nAbbruch!", "Datei nicht gefunden", JOptionPane.ERROR_MESSAGE);
       } catch (JRException e1) {
          logger.error("Error creating PDF", e1);
-         JOptionPane.showMessageDialog(this, "Rechnung vom " + rechnung.getDatum() + "\nkonnte nicht erstellt werden!\nAbbruch!\n" + e1.getMessage(), "PDF nicht erstellt", JOptionPane.ERROR_MESSAGE);
+         JOptionPane.showMessageDialog(this, "Rechnung vom " + rechnung.getDatum() + "\nkonnte nicht erstellt werden!\nAbbruch!\n" + e1.getMessage(), "PDF nicht erstellt",
+               JOptionPane.ERROR_MESSAGE);
       }
 
       this.setVisible(false);
@@ -956,7 +910,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
          dateiname = rechnung.getRechnungnr();
          dateiname = dateiname.replace(" ", "_");
       }
-      
+
       RechnungSystemExecutionService fileService = new RechnungSystemExecutionService(optionen);
 
       int ergebnis = fileService.movePdf(rechnung, dateiname);
