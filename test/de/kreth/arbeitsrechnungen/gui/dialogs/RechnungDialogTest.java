@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.Vector;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.kreth.arbeitsrechnungen.ArbeitRechnungFactoryTestingFakeDB;
@@ -36,6 +37,7 @@ public class RechnungDialogTest {
    }
 
    @Test
+   @Ignore
    public void testInit() {
       Properties prop = new Properties();
       prop.setProperty(Options.DB_HOST, "localhost");
