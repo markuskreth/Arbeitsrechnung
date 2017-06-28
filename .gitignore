@@ -6,8 +6,8 @@ target/
 output/
 pdf-speicher/
 tmpDir/
+/db/
 
- 
 # OS Files #
 .DS_Store
  
