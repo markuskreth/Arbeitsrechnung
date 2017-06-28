@@ -9,6 +9,9 @@ import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
 
 public class MockRechnungDialogPersister extends RechnungDialogPersister {
 
+   public int klientId;
+   public Builder rechnungBuilder;
+
    public MockRechnungDialogPersister(Options optionen) {
       this();
    }
@@ -23,8 +26,13 @@ public class MockRechnungDialogPersister extends RechnungDialogPersister {
    }
 
    @Override
+   public int getKlientenIdForRechnungId(int rechnungs_id) {
+      return klientId;
+   }
+   
+   @Override
    public Builder getRechnungById(int rechnungs_id) {
-      return new Builder();
+      return rechnungBuilder;
    }
 
    @Override
