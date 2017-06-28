@@ -933,6 +933,10 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       this.dispose();
    }
 
+   Rechnung getRechnung() {
+      return rechnung;
+   }
+   
    /**
     * Speichert die Rechnung und Details in der Datenbank
     * 
