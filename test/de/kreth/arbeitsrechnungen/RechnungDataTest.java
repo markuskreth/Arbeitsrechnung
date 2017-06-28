@@ -8,12 +8,14 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.ArbeitsstundeImpl;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 
+@Ignore
 public class RechnungDataTest {
 
    private PdfCreator rechnung;
