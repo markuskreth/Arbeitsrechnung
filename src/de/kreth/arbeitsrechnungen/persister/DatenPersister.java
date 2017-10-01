@@ -3,7 +3,12 @@ package de.kreth.arbeitsrechnungen.persister;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Vector;
 
 import de.kreth.arbeitsrechnungen.MySqlDate;
 import de.kreth.arbeitsrechnungen.Options;
@@ -19,8 +24,10 @@ public class DatenPersister extends AbstractPersister {
 
    public List<Forderung> getForderungen() {
       String sqltext = "SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, einheiten.Rechnung_Datum AS datum, SUM(einheiten.Preis) AS summe "
-            + "FROM einheiten, klienten " + "WHERE einheiten.klienten_id = klienten.klienten_id " + "AND NOT (ISNULL( einheiten.Rechnung_verschickt )) "
-            + "AND ISNULL( einheiten.Bezahlt ) GROUP BY einheiten.Rechnung_Datum,einheiten.klienten_id ORDER BY einheiten.Rechnung_Datum;";
+            + "FROM einheiten, klienten WHERE einheiten.klienten_id = klienten.klienten_id AND einheiten.Rechnung_verschickt IS NOT NULL "
+            + "AND einheiten.Bezahlt IS NULL "
+            + "GROUP BY einheiten.Rechnung_Datum, einheiten.klienten_id, klienten.klienten_id, klienten.Auftraggeber "
+            + "ORDER BY einheiten.Rechnung_Datum;";
 
       List<Forderung> result = new Vector<>();
       debugLogSql(sqltext);
@@ -46,8 +53,10 @@ public class DatenPersister extends AbstractPersister {
 
    public List<Einheit> getEinheiten() {
       String sqltext = "SELECT klienten.klienten_id AS id, klienten.Auftraggeber AS auftraggeber, COUNT(einheiten.Preis) AS anzahl, SUM(einheiten.Preis) AS klientpreis "
-            + "FROM einheiten, klienten " + "WHERE einheiten.klienten_id = klienten.klienten_id " + "AND ISNULL( einheiten.Rechnung_verschickt ) "
-            + "AND ISNULL( einheiten.Bezahlt ) " + "GROUP BY einheiten.klienten_id " + "ORDER BY klientpreis;";
+            + "FROM einheiten, klienten " + "WHERE einheiten.klienten_id = klienten.klienten_id " + "AND einheiten.Rechnung_verschickt IS NULL "
+            + "AND einheiten.Bezahlt IS NULL "
+            + "GROUP BY einheiten.klienten_id , klienten.klienten_id, klienten.Auftraggeber "
+            + "ORDER BY klientpreis;";
 
       debugLogSql(sqltext);
 

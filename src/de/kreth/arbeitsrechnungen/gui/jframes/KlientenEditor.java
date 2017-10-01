@@ -608,12 +608,12 @@ public class KlientenEditor extends JDialog {
    @SuppressWarnings("unused")
    private void initComponents() {
 
-      int klienten_id;
-      if (currentKlient != null)
-         klienten_id = currentKlient.getKlienten_id();
-      else
-         klienten_id = -1;
+      if (currentKlient == null) {
+          currentKlient = persister.createNewAuftraggeber();
+          allKlienten = persister.getAllKlienten();
+      }
 
+      int klienten_id = currentKlient.getKlienten_id();
       jSplitPane1 = new JSplitPane();
       jTabbedPane1 = new JTabbedPane();
       jPanelArbeitsstunden = new JPanel();
@@ -1630,7 +1630,7 @@ public class KlientenEditor extends JDialog {
 
       dateiname.setVisible(true);
       if (dateiname.getFile() != null) {
-         persister.speicherWert(currentKlient.getKlienten_id(), "tex_datei", "\"" + dateiname.getDirectory() + dateiname.getFile() + "\"");
+         persister.speicherWert(currentKlient.getKlienten_id(), "tex_datei", "'" + dateiname.getDirectory() + dateiname.getFile() + "'");
          this.jTextFieldTex_datei.setText(currentKlient.getTex_datei());
       }
       dateiname.dispose();
@@ -1657,7 +1657,7 @@ public class KlientenEditor extends JDialog {
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
          System.out.println("Text: " + tf.getText() + "\nName: " + tf.getName() + "\n");
-         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");
+         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "'" + tf.getText() + "'");
          allKlienten = persister.getAllKlienten();
       }
       if (event.getSource() instanceof JCheckBox) {
@@ -1695,13 +1695,13 @@ public class KlientenEditor extends JDialog {
 
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
-         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");
+         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "'" + tf.getText() + "'");
          allKlienten = persister.getAllKlienten();
       }
 
       if (event.getSource() instanceof JTextArea) {
          JTextArea ta = (JTextArea) event.getSource();
-         persister.speicherWert(currentKlient.getKlienten_id(), ta.getName(), "\"" + ta.getText() + "\"");
+         persister.speicherWert(currentKlient.getKlienten_id(), ta.getName(), "'" + ta.getText() + "'");
          allKlienten = persister.getAllKlienten();
       }
    }

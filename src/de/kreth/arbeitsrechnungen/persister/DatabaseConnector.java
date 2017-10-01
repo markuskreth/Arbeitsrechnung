@@ -2,11 +2,12 @@ package de.kreth.arbeitsrechnungen.persister;
 
 import java.util.Properties;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import arbeitsabrechnungendataclass.Verbindung;
-import arbeitsabrechnungendataclass.Verbindung_mysql;
+import arbeitsabrechnungendataclass.Verbindung_HsqlCreator;
+import de.kreth.hsqldbcreator.HsqlCreator;
 
 /**
  * Stellt die Db-Verbindung her und stellt logger-Objekt zur Verfügung.
@@ -15,13 +16,14 @@ import arbeitsabrechnungendataclass.Verbindung_mysql;
  */
 public final class DatabaseConnector {
 
-   private Logger logger = LogManager.getLogger(getClass());
+   private Logger logger = LoggerFactory.getLogger(getClass());
    private Verbindung verbindung;
 
    public DatabaseConnector(Properties optionen) {
       super();
 
-      verbindung = new Verbindung_mysql(optionen);
+      verbindung = new Verbindung_HsqlCreator(HsqlCreator.getInstance());
+//      verbindung = new Verbindung_mysql(optionen);
 
       if (verbindung.connected()) {
          logger.info("Connected to " + verbindung);

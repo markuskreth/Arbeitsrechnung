@@ -26,67 +26,67 @@ public class AngebotPersister extends AbstractPersister {
                   + klient
                   + ","
                   + angebot_id
-                  + ",\""
+                  + ",'"
                   + datum
-                  + "\",\""
+                  + "','"
                   + sqlBeginn
-                  + "\",\""
+                  + "','"
                   + zusatz1
-                  + "\",\""
+                  + "','"
                   + zusatz2
-                  + "\",\""
+                  + "','"
                   + preis
-                  + "\",\""
+                  + "','"
                   + dauer
-                  + "\",\""
+                  + "','"
                   + isEingereicht
-                  + "\",\""
+                  + "','"
                   + eingereichtDatum
-                  + "\",\""
+                  + "','"
                   + isBezahlt
-                  + "\",\"" + bezahltDatum + "\",\"" + preisAenderung + "\");";
+                  + "','" + bezahltDatum + "','" + preisAenderung + "');";
          } else if (isEingereicht != 0) {
             sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer,"
                   + "Rechnung_verschickt,Rechnung_Datum,Preisänderung) VALUES " + "("
                   + klient
                   + ","
                   + angebot_id
-                  + ",\""
+                  + ",'"
                   + datum
-                  + "\",\""
+                  + "','"
                   + sqlBeginn
-                  + "\",\""
+                  + "','"
                   + sqlEnde
-                  + "\",\""
+                  + "','"
                   + zusatz1.trim()
-                  + "\",\""
+                  + "','"
                   + zusatz2.trim()
-                  + "\",\""
+                  + "','"
                   + preis
-                  + "\",\""
+                  + "','"
                   + dauer
-                  + "\",\""
+                  + "','"
                   + isEingereicht
-                  + "\",\""
+                  + "','"
                   + eingereichtDatum
-                  + "\",\""
-                  + preisAenderung.trim() + "\");";
+                  + "','"
+                  + preisAenderung.trim() + "');";
          } else {
             sqltext = "INSERT INTO einheiten " + "(klienten_id,angebote_id,Datum,Beginn,Ende,zusatz1,zusatz2,Preis,Dauer," + "Preisänderung) VALUES " + "(" + klient
-                  + "," + angebot_id + ",\"" + datum + "\",\"" + sqlBeginn + "\",\"" + sqlEnde + "\",\"" + zusatz1.trim() + "\",\""
-                  + zusatz2.trim() + "\",\"" + preis + "\",\"" + dauer + "\",\"" + preisAenderung + "\");";
+                  + "," + angebot_id + ",'" + datum + "','" + sqlBeginn + "','" + sqlEnde + "','" + zusatz1.trim() + "','"
+                  + zusatz2.trim() + "','" + preis + "','" + dauer + "','" + preisAenderung + "');";
          }
       } else {
-         sqltext = "UPDATE einheiten set " + "angebote_id=" + angebot_id + ",Datum=\"" + datum + "\""
-               + ",Beginn=\"" + sqlBeginn + "\",Ende=\"" + sqlEnde + "\",zusatz1=\"" + zusatz1.trim() + "\"" + ",zusatz2=\""
-               + zusatz2.trim() + "\"" + ",Preis=" + preis + ",Dauer=" + dauer;
+         sqltext = "UPDATE einheiten set " + "angebote_id=" + angebot_id + ",Datum='" + datum + "'"
+               + ",Beginn='" + sqlBeginn + "',Ende='" + sqlEnde + "',zusatz1='" + zusatz1.trim() + "'" + ",zusatz2='"
+               + zusatz2.trim() + "'" + ",Preis=" + preis + ",Dauer=" + dauer;
          if (isEingereicht != 0) {
-            sqltext = sqltext + ",Rechnung_verschickt=\"" + isEingereicht + "\"" + ",Rechnung_Datum=\"" + eingereichtDatum + "\"";
+            sqltext = sqltext + ",Rechnung_verschickt='" + isEingereicht + "'" + ",Rechnung_Datum='" + eingereichtDatum + "'";
          } else {
             sqltext = sqltext + ",Rechnung_verschickt=NULL" + ",Rechnung_Datum=NULL";
          }
          if ((isEingereicht != 0) && (isBezahlt != 0)) {
-            sqltext = sqltext + ",Bezahlt=\"" + isBezahlt + "\"" + ",Bezahlt_Datum=\"" + bezahltDatum + "\"";
+            sqltext = sqltext + ",Bezahlt='" + isBezahlt + "'" + ",Bezahlt_Datum='" + bezahltDatum + "'";
          } else {
             sqltext = sqltext + ",Bezahlt=NULL" + ",Bezahlt_Datum=NULL";
          }
@@ -112,7 +112,7 @@ public class AngebotPersister extends AbstractPersister {
       try {
          rs = verbindung.query(sqltext);
 
-         rs.first();
+         rs.next();
          String inhalt = rs.getString("Inhalt");
          float preis = rs.getFloat("Preis");
          String beschr = rs.getString("Beschreibung");
@@ -143,8 +143,8 @@ public class AngebotPersister extends AbstractPersister {
    private String insertAngebot(int klientId, Angebot angebot) {
       String sqltext;
 
-      sqltext = "INSERT INTO angebote (klienten_id, Inhalt, Preis, preis_pro_stunde, Beschreibung) " + "VALUES (" + klientId + "," + "\"" + angebot.getInhalt() + "\","
-            + angebot.getPreis() + "," + (angebot.isPreis_pro_stunde() ? 1 : 0) + ", " + "\"" + angebot.getBeschreibung() + "\");";
+      sqltext = "INSERT INTO angebote (klienten_id, Inhalt, Preis, preis_pro_stunde, Beschreibung) " + "VALUES (" + klientId + "," + "'" + angebot.getInhalt() + "',"
+            + angebot.getPreis() + "," + (angebot.isPreis_pro_stunde() ? 1 : 0) + ", " + "'" + angebot.getBeschreibung() + "');";
 
       return sqltext;
    }
@@ -153,7 +153,7 @@ public class AngebotPersister extends AbstractPersister {
 
       String sqltext;
 
-      sqltext = "UPDATE angebote SET " + "Inhalt=\"" + angebot.getInhalt() + "\", " + "Preis=" + angebot.getPreis() + ", " + "Beschreibung=\"" + angebot.getBeschreibung() + "\", "
+      sqltext = "UPDATE angebote SET " + "Inhalt='" + angebot.getInhalt() + "', " + "Preis=" + angebot.getPreis() + ", " + "Beschreibung='" + angebot.getBeschreibung() + "', "
             + "preis_pro_stunde=" + (angebot.isPreis_pro_stunde() ? 1 : 0) + " WHERE angebote_id=" + angebot.getAngebote_id() + ";";
       return sqltext;
    }

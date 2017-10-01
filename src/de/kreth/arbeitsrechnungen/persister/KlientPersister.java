@@ -67,7 +67,7 @@ public class KlientPersister extends AbstractPersister {
       logger.info("Einheit_einzel.setAuftraggeber: " + sqltext);
       try {
          ResultSet daten = verbindung.query(sqltext);
-         if (daten.first()) {
+         if (daten.next()) {
             Auftraggeber result = new Auftraggeber();
             result.name = daten.getString("Auftraggeber");
             

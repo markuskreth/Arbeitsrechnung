@@ -19,14 +19,19 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.MySqlDate;
@@ -39,7 +44,7 @@ import de.kreth.arbeitsrechnungen.persister.KlientPersister;
 public class EinheitEinzelFrame extends JFrame {
 
    private static final long serialVersionUID = 3963303174102985288L;
-   Logger logger = LogManager.getLogger(getClass());
+   Logger logger = LoggerFactory.getLogger(getClass());
    private NumberFormat preisFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
    private Options optionen;

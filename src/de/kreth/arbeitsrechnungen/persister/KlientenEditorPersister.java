@@ -121,14 +121,14 @@ public class KlientenEditorPersister extends AbstractPersister {
       String aAdresse1 = "Strasse eingeben";
       String plz = "00000";
       String ort = "Ort eingeben";
-      String sql = "INSERT INTO klienten (Auftraggeber, AAdresse1, APLZ, AOrt) " + "VALUES (\"" + auftraggeber + "\", \"" + aAdresse1 + "\", \"" + plz + "\", \"" + ort + "\");";
+      String sql = "INSERT INTO klienten (Auftraggeber, AAdresse1, APLZ, AOrt) " + "VALUES ('" + auftraggeber + "', '" + aAdresse1 + "', '" + plz + "', '" + ort + "');";
 
       logger.debug(sql);
 
       try {
          verbindung.sql(sql);
-         ResultSet rs = verbindung.query("SELECT LAST_INSERT_ID()");
-         rs.first();
+         ResultSet rs = verbindung.getAutoincrement();
+         rs.next();
          int klient_id = rs.getInt(1);
          k = new Klient.Builder(klient_id, auftraggeber, aAdresse1, plz, ort).build();
       } catch (SQLException e) {
@@ -203,11 +203,12 @@ public class KlientenEditorPersister extends AbstractPersister {
             ResultSet rs;
             rs = verbindung.query(sql);
 
-            if (rs.first())
-               anzahl = rs.getInt(1);
+            if (rs.next()) {
+            	anzahl = rs.getInt(1);
+            }
 
          } catch (SQLException e) {
-            logger.error("", e);
+            logger.error(e.getMessage(), e);
          }
       } else
          logger.info("Klient was null");

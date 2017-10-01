@@ -3,11 +3,14 @@ package de.kreth.arbeitsrechnungen;
 /**
  * @author markus
  */
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Einstellungen {
 
@@ -20,7 +23,7 @@ public class Einstellungen {
 
    protected Einstellungen() {
 
-      logger = LogManager.getLogger(getClass());
+      logger = LoggerFactory.getLogger(getClass());
       Properties optionen = new Properties();
       java.util.Properties sysprops = System.getProperties();
       // Testen ob das arbeitsverzeichnis im home-verzeichnis existiert
