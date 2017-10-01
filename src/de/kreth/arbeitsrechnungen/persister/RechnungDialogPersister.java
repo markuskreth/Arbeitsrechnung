@@ -136,7 +136,7 @@ public class RechnungDialogPersister extends AbstractPersister {
       try {
          ResultSet auftraggeber = verbindung.query(sql);
 
-         if (auftraggeber.first()) {
+         if (auftraggeber.next()) {
             if (auftraggeber.getString("rechnungnummer_bezeichnung") == null || auftraggeber.getString("rechnungnummer_bezeichnung").isEmpty()) {
                rechnungsnr = auftraggeber.getString("Auftraggeber");
             } else {
@@ -155,14 +155,18 @@ public class RechnungDialogPersister extends AbstractPersister {
    public String checkAndUpdateRechnungNr(String rechnungsnr) {
 
       String newNr = rechnungsnr;
-      String sql = "SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE \"" + rechnungsnr + "%\" ORDER BY rechnungnr;";
+      String sql = "SELECT rechnungnr FROM rechnungen WHERE rechnungnr LIKE '" + rechnungsnr + "%' ORDER BY rechnungnr;";
       logger.debug("RechnungDialog:setRechnungsnr:" + sql);
 
       // Wenn rechnungsnr bereits existiert wird ein buchstabe angehängt.
       try {
          ResultSet rs = verbindung.query(sql);
-         if (rs.last()) {
-            char buchstabe = (char) ('a' + rs.getRow() - 1);
+         Character ch = null;
+         while (rs.next()) {
+        	 ch = (char) rs.getRow();
+         }
+         if (ch != null) {
+            char buchstabe = (char) ('a' + ch.charValue() - 1);
             newNr += buchstabe;
          }
       } catch (SQLException e) {
@@ -231,9 +235,9 @@ public class RechnungDialogPersister extends AbstractPersister {
       // dann die Rechnung in die Datenbank
       if (rechnung.isNew()) { // Bei neuer Rechnung INSERT
          sql.append("INSERT INTO rechnungen (klienten_id, datum, rechnungnr, betrag, texdatei, pdfdatei, adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, timestamp)")
-               .append("VALUES (").append(rechnung.getKlienten_id()).append(", \"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", \"")
-               .append(rechnung.getRechnungnr()).append("\", ").append(rechnung.getBetrag().toPlainString()).append(", \"").append(rechnung.getTexdatei()).append("\", \"")
-               .append(rechnung.getPdfdatei()).append("\", \"").append(rechnung.getAdresse()).append("\", ");
+               .append("VALUES (").append(rechnung.getKlienten_id()).append(", '").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("', '")
+               .append(rechnung.getRechnungnr()).append("', ").append(rechnung.getBetrag().toPlainString()).append(", '").append(rechnung.getTexdatei()).append("', '")
+               .append(rechnung.getPdfdatei()).append("', '").append(rechnung.getAdresse()).append("', ");
 
          if (rechnung.getZusatz1_name() == null)
             sql.append("0");
@@ -250,28 +254,28 @@ public class RechnungDialogPersister extends AbstractPersister {
          else
             sql.append(", 0");
 
-         sql.append(", \"").append(sqlDateFormat.format(rechnung.getZahldatum().getTime())).append("\" , \"" + sqlDateFormat.format(new Date()) + "\");");
+         sql.append(", '").append(sqlDateFormat.format(rechnung.getZahldatum().getTime())).append("' , '" + sqlDateFormat.format(new Date()) + "');");
 
       } else {
          // Bei vorhandener Rechnung UPDATE
-         sql.append("UPDATE rechnungen SET").append(" datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", rechnungnr=\"")
-               .append(rechnung.getRechnungnr()).append("\", betrag=").append(rechnung.getBetrag().toPlainString()).append(", texdatei=\"").append(rechnung.getTexdatei())
-               .append("\", pdfdatei=\"").append(rechnung.getPdfdatei()).append("\", adresse=\"").append(rechnung.getAdresse());
+         sql.append("UPDATE rechnungen SET").append(" datum='").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("', rechnungnr='")
+               .append(rechnung.getRechnungnr()).append("', betrag=").append(rechnung.getBetrag().toPlainString()).append(", texdatei='").append(rechnung.getTexdatei())
+               .append("', pdfdatei='").append(rechnung.getPdfdatei()).append("', adresse='").append(rechnung.getAdresse());
 
          if (rechnung.getZusatz1_name() == null)
-            sql.append("\", zusatz1=\"0");
+            sql.append("', zusatz1='0");
          else
-            sql.append("\", zusatz1=\"1");
+            sql.append("', zusatz1='1");
 
          if (rechnung.getZusatz2_name() == null)
-            sql.append("\", zusatz2=\"0");
+            sql.append("', zusatz2='0");
          else
-            sql.append("\", zusatz2=\"1");
+            sql.append("', zusatz2='1");
 
-         sql.append("\", zusammenfassungen=").append(rechnung.isZusammenfassungenErlauben());
+         sql.append("', zusammenfassungen=").append(rechnung.isZusammenfassungenErlauben());
 
-         sql.append(", zahldatum=\"").append(sqlDateFormat.format(rechnung.getZahldatum().getTime()));
-         sql.append("\" WHERE rechnungen_id =").append(rechnung.getRechnungen_id());
+         sql.append(", zahldatum='").append(sqlDateFormat.format(rechnung.getZahldatum().getTime()));
+         sql.append("' WHERE rechnungen_id =").append(rechnung.getRechnungen_id());
 
       }
       logger.debug("Rechnung speichern: " + sql);
@@ -298,11 +302,11 @@ public class RechnungDialogPersister extends AbstractPersister {
             // einheiten ändern
             if (rechnung.isNew()) {
                logger.debug("LAST_INSERT_ID wird benutzt...");
-               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", ")
+               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum='").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("', ")
                      .append("rechnung_id=").append(lastInsertId);
                sql.append(" WHERE einheiten_id IN ");
             } else {
-               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum=\"").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("\", ")
+               sql.append("UPDATE einheiten SET Rechnung_verschickt=1, " + "Rechnung_Datum='").append(sqlDateFormat.format(rechnung.getDatum().getTime())).append("', ")
                      .append("rechnung_id=").append((rechnung.getRechnungen_id()));
                sql.append(" WHERE einheiten_id IN ");
             }

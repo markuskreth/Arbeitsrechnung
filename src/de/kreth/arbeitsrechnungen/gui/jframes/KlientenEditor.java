@@ -12,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -1412,12 +1413,12 @@ public class KlientenEditor extends JDialog {
 
       for (Angebot angebot : angebote) {
 
-         Vector<String> einVektor = new Vector<String>();
-         einVektor.addElement(angebot.getInhalt());
-         einVektor.addElement(zf.format(angebot.getPreis()));
-         einVektor.addElement(angebot.getBeschreibung());
+         List<String> einVektor = new ArrayList<>();
+         einVektor.add(angebot.getInhalt());
+         einVektor.add(zf.format(angebot.getPreis()));
+         einVektor.add(angebot.getBeschreibung());
 
-         angeboteTableModel.addRow(einVektor);
+         angeboteTableModel.addRow(einVektor.toArray(new String[] {}));
       }
    }
 
