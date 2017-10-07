@@ -35,6 +35,8 @@ import de.kreth.arbeitsrechnungen.persister.DatenPersister;
 @SuppressWarnings("boxing")
 public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
+   private static final int INVALID_SELECTION = -10;
+
    private static final long serialVersionUID = 8161115991876323549L;
 
    private Logger logger = LogManager.getLogger(getClass());
@@ -57,10 +59,10 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    private String filter = "(ISNULL(Bezahlt) OR ISNULL(Rechnung_verschickt))";
 
    private DatenPersister datenPersister;
-   
-//   public static final String TEXUMBRUCH = "\\\\\\\\";
-//   public static final String TEXLINE = "\\\\hline";
-//   public static final String TEXEURO = "\\\\officialeuro";
+
+   // public static final String TEXUMBRUCH = "\\\\\\\\";
+   // public static final String TEXLINE = "\\\\hline";
+   // public static final String TEXEURO = "\\\\officialeuro";
    public static final int EINGEREICHTE = 1;
    public static final int NICHTEINGEREICHTE = 2;
    public static final int OFFENE = 3;
@@ -118,18 +120,18 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       stundenzahl = null;
 
       arbeitsstunden.clear();
-      
+
       try {
          arbeitsstunden.addAll(datenPersister.getEinheiten(klienten_id, filter));
       } catch (SQLException e) {
          logger.error("Failure fetching Arbeitsstunden", e);
       }
-      
+
       for (Arbeitsstunde std : arbeitsstunden) {
 
          summe = summe + std.getPreis().doubleValue();
          anzahl = anzahl + 1;
-         
+
          if (std.isPreisProStunde()) {
             if (stundenzahl == null) {
                stundenzahl = 0.0;
@@ -137,7 +139,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
             stundenzahl += std.getDauerInMinutes();
          }
       }
-      
+
       if (stundenzahl != null)
          stundenzahl = stundenzahl / 60.0; // Minuten in Stunden umrechnen
    }
@@ -196,17 +198,10 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          }
       }
       // Model mit Überschriften erstellen
-      DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {}, 
-            new String[] { ArbeitsstundenSpalten.Datum.toString(),
-                  ArbeitsstundenSpalten.Inhalt.toString(), 
-                  ArbeitsstundenSpalten.Start.toString(), 
-                  ArbeitsstundenSpalten.Ende.toString(), 
-                  ArbeitsstundenSpalten.Preis.toString(),
-                  this.zusatz1_name, 
-                  this.zusatz2_name, 
-                  ArbeitsstundenSpalten.Preisänderung.toString(), 
-                  ArbeitsstundenSpalten.Eingereicht.toString(),
-                  ArbeitsstundenSpalten.Bezahlt.toString() }) {
+      DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {},
+            new String[] { ArbeitsstundenSpalten.Datum.toString(), ArbeitsstundenSpalten.Inhalt.toString(), ArbeitsstundenSpalten.Start.toString(),
+                  ArbeitsstundenSpalten.Ende.toString(), ArbeitsstundenSpalten.Preis.toString(), this.zusatz1_name, this.zusatz2_name,
+                  ArbeitsstundenSpalten.Preisänderung.toString(), ArbeitsstundenSpalten.Eingereicht.toString(), ArbeitsstundenSpalten.Bezahlt.toString() }) {
 
          private static final long serialVersionUID = 1913170267962749520L;
 
@@ -243,7 +238,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          jTable1.getColumnModel().getColumn(i).setPreferredWidth(breitenOpt[i]);
          jTable1.getColumnModel().getColumn(i).setMinWidth(breitenMin[i]);
       }
-      
+
       if (!this.zusatz2) {
          this.geloeschte_spalten[1] = 6;
          this.spalte6 = jTable1.getColumnModel().getColumn(6);
@@ -258,7 +253,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       } else {
          this.geloeschte_spalten[0] = null;
       }
-      
+
    }
 
    /**
@@ -367,8 +362,8 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
             new String[] { "Datum", "Inhalt", "Start", "Ende", "Preis", "Zusatz1", "Zusatz2", "Preisänderung", "Eingereicht", "Bezahlt" }) {
 
          /**
-			 * 
-			 */
+          * 
+          */
          private static final long serialVersionUID = 516135999448412054L;
          Class<?>[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class };
@@ -593,102 +588,61 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
       GroupLayout layout = new GroupLayout(this);
       this.setLayout(layout);
-      layout.setHorizontalGroup(layout
-            .createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
-            .addGroup(
-                  layout.createSequentialGroup().addContainerGap().addComponent(jButtonRechnung).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonNeuerDatensatz, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonBearbeiten, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonDelete, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE).addContainerGap(162, Short.MAX_VALUE))
-            .addGroup(
-                  layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(
-                              layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                    .addGroup(
-                                          layout.createSequentialGroup().addComponent(jRadioButtonNichtEingereichte)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jRadioButtonAbgeschlossene))
-                                    .addGroup(
-                                          layout.createSequentialGroup().addComponent(jLabel1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jRadioButtonAlle).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jRadioButtonNichtBezahlte)))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(
-                              layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                    .addGroup(
-                                          layout.createSequentialGroup()
-                                                .addComponent(jRadioButtonOffene)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jDateChooserVonDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-                                                      GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jDateChooserBisDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-                                          GroupLayout.PREFERRED_SIZE)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jLabel4).addComponent(jLabel5))
-                        .addContainerGap(89, Short.MAX_VALUE))
-            .addGroup(
-                  GroupLayout.Alignment.TRAILING,
+      layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jButtonRechnung).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jButtonNeuerDatensatz, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jButtonBearbeiten, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jButtonDelete, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE).addContainerGap(162, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup().addContainerGap()
+                  .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup().addComponent(jRadioButtonNichtEingereichte).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                              .addComponent(jRadioButtonAbgeschlossene))
+                        .addGroup(layout.createSequentialGroup().addComponent(jLabel1).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jRadioButtonAlle)
+                              .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jRadioButtonNichtBezahlte)))
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup().addComponent(jRadioButtonOffene).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                              .addComponent(jDateChooserVonDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jDateChooserBisDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jLabel4).addComponent(jLabel5)).addContainerGap(89, Short.MAX_VALUE))
+            .addGroup(GroupLayout.Alignment.TRAILING,
                   layout.createSequentialGroup().addContainerGap(217, Short.MAX_VALUE).addComponent(jLabel6).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldStundenzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jLabel3)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jLabel3).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldAnzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel2)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel2).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldSumme, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
             .addComponent(jLabel7, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
 
       layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] { jButtonBearbeiten, jButtonDelete, jButtonNeuerDatensatz });
 
-      layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] { jRadioButtonAbgeschlossene, jRadioButtonAlle, jRadioButtonNichtBezahlte,
-            jRadioButtonNichtEingereichte });
+      layout.linkSize(SwingConstants.HORIZONTAL,
+            new java.awt.Component[] { jRadioButtonAbgeschlossene, jRadioButtonAlle, jRadioButtonNichtBezahlte, jRadioButtonNichtEingereichte });
 
-      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-            GroupLayout.Alignment.TRAILING,
-            layout.createSequentialGroup()
-                  .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
-                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(
-                        layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                              .addComponent(jTextFieldSumme, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                              .addComponent(jLabel2)
-                              .addComponent(jTextFieldAnzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                              .addComponent(jLabel3)
-                              .addComponent(jTextFieldStundenzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-                                    GroupLayout.PREFERRED_SIZE).addComponent(jLabel6))
+      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(GroupLayout.Alignment.TRAILING,
+            layout.createSequentialGroup().addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                  .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextFieldSumme, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jLabel2)
+                        .addComponent(jTextFieldAnzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jLabel3)
+                        .addComponent(jTextFieldStundenzahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jLabel6))
                   .addGap(13, 13, 13)
-                  .addGroup(
-                        layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                              .addGroup(
-                                    layout.createSequentialGroup()
-                                          .addGroup(
-                                                layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonAlle).addComponent(jLabel1)
-                                                      .addComponent(jRadioButtonNichtBezahlte).addComponent(jRadioButtonOffene))
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonNichtEingereichte)
-                                                      .addComponent(jRadioButtonAbgeschlossene))
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 2, GroupLayout.PREFERRED_SIZE))
-                              .addGroup(
-                                    GroupLayout.Alignment.TRAILING,
-                                    layout.createSequentialGroup()
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 4, GroupLayout.PREFERRED_SIZE)
-                                          .addGroup(
-                                                layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                      .addComponent(jLabel4)
-                                                      .addComponent(jDateChooserVonDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-                                                            GroupLayout.PREFERRED_SIZE))
-                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                      .addComponent(jDateChooserBisDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-                                                            GroupLayout.PREFERRED_SIZE).addComponent(jLabel5))))
-                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(
-                        layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jButtonRechnung).addComponent(jButtonNeuerDatensatz)
-                              .addComponent(jButtonBearbeiten).addComponent(jButtonDelete)).addGap(12, 12, 12).addComponent(jLabel7)));
+                  .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false).addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonAlle).addComponent(jLabel1)
+                              .addComponent(jRadioButtonNichtBezahlte).addComponent(jRadioButtonOffene))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jRadioButtonNichtEingereichte).addComponent(jRadioButtonAbgeschlossene))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 2, GroupLayout.PREFERRED_SIZE))
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                              .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 4, GroupLayout.PREFERRED_SIZE)
+                              .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING).addComponent(jLabel4).addComponent(jDateChooserVonDatum,
+                                    GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                              .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                              .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jDateChooserBisDatum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jLabel5))))
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jButtonRechnung)
+                        .addComponent(jButtonNeuerDatensatz).addComponent(jButtonBearbeiten).addComponent(jButtonDelete))
+                  .addGap(12, 12, 12).addComponent(jLabel7)));
 
    }
 
@@ -718,9 +672,9 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    private void jButtonDeleteActionPerformed(ActionEvent evt) {
       // Datensatz löschen
 
-      int einheit_id[] = this.jTable1.getSelectedRows();
+      int[] einheit_id = this.jTable1.getSelectedRows();
 
-      int selection = -10;
+      int selection = INVALID_SELECTION;
 
       for (int i = 0; i < einheit_id.length; i++) {
          einheit_id[i] = this.arbeitsstunden.get(einheit_id[i]).getID();
@@ -732,7 +686,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       } else {
 
          List<Date> daten = datenPersister.getDatumForEinheiten(einheit_id);
-         
+
          try {
             if (einheit_id.length == 1) {
                frageText = "Soll der Datensatz Nr. \"" + einheit_id[0];
@@ -743,14 +697,14 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
                frageText += ", " + einheit_id[i];
             }
             DateFormat dateInstance = DateFormat.getDateInstance();
-            for (int i=0; i<daten.size(); i++) {
-               if(i==0) {
+            for (int i = 0; i < daten.size(); i++) {
+               if (i == 0) {
                   frageText += "\" vom " + dateInstance.format(daten.get(i));
                } else {
                   frageText += ", " + dateInstance.format(daten.get(i));
                }
             }
-            
+
             frageText += " wirklich gelöscht werden?";
 
             if (daten.size() != einheit_id.length) {
@@ -759,7 +713,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          } catch (Exception e) {
             e.printStackTrace();
          }
-         
+
          selection = JOptionPane.showConfirmDialog(this, frageText);
          if (selection == JOptionPane.YES_OPTION) {
             datenPersister.deleteEinheiten(einheit_id);
@@ -779,7 +733,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    // Verbindung verbindung = new Verbindung(optionen.getProperty("sqlserver"),
    // optionen.getProperty("datenbank") ,
    // optionen.getProperty("user"), optionen.getProperty("password"));
-   // String sqltext = "SELECT * FROM klienten WHERE  klienten_id=" +
+   // String sqltext = "SELECT * FROM klienten WHERE klienten_id=" +
    // this.klient + ";";
    // System.out.println("ArbeitsstundenTabelle::rechnungStart: " + sqltext);
    // ResultSet angebote = verbindung.query(sqltext);
@@ -825,7 +779,8 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    // }
    // latexdatei.close();
    // }catch (java.io.IOException e){
-   // System.err.println("Tex-Datei auslesen und in Variable \"latex\" speichern.");
+   // System.err.println("Tex-Datei auslesen und in Variable \"latex\"
+   // speichern.");
    // e.printStackTrace();
    // }
    // }catch(java.io.FileNotFoundException e){
@@ -873,12 +828,12 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    // Arbeitsstunden.elementAt(i).getZusatz1() + " & ";
    // try{
    // Integer.parseInt(Arbeitsstunden.elementAt(i).getZusatz2());
-   // tabelle = tabelle + Arbeitsstunden.elementAt(i).getZusatz2() + " &  & ";
+   // tabelle = tabelle + Arbeitsstunden.elementAt(i).getZusatz2() + " & & ";
    // }catch (NumberFormatException e){
    // tabelle = tabelle + " & Ja & ";
    // }
    // // tabelle = tabelle + Arbeitsstunden.elementAt(i).getZusatz2() +
-   // " &  & ";
+   // " & & ";
    // tabelle = tabelle + (Arbeitsstunden.elementAt(i).getPreis() )
    // +" \\\\officialeuro";
    // rechnung_summe = rechnung_summe + Arbeitsstunden.elementAt(i).getPreis();
@@ -999,8 +954,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          if ((!this.arbeitsstunden.get(i).isVerschickt()) && (!this.arbeitsstunden.get(i).isBezahlt()))
             einheitenIDs.add(this.arbeitsstunden.get(i).getID());
          else {
-            String nachricht = "Die Einheit vom " + this.arbeitsstunden.get(i).getDatum() + " ist bereits verschickt oder bezahlt!\n"
-                  + "Erstellung der Rechnung abgebrochen.";
+            String nachricht = "Die Einheit vom " + this.arbeitsstunden.get(i).getDatum() + " ist bereits verschickt oder bezahlt!\n" + "Erstellung der Rechnung abgebrochen.";
             isAnySubmitted = true;
             einheitenIDs.removeAllElements();
             i = this.arbeitsstunden.size();
@@ -1095,18 +1049,15 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
    public void setFilter(int Filter) {
       switch (Filter) {
-         case EINGEREICHTE: {
+         case EINGEREICHTE:
             jRadioButtonNichtBezahlte.setSelected(true);
             break;
-         }
-         case NICHTEINGEREICHTE: {
+         case NICHTEINGEREICHTE:
             jRadioButtonNichtEingereichte.setSelected(true);
             break;
-         }
-         case OFFENE: {
+         case OFFENE:
             jRadioButtonOffene.setSelected(true);
             break;
-         }
       }
    }
 
@@ -1146,12 +1097,12 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          dialog.dispose();
 
          // ID der Datensätze herausfinden
-         int einheit_id[] = this.jTable1.getSelectedRows();
-         for (int i = 0; i < einheit_id.length; i++) {
-            einheit_id[i] = this.arbeitsstunden.get(einheit_id[i]).getID();
+         int[] einheitId = this.jTable1.getSelectedRows();
+         for (int i = 0; i < einheitId.length; i++) {
+            einheitId[i] = this.arbeitsstunden.get(einheitId[i]).getID();
          }
-         
-         return datenPersister.updateFields(feld, feld2, datum, einheit_id);
+
+         return datenPersister.updateFields(feld, feld2, datum, einheitId);
       } else
          return false;
    }
