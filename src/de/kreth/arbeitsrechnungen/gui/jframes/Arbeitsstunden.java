@@ -45,7 +45,6 @@ public class Arbeitsstunden extends JFrame {
       logger.debug("Init beginnt:");
 
       initComponents();
-      this.arbeitsstundenTabelle1.setParent(this);
       ready = true;
    }
 
@@ -57,7 +56,7 @@ public class Arbeitsstunden extends JFrame {
       jComboBoxKunden = new JComboBox<String>();
       jLabel1 = new JLabel();
       jButton2 = new JButton();
-      arbeitsstundenTabelle1 = new de.kreth.arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle();
+      arbeitsstundenTabelle1 = new de.kreth.arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle(this);
 
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
       setName("Form"); // NOI18N

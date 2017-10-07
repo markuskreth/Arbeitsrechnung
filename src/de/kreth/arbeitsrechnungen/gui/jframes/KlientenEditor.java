@@ -70,7 +70,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param arg0
     */
-   public KlientenEditor(Frame arg0) {
+   public KlientenEditor(final Frame arg0) {
       super(arg0, "Klienteneditor");
 
       optionen = Einstellungen.getInstance().getEinstellungen();
@@ -100,8 +100,11 @@ public class KlientenEditor extends JDialog {
       setEvents();
    }
 
+   /**
+    * Asynchron wird die Datenansicht aktualisiert.
+    */
    @Override
-   public void setVisible(boolean b) {
+   public void setVisible(final boolean b) {
       super.setVisible(b);
       if (b) {
          new Thread(new Runnable() {
@@ -125,7 +128,7 @@ public class KlientenEditor extends JDialog {
       jTextFieldKunde.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
@@ -133,354 +136,354 @@ public class KlientenEditor extends JDialog {
       jTextFieldKunde.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldKAdress1.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldKAdress1.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldKAdress2.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldKAdress2.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldKPlz.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldKPlz.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldKOrt.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldKOrt.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldKTelefon.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldKTelefon.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldKEmail.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldKEmail.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldAuftraggeber.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldAuftraggeber.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldAAdress1.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldAAdress1.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldAAdress2.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldAAdress2.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldAPlz.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldAPlz.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldAOrt.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldAOrt.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldATelefon.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldATelefon.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldAEmail.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldAEmail.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldTex_datei.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       this.jTextAreaBemerkungen.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldZusatzBezeichnung1.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldZusatzBezeichnung1.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldZusatzBezeichnung2.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldZusatzBezeichnung2.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jTextFieldRechnungBezeichnung.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jTextFieldRechnungBezeichnung.addFocusListener(new FocusAdapter() {
 
          @Override
-         public void focusGained(FocusEvent evt) {
+         public void focusGained(final FocusEvent evt) {
             TextFieldFocusGained(evt);
          }
 
          @Override
-         public void focusLost(FocusEvent evt) {
+         public void focusLost(final FocusEvent evt) {
             TextFieldFocusLost(evt);
          }
       });
       jCheckBoxZusatz1.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
       jCheckBoxZusatz2.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             TextFieldActionPerformed(evt);
          }
       });
@@ -488,14 +491,14 @@ public class KlientenEditor extends JDialog {
       this.formRechnungen1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 
          @Override
-         public void propertyChange(PropertyChangeEvent evt) {
+         public void propertyChange(final PropertyChangeEvent evt) {
             formChange(evt);
          }
       });
       this.arbeitsstundenTabelle1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 
          @Override
-         public void propertyChange(PropertyChangeEvent evt) {
+         public void propertyChange(final PropertyChangeEvent evt) {
             formChange(evt);
          }
       });
@@ -504,24 +507,21 @@ public class KlientenEditor extends JDialog {
    /**
     * Setzt Filtern in der ArbeitsstundenTabelle
     */
-   public void setFilter(int Filter) {
+   public void setFilter(final int Filter) {
       switch (Filter) {
-         case EINGEREICHTE: {
+         case EINGEREICHTE:
             this.arbeitsstundenTabelle1.setFilter(ArbeitsstundenTabelle.EINGEREICHTE);
             break;
-         }
-         case NICHTEINGEREICHTE: {
+         case NICHTEINGEREICHTE:
             this.arbeitsstundenTabelle1.setFilter(ArbeitsstundenTabelle.NICHTEINGEREICHTE);
             break;
-         }
-         case OFFENE: {
+         case OFFENE:
             this.arbeitsstundenTabelle1.setFilter(ArbeitsstundenTabelle.OFFENE);
             break;
-         }
       }
    }
 
-   private void formChange(PropertyChangeEvent evt) {
+   private void formChange(final PropertyChangeEvent evt) {
       // Bei allen PropertyChangeEvents tabellen aktualisieren
       this.updateTables();
       this.firePropertyChange("", 0, 1);
@@ -608,18 +608,18 @@ public class KlientenEditor extends JDialog {
    @SuppressWarnings("unused")
    private void initComponents() {
 
-      int klienten_id;
+      int klientenId;
       if (currentKlient != null)
-         klienten_id = currentKlient.getKlienten_id();
+         klientenId = currentKlient.getKlienten_id();
       else
-         klienten_id = -1;
+         klientenId = -1;
 
       jSplitPane1 = new JSplitPane();
       jTabbedPane1 = new JTabbedPane();
       jPanelArbeitsstunden = new JPanel();
-      arbeitsstundenTabelle1 = new ArbeitsstundenTabelle(this, klienten_id);
+      arbeitsstundenTabelle1 = new ArbeitsstundenTabelle(this, klientenId);
       jPanelRechnungen = new JPanel();
-      formRechnungen1 = new FormRechnungen(getOwner(), klienten_id);
+      formRechnungen1 = new FormRechnungen(getOwner(), klientenId);
       jPanelAngebote = new JPanel();
       jScrollPane2 = new JScrollPane();
       jTableAngebote = new JTable();
@@ -737,7 +737,7 @@ public class KlientenEditor extends JDialog {
       jTableAngebote.addMouseListener(new MouseAdapter() {
 
          @Override
-         public void mouseClicked(MouseEvent evt) {
+         public void mouseClicked(final MouseEvent evt) {
             jTableAngeboteMouseClicked(evt);
          }
       });
@@ -752,7 +752,7 @@ public class KlientenEditor extends JDialog {
       jButtonaddAngebot.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonaddAngebotActionPerformed(evt);
          }
       });
@@ -762,7 +762,7 @@ public class KlientenEditor extends JDialog {
       jButtonEditAngebot.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonEditAngebotActionPerformed(evt);
          }
       });
@@ -772,7 +772,7 @@ public class KlientenEditor extends JDialog {
       jButtonDeleteAngebot.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonDeleteAngebotActionPerformed(evt);
          }
       });
@@ -964,7 +964,7 @@ public class KlientenEditor extends JDialog {
       jButtonNewKlient.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonNewKlientActionPerformed(evt);
          }
       });
@@ -975,7 +975,7 @@ public class KlientenEditor extends JDialog {
       jButtonDelKlient.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonDelKlientActionPerformed(evt);
          }
       });
@@ -986,7 +986,7 @@ public class KlientenEditor extends JDialog {
       jButtonBeenden.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonBeendenActionPerformed(evt);
          }
       });
@@ -1001,7 +1001,7 @@ public class KlientenEditor extends JDialog {
       jButtonZumAnfang.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonZumAnfangActionPerformed(evt);
          }
       });
@@ -1012,7 +1012,7 @@ public class KlientenEditor extends JDialog {
       jButtonZurueck.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonZurueckActionPerformed(evt);
          }
       });
@@ -1023,7 +1023,7 @@ public class KlientenEditor extends JDialog {
       jButtonVor.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonVorActionPerformed(evt);
          }
       });
@@ -1034,7 +1034,7 @@ public class KlientenEditor extends JDialog {
       jButtonZumEnde.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonZumEndeActionPerformed(evt);
          }
       });
@@ -1108,7 +1108,7 @@ public class KlientenEditor extends JDialog {
       jButtonfindeTexDatei.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonfindeTexDateiActionPerformed(evt);
          }
       });
@@ -1337,7 +1337,7 @@ public class KlientenEditor extends JDialog {
       pack();
    }
 
-   private Icon getIcon(String fileName) {
+   private Icon getIcon(final String fileName) {
       URL resource = getClass().getResource("/" + fileName);
       return new ImageIcon(resource);
    }
@@ -1348,7 +1348,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonVorActionPerformed(ActionEvent evt) {
+   private void jButtonVorActionPerformed(final ActionEvent evt) {
       toNextKlientIfPossible();
    }
 
@@ -1366,7 +1366,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonZurueckActionPerformed(ActionEvent evt) {
+   private void jButtonZurueckActionPerformed(final ActionEvent evt) {
       toPreviourKlientIfPossible();
    }
 
@@ -1427,7 +1427,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonNewKlientActionPerformed(ActionEvent evt) {
+   private void jButtonNewKlientActionPerformed(final ActionEvent evt) {
       currentKlient = persister.createNewAuftraggeber();
       allKlienten = persister.getAllKlienten();
       updateComponents();
@@ -1440,7 +1440,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonDelKlientActionPerformed(ActionEvent evt) {
+   private void jButtonDelKlientActionPerformed(final ActionEvent evt) {
 
       int ergebnis = JOptionPane.showConfirmDialog(this, "Wollen Sie den Datensatz \"" + currentKlient.getAuftraggeber() + "\" endgültig löschen?", "Löschen?",
             JOptionPane.YES_NO_OPTION);
@@ -1474,7 +1474,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonBeendenActionPerformed(ActionEvent evt) {
+   private void jButtonBeendenActionPerformed(final ActionEvent evt) {
       this.setVisible(false);
       this.dispose();
    }
@@ -1485,7 +1485,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonZumEndeActionPerformed(ActionEvent evt) {
+   private void jButtonZumEndeActionPerformed(final ActionEvent evt) {
       toLast();
    }
 
@@ -1502,7 +1502,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonZumAnfangActionPerformed(ActionEvent evt) {
+   private void jButtonZumAnfangActionPerformed(final ActionEvent evt) {
       toFirst();
    }
 
@@ -1519,7 +1519,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonaddAngebotActionPerformed(ActionEvent evt) {
+   private void jButtonaddAngebotActionPerformed(final ActionEvent evt) {
       // Konstruktor mit 3 Parametern wird für neue Angebote benutzt -1 steht
       // für unbekannte Angebot_ID
       AngebotDialog eingabefenster = new AngebotDialog(this.getOwner(), currentKlient.getKlienten_id());
@@ -1533,7 +1533,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonEditAngebotActionPerformed(ActionEvent evt) {
+   private void jButtonEditAngebotActionPerformed(final ActionEvent evt) {
 
       if (this.jTableAngebote.getSelectedRow() == -1) {
          JOptionPane.showMessageDialog(this, "Bearbeitung abgebrochen!\nEin Eintrag muss ausgewählt sein!");
@@ -1559,7 +1559,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jButtonDeleteAngebotActionPerformed(ActionEvent evt) {
+   private void jButtonDeleteAngebotActionPerformed(final ActionEvent evt) {
       if (this.jTableAngebote.getSelectedRow() == -1) {
          JOptionPane.showMessageDialog(this, "Bearbeitung abgebrochen!\nEin Eintrag muss ausgewählt sein!");
       } else {
@@ -1586,7 +1586,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jTableAngeboteMouseClicked(MouseEvent evt) {
+   private void jTableAngeboteMouseClicked(final MouseEvent evt) {
       if (evt.getClickCount() > 1) { // Bei mehr als Einfach-Klick
          if (this.jTableAngebote.getSelectedRow() == -1) { // Wenn keine Zeile
                                                            // markiert ist
@@ -1598,7 +1598,7 @@ public class KlientenEditor extends JDialog {
       }
    }
 
-   private void jButtonfindeTexDateiActionPerformed(ActionEvent evt) {
+   private void jButtonfindeTexDateiActionPerformed(final ActionEvent evt) {
 
       java.awt.FileDialog dateiname = new java.awt.FileDialog(this, "Tex-Datei", java.awt.FileDialog.LOAD);
       int endindex = 0;
@@ -1619,7 +1619,7 @@ public class KlientenEditor extends JDialog {
       dateiname.setFilenameFilter(new java.io.FilenameFilter() {
 
          @Override
-         public boolean accept(File dir, String name) {
+         public boolean accept(final File dir, final String name) {
             if (name.endsWith(".tex")) {
                return true;
             } else {
@@ -1641,7 +1641,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param evt
     */
-   private void jTable1SetSelection(MouseEvent evt) {
+   private void jTable1SetSelection(final MouseEvent evt) {
       // System.out.println("Zeile wird selectiert.");
       java.awt.Point p = evt.getPoint();
       int zeile = this.jTableAngebote.rowAtPoint(p);
@@ -1653,7 +1653,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param event
     */
-   private void TextFieldActionPerformed(ActionEvent event) {
+   private void TextFieldActionPerformed(final ActionEvent event) {
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
          System.out.println("Text: " + tf.getText() + "\nName: " + tf.getName() + "\n");
@@ -1677,7 +1677,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param event
     */
-   private void TextFieldFocusGained(FocusEvent event) {
+   private void TextFieldFocusGained(final FocusEvent event) {
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
          tf.setSelectionStart(0);
@@ -1691,7 +1691,7 @@ public class KlientenEditor extends JDialog {
     * 
     * @param event
     */
-   private void TextFieldFocusLost(FocusEvent event) {
+   private void TextFieldFocusLost(final FocusEvent event) {
 
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
@@ -1706,7 +1706,11 @@ public class KlientenEditor extends JDialog {
       }
    }
 
-   public void setCurrentKlientenId(int klientenID) {
+   /**
+    * KLienten aktualisieren, Tabelle wird neu geladen.
+    * @param klientenID
+    */
+   public void setCurrentKlientenId(final int klientenID) {
       for (int i = 0; i < allKlienten.size(); i++) {
          Klient k = allKlienten.get(i);
          if (k.getKlienten_id() == klientenID) {
@@ -1792,34 +1796,34 @@ public class KlientenEditor extends JDialog {
       List<JComponent> list = java.util.Arrays.asList(order);
 
       @Override
-      public Component getFirstComponent(java.awt.Container focusCycleRoot) {
+      public Component getFirstComponent(final java.awt.Container focusCycleRoot) {
          return order[0];
       }
 
       @Override
-      public Component getLastComponent(java.awt.Container focusCycleRoot) {
+      public Component getLastComponent(final java.awt.Container focusCycleRoot) {
          return order[order.length - 1];
       }
 
       @Override
-      public Component getComponentAfter(java.awt.Container focusCycleRoot, Component aComponent) {
+      public Component getComponentAfter(final java.awt.Container focusCycleRoot, final Component aComponent) {
          int index = list.indexOf(aComponent);
          return order[(index + 1) % order.length];
       }
 
       @Override
-      public Component getComponentBefore(java.awt.Container focusCycleRoot, Component aComponent) {
+      public Component getComponentBefore(final java.awt.Container focusCycleRoot, final Component aComponent) {
          int index = list.indexOf(aComponent);
          return order[(index - 1 + order.length) % order.length];
       }
 
       @Override
-      public Component getDefaultComponent(java.awt.Container focusCycleRoot) {
+      public Component getDefaultComponent(final java.awt.Container focusCycleRoot) {
          return order[0];
       }
 
       @Override
-      public Component getInitialComponent(java.awt.Window window) {
+      public Component getInitialComponent(final java.awt.Window window) {
          return order[0];
       }
    }
