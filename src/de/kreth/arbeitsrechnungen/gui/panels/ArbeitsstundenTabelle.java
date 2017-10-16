@@ -11,6 +11,7 @@ import java.awt.Window;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -27,10 +28,12 @@ import com.toedter.calendar.JDateChooser;
 
 import de.kreth.arbeitsrechnungen.*;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
+import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.EinheitEinzelFrame;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister;
+import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 
 @SuppressWarnings("boxing")
 public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
@@ -45,7 +48,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    private Options optionen;
    private Window parent = null;
    private int anzahl = 0;
-   private Double summe = 0.00;
+   private BigDecimal summe = BigDecimal.ZERO;
    private Double stundenzahl = null;
    private int klient;
    private boolean zusatz1 = false;
@@ -96,6 +99,15 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          parent.setVisible(false);
          parent.dispose();
       } else {
+         Klient kl = new KlientenEditorPersister(optionen).getKlientById(klienten_id);
+         if(kl.hasZusatz1()) {
+            this.zusatz1 = true;
+            this.zusatz1_name = kl.getZusatz1_Name();
+         }
+         if(kl.hasZusatz2()) {
+            this.zusatz2 = true;
+            this.zusatz2_name = kl.getZusatz2_Name();
+         }
          initComponents();
          this.jTextFieldStundenzahl.setVisible(false);
          this.jLabel6.setVisible(false);
@@ -116,7 +128,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
       this.klient = klienten_id;
 
       anzahl = 0;
-      summe = 0.00;
+      summe = BigDecimal.ZERO;
       stundenzahl = null;
 
       arbeitsstunden.clear();
@@ -129,7 +141,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
       for (Arbeitsstunde std : arbeitsstunden) {
 
-         summe = summe + std.getPreis().doubleValue();
+         summe = summe.add(std.getPreis());
          anzahl = anzahl + 1;
 
          if (std.isPreisProStunde()) {
@@ -197,11 +209,12 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
             }
          }
       }
+      List<String> captions = Arrays.asList(ArbeitsstundenSpalten.Datum.toString(), ArbeitsstundenSpalten.Inhalt.toString(), ArbeitsstundenSpalten.Start.toString(),
+            ArbeitsstundenSpalten.Ende.toString(), ArbeitsstundenSpalten.Preis.toString(), this.zusatz1_name, this.zusatz2_name,
+            ArbeitsstundenSpalten.Preisänderung.toString(), ArbeitsstundenSpalten.Eingereicht.toString(), ArbeitsstundenSpalten.Bezahlt.toString());
+      
       // Model mit Überschriften erstellen
-      DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {},
-            new String[] { ArbeitsstundenSpalten.Datum.toString(), ArbeitsstundenSpalten.Inhalt.toString(), ArbeitsstundenSpalten.Start.toString(),
-                  ArbeitsstundenSpalten.Ende.toString(), ArbeitsstundenSpalten.Preis.toString(), this.zusatz1_name, this.zusatz2_name,
-                  ArbeitsstundenSpalten.Preisänderung.toString(), ArbeitsstundenSpalten.Eingereicht.toString(), ArbeitsstundenSpalten.Bezahlt.toString() }) {
+      DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {},captions.toArray()) {
 
          private static final long serialVersionUID = 1913170267962749520L;
 

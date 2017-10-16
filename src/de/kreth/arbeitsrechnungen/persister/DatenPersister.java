@@ -126,11 +126,11 @@ public class DatenPersister extends AbstractPersister {
                .dauerInMinuten(daten.getInt("Dauer"));
 
          if (daten.getBoolean("bool1")) {
-            stunde.zusatz1(daten.getString("Zusatz1_Name"));
+            stunde.zusatz1(daten.getString("einheiten.zusatz1"));
          }
          
          if (daten.getBoolean("bool2")) {
-            stunde.zusatz2(daten.getString("Zusatz2_Name"));
+            stunde.zusatz2(daten.getString("einheiten.zusatz2"));
          }
 
          if (daten.getBoolean("preis_pro_stunde")) {
