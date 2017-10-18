@@ -4,6 +4,7 @@
  */
 package de.kreth.arbeitsrechnungen.gui.panels;
 
+import java.awt.Rectangle;
 /**
  * @author markus
  */
@@ -100,11 +101,11 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          parent.dispose();
       } else {
          Klient kl = new KlientenEditorPersister(optionen).getKlientById(klienten_id);
-         if(kl.hasZusatz1()) {
+         if (kl.hasZusatz1()) {
             this.zusatz1 = true;
             this.zusatz1_name = kl.getZusatz1_Name();
          }
-         if(kl.hasZusatz2()) {
+         if (kl.hasZusatz2()) {
             this.zusatz2 = true;
             this.zusatz2_name = kl.getZusatz2_Name();
          }
@@ -210,11 +211,11 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          }
       }
       List<String> captions = Arrays.asList(ArbeitsstundenSpalten.Datum.toString(), ArbeitsstundenSpalten.Inhalt.toString(), ArbeitsstundenSpalten.Start.toString(),
-            ArbeitsstundenSpalten.Ende.toString(), ArbeitsstundenSpalten.Preis.toString(), this.zusatz1_name, this.zusatz2_name,
-            ArbeitsstundenSpalten.Preisänderung.toString(), ArbeitsstundenSpalten.Eingereicht.toString(), ArbeitsstundenSpalten.Bezahlt.toString());
-      
+            ArbeitsstundenSpalten.Ende.toString(), ArbeitsstundenSpalten.Preis.toString(), this.zusatz1_name, this.zusatz2_name, ArbeitsstundenSpalten.Preisänderung.toString(),
+            ArbeitsstundenSpalten.Eingereicht.toString(), ArbeitsstundenSpalten.Bezahlt.toString());
+
       // Model mit Überschriften erstellen
-      DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {},captions.toArray()) {
+      DefaultTableModel mymodel = new DefaultTableModel(new Object[][] {}, captions.toArray()) {
 
          private static final long serialVersionUID = 1913170267962749520L;
 
@@ -267,8 +268,19 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          this.geloeschte_spalten[0] = null;
       }
 
+      scrollToVisible(jTable1, mymodel.getRowCount(), 0);
    }
-
+   
+   public static void scrollToVisible(JTable table, int rowIndex, int vColIndex) {
+      
+      if (!(table.getParent() instanceof JViewport)) {
+         return;
+      }
+      
+      Rectangle rect = table.getCellRect(rowIndex, vColIndex, true);
+      table.scrollRectToVisible(rect);
+   }
+   
    /**
     * This method is called from within the constructor to
     * initialize the form.
