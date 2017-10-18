@@ -4,6 +4,7 @@
  */
 package de.kreth.arbeitsrechnungen.gui.jframes;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +50,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       this(null);
    }
    
-   public StartFenster(Options options) {
+   public StartFenster(final Options options) {
       logger = LogManager.getLogger(getClass());
 
       if(options == null)
@@ -73,13 +76,16 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
    private void initHintman() {
 
-      this.jButtonKlientenEditor.setToolTipText("Startet den Klienteneditor, einen umfassenden Werkzeug für die meisten Programmfunktionen");
+      this.jButtonKlientenEditor
+         .setToolTipText("Startet den Klienteneditor, einen umfassenden Werkzeug für die meisten Programmfunktionen");
       this.jTableEinheiten.setToolTipText("Geleistete Arbeitsstunden, noch nicht abgerechnet");
       this.jTableForderungen.setToolTipText("Abgerechnete Arbeitsstunden, noch nicht bezahlt");
-      this.jButtonBeenden.setToolTipText("Beendet das Programm und schließt alle zugehörigen Fenster");
+      this.jButtonBeenden
+         .setToolTipText("Beendet das Programm und schließt alle zugehörigen Fenster");
       this.jButtonArtenEinheiten.setToolTipText("TODO: Einheitenarten");
       this.jButton1.setToolTipText("Einfacher Editor für Arbeitsstunden");
-      this.jMenuItemBeenden.setToolTipText("Beendet das Programm und schließt alle zugehörigen Fenster");
+      this.jMenuItemBeenden
+         .setToolTipText("Beendet das Programm und schließt alle zugehörigen Fenster");
    }
 
    protected void loadOrCreateOptions() {
@@ -130,7 +136,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
    }
 
-   private void restoreSpaltenBreiten(JTable tab, int[][] spaltenBreiten) {
+   private void restoreSpaltenBreiten(final JTable tab, final int[][] spaltenBreiten) {
 
       int[] breitenMax = spaltenBreiten[0];
       int[] breitenOpt = spaltenBreiten[1];
@@ -143,7 +149,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       }
    }
 
-   private int[][] getSpaltenBreiten(JTable tab) {
+   private int[][] getSpaltenBreiten(final JTable tab) {
       int spaltenzahl = tab.getColumnModel().getColumnCount();
 
       int[] breitenMax = new int[spaltenzahl];
@@ -238,51 +244,51 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
       addWindowListener(new WindowAdapter() {
          @Override
-         public void windowActivated(WindowEvent e) {
+         public void windowActivated(final WindowEvent e) {
             super.windowActivated(e);
             reloadContents();
          }
       });
       jButtonKlientenEditor.setText(resourceMap.getString("jButtonKlientenEditor.text")); // NOI18N
-      jButtonKlientenEditor.setMaximumSize(new java.awt.Dimension(500, 25));
-      jButtonKlientenEditor.setMinimumSize(new java.awt.Dimension(120, 25));
+      jButtonKlientenEditor.setMaximumSize(new Dimension(500, 25));
+      jButtonKlientenEditor.setMinimumSize(new Dimension(120, 25));
       jButtonKlientenEditor.setName("jButtonKlientenEditor"); // NOI18N
-      jButtonKlientenEditor.setPreferredSize(new java.awt.Dimension(151, 25));
+      jButtonKlientenEditor.setPreferredSize(new Dimension(151, 25));
       jButtonKlientenEditor.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButtonKlientenEditorActionPerformed(evt);
          }
       });
 
       jButtonBeenden.setText(resourceMap.getString("jButtonBeenden.text")); // NOI18N
-      jButtonBeenden.setMaximumSize(new java.awt.Dimension(500, 25));
-      jButtonBeenden.setMinimumSize(new java.awt.Dimension(120, 25));
+      jButtonBeenden.setMaximumSize(new Dimension(500, 25));
+      jButtonBeenden.setMinimumSize(new Dimension(120, 25));
       jButtonBeenden.setName("jButtonBeenden"); // NOI18N
-      jButtonBeenden.setPreferredSize(new java.awt.Dimension(151, 25));
+      jButtonBeenden.setPreferredSize(new Dimension(151, 25));
       jButtonBeenden.setAction(quitAction);
 
       jButtonArtenEinheiten.setText(resourceMap.getString("jButtonArtenEinheiten.text")); // NOI18N
-      jButtonArtenEinheiten.setMaximumSize(new java.awt.Dimension(500, 25));
-      jButtonArtenEinheiten.setMinimumSize(new java.awt.Dimension(120, 25));
+      jButtonArtenEinheiten.setMaximumSize(new Dimension(500, 25));
+      jButtonArtenEinheiten.setMinimumSize(new Dimension(120, 25));
       jButtonArtenEinheiten.setName("jButtonArtenEinheiten"); // NOI18N
-      jButtonArtenEinheiten.setPreferredSize(new java.awt.Dimension(151, 25));
+      jButtonArtenEinheiten.setPreferredSize(new Dimension(151, 25));
 
       jButton1.setText(resourceMap.getString("jButtonEinheiten.text")); // NOI18N
       jButton1.setHorizontalTextPosition(SwingConstants.CENTER);
-      jButton1.setMaximumSize(new java.awt.Dimension(500, 25));
-      jButton1.setMinimumSize(new java.awt.Dimension(120, 25));
+      jButton1.setMaximumSize(new Dimension(500, 25));
+      jButton1.setMinimumSize(new Dimension(120, 25));
       jButton1.setName("jButtonEinheiten"); // NOI18N
       jButton1.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButton1ActionPerformed(evt);
          }
       });
 
-      jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+      jPanel1.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
       jPanel1.setName("jPanel1"); // NOI18N
 
       Status_links.setFont(Font.getFont(resourceMap.getString("Status_links.font"))); // NOI18N
@@ -311,7 +317,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       jSplitPane1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
 
          @Override
-         public void propertyChange(java.beans.PropertyChangeEvent evt) {
+         public void propertyChange(final java.beans.PropertyChangeEvent evt) {
             jSplitPane1PropertyChange(evt);
          }
       });
@@ -331,7 +337,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       jTableForderungen.addMouseListener(new MouseAdapter() {
 
          @Override
-         public void mouseClicked(MouseEvent evt) {
+         public void mouseClicked(final MouseEvent evt) {
             jTableForderungenMouseClicked(evt);
          }
       });
@@ -380,7 +386,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       jTableEinheiten.addMouseListener(new MouseAdapter() {
 
          @Override
-         public void mouseClicked(MouseEvent evt) {
+         public void mouseClicked(final MouseEvent evt) {
             jTableEinheitenMouseClicked(evt);
          }
       });
@@ -428,7 +434,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       jMenuItemOption.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jMenuItemOptionActionPerformed(evt);
          }
       });
@@ -488,11 +494,11 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       initEinheiten();
    }
 
-   private void jButtonKlientenEditorActionPerformed(ActionEvent evt) {
+   private void jButtonKlientenEditorActionPerformed(final ActionEvent evt) {
       openKlientenEditor(-1, null);
    }
 
-   private void openKlientenEditor(int KlientenID, StartTable Tabelle) {
+   private void openKlientenEditor(final int KlientenID, final StartTable Tabelle) {
 
       KlientenEditor klienteneditor = new KlientenEditor(this);
       klienteneditor.arbeitsstundenTabelle1.addPropertyChangeListener("ArbeitsstundenTabelle.Tabellendaten", this);
@@ -516,19 +522,19 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
     * @param evt
     */
    @Override
-   public void propertyChange(java.beans.PropertyChangeEvent evt) {
+   public void propertyChange(final java.beans.PropertyChangeEvent evt) {
       if (evt.getPropertyName().equals("ArbeitsstundenTabelle.Tabellendaten")) {
          initForderungen();
          initEinheiten();
       }
    }
 
-   private void jButton1ActionPerformed(ActionEvent evt) {
+   private void jButton1ActionPerformed(final ActionEvent evt) {
       Arbeitsstunden arbeitsstunden = new Arbeitsstunden(optionen);
       arbeitsstunden.setVisible(true);
    }
 
-   private void jTableForderungenMouseClicked(MouseEvent evt) {
+   private void jTableForderungenMouseClicked(final MouseEvent evt) {
       // System.out.println("Mouse geklickt! Anzahl: " + evt.getClickCount());
       if (this.jTableForderungen.getSelectedRowCount() == 0)
          jTableForderungenSetSelection(evt);
@@ -546,7 +552,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
        */
    }
 
-   private void jTableEinheitenMouseClicked(MouseEvent evt) {
+   private void jTableEinheitenMouseClicked(final MouseEvent evt) {
       // System.out.println("Mouse geklickt! Anzahl: " + evt.getClickCount());
       if (this.jTableForderungen.getSelectedRowCount() == 0)
          jTableEinheitenSetSelection(evt);
@@ -559,25 +565,25 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
    }
 
-   private void jMenuItemOptionActionPerformed(ActionEvent evt) {
+   private void jMenuItemOptionActionPerformed(final ActionEvent evt) {
       // Öffne Options-Fenster
       OptionenDialog optionwindow = new OptionenDialog(this, false);
       optionwindow.setVisible(true);
    }
 
-   private void jSplitPane1PropertyChange(java.beans.PropertyChangeEvent evt) {
+   private void jSplitPane1PropertyChange(final java.beans.PropertyChangeEvent evt) {
 
       this.jLabel3.setText("Divider: " + this.jSplitPane1.getDividerLocation());
    }
 
-   private void jTableEinheitenSetSelection(MouseEvent evt) {
+   private void jTableEinheitenSetSelection(final MouseEvent evt) {
       // System.out.println("Zeile wird selectiert.");
       java.awt.Point p = evt.getPoint();
       int zeile = this.jTableEinheiten.rowAtPoint(p);
       this.jTableEinheiten.getSelectionModel().setSelectionInterval(zeile, zeile);
    }
 
-   private void jTableForderungenSetSelection(MouseEvent evt) {
+   private void jTableForderungenSetSelection(final MouseEvent evt) {
       java.awt.Point p = evt.getPoint();
       int zeile = this.jTableForderungen.rowAtPoint(p);
       this.jTableForderungen.getSelectionModel().setSelectionInterval(zeile, zeile);
@@ -593,7 +599,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       private static final long serialVersionUID = -7037463710032412611L;
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
          exit();
       }
 
@@ -633,17 +639,17 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    
    private class StartTableModel extends LabeledTableModel<Element> {
 
-      public StartTableModel(String[] titles) {
+      public StartTableModel(final String[] titles) {
          super(titles);
       }
 
       @Override
-      public Class<?> getColumnClass(int columnIndex) {
+      public Class<?> getColumnClass(final int columnIndex) {
          return String.class;
       }
 
       @Override
-      public Object getValueAt(int rowIndex, int columnIndex) {
+      public Object getValueAt(final int rowIndex, final int columnIndex) {
          Element item = getItem(rowIndex);
          switch (columnIndex) {
             case 0:
