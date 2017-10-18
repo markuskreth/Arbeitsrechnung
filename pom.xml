@@ -65,16 +65,6 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.jdesktop</groupId>
-			<artifactId>beansbinding</artifactId>
-			<version>1.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jdesktop</groupId>
-			<artifactId>appframework</artifactId>
-			<version>1.0.3</version>
-		</dependency>
-		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>6.0.5</version>
