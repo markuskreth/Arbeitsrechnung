@@ -67,7 +67,7 @@ public class EinheitEinzelFrame extends JFrame {
     * Neuen Datensatz anlegen
     * Creates new form Einheit_einzel
     */
-   public EinheitEinzelFrame(int klient) {
+   public EinheitEinzelFrame(final int klient) {
       this(klient, -1);
    }
 
@@ -75,7 +75,7 @@ public class EinheitEinzelFrame extends JFrame {
     * Bestehenden Datensatz edieren
     * Creates new form Einheit_einzel
     */
-   public EinheitEinzelFrame(int klient, int einheit) {
+   public EinheitEinzelFrame(final int klient, final int einheit) {
 
       optionen = Einstellungen.getInstance().getEinstellungen();
 
@@ -371,7 +371,7 @@ public class EinheitEinzelFrame extends JFrame {
       jButton1.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButton1ActionPerformed(evt);
          }
       });
@@ -381,7 +381,7 @@ public class EinheitEinzelFrame extends JFrame {
       jButton2.addActionListener(new ActionListener() {
 
          @Override
-         public void actionPerformed(ActionEvent evt) {
+         public void actionPerformed(final ActionEvent evt) {
             jButton2ActionPerformed(evt);
          }
       });
@@ -538,13 +538,13 @@ public class EinheitEinzelFrame extends JFrame {
       pack();
    }
 
-   private void jButton2ActionPerformed(ActionEvent evt) {
+   private void jButton2ActionPerformed(final ActionEvent evt) {
       // TODO Kontrolle der Eingaben auf vollständigkeit und richtigkeit
 
       saveData();
    }
 
-   private void jButton1ActionPerformed(ActionEvent evt) {
+   private void jButton1ActionPerformed(final ActionEvent evt) {
       // Fenster schließen
       this.setVisible(false);
       this.dispose();
