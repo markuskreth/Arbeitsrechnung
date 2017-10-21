@@ -849,36 +849,57 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
          if (JOptionPane.showConfirmDialog(null, "Soll diese Rechnung so gespeichert werden?", "Speichern?", JOptionPane.OK_CANCEL_OPTION,
                JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 
-            OutputStream outStream = new FileOutputStream(this.rechnung.getPdfdatei());
+
+            String dateiname = "";
+
+            if (klient == null) {
+               klient = klientenPersister.getKlientById(rechnung.getKlienten_id());
+            }
+            if (klient != null) {
+               dateiname = klient.getAuftraggeber() + "_" + rechnung.getRechnungnr();
+            } else {
+               // sql nicht erfolgreich
+               dateiname = rechnung.getRechnungnr();
+            }
+            dateiname = dateiname.replace(" ", "_");
+
+            String new_pdf = dateiname + ".pdf";
+            File target = new File(einstellungen.getTargetDir(), new_pdf);
+            logger.info("storing rechnung pdf to " + target.getAbsolutePath());
+            
+            OutputStream outStream = new FileOutputStream(target);
             rechn.store(repo, outStream);
-
-            speichern(einstellungen);
-
-            File pdf_datei = new File(rechnung.getPdfdatei());
+            rechnung.setPdfdatei(target.getAbsolutePath());
+            persister.insertOrUpdateRechnung(rechnung);
+            
             String pdfProg = einstellungen.getPdfProg();
             if (pdfProg != null) {
                String befehl = "";
                befehl = pdfProg + " " + rechnung.getPdfdatei();
 
-               if (pdf_datei.canRead()) {
+               if (target.canRead()) {
                   logger.info("showPdf: " + befehl);
                   try {
                      // Runtime.getRuntime().exec("sh -c " + befehl);
                      Runtime.getRuntime().exec(befehl);
                   } catch (Exception e) {
                      logger.debug("showPdf Runtime error:", e);
+                     JOptionPane.showMessageDialog(this , "Fehler beim Anzeigen des PDF", "Fehler", JOptionPane.ERROR_MESSAGE);
                   }
                } else {
-                  System.err.println("Pdfdatei existiert nicht: " + pdf_datei.getAbsolutePath());
+                  logger.error("Pdfdatei existiert nicht: " + target.getAbsolutePath());
+                  JOptionPane.showMessageDialog(this , "Pdfdatei existiert nicht: " + target.getAbsolutePath(), "Fehler", JOptionPane.ERROR_MESSAGE);
                }
             } else {
-               logger.debug("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
+               logger.info("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
+               JOptionPane.showMessageDialog(this , "Kein pdf-Programm angegeben. Ausgabe nicht möglich.", "Fehler", JOptionPane.ERROR_MESSAGE);
             }
 
             pchListeners.firePropertyChange(ERSTELLT, 0, rechnung.getRechnungen_id());
          }
 
       } catch (FileNotFoundException e) {
+         logger.error("Error storing PDF", e);
          JOptionPane.showMessageDialog(this, "Datei " + rechnung.getTexdatei() + "\nkonnte nicht gefunden werden!\nAbbruch!", "Datei nicht gefunden", JOptionPane.ERROR_MESSAGE);
       } catch (JRException e1) {
          logger.error("Error creating PDF", e1);
