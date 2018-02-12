@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-06-25T00:57:12 -->
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.3.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="mtv_gross_buchholz" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="266"/>
@@ -575,7 +574,7 @@ where rechnungen_id=16]]>
 			<textField>
 				<reportElement x="3" y="21" width="539" height="16" uuid="2cdd1ec4-2cf8-41e8-9db1-9b98b4ab9371"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.0#").format($V{Dauer1}/60) + " Stunden x " + NumberFormat.getCurrencyInstance().format($F{einzelPreis}) + " = " + NumberFormat.getCurrencyInstance().format($F{betrag}) + "  brutto"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.0#").format($V{Dauer1}/60) + " Stunden x " + NumberFormat.getCurrencyInstance().format($F{einzelPreis}) + " = " + NumberFormat.getCurrencyInstance().format(($V{Dauer1}/60) * $F{einzelPreis}) + "  brutto"]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

@@ -39,10 +39,10 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
          homeverzeichnis.mkdirs();
       }
 
-      String useTest = System.getProperty("useTestDb");
+      String useTest = System.getProperty("useTestDb", "false");
 
       Options optionen;
-      if (useTest != null && useTest.isEmpty() == false && Boolean.parseBoolean(useTest)) {
+      if (Boolean.parseBoolean(useTest)) {
          optionen = new Options.Build().dbHost("localhost").dbUser("markus").dbPassword("0773").dbDatabaseName("ArbeitrechnungenBak").stdTexFile("Rechnung_Allgemein.tex")
                .texTemplatesDir("Tex-Vorlagen").targetDir("targetDir").tmpDir("tmpDir").pdfProg("/usr/bin/okular").build();
       } else {

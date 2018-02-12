@@ -27,7 +27,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.kreth.arbeitsrechnungen.*;
-import de.kreth.arbeitsrechnungen.business.RechnungSystemExecutionService;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
@@ -829,7 +828,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       this.rechnung.setZusatz2(this.jCheckBoxZusatz2.isSelected());
 
       // Nur arbetisstunden übernehmen, die auch gewält sind.
-      Vector<Arbeitsstunde> tmp_einheiten = new Vector<Arbeitsstunde>();
+      Vector<Arbeitsstunde> tmp_einheiten = new Vector<>();
 
       for (int i = 0; i < einheiten.size(); i++) {
 
@@ -845,37 +844,46 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
          ShowJasperRechnung rechn = new ShowJasperRechnung();
          JRDataSource source = rechn.createSource(this.rechnung);
          JasperPrint repo = rechn.compileAndShowReport(source);
-
+         
          if (JOptionPane.showConfirmDialog(null, "Soll diese Rechnung so gespeichert werden?", "Speichern?", JOptionPane.OK_CANCEL_OPTION,
                JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 
-            OutputStream outStream = new FileOutputStream(this.rechnung.getPdfdatei());
+            File pdf_datei = new File(einstellungen.getTargetDir(), this.rechnung.getRechnungnr() + ".pdf");
+            
+            OutputStream outStream = new FileOutputStream(pdf_datei);
             rechn.store(repo, outStream);
+            
+            rechnung.setPdfdatei(pdf_datei.getAbsolutePath());
+            persister.insertOrUpdateRechnung(rechnung);
 
-            speichern(einstellungen);
-
-            File pdf_datei = new File(rechnung.getPdfdatei());
             String pdfProg = einstellungen.getPdfProg();
-            if (pdfProg != null) {
+            
+            if (pdfProg != null && new File(pdfProg).exists()) {
                String befehl = "";
-               befehl = pdfProg + " " + rechnung.getPdfdatei();
+               befehl = pdfProg + " \"" + rechnung.getPdfdatei() + "\"";
 
                if (pdf_datei.canRead()) {
-                  logger.info("showPdf: " + befehl);
+                  if(logger.isInfoEnabled()) {
+                     logger.info("showPdf: " + befehl);
+                  }
                   try {
                      // Runtime.getRuntime().exec("sh -c " + befehl);
                      Runtime.getRuntime().exec(befehl);
                   } catch (Exception e) {
                      logger.debug("showPdf Runtime error:", e);
                   }
+
+                  pchListeners.firePropertyChange(ERSTELLT, 0, rechnung.getRechnungen_id());
                } else {
-                  System.err.println("Pdfdatei existiert nicht: " + pdf_datei.getAbsolutePath());
+                  logger.error("Pdfdatei existiert nicht: " + pdf_datei.getAbsolutePath());
+                  JOptionPane.showMessageDialog(this, "Pdfdatei existiert nicht: " + pdf_datei.getAbsolutePath(), "Fehler", JOptionPane.ERROR_MESSAGE);
                }
             } else {
-               logger.debug("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
+               if(logger.isDebugEnabled()) {
+                  logger.debug("Kein pdf-Programm angegeben. Ausgabe nicht möglich.");
+               }
             }
 
-            pchListeners.firePropertyChange(ERSTELLT, 0, rechnung.getRechnungen_id());
          }
 
       } catch (FileNotFoundException e) {
@@ -894,42 +902,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       return rechnung;
    }
    
-   /**
-    * Speichert die Rechnung und Details in der Datenbank
-    * 
-    * @param optionen
-    */
-   public int speichern(Options optionen) {
-
-      String dateiname = "";
-
-      if (klient == null) {
-         klient = klientenPersister.getKlientById(rechnung.getKlienten_id());
-      }
-      if (klient != null) {
-         dateiname = klient.getAuftraggeber() + "_" + rechnung.getRechnungnr();
-         dateiname = dateiname.replace(" ", "_");
-      } else {
-         // sql nicht erfolgreich
-         dateiname = rechnung.getRechnungnr();
-         dateiname = dateiname.replace(" ", "_");
-      }
-
-      RechnungSystemExecutionService fileService = new RechnungSystemExecutionService(optionen);
-
-      int ergebnis = fileService.movePdf(rechnung, dateiname);
-
-      if (ergebnis == 0) {
-         ergebnis = fileService.moveTex(rechnung, dateiname);
-      }
-
-      if (ergebnis == 0) {
-         persister.insertOrUpdateRechnung(rechnung);
-      }
-
-      return ergebnis;
-   }
-
    private void jTextRechnungsnummerActionPerformed(ActionEvent evt) {
       this.rechnung.setRechnungnr(jTextRechnungsnummer.getText());
    }
