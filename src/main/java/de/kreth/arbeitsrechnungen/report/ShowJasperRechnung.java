@@ -2,19 +2,20 @@ package de.kreth.arbeitsrechnungen.report;
 
 import java.io.OutputStream;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
+import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
+import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
+import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -39,22 +40,16 @@ public class ShowJasperRechnung {
    public JRDataSource createSource(int rechnungId) {
 
       Options opts = Einstellungen.getInstance().getEinstellungen();
+      RechnungDialogPersister p = new RechnungDialogPersister(opts);
+      Builder rechn = p.getRechnungById(rechnungId);
+      rechn.einheiten(p.getEinheiten(rechnungId));
+
+      int klienten_id = p.getKlientenIdForRechnungId(rechnungId);
+      Klient klient = new KlientenEditorPersister(opts).getKlientById(klienten_id);
+      rechn.zusatz1Name(klient.getZusatz1_Name());
+      rechn.zusatz2Name(klient.getZusatz2_Name());
+      return createSource(rechn.build());
       
-      Verbindung_mysql verb = new Verbindung_mysql(opts.getProperties());
-      ResultSet rs = verb.query("SELECT rechnungen_id, betrag, rechnungen.datum, geldeingang, pdfdatei, rechnungnr, \n" + 
-            "   zahldatum, zusammenfassungen, rechnungen.zusatz1, rechnungen.zusatz2,\n" + 
-            "    klienten.Zusatz1, klienten.Zusatz1_Name, klienten.Zusatz2, klienten.Zusatz2_Name, \n" + 
-            "    einheiten.Beginn, einheiten.Ende, einheiten.Dauer, einheiten.Preis, \n" + 
-            "    einheiten.Preisänderung, einheiten.zusatz1 zusatz1Val, einheiten.zusatz2 zusatz2Val, angebote.Beschreibung, \n" + 
-            "    angebote.Preis preisProStunde\n" + 
-            "FROM Arbeitrechnungen.rechnungen \n" + 
-            "    inner join Arbeitrechnungen.klienten on rechnungen.klienten_id=klienten.klienten_id\n" + 
-            "    inner join einheiten on rechnungen.rechnungen_id=einheiten.rechnung_id\n" + 
-            "    inner join angebote on einheiten.angebote_id=angebote.angebote_id\n" + 
-            "where rechnungen_id=" + rechnungId);
-      
-      JRResultSetDataSource source = new JRResultSetDataSource(rs);
-      return source;
    }
 
    public JRDataSource createSource(Rechnung rechnung) {
