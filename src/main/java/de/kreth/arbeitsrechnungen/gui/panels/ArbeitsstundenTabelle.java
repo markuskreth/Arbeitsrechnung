@@ -9,25 +9,56 @@ import java.awt.Rectangle;
  * @author markus
  */
 import java.awt.Window;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JViewport;
+import javax.swing.LayoutStyle;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.toedter.calendar.JDateChooser;
 
-import de.kreth.arbeitsrechnungen.*;
+import de.kreth.arbeitsrechnungen.ArbeitsstundenSpalten;
+import de.kreth.arbeitsrechnungen.Einstellungen;
+import de.kreth.arbeitsrechnungen.MySqlDate;
+import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
@@ -43,7 +74,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
    private static final long serialVersionUID = 8161115991876323549L;
 
-   private Logger logger = LogManager.getLogger(getClass());
+   private Logger logger = LoggerFactory.getLogger(getClass());
 
    private List<Arbeitsstunde> arbeitsstunden;
    private Options optionen;

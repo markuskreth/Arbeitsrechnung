@@ -3,8 +3,8 @@ package de.kreth.arbeitsrechnungen.business;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
@@ -16,7 +16,7 @@ public class RechnungSystemExecutionService {
 
    public RechnungSystemExecutionService(Options optionen) {
       this.options = optionen;
-      this.logger = LogManager.getLogger(getClass());
+      this.logger = LoggerFactory.getLogger(getClass());
    }
 
    public int movePdf(Rechnung rechnung, String dateiname) {

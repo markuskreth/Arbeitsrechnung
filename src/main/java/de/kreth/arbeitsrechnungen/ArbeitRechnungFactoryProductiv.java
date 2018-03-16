@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
@@ -26,7 +26,7 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 
    protected ArbeitRechnungFactoryProductiv() {
 
-      logger = LogManager.getLogger(getClass());
+      logger = LoggerFactory.getLogger(getClass());
       // Testen ob das arbeitsverzeichnis im home-verzeichnis existiert
       File homeverzeichnis;
       Properties sysprops = System.getProperties();

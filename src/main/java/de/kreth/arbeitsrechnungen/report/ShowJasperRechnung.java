@@ -5,25 +5,32 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class ShowJasperRechnung {
 
-   Logger log = LogManager.getLogger(getClass());
+   Logger log = LoggerFactory.getLogger(getClass());
    
    public static void main(String[] args) throws JRException {
       ShowJasperRechnung showJasperRechnung = new ShowJasperRechnung();
 
       URL resource = showJasperRechnung.getClass().getResource("mtv_gross_buchholz.jasper");
-      showJasperRechnung.log.debug(resource);
+      showJasperRechnung.log.debug(resource==null?"null":resource.toString());
 
       JRDataSource res = showJasperRechnung.createSource(16);
       showJasperRechnung.compileAndShowReport(res);

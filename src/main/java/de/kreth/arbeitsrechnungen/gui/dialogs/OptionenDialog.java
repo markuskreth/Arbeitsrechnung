@@ -17,21 +17,31 @@ package de.kreth.arbeitsrechnungen.gui.dialogs;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
-import javax.swing.*;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle;
+import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileFilter;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
@@ -41,15 +51,11 @@ public class OptionenDialog extends JDialog {
 
    private static final long serialVersionUID = -527076543127705929L;
 
-   private Logger logger = LogManager.getLogger(getClass());
+   private Logger logger = LoggerFactory.getLogger(getClass());
 
    private boolean firststart;
 
-   private JLabel jLabelLogLevel;
-
    private JPanel jPanelSettings;
-
-   private JTextField jTextFieldLogLevel;
 
    private Options options;
 
@@ -117,9 +123,6 @@ public class OptionenDialog extends JDialog {
          }
       }
       
-      Level level = logger.getLevel();
-      
-      jTextFieldLogLevel.setText(level.toString());
    }
 
    private void fillComponentMap(Map<String, JTextField> components, Container contentPane) {
@@ -201,35 +204,7 @@ public class OptionenDialog extends JDialog {
       jButton2 = new JButton();
 
       jPanelSettings = new JPanel();
-      jLabelLogLevel = new JLabel();
-      jTextFieldLogLevel = new JTextField();
-      jTextFieldLogLevel.setName("LogLevel");
-      jTextFieldLogLevel.setEditable(false);
-      jTextFieldLogLevel.addMouseListener(new MouseAdapter() {
-         
-         @Override
-         public void mouseClicked(MouseEvent e) {
-
-            logger.info("Neue Logger haben Level: " + LogManager.getLogger("TestLoger").getLevel());
-            Level[] alle = {Level.ALL, Level.DEBUG, Level.INFO, Level.WARN, Level.ERROR, Level.FATAL, Level.OFF};
-            Level selected = (Level) JOptionPane.showInputDialog(null, "Level zur Auswahl:", "Setzen des Loglevels", JOptionPane.QUESTION_MESSAGE, null, alle, logger.getLevel());
-
-            if(selected != null) {
-               LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-               Configuration config = ctx.getConfiguration();
-               LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME); 
-               loggerConfig.setLevel(selected);
-               ctx.updateLoggers();
-               
-               jTextFieldLogLevel.setText(selected.toString());
-               logger.info("Neue Logger haben nun Level: " + LogManager.getLogger("TestLoger").getLevel());
-            } else {
-               logger.info("Kein Level gesetzt.");
-            }
             
-         }
-      });
-      
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
       ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
@@ -265,9 +240,6 @@ public class OptionenDialog extends JDialog {
       jPasswordFieldPassword.setText(resourceMap.getString("password.text")); // NOI18N
       jPasswordFieldPassword.setName("password"); // NOI18N
 
-      jLabelLogLevel.setText(resourceMap.getString("jLabelLogLevel.text"));
-      jLabelLogLevel.setName("jLabelLogLevel");
-      
       GroupLayout jPanelDatenbankLayout = new GroupLayout(jPanelDatenbank);
       jPanelDatenbank.setLayout(jPanelDatenbankLayout);
       jPanelDatenbankLayout.setHorizontalGroup(jPanelDatenbankLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
@@ -507,8 +479,6 @@ public class OptionenDialog extends JDialog {
       pack();
       
       jPanelSettings.setLayout(new GridLayout(1,2,15,15));
-      jPanelSettings.add(jLabelLogLevel);
-      jPanelSettings.add(jTextFieldLogLevel);
       
       jTabbedPane1.addTab(resourceMap.getString("jPanelSettings.TabConstraints.tabTitle"), jPanelSettings);
    }

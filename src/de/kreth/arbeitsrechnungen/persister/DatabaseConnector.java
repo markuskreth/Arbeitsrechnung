@@ -2,8 +2,8 @@ package de.kreth.arbeitsrechnungen.persister;
 
 import java.util.Properties;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import arbeitsabrechnungendataclass.Verbindung;
 import arbeitsabrechnungendataclass.Verbindung_mysql;
@@ -15,7 +15,7 @@ import arbeitsabrechnungendataclass.Verbindung_mysql;
  */
 public final class DatabaseConnector {
 
-   private final Logger logger = LogManager.getLogger(getClass());
+   private final Logger logger = LoggerFactory.getLogger(getClass());
    private static Verbindung verbindung = null;
 
    public DatabaseConnector(Properties optionen) {

@@ -11,22 +11,56 @@ package de.kreth.arbeitsrechnungen.gui.dialogs;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Window;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.GroupLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.LayoutStyle;
+import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import de.kreth.arbeitsrechnungen.*;
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
+import de.kreth.arbeitsrechnungen.ArbeitsstundenSpalten;
+import de.kreth.arbeitsrechnungen.Einstellungen;
+import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.business.RechnungSystemExecutionService;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.Klient;
@@ -42,7 +76,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class RechnungDialog extends JDialog implements PropertyChangeListener, DocumentListener {
 
    private static final long serialVersionUID = 3906049054488142992L;
-   private Logger logger = LogManager.getLogger(getClass());
+   private Logger logger = LoggerFactory.getLogger(getClass());
 
    public static final String ERSTELLT = "Rechnung erstellt";
 
@@ -237,7 +271,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
    }
 
    private void changeText(DocumentEvent e) {
-      logger.debug(e.getDocument().getProperty("name"));
+      logger.debug((String) e.getDocument().getProperty("name"));
       logger.debug(" wurde geändert!");
       logger.debug("DefaultRootElement: " + e.getDocument().getDefaultRootElement());
       if (e.getDocument().equals(this.jTextKlient.getDocument())) {

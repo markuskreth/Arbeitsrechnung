@@ -4,10 +4,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Vector;
 
 import de.kreth.arbeitsrechnungen.Options;
-import de.kreth.arbeitsrechnungen.data.*;
+import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
+import de.kreth.arbeitsrechnungen.data.ArbeitsstundeImpl;
+import de.kreth.arbeitsrechnungen.data.Klient;
+import de.kreth.arbeitsrechnungen.data.Rechnung;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 
 public class RechnungDialogPersister extends AbstractPersister {

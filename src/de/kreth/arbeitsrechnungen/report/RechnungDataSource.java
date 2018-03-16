@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
@@ -19,7 +19,7 @@ public class RechnungDataSource implements JRDataSource {
    private Iterator<Arbeitsstunde> einheiten;
    private Arbeitsstunde current;
 
-   private final Logger logger = LogManager.getLogger(getClass());
+   private final Logger logger = LoggerFactory.getLogger(getClass());
    
    public RechnungDataSource(Rechnung r) {
       super();
