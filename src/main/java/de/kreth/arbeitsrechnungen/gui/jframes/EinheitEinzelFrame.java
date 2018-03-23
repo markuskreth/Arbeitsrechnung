@@ -52,14 +52,6 @@ public class EinheitEinzelFrame extends JFrame {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final NumberFormat preisFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
-	private Options optionen;
-	//
-	// private int klient;
-	// private int einheit = -1;
-	// private boolean zusatz1 = false;
-	// private boolean zusatz2 = false;
-	// private String zusatz1_name = "";
-	// private String zusatz2_name = "";
 	private KlientPersister klientPersister;
 	private AngebotPersister angebotPersister;
 	private Auftraggeber klient;
@@ -86,7 +78,7 @@ public class EinheitEinzelFrame extends JFrame {
 	 */
 	public EinheitEinzelFrame(final int klient, final int einheit) {
 
-		optionen = Einstellungen.getInstance().getEinstellungen();
+		Options optionen = Einstellungen.getInstance().getEinstellungen();
 		klientPersister = new KlientPersister(optionen);
 		angebotPersister = new AngebotPersister(optionen);
 
@@ -167,10 +159,6 @@ public class EinheitEinzelFrame extends JFrame {
          this.jTextFieldZusatz2.setText(einheit.getZusatz2());
          this.jDateChooserEingereicht.setDate(einheit.getRechnungDatum());
          this.jDateChooserBezahlt.setDate(einheit.getBezahltDatum());
-      } else {
-         JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Datensatz aus der Tabelle zum Edieren!", "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
-         this.setVisible(false);
-         this.dispose();
       }
    }
 
@@ -196,6 +184,12 @@ public class EinheitEinzelFrame extends JFrame {
 				.bezahltDatum(jDateChooserBezahlt.getDate())
 				.rechnungDatum(jDateChooserEingereicht.getDate());
 
+		if (klient.hasZusatz1()) {
+			bld.zusatz1(jTextFieldZusatz1.getText());
+		}
+		if (klient.hasZustz2()) {
+			bld.zusatz2(jTextFieldZusatz2.getText());
+		}
 		// Setzten der Angebot-Elemente für diese Einheit
 		
 		Angebot a = (Angebot) jComboBoxAngebot.getSelectedItem();
@@ -223,13 +217,7 @@ public class EinheitEinzelFrame extends JFrame {
 				}
 
 				try {
-
 					angebotPersister.storeEinheit(klient, einheit);
-//					angebotPersister.storeEinheit(this.klient.getKlientId(), this.einheit.getId()
-//							, preis, dauer, datum, eingereichtDatum,
-//							isEingereicht, bezahltDatum, isBezahlt, sqlBeginn, sqlEnde, a.getAngebote_id(),
-//							this.jTextFieldZusatz1.getText(), this.jTextFieldZusatz2.getText(),
-//							this.jTextFieldPreisAenderung.getText());
 				} catch (SQLException e) {
 					logger.error("Error storing Einheit", e);
 				}
