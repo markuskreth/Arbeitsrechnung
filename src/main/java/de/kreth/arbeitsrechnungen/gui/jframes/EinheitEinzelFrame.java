@@ -10,6 +10,7 @@
 
 package de.kreth.arbeitsrechnungen.gui.jframes;
 
+import java.awt.Component;
 /**
  * @author markus
  */
@@ -20,156 +21,152 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.text.MaskFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.MySqlDate;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Einheit;
+import de.kreth.arbeitsrechnungen.data.Einheit.Builder;
 import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
 import de.kreth.arbeitsrechnungen.persister.KlientPersister;
+import de.kreth.arbeitsrechnungen.persister.KlientPersister.Auftraggeber;
 
 public class EinheitEinzelFrame extends JFrame {
 
-   private static final long serialVersionUID = 3963303174102985288L;
-   Logger logger = LoggerFactory.getLogger(getClass());
-   private NumberFormat preisFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+	private static final long serialVersionUID = 3963303174102985288L;
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private final NumberFormat preisFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
-   private Options optionen;
+	private Options optionen;
+	//
+	// private int klient;
+	// private int einheit = -1;
+	// private boolean zusatz1 = false;
+	// private boolean zusatz2 = false;
+	// private String zusatz1_name = "";
+	// private String zusatz2_name = "";
+	private KlientPersister klientPersister;
+	private AngebotPersister angebotPersister;
+	private Auftraggeber klient;
+	private List<Angebot> angebote;
+	private Einheit einheit;
 
-   private int klient;
-   private int einheit = -1;
-   private boolean zusatz1 = false;
-   private boolean zusatz2 = false;
-   private String zusatz1_name = "";
-   private String zusatz2_name = "";
-   private Vector<Integer> angeboteliste;
-   private KlientPersister klientPersister;
-   private AngebotPersister angebotPersister;
+	/**
+	 * Sollte nicht benutzt werden! Oder nur in Kombination mit setKlient() Creates
+	 * new form Einheit_einzel
+	 */
+	public EinheitEinzelFrame() {
+		this(1, 2);
+	}
 
-   /**
-    * Sollte nicht benutzt werden!
-    * Oder nur in Kombination mit setKlient()
-    * Creates new form Einheit_einzel
-    */
-   public EinheitEinzelFrame() {
-      this(1, 2);
-   }
+	/**
+	 * Neuen Datensatz anlegen Creates new form Einheit_einzel
+	 */
+	public EinheitEinzelFrame(final int klient) {
+		this(klient, -1);
+	}
 
-   /**
-    * Neuen Datensatz anlegen
-    * Creates new form Einheit_einzel
-    */
-   public EinheitEinzelFrame(final int klient) {
-      this(klient, -1);
-   }
+	/**
+	 * Bestehenden Datensatz edieren Creates new form Einheit_einzel
+	 */
+	public EinheitEinzelFrame(final int klient, final int einheit) {
 
-   /**
-    * Bestehenden Datensatz edieren
-    * Creates new form Einheit_einzel
-    */
-   public EinheitEinzelFrame(final int klient, final int einheit) {
+		optionen = Einstellungen.getInstance().getEinstellungen();
+		klientPersister = new KlientPersister(optionen);
+		angebotPersister = new AngebotPersister(optionen);
 
-      optionen = Einstellungen.getInstance().getEinstellungen();
+		this.klient = klientPersister.getAuftraggeber(klient);
+		
+		initComponents();
+		initAngebote();
+		setAuftraggeber();
+		setZusaetze();
+		if (einheit > -1) {
+			this.einheit = klientPersister.getEinheitById(einheit);
+		} else {
+			this.einheit = new Einheit.Builder().klientenId(klient).id(einheit).datum(new Date()).build();
+		}
+		setEinheit();
+	}
 
-      klientPersister = new KlientPersister(optionen);
-      angebotPersister = new AngebotPersister(optionen);
-      
-      this.klient = klient;
-      initComponents();
-      MaskFormatter startmask;
-      MaskFormatter endemask;
-      try {
-         startmask = new MaskFormatter("##:##");
-         startmask.setPlaceholderCharacter('_');
-         startmask.install(jFormattedTextFieldStart);
-         endemask = new MaskFormatter("##:##");
-         endemask.setPlaceholderCharacter('_');
-         endemask.install(jFormattedTextFieldEnde);
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-      initAngebote();
-      setAuftraggeber();
-      setZusaetze();
-      if (einheit > -1) {
-         this.einheit = einheit;
-         setEinheit();
-      }
-   }
+	private void setZusaetze() {
+		if (this.klient.hasZusatz1())
+			this.jLabel8.setText(this.klient.getZusatz1());
+		else {
+			this.jLabel8.setVisible(false);
+			this.jTextFieldZusatz1.setVisible(false);
+		}
+		if (this.klient.hasZustz2())
+			this.jLabel9.setText(this.klient.getZusatz2());
+		else {
+			this.jLabel9.setVisible(false);
+			this.jTextFieldZusatz2.setVisible(false);
+		}
+	}
 
-   private void setZusaetze() {
-      if (this.zusatz1)
-         this.jLabel8.setText(zusatz1_name);
-      else {
-         this.jLabel8.setVisible(false);
-         this.jTextFieldZusatz1.setVisible(false);
-      }
-      if (this.zusatz2)
-         this.jLabel9.setText(zusatz2_name);
-      else {
-         this.jLabel9.setVisible(false);
-         this.jTextFieldZusatz2.setVisible(false);
-      }
-   }
+	private void setAuftraggeber() {
 
-   private void setAuftraggeber() {
+		if (this.klient != null) {
+			this.jTextField1.setText(String.valueOf(this.klient.getKlientId()));
 
-      KlientPersister.Auftraggeber auftraggeber = klientPersister.getAuftraggeber(this.klient);
+			this.jTextField6.setText(this.klient.getName());
 
-      if(auftraggeber != null) {
-         this.jTextField1.setText(String.valueOf(this.klient));
-   
-         this.jTextField6.setText(auftraggeber.getName());
-         
-         this.zusatz1 = auftraggeber.hasZusatz1();
-         this.zusatz2 = auftraggeber.hasZustz2();
-         this.zusatz1_name = auftraggeber.getZusatz1();
-         this.zusatz2_name = auftraggeber.getZusatz2();
-      }
-   }
+		}
+	}
 
-   private void setEinheit() {
+	private void setEinheit() {
       // Füllt das Formular mit existierenden Feldern
-      if (this.einheit > -1) {
+      if (this.einheit != null) {
 
-         Einheit e = klientPersister.getEinheitById(this.einheit);
-
-         if (e.getKlientenId() != this.klient) {
-            String msg = "Achtung!!!\n" + "Klienten_id des Konstruktors stimmt nicht mit der des übegebenen" + " Datensatzes überein!" + "\nDatensatz-Klient: " + e.getKlientenId()
+         if (this.einheit.getKlientenId() != this.klient.getKlientId()) {
+            String msg = "Achtung!!!\n" + "Klienten_id des Konstruktors stimmt nicht mit der des übegebenen" + " Datensatzes überein!" + "\nDatensatz-Klient: " + einheit.getKlientenId()
                   + "\nKonstruktor-Klient: " + klient;
             JOptionPane.showMessageDialog(this, msg);
          }
-         // Set Angebot-Combobox
-         this.jComboBoxAngebot.setSelectedIndex(this.angeboteliste.indexOf(Integer.valueOf(e.getAngebotId())));
 
-         // Set Uhrzeit Beginn
-         String stzeit = DateFormat.getTimeInstance().format(e.getBeginn());
-         stzeit = stzeit.substring(0, stzeit.length() - 2);
-         this.jFormattedTextFieldStart.setText(stzeit);
+         Angebot a = null;
+         for (Angebot an : angebote) {
+        	 if(an.getAngebote_id() == einheit.getAngebotId()) {
+        		 a = an;
+                 this.jComboBoxAngebot.setSelectedItem(a);
+        	 }
+         }
 
-         // Set Uhrzeit Ende
-         stzeit = DateFormat.getTimeInstance().format(e.getEnde());
-         stzeit = stzeit.substring(0, stzeit.length() - 2);
-         this.jFormattedTextFieldEnde.setText(stzeit);
-         this.jDateChooserDatum.setDate(e.getDatum());
-         this.jTextFieldPreisAenderung.setText(String.valueOf(e.getPreisAenderung()));
-         this.jTextFieldZusatz1.setText(e.getZusatz1());
-         this.jTextFieldZusatz2.setText(e.getZusatz2());
-         this.jDateChooserEingereicht.setDate(e.getRechnungDatum());
-         this.jDateChooserBezahlt.setDate(e.getBezahltDatum());
+         if (einheit.getBeginn() != null) {
+             // Set Uhrzeit Beginn
+             String stzeit = DateFormat.getTimeInstance().format(einheit.getBeginn());
+             stzeit = stzeit.substring(0, stzeit.length() - 2);
+             this.jFormattedTextFieldStart.setText(stzeit);
+
+         }
+         if(einheit.getEnde() != null) {
+             // Set Uhrzeit Ende
+             String stzeit = DateFormat.getTimeInstance().format(einheit.getEnde());
+             stzeit = stzeit.substring(0, stzeit.length() - 2);
+             this.jFormattedTextFieldEnde.setText(stzeit);
+         }
+         
+         this.jDateChooserDatum.setDate(einheit.getDatum());
+         this.jTextFieldPreisAenderung.setText(String.valueOf(einheit.getPreisAenderung()));
+         this.jTextFieldZusatz1.setText(einheit.getZusatz1());
+         this.jTextFieldZusatz2.setText(einheit.getZusatz2());
+         this.jDateChooserEingereicht.setDate(einheit.getRechnungDatum());
+         this.jDateChooserBezahlt.setDate(einheit.getBezahltDatum());
       } else {
          JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Datensatz aus der Tabelle zum Edieren!", "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
          this.setVisible(false);
@@ -177,407 +174,408 @@ public class EinheitEinzelFrame extends JFrame {
       }
    }
 
-   private void initAngebote() {
-      this.jComboBoxAngebot.removeAllItems();
-      this.angeboteliste = new Vector<Integer>();
+	private void initAngebote() {
+		this.jComboBoxAngebot.removeAllItems();
 
-      List<Angebot> angebote = angebotPersister.getForKlient(this.klient);
-      
-      for (Angebot a: angebote) {
+		angebote = angebotPersister.getForKlient(this.klient.getKlientId());
 
-         String datensatz;
-         datensatz = a.getInhalt() + "|" + preisFormat.format(a.getPreis());
-         this.jComboBoxAngebot.addItem(datensatz);
-         this.angeboteliste.addElement(Integer.valueOf(a.getAngebote_id()));
-      }
-      
-   }
+		for (Angebot a : angebote) {
+			this.jComboBoxAngebot.addItem(a);
+		}
+		if (angebote.size()>0) {
+			this.jComboBoxAngebot.setSelectedIndex(0);
+		}
+	}
 
-   private void saveData() {
-      // Wenn this.einheit = -1 dann existiert der Datensatz noch nicht und
-      // muss angelegt werden.
+	private void saveData() {
+		// Wenn this.einheit = -1 dann existiert der Datensatz noch nicht und
+		// muss angelegt werden.
 
-      double preis = 0.0;
-      long dauer = 0;
+		Builder bld = new Einheit.Builder(einheit)
+				.datum(jDateChooserDatum.getDate())
+				.bezahltDatum(jDateChooserBezahlt.getDate())
+				.rechnungDatum(jDateChooserEingereicht.getDate());
 
-      final Calendar einheitDate = this.jDateChooserDatum.getCalendar();
+		// Setzten der Angebot-Elemente für diese Einheit
+		
+		Angebot a = (Angebot) jComboBoxAngebot.getSelectedItem();
+		if (a != null) {
+			bld.preisAenderung(Double.parseDouble(this.jTextFieldPreisAenderung.getText()));
+			bld.angebotId(a.getAngebote_id());
+			bld.angebot(a);
 
-      MySqlDate tmpdate = new MySqlDate(einheitDate);
-      String datum = tmpdate.getSqlDate();
+			if (a.isPreis_pro_stunde()) {
+				Date einheitDatum = jDateChooserDatum.getDate();
+				String starttext = this.jFormattedTextFieldStart.getText();
+				Calendar startDate = parseDate(einheitDatum, starttext);
+				bld.beginn(startDate.getTime());
+				
+				String endetext = this.jFormattedTextFieldEnde.getText();
+				Calendar endecal =parseDate(einheitDatum, endetext);
+				bld.ende(endecal.getTime());
+				
+				einheit = bld.build();
 
-      String eingereichtDatum = "NULL";
-      int isEingereicht = 0;
-      String bezahltDatum = "NULL";
-      int isBezahlt = 0;
+				if(logger.isDebugEnabled()) {
+					logger.debug("Dauer: " + einheit.getDauerInMinutes() + " Minuten\n" 
+							+ "Dauer: " + (double) einheit.getDauerInMinutes() / 60 
+							+ " Stunden\n Preis: " + einheit.getPreis());
+				}
 
-      String sqlBeginn;
-      String sqlEnde;
+				try {
 
-      if (this.jDateChooserEingereicht.getDate() != null) {
-         logger.debug("Eingereicht: " + DateFormat.getDateInstance().format(this.jDateChooserEingereicht.getDate()));
-         tmpdate = new MySqlDate(this.jDateChooserEingereicht.getDate());
-         eingereichtDatum = tmpdate.getSqlDate();
-         isEingereicht = 1;
-      }
+					angebotPersister.storeEinheit(klient, einheit);
+//					angebotPersister.storeEinheit(this.klient.getKlientId(), this.einheit.getId()
+//							, preis, dauer, datum, eingereichtDatum,
+//							isEingereicht, bezahltDatum, isBezahlt, sqlBeginn, sqlEnde, a.getAngebote_id(),
+//							this.jTextFieldZusatz1.getText(), this.jTextFieldZusatz2.getText(),
+//							this.jTextFieldPreisAenderung.getText());
+				} catch (SQLException e) {
+					logger.error("Error storing Einheit", e);
+				}
+			}
+		}
 
-      if (this.jDateChooserBezahlt.getDate() != null) {
-         logger.debug("Bezahlt: " + DateFormat.getDateInstance().format(this.jDateChooserBezahlt.getDate()));
-         tmpdate = new MySqlDate(this.jDateChooserBezahlt.getDate());
-         bezahltDatum = tmpdate.getSqlDate();
-         isBezahlt = 1;
-      }
+		this.setVisible(false);
+		this.dispose();
+	}
 
-      // Setzten der Angebot-Elemente für diese Einheit
-      int angebot_id = this.angeboteliste.elementAt(this.jComboBoxAngebot.getSelectedIndex()).intValue();
-      
-      Angebot a = angebotPersister.getAngebot(angebot_id);
-      if(a != null) {
+	private Calendar parseDate(Date einheitDatum, String starttext) {
+		GregorianCalendar startcal = new GregorianCalendar();
+		startcal.setTime(einheitDatum);
+		String[] startfeld = starttext.split(":");
 
-         preis = Math.round((a.getPreis() + Double.parseDouble(this.jTextFieldPreisAenderung.getText())) * 100);
-         preis = preis / 100;
+		startcal.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(startfeld[0]));
+		startcal.set(GregorianCalendar.MINUTE, Integer.parseInt(startfeld[1]));
+		return startcal;
+	}
 
-         if (a.isPreis_pro_stunde()) {
-            GregorianCalendar startcal = new GregorianCalendar();
-            startcal.setTime(einheitDate.getTime());
-            String starttext = this.jFormattedTextFieldStart.getText();
-            String[] startfeld = starttext.split(":");
+	/**
+	 * This method is called from within the constructor to initialize the form.
+	 */
+	private void initComponents() {
 
-            startcal.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(startfeld[0]));
-            startcal.set(GregorianCalendar.MINUTE, Integer.parseInt(startfeld[1]));
+		jLabel1 = new javax.swing.JLabel();
+		jTextField1 = new javax.swing.JTextField();
+		jTextFieldPreisAenderung = new javax.swing.JTextField();
+		jComboBoxAngebot = new javax.swing.JComboBox<Angebot>();
+		jLabel2 = new javax.swing.JLabel();
+		jLabel3 = new javax.swing.JLabel();
+		jLabel4 = new javax.swing.JLabel();
+		jLabel5 = new javax.swing.JLabel();
+		jLabel6 = new javax.swing.JLabel();
+		jLabel7 = new javax.swing.JLabel();
+		jTextField6 = new javax.swing.JTextField();
+		jFormattedTextFieldStart = new javax.swing.JFormattedTextField();
+		jFormattedTextFieldEnde = new javax.swing.JFormattedTextField();
+		jDateChooserDatum = new com.toedter.calendar.JDateChooser();
+		Calendar now = new GregorianCalendar();
+		now.set(Calendar.HOUR_OF_DAY, 0);
+		now.set(Calendar.MINUTE, 0);
+		now.set(Calendar.SECOND, 0);
+		now.set(Calendar.MILLISECOND, 0);
+		jDateChooserDatum.setCalendar(now);
 
-            GregorianCalendar endecal = new GregorianCalendar();
-            endecal.setTime(einheitDate.getTime());
-            String endetext = this.jFormattedTextFieldEnde.getText();
-            String[] endefeld = endetext.split(":");
+		jButton1 = new javax.swing.JButton();
+		jButton2 = new javax.swing.JButton();
+		jTextFieldZusatz2 = new javax.swing.JTextField();
+		jTextFieldZusatz1 = new javax.swing.JTextField();
+		jLabel8 = new javax.swing.JLabel();
+		jLabel9 = new javax.swing.JLabel();
+		jDateChooserEingereicht = new com.toedter.calendar.JDateChooser();
+		jDateChooserBezahlt = new com.toedter.calendar.JDateChooser();
+		jLabel10 = new javax.swing.JLabel();
+		jLabel11 = new javax.swing.JLabel();
 
-            endecal.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(endefeld[0]));
-            endecal.set(GregorianCalendar.MINUTE, Integer.parseInt(endefeld[1]));
+		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-            sqlBeginn = new MySqlDate(startcal).getSqlDate();
-            sqlEnde = new MySqlDate(endecal).getSqlDate();
+		ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
 
-            dauer = Math.round(((double) endecal.getTime().getTime() - startcal.getTime().getTime()) / (60. * 1000.));
+		setTitle(resourceMap.getString("Form.title")); // NOI18N
+		setName("Form"); // NOI18N
 
-            preis = Math.round(((double) dauer / 60 * preis) * 100);
-            preis = preis / 100;
-            logger.debug("Dauer: " + dauer + " Minuten\n" + "Dauer: " + (double) dauer / 60 + " Stunden\n Preis: " + preis);
+		jLabel1.setFont(Font.getFont(resourceMap.getString("jLabel1.font"))); // NOI18N
+		jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+		jLabel1.setName("jLabel1"); // NOI18N
 
-            try {
-               
-               angebotPersister.storeEinheit(this.klient, this.einheit, preis, dauer, datum, 
-                     eingereichtDatum, isEingereicht, bezahltDatum, isBezahlt, sqlBeginn, sqlEnde, angebot_id
-                     , this.jTextFieldZusatz1.getText(), this.jTextFieldZusatz2.getText(), this.jTextFieldPreisAenderung.getText());
-            } catch (SQLException e) {
-               logger.error("Error storing Einheit", e);
-            }
-         }
-      }
+		jTextField1.setEditable(false);
+		jTextField1.setText(resourceMap.getString("jTextField1.text")); // NOI18N
+		jTextField1.setEnabled(false);
+		jTextField1.setName("jTextField1"); // NOI18N
 
-      this.setVisible(false);
-      this.dispose();
-   }
+		jTextFieldPreisAenderung.setText(resourceMap.getString("jTextFieldPreisAenderung.text")); // NOI18N
+		jTextFieldPreisAenderung.setMinimumSize(new java.awt.Dimension(70, 60));
+		jTextFieldPreisAenderung.setName("jTextFieldPreisAenderung"); // NOI18N
 
-   /**
-    * This method is called from within the constructor to
-    * initialize the form.
-    */
-   private void initComponents() {
+		jComboBoxAngebot.setModel(new javax.swing.DefaultComboBoxModel<Angebot>());
+		jComboBoxAngebot.setName("jComboBoxAngebot"); // NOI18N
 
-      jLabel1 = new javax.swing.JLabel();
-      jTextField1 = new javax.swing.JTextField();
-      jTextFieldPreisAenderung = new javax.swing.JTextField();
-      jComboBoxAngebot = new javax.swing.JComboBox<String>();
-      jLabel2 = new javax.swing.JLabel();
-      jLabel3 = new javax.swing.JLabel();
-      jLabel4 = new javax.swing.JLabel();
-      jLabel5 = new javax.swing.JLabel();
-      jLabel6 = new javax.swing.JLabel();
-      jLabel7 = new javax.swing.JLabel();
-      jTextField6 = new javax.swing.JTextField();
-      jFormattedTextFieldStart = new javax.swing.JFormattedTextField();
-      jFormattedTextFieldEnde = new javax.swing.JFormattedTextField();
-      jDateChooserDatum = new com.toedter.calendar.JDateChooser();
-      Calendar now = new GregorianCalendar();
-      now.set(Calendar.HOUR_OF_DAY, 0);
-      now.set(Calendar.MINUTE, 0);
-      now.set(Calendar.SECOND, 0);
-      now.set(Calendar.MILLISECOND, 0);
-      jDateChooserDatum.setCalendar(now);
+		jComboBoxAngebot.setRenderer(new ListCellRenderer<Angebot>() {
 
-      jButton1 = new javax.swing.JButton();
-      jButton2 = new javax.swing.JButton();
-      jTextFieldZusatz2 = new javax.swing.JTextField();
-      jTextFieldZusatz1 = new javax.swing.JTextField();
-      jLabel8 = new javax.swing.JLabel();
-      jLabel9 = new javax.swing.JLabel();
-      jDateChooserEingereicht = new com.toedter.calendar.JDateChooser();
-      jDateChooserBezahlt = new com.toedter.calendar.JDateChooser();
-      jLabel10 = new javax.swing.JLabel();
-      jLabel11 = new javax.swing.JLabel();
+			@Override
+			public Component getListCellRendererComponent(JList<? extends Angebot> list, Angebot value, int index,
+					boolean isSelected, boolean cellHasFocus) {
+				if (value == null) {
+					return new JLabel();
+				}
+				String text = value.getInhalt() + "|" + preisFormat.format(value.getPreis());
+				return new JLabel(text);
+			}
+		});
+		jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+		jLabel2.setName("jLabel2"); // NOI18N
 
-      setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+		jLabel3.setName("jLabel3"); // NOI18N
 
-      ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
+		jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+		jLabel4.setName("jLabel4"); // NOI18N
 
-      setTitle(resourceMap.getString("Form.title")); // NOI18N
-      setName("Form"); // NOI18N
+		jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+		jLabel5.setName("jLabel5"); // NOI18N
 
-      jLabel1.setFont(Font.getFont(resourceMap.getString("jLabel1.font"))); // NOI18N
-      jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
-      jLabel1.setName("jLabel1"); // NOI18N
+		jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
+		jLabel6.setName("jLabel6"); // NOI18N
 
-      jTextField1.setEditable(false);
-      jTextField1.setText(resourceMap.getString("jTextField1.text")); // NOI18N
-      jTextField1.setEnabled(false);
-      jTextField1.setName("jTextField1"); // NOI18N
+		jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
+		jLabel7.setName("jLabel7"); // NOI18N
 
-      jTextFieldPreisAenderung.setText(resourceMap.getString("jTextFieldPreisAenderung.text")); // NOI18N
-      jTextFieldPreisAenderung.setMinimumSize(new java.awt.Dimension(70, 60));
-      jTextFieldPreisAenderung.setName("jTextFieldPreisAenderung"); // NOI18N
+		jTextField6.setEditable(false);
+		jTextField6.setText(resourceMap.getString("jTextField6.text")); // NOI18N
+		jTextField6.setEnabled(false);
+		jTextField6.setName("jTextField6"); // NOI18N
 
-      jComboBoxAngebot.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Doppelstunde Untericht + Computer|24€", "Item 2" }));
-      jComboBoxAngebot.setName("jComboBoxAngebot"); // NOI18N
+		jFormattedTextFieldStart.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+				new javax.swing.text.DateFormatter(java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT))));
+		jFormattedTextFieldStart.setName("jFormattedTextFieldStart"); // NOI18N
 
-      jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-      jLabel2.setName("jLabel2"); // NOI18N
+		jFormattedTextFieldEnde.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+				new javax.swing.text.DateFormatter(java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT))));
+		jFormattedTextFieldEnde.setName("jFormattedTextFieldEnde"); // NOI18N
 
-      jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
-      jLabel3.setName("jLabel3"); // NOI18N
+		jDateChooserDatum.setName("jDateChooserDatum"); // NOI18N
 
-      jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
-      jLabel4.setName("jLabel4"); // NOI18N
+		jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+		jButton1.setName("jButton1"); // NOI18N
+		jButton1.addActionListener(new ActionListener() {
 
-      jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
-      jLabel5.setName("jLabel5"); // NOI18N
+			@Override
+			public void actionPerformed(final ActionEvent evt) {
+				jButton1ActionPerformed(evt);
+			}
+		});
 
-      jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
-      jLabel6.setName("jLabel6"); // NOI18N
+		jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
+		jButton2.setName("jButton2"); // NOI18N
+		jButton2.addActionListener(new ActionListener() {
 
-      jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
-      jLabel7.setName("jLabel7"); // NOI18N
+			@Override
+			public void actionPerformed(final ActionEvent evt) {
+				jButton2ActionPerformed(evt);
+			}
+		});
 
-      jTextField6.setEditable(false);
-      jTextField6.setText(resourceMap.getString("jTextField6.text")); // NOI18N
-      jTextField6.setEnabled(false);
-      jTextField6.setName("jTextField6"); // NOI18N
+		jTextFieldZusatz2.setText(resourceMap.getString("jTextFieldZusatz2.text")); // NOI18N
+		jTextFieldZusatz2.setName("jTextFieldZusatz2"); // NOI18N
 
-      jFormattedTextFieldStart.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat
-            .getTimeInstance(java.text.DateFormat.SHORT))));
-      jFormattedTextFieldStart.setName("jFormattedTextFieldStart"); // NOI18N
+		jTextFieldZusatz1.setText(resourceMap.getString("jTextFieldZusatz1.text")); // NOI18N
+		jTextFieldZusatz1.setName("jTextFieldZusatz1"); // NOI18N
 
-      jFormattedTextFieldEnde.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat
-            .getTimeInstance(java.text.DateFormat.SHORT))));
-      jFormattedTextFieldEnde.setName("jFormattedTextFieldEnde"); // NOI18N
+		jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
+		jLabel8.setName("jLabel8"); // NOI18N
 
-      jDateChooserDatum.setName("jDateChooserDatum"); // NOI18N
+		jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
+		jLabel9.setName("jLabel9"); // NOI18N
 
-      jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-      jButton1.setName("jButton1"); // NOI18N
-      jButton1.addActionListener(new ActionListener() {
+		jDateChooserEingereicht.setName("jDateChooserEingereicht"); // NOI18N
 
-         @Override
-         public void actionPerformed(final ActionEvent evt) {
-            jButton1ActionPerformed(evt);
-         }
-      });
+		jDateChooserBezahlt.setName("jDateChooserBezahlt"); // NOI18N
 
-      jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
-      jButton2.setName("jButton2"); // NOI18N
-      jButton2.addActionListener(new ActionListener() {
+		jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
+		jLabel10.setName("jLabel10"); // NOI18N
 
-         @Override
-         public void actionPerformed(final ActionEvent evt) {
-            jButton2ActionPerformed(evt);
-         }
-      });
+		jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
+		jLabel11.setName("jLabel11"); // NOI18N
 
-      jTextFieldZusatz2.setText(resourceMap.getString("jTextFieldZusatz2.text")); // NOI18N
-      jTextFieldZusatz2.setName("jTextFieldZusatz2"); // NOI18N
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
+				.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jLabel1))
+						.addGroup(layout.createSequentialGroup().addGap(30, 30, 30).addGroup(layout
+								.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(jLabel2)
+								.addComponent(jLabel3).addComponent(jLabel4).addComponent(jLabel5).addComponent(jLabel6)
+								.addComponent(jLabel7).addComponent(jLabel11))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 57,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 268,
+														Short.MAX_VALUE))
+										.addComponent(jComboBoxAngebot, 0, 331, Short.MAX_VALUE)
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(jTextFieldPreisAenderung,
+														javax.swing.GroupLayout.PREFERRED_SIZE, 115,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addGap(203, 203, 203))
+										.addComponent(jDateChooserDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 114,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addGroup(layout.createSequentialGroup().addGroup(layout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+												.addGroup(layout.createSequentialGroup().addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+																false)
+														.addComponent(jFormattedTextFieldEnde,
+																javax.swing.GroupLayout.Alignment.LEADING)
+														.addComponent(jFormattedTextFieldStart,
+																javax.swing.GroupLayout.Alignment.LEADING,
+																javax.swing.GroupLayout.DEFAULT_SIZE, 63,
+																Short.MAX_VALUE))
+														.addPreferredGap(
+																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+														.addGroup(layout
+																.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.LEADING)
+																.addComponent(jLabel8).addComponent(jLabel9)))
+												.addComponent(jDateChooserEingereicht,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+														.addComponent(jTextFieldZusatz1,
+																javax.swing.GroupLayout.Alignment.LEADING,
+																javax.swing.GroupLayout.DEFAULT_SIZE, 194,
+																Short.MAX_VALUE)
+														.addComponent(jTextFieldZusatz2,
+																javax.swing.GroupLayout.Alignment.LEADING,
+																javax.swing.GroupLayout.DEFAULT_SIZE, 194,
+																Short.MAX_VALUE)
+														.addGroup(layout.createSequentialGroup().addComponent(jLabel10)
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addComponent(jDateChooserBezahlt,
+																		javax.swing.GroupLayout.PREFERRED_SIZE,
+																		javax.swing.GroupLayout.DEFAULT_SIZE,
+																		javax.swing.GroupLayout.PREFERRED_SIZE))))))
+						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+								layout.createSequentialGroup().addContainerGap(262, Short.MAX_VALUE)
+										.addComponent(jButton2)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(jButton1)))
+				.addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addGap(18, 18, 18)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+								.addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabel2).addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(jComboBoxAngebot, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabel3))
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addGroup(layout
+								.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(jLabel4)
+								.addComponent(jDateChooserDatum, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(10, 10, 10)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+								.addComponent(jLabel5)
+								.addComponent(jFormattedTextFieldStart, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabel8).addComponent(
+										jTextFieldZusatz1, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(jLabel6)
+								.addComponent(jFormattedTextFieldEnde, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabel9)
+								.addComponent(jTextFieldZusatz2, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addGroup(layout
+								.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+										.addComponent(jTextFieldPreisAenderung, javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabel7))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(jLabel11).addComponent(jDateChooserEingereicht,
+												javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)))
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(jLabel10).addComponent(jDateChooserBezahlt,
+												javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)))
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(jButton1).addComponent(jButton2))
+						.addContainerGap()));
 
-      jTextFieldZusatz1.setText(resourceMap.getString("jTextFieldZusatz1.text")); // NOI18N
-      jTextFieldZusatz1.setName("jTextFieldZusatz1"); // NOI18N
+		MaskFormatter startmask;
+		MaskFormatter endemask;
+		try {
+			startmask = new MaskFormatter("##:##");
+			startmask.setPlaceholderCharacter('_');
+			startmask.install(jFormattedTextFieldStart);
+			endemask = new MaskFormatter("##:##");
+			endemask.setPlaceholderCharacter('_');
+			endemask.install(jFormattedTextFieldEnde);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		pack();
+	}
 
-      jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
-      jLabel8.setName("jLabel8"); // NOI18N
+	private void jButton2ActionPerformed(final ActionEvent evt) {
+		// TODO Kontrolle der Eingaben auf vollständigkeit und richtigkeit
 
-      jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
-      jLabel9.setName("jLabel9"); // NOI18N
+		saveData();
+	}
 
-      jDateChooserEingereicht.setName("jDateChooserEingereicht"); // NOI18N
+	private void jButton1ActionPerformed(final ActionEvent evt) {
+		// Fenster schließen
+		this.setVisible(false);
+		this.dispose();
+	}
 
-      jDateChooserBezahlt.setName("jDateChooserBezahlt"); // NOI18N
-
-      jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
-      jLabel10.setName("jLabel10"); // NOI18N
-
-      jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
-      jLabel11.setName("jLabel11"); // NOI18N
-
-      javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-      getContentPane().setLayout(layout);
-      layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            layout.createSequentialGroup()
-                  .addGroup(
-                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                              .addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jLabel1))
-                              .addGroup(
-                                    layout.createSequentialGroup()
-                                          .addGap(30, 30, 30)
-                                          .addGroup(
-                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(jLabel2).addComponent(jLabel3)
-                                                      .addComponent(jLabel4).addComponent(jLabel5).addComponent(jLabel6).addComponent(jLabel7).addComponent(jLabel11))
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                      .addGroup(
-                                                            layout.createSequentialGroup()
-                                                                  .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                  .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
-                                                      .addComponent(jComboBoxAngebot, 0, 331, Short.MAX_VALUE)
-                                                      .addGroup(
-                                                            layout.createSequentialGroup()
-                                                                  .addComponent(jTextFieldPreisAenderung, javax.swing.GroupLayout.PREFERRED_SIZE, 115,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE).addGap(203, 203, 203))
-                                                      .addComponent(jDateChooserDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                      .addGroup(
-                                                            layout.createSequentialGroup()
-                                                                  .addGroup(
-                                                                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                              .addGroup(
-                                                                                    layout.createSequentialGroup()
-                                                                                          .addGroup(
-                                                                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                                                                      .addComponent(jFormattedTextFieldEnde,
-                                                                                                            javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                      .addComponent(jFormattedTextFieldStart,
-                                                                                                            javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                                            javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
-                                                                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                          .addGroup(
-                                                                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                      .addComponent(jLabel8).addComponent(jLabel9)))
-                                                                              .addComponent(jDateChooserEingereicht, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                  .addGroup(
-                                                                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                              .addComponent(jTextFieldZusatz1, javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                    javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                                                                              .addComponent(jTextFieldZusatz2, javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                    javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                                                                              .addGroup(
-                                                                                    layout.createSequentialGroup()
-                                                                                          .addComponent(jLabel10)
-                                                                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                          .addComponent(jDateChooserBezahlt, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                              .addGroup(
-                                    javax.swing.GroupLayout.Alignment.TRAILING,
-                                    layout.createSequentialGroup().addContainerGap(262, Short.MAX_VALUE).addComponent(jButton2)
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton1))).addContainerGap()));
-      layout.setVerticalGroup(layout
-            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(
-                  layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addGroup(
-                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(
-                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jComboBoxAngebot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(
-                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jDateChooserDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(
-                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jFormattedTextFieldStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jTextFieldZusatz1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(
-                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jFormattedTextFieldEnde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jTextFieldZusatz2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                          javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(
-                              layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(
-                                          layout.createSequentialGroup()
-                                                .addGroup(
-                                                      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                                                            .addComponent(jTextFieldPreisAenderung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                  javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel7))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(
-                                                      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(jLabel11)
-                                                            .addComponent(jDateChooserEingereicht, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                  javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(
-                                          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel10)
-                                                .addComponent(jDateChooserBezahlt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                      javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButton1).addComponent(jButton2)).addContainerGap()));
-
-      pack();
-   }
-
-   private void jButton2ActionPerformed(final ActionEvent evt) {
-      // TODO Kontrolle der Eingaben auf vollständigkeit und richtigkeit
-
-      saveData();
-   }
-
-   private void jButton1ActionPerformed(final ActionEvent evt) {
-      // Fenster schließen
-      this.setVisible(false);
-      this.dispose();
-   }
-
-   private javax.swing.JButton jButton1;
-   private javax.swing.JButton jButton2;
-   private javax.swing.JComboBox<String> jComboBoxAngebot;
-   private com.toedter.calendar.JDateChooser jDateChooserBezahlt;
-   private com.toedter.calendar.JDateChooser jDateChooserDatum;
-   private com.toedter.calendar.JDateChooser jDateChooserEingereicht;
-   private javax.swing.JFormattedTextField jFormattedTextFieldEnde;
-   private javax.swing.JFormattedTextField jFormattedTextFieldStart;
-   private javax.swing.JLabel jLabel1;
-   private javax.swing.JLabel jLabel10;
-   private javax.swing.JLabel jLabel11;
-   private javax.swing.JLabel jLabel2;
-   private javax.swing.JLabel jLabel3;
-   private javax.swing.JLabel jLabel4;
-   private javax.swing.JLabel jLabel5;
-   private javax.swing.JLabel jLabel6;
-   private javax.swing.JLabel jLabel7;
-   private javax.swing.JLabel jLabel8;
-   private javax.swing.JLabel jLabel9;
-   private javax.swing.JTextField jTextField1;
-   private javax.swing.JTextField jTextField6;
-   private javax.swing.JTextField jTextFieldPreisAenderung;
-   private javax.swing.JTextField jTextFieldZusatz1;
-   private javax.swing.JTextField jTextFieldZusatz2;
+	private javax.swing.JButton jButton1;
+	private javax.swing.JButton jButton2;
+	private javax.swing.JComboBox<Angebot> jComboBoxAngebot;
+	private com.toedter.calendar.JDateChooser jDateChooserBezahlt;
+	private com.toedter.calendar.JDateChooser jDateChooserDatum;
+	private com.toedter.calendar.JDateChooser jDateChooserEingereicht;
+	private javax.swing.JFormattedTextField jFormattedTextFieldEnde;
+	private javax.swing.JFormattedTextField jFormattedTextFieldStart;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel10;
+	private javax.swing.JLabel jLabel11;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JLabel jLabel5;
+	private javax.swing.JLabel jLabel6;
+	private javax.swing.JLabel jLabel7;
+	private javax.swing.JLabel jLabel8;
+	private javax.swing.JLabel jLabel9;
+	private javax.swing.JTextField jTextField1;
+	private javax.swing.JTextField jTextField6;
+	private javax.swing.JTextField jTextFieldPreisAenderung;
+	private javax.swing.JTextField jTextFieldZusatz1;
+	private javax.swing.JTextField jTextFieldZusatz2;
 
 }

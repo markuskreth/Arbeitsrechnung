@@ -1716,6 +1716,9 @@ public class KlientenEditor extends JDialog {
     */
    private void TextFieldFocusLost(final FocusEvent event) {
 
+	   if (currentKlient == null) {
+		   return;
+	   }
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
          persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");

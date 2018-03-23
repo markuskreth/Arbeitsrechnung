@@ -131,14 +131,17 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          parent.setVisible(false);
          parent.dispose();
       } else {
+    	 
          Klient kl = new KlientenEditorPersister(optionen).getKlientById(klienten_id);
-         if (kl.hasZusatz1()) {
-            this.zusatz1 = true;
-            this.zusatz1_name = kl.getZusatz1_Name();
-         }
-         if (kl.hasZusatz2()) {
-            this.zusatz2 = true;
-            this.zusatz2_name = kl.getZusatz2_Name();
+         if (kl != null) {
+             if (kl.hasZusatz1()) {
+                 this.zusatz1 = true;
+                 this.zusatz1_name = kl.getZusatz1_Name();
+              }
+              if (kl.hasZusatz2()) {
+                 this.zusatz2 = true;
+                 this.zusatz2_name = kl.getZusatz2_Name();
+              }
          }
          initComponents();
          this.jTextFieldStundenzahl.setVisible(false);
