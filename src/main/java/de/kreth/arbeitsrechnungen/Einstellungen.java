@@ -75,7 +75,9 @@ public class Einstellungen {
    }
 
    static void setOptions(Options optionen) {
-      instance = new Einstellungen();
+	   if(instance == null) {
+		   instance = new Einstellungen();
+	   }
       instance.opt = optionen;
    }
 

@@ -32,11 +32,13 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Angebot;
@@ -52,26 +54,29 @@ public class EinheitEinzelFrame extends JFrame {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final NumberFormat preisFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
-	private KlientPersister klientPersister;
-	private AngebotPersister angebotPersister;
+	KlientPersister klientPersister;
+	AngebotPersister angebotPersister;
 	private Auftraggeber klient;
 	private List<Angebot> angebote;
 	private Einheit einheit;
 
-	/**
-	 * Sollte nicht benutzt werden! Oder nur in Kombination mit setKlient() Creates
-	 * new form Einheit_einzel
-	 */
 	public EinheitEinzelFrame() {
-		this(new KlientPersister(Einstellungen.getInstance().getEinstellungen()), new AngebotPersister(Einstellungen.getInstance().getEinstellungen()));
-	}
+		ArbeitRechnungFactory factory = ArbeitRechnungFactory.getInstance();
+		Options optionen = Einstellungen.getInstance().getEinstellungen();
 
+		this.klientPersister = factory.getPersister(KlientPersister.class, optionen);
+		this.angebotPersister = factory.getPersister(AngebotPersister.class, optionen);
+		initComponents();
+	}
+	
 	/**
 	 * Bestehenden Datensatz edieren Creates new form Einheit_einzel
 	 */
 	public EinheitEinzelFrame(final KlientPersister klientPersister2, final AngebotPersister angebotPersister2) {
-		klientPersister = klientPersister2;
-		angebotPersister = angebotPersister2;
+		super();
+		this.klientPersister = klientPersister2;
+		this.angebotPersister = angebotPersister2;
+		initComponents();
 	}
 
 	/**
@@ -80,7 +85,6 @@ public class EinheitEinzelFrame extends JFrame {
 	public void load(final int klient, final int einheit) {
 		this.klient = klientPersister.getAuftraggeber(klient);
 
-		initComponents();
 		initAngebote();
 		setAuftraggeber();
 		setZusaetze();
@@ -560,4 +564,14 @@ public class EinheitEinzelFrame extends JFrame {
 	private javax.swing.JTextField jTextFieldZusatz1;
 	private javax.swing.JTextField jTextFieldZusatz2;
 
+	public static void main(final String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+
+        		EinheitEinzelFrame frame = new EinheitEinzelFrame();
+        		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        		frame.setVisible(true);
+            }
+        });
+	}
 }

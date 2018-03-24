@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
+import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
+import de.kreth.arbeitsrechnungen.persister.KlientPersister;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 import de.kreth.arbeitsrechnungen.persister.Persister;
 import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
@@ -94,12 +96,21 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 	}
 
 	@Override
-	public Persister getPersister(Class<? extends Persister> clazz, Options optionen) {
-		if (clazz == KlientenEditorPersister.class)
-			return new KlientenEditorPersister(optionen);
-		if (clazz == RechnungDialogPersister.class)
-			return new RechnungDialogPersister(optionen);
+	@SuppressWarnings("unchecked")
+	public <T extends Persister> T getPersister(Class<T> clazz, Options optionen) {
+		if (clazz == KlientenEditorPersister.class) {
+			return (T) new KlientenEditorPersister(optionen);
+		}
+		if (clazz == RechnungDialogPersister.class) {
+			return (T) new RechnungDialogPersister(optionen);
+		}
+		if (clazz == KlientPersister.class) {
+			return (T) new KlientPersister(optionen);
+		}
+		if (clazz == AngebotPersister.class) {
+			return (T) new AngebotPersister(optionen);
+		}
 		throw new IllegalArgumentException("Klasse " + clazz.getSimpleName() + " nicht unterstützt...");
 	}
-
+	
 }

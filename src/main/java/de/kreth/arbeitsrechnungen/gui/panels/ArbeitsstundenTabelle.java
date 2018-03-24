@@ -64,7 +64,9 @@ import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.EinheitEinzelFrame;
+import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister;
+import de.kreth.arbeitsrechnungen.persister.KlientPersister;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 
 @SuppressWarnings("boxing")
@@ -706,7 +708,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    }
 
    private void jButtonNeuerDatensatzActionPerformed(ActionEvent evt) {
-      EinheitEinzelFrame fenster = new EinheitEinzelFrame();
+      EinheitEinzelFrame fenster = new EinheitEinzelFrame(new KlientPersister(optionen), new AngebotPersister(optionen));
       fenster.load(this.klient, -1);
       fenster.addWindowListener(this);
       fenster.setVisible(true);
@@ -723,7 +725,8 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Datensatz aus der Tabelle zum Edieren!", "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
       } else {
          einheit_id = this.arbeitsstunden.get(einheit_id).getID();
-         EinheitEinzelFrame fenster = new EinheitEinzelFrame();
+
+         EinheitEinzelFrame fenster = new EinheitEinzelFrame(new KlientPersister(optionen), new AngebotPersister(optionen));
          fenster.load(this.klient, einheit_id);
          fenster.addWindowListener(this);
          fenster.setVisible(true);
