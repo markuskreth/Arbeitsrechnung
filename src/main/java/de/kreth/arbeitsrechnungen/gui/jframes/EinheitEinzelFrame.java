@@ -63,27 +63,23 @@ public class EinheitEinzelFrame extends JFrame {
 	 * new form Einheit_einzel
 	 */
 	public EinheitEinzelFrame() {
-		this(1, 2);
-	}
-
-	/**
-	 * Neuen Datensatz anlegen Creates new form Einheit_einzel
-	 */
-	public EinheitEinzelFrame(final int klient) {
-		this(klient, -1);
+		this(new KlientPersister(Einstellungen.getInstance().getEinstellungen()), new AngebotPersister(Einstellungen.getInstance().getEinstellungen()));
 	}
 
 	/**
 	 * Bestehenden Datensatz edieren Creates new form Einheit_einzel
 	 */
-	public EinheitEinzelFrame(final int klient, final int einheit) {
+	public EinheitEinzelFrame(final KlientPersister klientPersister2, final AngebotPersister angebotPersister2) {
+		klientPersister = klientPersister2;
+		angebotPersister = angebotPersister2;
+	}
 
-		Options optionen = Einstellungen.getInstance().getEinstellungen();
-		klientPersister = new KlientPersister(optionen);
-		angebotPersister = new AngebotPersister(optionen);
-
+	/**
+	 * Bestehenden Datensatz edieren Creates new form Einheit_einzel
+	 */
+	public void load(final int klient, final int einheit) {
 		this.klient = klientPersister.getAuftraggeber(klient);
-		
+
 		initComponents();
 		initAngebote();
 		setAuftraggeber();
@@ -122,45 +118,46 @@ public class EinheitEinzelFrame extends JFrame {
 	}
 
 	private void setEinheit() {
-      // Füllt das Formular mit existierenden Feldern
-      if (this.einheit != null) {
+		// Füllt das Formular mit existierenden Feldern
+		if (this.einheit != null) {
 
-         if (this.einheit.getKlientenId() != this.klient.getKlientId()) {
-            String msg = "Achtung!!!\n" + "Klienten_id des Konstruktors stimmt nicht mit der des übegebenen" + " Datensatzes überein!" + "\nDatensatz-Klient: " + einheit.getKlientenId()
-                  + "\nKonstruktor-Klient: " + klient;
-            JOptionPane.showMessageDialog(this, msg);
-         }
+			if (this.einheit.getKlientenId() != this.klient.getKlientId()) {
+				String msg = "Achtung!!!\n" + "Klienten_id des Konstruktors stimmt nicht mit der des übegebenen"
+						+ " Datensatzes überein!" + "\nDatensatz-Klient: " + einheit.getKlientenId()
+						+ "\nKonstruktor-Klient: " + klient;
+				JOptionPane.showMessageDialog(this, msg);
+			}
 
-         Angebot a = null;
-         for (Angebot an : angebote) {
-        	 if(an.getAngebote_id() == einheit.getAngebotId()) {
-        		 a = an;
-                 this.jComboBoxAngebot.setSelectedItem(a);
-        	 }
-         }
+			Angebot a = null;
+			for (Angebot an : angebote) {
+				if (an.getAngebote_id() == einheit.getAngebotId()) {
+					a = an;
+					this.jComboBoxAngebot.setSelectedItem(a);
+				}
+			}
 
-         if (einheit.getBeginn() != null) {
-             // Set Uhrzeit Beginn
-             String stzeit = DateFormat.getTimeInstance().format(einheit.getBeginn());
-             stzeit = stzeit.substring(0, stzeit.length() - 2);
-             this.jFormattedTextFieldStart.setText(stzeit);
+			if (einheit.getBeginn() != null) {
+				// Set Uhrzeit Beginn
+				String stzeit = DateFormat.getTimeInstance().format(einheit.getBeginn());
+				stzeit = stzeit.substring(0, stzeit.length() - 2);
+				this.jFormattedTextFieldStart.setText(stzeit);
 
-         }
-         if(einheit.getEnde() != null) {
-             // Set Uhrzeit Ende
-             String stzeit = DateFormat.getTimeInstance().format(einheit.getEnde());
-             stzeit = stzeit.substring(0, stzeit.length() - 2);
-             this.jFormattedTextFieldEnde.setText(stzeit);
-         }
-         
-         this.jDateChooserDatum.setDate(einheit.getDatum());
-         this.jTextFieldPreisAenderung.setText(String.valueOf(einheit.getPreisAenderung()));
-         this.jTextFieldZusatz1.setText(einheit.getZusatz1());
-         this.jTextFieldZusatz2.setText(einheit.getZusatz2());
-         this.jDateChooserEingereicht.setDate(einheit.getRechnungDatum());
-         this.jDateChooserBezahlt.setDate(einheit.getBezahltDatum());
-      }
-   }
+			}
+			if (einheit.getEnde() != null) {
+				// Set Uhrzeit Ende
+				String stzeit = DateFormat.getTimeInstance().format(einheit.getEnde());
+				stzeit = stzeit.substring(0, stzeit.length() - 2);
+				this.jFormattedTextFieldEnde.setText(stzeit);
+			}
+
+			this.jDateChooserDatum.setDate(einheit.getDatum());
+			this.jTextFieldPreisAenderung.setText(String.valueOf(einheit.getPreisAenderung()));
+			this.jTextFieldZusatz1.setText(einheit.getZusatz1());
+			this.jTextFieldZusatz2.setText(einheit.getZusatz2());
+			this.jDateChooserEingereicht.setDate(einheit.getRechnungDatum());
+			this.jDateChooserBezahlt.setDate(einheit.getBezahltDatum());
+		}
+	}
 
 	private void initAngebote() {
 		this.jComboBoxAngebot.removeAllItems();
@@ -170,7 +167,7 @@ public class EinheitEinzelFrame extends JFrame {
 		for (Angebot a : angebote) {
 			this.jComboBoxAngebot.addItem(a);
 		}
-		if (angebote.size()>0) {
+		if (angebote.size() > 0) {
 			this.jComboBoxAngebot.setSelectedIndex(0);
 		}
 	}
@@ -179,10 +176,8 @@ public class EinheitEinzelFrame extends JFrame {
 		// Wenn this.einheit = -1 dann existiert der Datensatz noch nicht und
 		// muss angelegt werden.
 
-		Builder bld = new Einheit.Builder(einheit)
-				.datum(jDateChooserDatum.getDate())
-				.bezahltDatum(jDateChooserBezahlt.getDate())
-				.rechnungDatum(jDateChooserEingereicht.getDate());
+		Builder bld = new Einheit.Builder(einheit).datum(jDateChooserDatum.getDate())
+				.bezahltDatum(jDateChooserBezahlt.getDate()).rechnungDatum(jDateChooserEingereicht.getDate());
 
 		if (klient.hasZusatz1()) {
 			bld.zusatz1(jTextFieldZusatz1.getText());
@@ -191,7 +186,7 @@ public class EinheitEinzelFrame extends JFrame {
 			bld.zusatz2(jTextFieldZusatz2.getText());
 		}
 		// Setzten der Angebot-Elemente für diese Einheit
-		
+
 		Angebot a = (Angebot) jComboBoxAngebot.getSelectedItem();
 		if (a != null) {
 			bld.preisAenderung(Double.parseDouble(this.jTextFieldPreisAenderung.getText()));
@@ -203,17 +198,16 @@ public class EinheitEinzelFrame extends JFrame {
 				String starttext = this.jFormattedTextFieldStart.getText();
 				Calendar startDate = parseDate(einheitDatum, starttext);
 				bld.beginn(startDate.getTime());
-				
+
 				String endetext = this.jFormattedTextFieldEnde.getText();
-				Calendar endecal =parseDate(einheitDatum, endetext);
+				Calendar endecal = parseDate(einheitDatum, endetext);
 				bld.ende(endecal.getTime());
-				
+
 				einheit = bld.build();
 
-				if(logger.isDebugEnabled()) {
-					logger.debug("Dauer: " + einheit.getDauerInMinutes() + " Minuten\n" 
-							+ "Dauer: " + (double) einheit.getDauerInMinutes() / 60 
-							+ " Stunden\n Preis: " + einheit.getPreis());
+				if (logger.isDebugEnabled()) {
+					logger.debug("Dauer: " + einheit.getDauerInMinutes() + " Minuten\n" + "Dauer: "
+							+ (double) einheit.getDauerInMinutes() / 60 + " Stunden\n Preis: " + einheit.getPreis());
 				}
 
 				try {
@@ -525,7 +519,7 @@ public class EinheitEinzelFrame extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		pack();
 	}
 

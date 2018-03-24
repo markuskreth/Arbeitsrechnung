@@ -706,7 +706,8 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
    }
 
    private void jButtonNeuerDatensatzActionPerformed(ActionEvent evt) {
-      EinheitEinzelFrame fenster = new EinheitEinzelFrame(this.klient);
+      EinheitEinzelFrame fenster = new EinheitEinzelFrame();
+      fenster.load(this.klient, -1);
       fenster.addWindowListener(this);
       fenster.setVisible(true);
    }
@@ -722,7 +723,8 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
          JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Datensatz aus der Tabelle zum Edieren!", "Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
       } else {
          einheit_id = this.arbeitsstunden.get(einheit_id).getID();
-         EinheitEinzelFrame fenster = new EinheitEinzelFrame(this.klient, einheit_id);
+         EinheitEinzelFrame fenster = new EinheitEinzelFrame();
+         fenster.load(this.klient, einheit_id);
          fenster.addWindowListener(this);
          fenster.setVisible(true);
       }

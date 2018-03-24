@@ -28,7 +28,7 @@ public class KlientenEditorPersister extends AbstractPersister {
 
    public List<Klient> getAllKlienten(String whereClause) {
       List<Klient> result = new ArrayList<>();
-      String sql = "SELECT * FROM klienten" + " " + whereClause;
+      String sql = "SELECT * FROM klienten " + whereClause;
       logger.debug(sql);
 
       try {
