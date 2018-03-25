@@ -41,6 +41,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
@@ -126,16 +127,15 @@ public class KlientenEditor extends JDialog {
    public void setVisible(final boolean b) {
       super.setVisible(b);
       if (b) {
-         new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-               updateRechnungenPanel();
-               updateKlient();
-               updateAngeboteTabelle();
-            }
-         }).start();
+    	  SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				updateRechnungenPanel();
+				updateKlient();
+				updateAngeboteTabelle();
+			}
+		});
       }
    }
 
@@ -598,7 +598,9 @@ public class KlientenEditor extends JDialog {
          jButtonZumAnfang.setEnabled(false);
          jButtonVor.setEnabled(false);
          jButtonZumEnde.setEnabled(false);
+         jTabbedPane1.setEnabled(false);
       } else {
+    	  jTabbedPane1.setEnabled(true);
          if (currentKlient.equals(allKlienten.get(0))) {
             jButtonZurueck.setEnabled(false);
             jButtonZumAnfang.setEnabled(false);
@@ -617,7 +619,9 @@ public class KlientenEditor extends JDialog {
    private void updateTables() {
       updateAngeboteTabelle();
       updateRechnungenPanel();
-      this.arbeitsstundenTabelle1.update(currentKlient.getKlienten_id());
+      if(currentKlient != null) {
+    	  this.arbeitsstundenTabelle1.update(currentKlient.getKlienten_id());
+      }
    }
 
    /**

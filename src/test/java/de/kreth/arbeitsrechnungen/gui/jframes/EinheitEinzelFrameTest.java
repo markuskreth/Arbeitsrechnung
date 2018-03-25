@@ -6,19 +6,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.awt.Frame;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.swing.core.GenericTypeMatcher;
@@ -27,63 +22,23 @@ import org.assertj.swing.edt.GuiTask;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JComboBoxFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
-import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 
 import com.toedter.calendar.JDateChooser;
 
-import de.kreth.arbeitsrechnungen.MockableArbeitRechnungFactory;
-import de.kreth.arbeitsrechnungen.MockableEinstellungen;
-import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Einheit;
-import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
-import de.kreth.arbeitsrechnungen.persister.KlientPersister;
-import de.kreth.arbeitsrechnungen.persister.KlientPersister.Auftraggeber;
 
-public class EinheitEinzelFrameTest extends AssertJSwingJUnitTestCase {
+public class EinheitEinzelFrameTest extends AbstractFrameTest {
 
-	private Calendar einheitDate;
-	private KlientPersister klientPersister;
-	private AngebotPersister angebotPersister;
-	private Auftraggeber auftraggeber;
-	private List<Angebot> angebote;
-	private MockableArbeitRechnungFactory factory;
-	private MockableEinstellungen einstellungen;
+	Calendar einheitDate;
 
 	@Override
 	protected void onSetUp() {
-		einheitDate = new GregorianCalendar(2017, Calendar.AUGUST, 1, 12, 33, 45);
-		klientPersister = mock(KlientPersister.class);
-		angebotPersister = mock(AngebotPersister.class);
-		initMockAuftraggeber();
-		initAngebote();
-		
-		when(klientPersister.getAuftraggeber(anyInt())).thenReturn(auftraggeber);
-		when(angebotPersister.getForKlient(anyInt())).thenReturn(angebote);
+		super.onSetUp();
 
-		einstellungen = mock(MockableEinstellungen.class);
-		MockableEinstellungen.setInstance(einstellungen);
-		factory = mock(MockableArbeitRechnungFactory.class);
-		MockableArbeitRechnungFactory.setInstance(factory);
-		
-		when(factory.getPersister(KlientPersister.class)).thenReturn(klientPersister);
-		when(factory.getPersister(AngebotPersister.class)).thenReturn(angebotPersister);
-		
 		application(EinheitEinzelFrame.class).start();
-	}
-
-	private void initAngebote() {
-		angebote = new ArrayList<>();
-		angebote.add(new Angebot.Builder("Angebot 9,5Eur", 9.5).angebotId(9).preis_pro_stunde(true).build());
-	}
-
-	private void initMockAuftraggeber() {
-		auftraggeber = mock(Auftraggeber.class);
-		when(auftraggeber.getName()).thenReturn("Auftraggeber Name");
-		when(auftraggeber.getKlientId()).thenReturn(1);
-		when(auftraggeber.getZusatz1()).thenReturn("Zusatz1");
-		when(auftraggeber.hasZusatz1()).thenReturn(true);
-		when(auftraggeber.hasZustz2()).thenReturn(false);
+	
+		einheitDate = new GregorianCalendar(2017, Calendar.AUGUST, 1, 12, 33, 45);
 	}
 
 	@Test
