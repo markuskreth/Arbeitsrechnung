@@ -262,6 +262,10 @@ public class Einheit {
 			return this;
 		}
 
+		public Date getDatum() {
+			return datum;
+		}
+		
 		public Builder preisAenderung(double preisAenderung) {
 			this.preisAenderung = preisAenderung;
 			return this;

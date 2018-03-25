@@ -91,7 +91,12 @@ public class EinheitEinzelFrame extends JFrame {
 		if (einheit > -1) {
 			this.einheit = klientPersister.getEinheitById(einheit);
 		} else {
-			this.einheit = new Einheit.Builder().klientenId(klient).id(einheit).datum(new Date()).build();
+			this.einheit = new Einheit.Builder()
+					.klientenId(klient)
+					.auftraggeber(this.klient.getName())
+					.id(einheit)
+					.datum(new Date())
+					.build();
 		}
 		setEinheit();
 	}
@@ -198,7 +203,7 @@ public class EinheitEinzelFrame extends JFrame {
 			bld.angebot(a);
 
 			if (a.isPreis_pro_stunde()) {
-				Date einheitDatum = jDateChooserDatum.getDate();
+				Date einheitDatum = bld.getDatum();
 				String starttext = this.jFormattedTextFieldStart.getText();
 				Calendar startDate = parseDate(einheitDatum, starttext);
 				bld.beginn(startDate.getTime());
@@ -543,7 +548,7 @@ public class EinheitEinzelFrame extends JFrame {
 	private javax.swing.JButton jButton2;
 	private javax.swing.JComboBox<Angebot> jComboBoxAngebot;
 	private com.toedter.calendar.JDateChooser jDateChooserBezahlt;
-	private com.toedter.calendar.JDateChooser jDateChooserDatum;
+	protected com.toedter.calendar.JDateChooser jDateChooserDatum;
 	private com.toedter.calendar.JDateChooser jDateChooserEingereicht;
 	private javax.swing.JFormattedTextField jFormattedTextFieldEnde;
 	private javax.swing.JFormattedTextField jFormattedTextFieldStart;
@@ -563,6 +568,7 @@ public class EinheitEinzelFrame extends JFrame {
 	private javax.swing.JTextField jTextFieldPreisAenderung;
 	private javax.swing.JTextField jTextFieldZusatz1;
 	private javax.swing.JTextField jTextFieldZusatz2;
+	private Einheit einheit2;
 
 	public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -573,5 +579,9 @@ public class EinheitEinzelFrame extends JFrame {
         		frame.setVisible(true);
             }
         });
+	}
+
+	public void setExpectedEinheit(Einheit einheit2) {
+		this.einheit2 = einheit2;
 	}
 }
