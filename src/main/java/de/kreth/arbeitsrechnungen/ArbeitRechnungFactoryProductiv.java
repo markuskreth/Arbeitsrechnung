@@ -9,10 +9,12 @@ import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
 import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
+import de.kreth.arbeitsrechnungen.persister.DatenPersister;
 import de.kreth.arbeitsrechnungen.persister.KlientPersister;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 import de.kreth.arbeitsrechnungen.persister.Persister;
 import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
+import de.kreth.arbeitsrechnungen.persister.RechnungPersister;
 
 /**
  * Stellt die Produktive ArbeitRechnungFactory zur Verfügung.
@@ -25,6 +27,7 @@ import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
 public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 
 	private Logger logger;
+	private Options optionen;
 
 	protected ArbeitRechnungFactoryProductiv() {
 
@@ -43,7 +46,6 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 
 		String useTest = System.getProperty("useTestDb", "false");
 
-		Options optionen;
 		if (Boolean.parseBoolean(useTest)) {
 			optionen = new Options.Build()
 					.dbHost("localhost").dbUser("markus").dbPassword("0773").dbDatabaseName("ArbeitrechnungenBak")
@@ -97,7 +99,7 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends Persister> T getPersister(Class<T> clazz, Options optionen) {
+	public <T extends Persister> T getPersister(Class<T> clazz) {
 		if (clazz == KlientenEditorPersister.class) {
 			return (T) new KlientenEditorPersister(optionen);
 		}
@@ -109,6 +111,12 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 		}
 		if (clazz == AngebotPersister.class) {
 			return (T) new AngebotPersister(optionen);
+		}
+		if (clazz == DatenPersister.class) {
+			return (T) new DatenPersister(optionen);
+		}
+		if (clazz == RechnungPersister.class) {
+			return (T) new RechnungPersister(optionen);
 		}
 		throw new IllegalArgumentException("Klasse " + clazz.getSimpleName() + " nicht unterstützt...");
 	}

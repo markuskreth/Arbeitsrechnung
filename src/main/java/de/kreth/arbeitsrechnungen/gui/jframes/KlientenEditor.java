@@ -44,8 +44,7 @@ import javax.swing.JTextField;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
-import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.gui.LabelComponentBinding;
@@ -74,8 +73,6 @@ public class KlientenEditor extends JDialog {
    private int currentIndex = -1;
    private List<Angebot> angebote;
 
-   private Options optionen;
-
    /**
     * Focusklasse anonym: Soll die Reihenfolge der Komponenten festgelgen und
     * widergeben.
@@ -96,8 +93,7 @@ public class KlientenEditor extends JDialog {
    public KlientenEditor(final Frame arg0) {
       super(arg0, "Klienteneditor");
 
-      optionen = Einstellungen.getInstance().getEinstellungen();
-      persister = new KlientenEditorPersister(optionen);
+      persister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
 
       allKlienten = persister.getAllKlienten();
 

@@ -9,7 +9,7 @@ public class MockableArbeitRechnungFactory extends ArbeitRechnungFactory {
 	}
 	
 	@Override
-	public <T extends Persister> T getPersister(Class<T> clazz, Options optionen) {
+	public <T extends Persister> T getPersister(Class<T> clazz) {
 		return null;
 	}
 

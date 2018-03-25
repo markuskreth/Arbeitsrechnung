@@ -28,8 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.business.RechnungSystemExecutionService;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
@@ -48,8 +47,6 @@ public class FormRechnungen extends JPanel {
 
    private Logger logger = LoggerFactory.getLogger(getClass());
 
-   private Options optionen;
-
    private PropertyChangeSupport pchListeners = new PropertyChangeSupport(this);
 
    private int klienten_id;
@@ -66,8 +63,7 @@ public class FormRechnungen extends JPanel {
    public FormRechnungen(Window owner, int klienten_id) {
       super();
       this.owner = owner;
-      optionen = Einstellungen.getInstance().getEinstellungen();
-      rechnungPersister = new RechnungPersister(optionen);
+      rechnungPersister = ArbeitRechnungFactory.getInstance().getPersister(RechnungPersister.class);
 
       this.klienten_id = klienten_id;
       initComponents();
@@ -236,7 +232,7 @@ public class FormRechnungen extends JPanel {
    private void jButtonAnsehenActionPerformed(ActionEvent evt) {
 
       if (this.jTable1.getSelectedRow() >= 0) {
-         RechnungSystemExecutionService fileService = new RechnungSystemExecutionService(optionen);
+         RechnungSystemExecutionService fileService = new RechnungSystemExecutionService();
          final Rechnung rechnungToShow = this.rechnungen.elementAt(jTable1.getSelectedRow());
          fileService.showRechnung(rechnungToShow);
       } else {
@@ -246,7 +242,7 @@ public class FormRechnungen extends JPanel {
 
    private void jButtonAendernActionPerformed(ActionEvent evt) {
       int rechnung_id = this.rechnungen.elementAt(this.jTable1.getSelectedRow()).getRechnungen_id();
-      RechnungDialog dialog = new RechnungDialog(optionen, getOwner(), rechnung_id);
+      RechnungDialog dialog = new RechnungDialog(getOwner(), rechnung_id);
       dialog.setVisible(true);
       pchListeners.fireIndexedPropertyChange(GEAENDERT, rechnung_id, true, false);
    }

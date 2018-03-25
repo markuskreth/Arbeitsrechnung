@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 
@@ -14,8 +15,8 @@ public class RechnungSystemExecutionService {
    private Options options;
    private Logger logger;
 
-   public RechnungSystemExecutionService(Options optionen) {
-      this.options = optionen;
+   public RechnungSystemExecutionService() {
+      this.options = Einstellungen.getInstance().getEinstellungen();
       this.logger = LoggerFactory.getLogger(getClass());
    }
 

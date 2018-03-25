@@ -21,7 +21,7 @@ public class ArbeitRechnungFactoryTestingFakeDB extends ArbeitRechnungFactory {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Persister> T getPersister(Class<T> clazz, Options optionen) {
+	public <T extends Persister> T getPersister(Class<T> clazz) {
 		if (clazz == KlientenEditorPersister.class) {
 			if (klientenEditorPersister != null) {
 				return (T) klientenEditorPersister;

@@ -30,7 +30,7 @@ import javax.swing.WindowConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 
@@ -49,9 +49,9 @@ public class Arbeitsstunden extends JFrame {
     * 
     * @param optionen
     */
-   public Arbeitsstunden(Options optionen) {
+   public Arbeitsstunden() {
       ready = false;
-      persister = new KlientenEditorPersister(optionen);
+      persister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
       logger.debug("Init beginnt:");
 
       initComponents();

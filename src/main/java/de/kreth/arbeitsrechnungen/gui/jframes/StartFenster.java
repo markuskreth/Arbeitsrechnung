@@ -41,6 +41,7 @@ import javax.swing.border.SoftBevelBorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.Einstellungen;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.StartFensterTableCellRenderer;
@@ -61,24 +62,15 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
 
    private DecimalFormat df = new DecimalFormat("0.00");
 
-   private Options optionen = null;
    private StartTableModel forderungenTableModel;
    private StartTableModel einheitenTableModel;
    private DatenPersister persister;
 
    public StartFenster() {
-      this(null);
-   }
-   
-   public StartFenster(final Options options) {
       logger = LoggerFactory.getLogger(getClass());
 
-      if(options == null)
-         loadOrCreateOptions();
-      else
-         this.optionen = options;
-
-      persister = new DatenPersister(optionen);
+      loadOrCreateOptions();
+      persister = ArbeitRechnungFactory.getInstance().getPersister(DatenPersister.class);
 
       // Model mit Überschriften erstellen
 //      einheitenTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Firma", "Einsätze", "Summe" });
@@ -109,13 +101,12 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    }
 
    protected void loadOrCreateOptions() {
-      optionen = Einstellungen.getInstance().getEinstellungen();
+      Options optionen = Einstellungen.getInstance().getEinstellungen();
       if (optionen == null || optionen.getDbHost() == null) {
          // Property sqlserver nicht gefunden: optionen nicht gespeichert!
          OptionenDialog optionwindow = new OptionenDialog(null, true);
          optionwindow.setVisible(true);
       }
-      optionen = Einstellungen.getInstance().getEinstellungen();
    }
 
    /**
@@ -550,7 +541,7 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
    }
 
    private void jButton1ActionPerformed(final ActionEvent evt) {
-      Arbeitsstunden arbeitsstunden = new Arbeitsstunden(optionen);
+      Arbeitsstunden arbeitsstunden = new Arbeitsstunden();
       arbeitsstunden.setVisible(true);
    }
 

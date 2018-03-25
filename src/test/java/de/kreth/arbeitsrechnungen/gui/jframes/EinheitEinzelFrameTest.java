@@ -5,12 +5,13 @@ import static org.assertj.swing.launcher.ApplicationLauncher.application;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.awt.Component;
 import java.awt.Frame;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,7 +34,6 @@ import com.toedter.calendar.JDateChooser;
 
 import de.kreth.arbeitsrechnungen.MockableArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.MockableEinstellungen;
-import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Einheit;
 import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
@@ -48,7 +48,6 @@ public class EinheitEinzelFrameTest extends AssertJSwingJUnitTestCase {
 	private Auftraggeber auftraggeber;
 	private List<Angebot> angebote;
 	private MockableArbeitRechnungFactory factory;
-	private Options options;
 	private MockableEinstellungen einstellungen;
 
 	@Override
@@ -62,16 +61,13 @@ public class EinheitEinzelFrameTest extends AssertJSwingJUnitTestCase {
 		when(klientPersister.getAuftraggeber(anyInt())).thenReturn(auftraggeber);
 		when(angebotPersister.getForKlient(anyInt())).thenReturn(angebote);
 
-		options = mock(Options.class);
 		einstellungen = mock(MockableEinstellungen.class);
 		MockableEinstellungen.setInstance(einstellungen);
-		when(einstellungen.getEinstellungen()).thenReturn(options);
-		MockableEinstellungen.setOptions(options);
 		factory = mock(MockableArbeitRechnungFactory.class);
 		MockableArbeitRechnungFactory.setInstance(factory);
 		
-		when(factory.getPersister(KlientPersister.class, options)).thenReturn(klientPersister);
-		when(factory.getPersister(AngebotPersister.class, options)).thenReturn(angebotPersister);
+		when(factory.getPersister(KlientPersister.class)).thenReturn(klientPersister);
+		when(factory.getPersister(AngebotPersister.class)).thenReturn(angebotPersister);
 		
 		application(EinheitEinzelFrame.class).start();
 	}
@@ -159,7 +155,6 @@ public class EinheitEinzelFrameTest extends AssertJSwingJUnitTestCase {
 				einh.load(1, -1);
 				JDateChooser dateChooser = FrameElementAccessor.getDateChooser(einh);
 				dateChooser.setCalendar(einheitDate);
-				einh.setExpectedEinheit(einheit);
 			}
 		};
 		GuiActionRunner.execute(task);
@@ -190,6 +185,8 @@ public class EinheitEinzelFrameTest extends AssertJSwingJUnitTestCase {
 	}
 	
 	public static class FrameElementAccessor extends EinheitEinzelFrame {
+		private static final long serialVersionUID = 1L;
+
 		public static JDateChooser getDateChooser(EinheitEinzelFrame frame) {
 			return frame.jDateChooserDatum;
 		}

@@ -15,5 +15,5 @@ public abstract class ArbeitRechnungFactory {
       return instance;
    }
 
-   public abstract <T extends Persister> T getPersister(Class<T> clazz, Options optionen);
+   public abstract <T extends Persister> T getPersister(Class<T> clazz);
 }

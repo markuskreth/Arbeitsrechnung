@@ -39,8 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
-import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Einheit;
 import de.kreth.arbeitsrechnungen.data.Einheit.Builder;
@@ -62,10 +60,9 @@ public class EinheitEinzelFrame extends JFrame {
 
 	public EinheitEinzelFrame() {
 		ArbeitRechnungFactory factory = ArbeitRechnungFactory.getInstance();
-		Options optionen = Einstellungen.getInstance().getEinstellungen();
 
-		this.klientPersister = factory.getPersister(KlientPersister.class, optionen);
-		this.angebotPersister = factory.getPersister(AngebotPersister.class, optionen);
+		this.klientPersister = factory.getPersister(KlientPersister.class);
+		this.angebotPersister = factory.getPersister(AngebotPersister.class);
 		initComponents();
 	}
 	
@@ -568,7 +565,6 @@ public class EinheitEinzelFrame extends JFrame {
 	private javax.swing.JTextField jTextFieldPreisAenderung;
 	private javax.swing.JTextField jTextFieldZusatz1;
 	private javax.swing.JTextField jTextFieldZusatz2;
-	private Einheit einheit2;
 
 	public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -581,7 +577,4 @@ public class EinheitEinzelFrame extends JFrame {
         });
 	}
 
-	public void setExpectedEinheit(Einheit einheit2) {
-		this.einheit2 = einheit2;
-	}
 }

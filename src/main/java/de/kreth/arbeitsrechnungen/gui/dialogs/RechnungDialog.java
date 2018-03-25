@@ -100,13 +100,14 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
    private Vector<Arbeitsstunde> einheiten;
    private Klient klient;
 
-   private RechnungDialog(Options optionen, Window parent) {
+   private RechnungDialog(Window parent) {
       super(parent);
       setModal(true);
 
       initComponents();
-      klientenPersister = (KlientenEditorPersister) ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class, optionen);
-      persister = (RechnungDialogPersister) ArbeitRechnungFactory.getInstance().getPersister(RechnungDialogPersister.class, optionen);
+      ArbeitRechnungFactory factory = ArbeitRechnungFactory.getInstance();
+	klientenPersister = (KlientenEditorPersister) factory.getPersister(KlientenEditorPersister.class);
+      persister = (RechnungDialogPersister) factory.getPersister(RechnungDialogPersister.class);
 
       heute = new GregorianCalendar();
    }
@@ -119,8 +120,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
     * @param parent
     * @param rechnungId
     */
-   public RechnungDialog(Options optionen, Window parent, int rechnungId) {
-      this(optionen, parent);
+   public RechnungDialog(Window parent, int rechnungId) {
+      this(parent);
 
       logger.info("Öffne Rechnungdialog mit RechnungId " + rechnungId);
       this.jToggleButtonDetails.setSelected(false);
@@ -196,8 +197,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
     * @param parent
     * @param einheiten
     */
-   public RechnungDialog(Options optionen, Window parent, Vector<Integer> einheiten) {
-      this(optionen, parent);
+   public RechnungDialog(Window parent, Vector<Integer> einheiten) {
+      this(parent);
 
       zusammenfassungen_erlauben = this.jToggleButtonZusammenfassungen.isSelected();
 
@@ -213,7 +214,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       zahldatum.setTime(heute.getTime());
       zahldatum.add(Calendar.MONTH, 1);
 
-      Builder reBuilder = new Rechnung.Builder().texdatei(optionen.getStdTexFile()).datum(heute).zahldatum(zahldatum).einheiten(this.einheiten)
+      Builder reBuilder = new Rechnung.Builder().datum(heute).zahldatum(zahldatum).einheiten(this.einheiten)
             .rechnungnr(generateRechnungsnr(heute)).klienten_id(this.klient.getKlienten_id()).zusatz1(klient.hasZusatz1()).zusatz2(klient.hasZusatz2())
             .zusatz1Name(klient.getZusatz1_Name()).zusatz2Name(klient.getZusatz2_Name());
 
@@ -857,7 +858,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
     * @param evt
     */
    private void jButtonErstellenActionPerformed(ActionEvent evt) {
-      Options einstellungen = Einstellungen.getInstance().getEinstellungen();
 
       this.rechnung.setZusatz1(this.jCheckBoxZusatz1.isSelected());
       this.rechnung.setZusatz2(this.jCheckBoxZusatz2.isSelected());
@@ -897,6 +897,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
             }
             dateiname = dateiname.replace(" ", "_");
 
+            Options einstellungen = Einstellungen.getInstance().getEinstellungen();
             String new_pdf = dateiname + ".pdf";
             File target = new File(einstellungen.getTargetDir(), new_pdf);
             logger.info("storing rechnung pdf to " + target.getAbsolutePath());
@@ -954,7 +955,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
     * 
     * @param optionen
     */
-   public int speichern(Options optionen) {
+   public int speichern() {
 
       String dateiname = "";
 
@@ -970,7 +971,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
          dateiname = dateiname.replace(" ", "_");
       }
 
-      RechnungSystemExecutionService fileService = new RechnungSystemExecutionService(optionen);
+      RechnungSystemExecutionService fileService = new RechnungSystemExecutionService();
 
       int ergebnis = fileService.movePdf(rechnung, dateiname);
 

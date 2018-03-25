@@ -388,7 +388,7 @@ public class Rechnung {
       }
 
       private void secureThatAllFieldsInMustBeSetExist() {
-         Field[] fields = getClass().getFields();
+         Field[] fields = getClass().getDeclaredFields();
          Collection<String> validate = new ArrayList<>(mustBeSet);
          for (Field f : fields)
             validate.remove(f.getName());

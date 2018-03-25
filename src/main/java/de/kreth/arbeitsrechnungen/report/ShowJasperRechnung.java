@@ -12,8 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
@@ -34,9 +33,8 @@ public class ShowJasperRechnung {
 	private static final String MTV_JRXML = "mtv_gross_buchholz.jrxml";
 	
 	private final Logger log = LoggerFactory.getLogger(getClass());
-	private Options opts = Einstellungen.getInstance().getEinstellungen();
-	private RechnungDialogPersister p = new RechnungDialogPersister(opts);
-	private KlientenEditorPersister klientenEditorPersister = new KlientenEditorPersister(opts);
+	private RechnungDialogPersister p = ArbeitRechnungFactory.getInstance().getPersister(RechnungDialogPersister.class);
+	private KlientenEditorPersister klientenEditorPersister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
 	
 
 	public static void main(String[] args) throws JRException {
@@ -58,7 +56,7 @@ public class ShowJasperRechnung {
 
 	private int chooseRechnung() {
 		List<Klient> klienten = klientenEditorPersister.getAllKlienten();
-		RechnungPersister pers = new RechnungPersister(opts);
+		RechnungPersister pers = ArbeitRechnungFactory.getInstance().getPersister(RechnungPersister.class);
 		List<KlientRechnung> rechnungen = new ArrayList<>();
 		for (Klient k: klienten) {
 			List<Rechnung> tmp = pers.getRechnungenForKlient(k.getKlienten_id());
