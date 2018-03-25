@@ -27,8 +27,10 @@ public class RechnungDialogTest {
 	public void setUp() throws Exception {
 		factory = ArbeitRechnungFactoryTestingFakeDB.init();
 		factory.rechnungDialogPersister = new MockRechnungDialogPersister();
-		factory.rechnungDialogPersister.rechnungBuilder = new Builder().datum(new GregorianCalendar()).zusatz2(false)
-				.klienten_id(-15).zusatz1(true).rechnungnr("TestRechnung" + getClass().getName()).zahldatum(null)
+		factory.rechnungDialogPersister.rechnungBuilder = new Builder()
+				.datum(new GregorianCalendar()).zusatz2(false)
+				.klienten_id(-15).zusatz1(true)
+				.rechnungnr("TestRechnung" + getClass().getName()).zahldatum(null)
 				.texdatei("").adresse("").einheiten(new Vector<>());
 	}
 

@@ -2,19 +2,15 @@ package de.kreth.arbeitsrechnungen;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
-import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
-import de.kreth.arbeitsrechnungen.persister.DatenPersister;
-import de.kreth.arbeitsrechnungen.persister.KlientPersister;
-import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 import de.kreth.arbeitsrechnungen.persister.Persister;
-import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
-import de.kreth.arbeitsrechnungen.persister.RechnungPersister;
 
 /**
  * Stellt die Produktive ArbeitRechnungFactory zur Verfügung.
@@ -98,27 +94,13 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T extends Persister> T getPersister(Class<T> clazz) {
-		if (clazz == KlientenEditorPersister.class) {
-			return (T) new KlientenEditorPersister(optionen);
+		try {
+			Constructor<T> constructor = clazz.getConstructor(optionen.getClass());
+			return constructor.newInstance(optionen);
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new IllegalArgumentException("Klasse " + clazz.getSimpleName() + " nicht unterstützt...", e);
 		}
-		if (clazz == RechnungDialogPersister.class) {
-			return (T) new RechnungDialogPersister(optionen);
-		}
-		if (clazz == KlientPersister.class) {
-			return (T) new KlientPersister(optionen);
-		}
-		if (clazz == AngebotPersister.class) {
-			return (T) new AngebotPersister(optionen);
-		}
-		if (clazz == DatenPersister.class) {
-			return (T) new DatenPersister(optionen);
-		}
-		if (clazz == RechnungPersister.class) {
-			return (T) new RechnungPersister(optionen);
-		}
-		throw new IllegalArgumentException("Klasse " + clazz.getSimpleName() + " nicht unterstützt...");
 	}
 	
 }
