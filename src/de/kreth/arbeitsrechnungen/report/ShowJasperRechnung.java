@@ -5,8 +5,8 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import arbeitsabrechnungendataclass.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.Einstellungen;
@@ -17,7 +17,7 @@ import net.sf.jasperreports.view.JasperViewer;
 
 public class ShowJasperRechnung {
 
-   Logger log = LogManager.getLogger(getClass());
+   Logger log = LoggerFactory.getLogger(getClass());
    
    public static void main(String[] args) throws JRException {
       ShowJasperRechnung showJasperRechnung = new ShowJasperRechnung();

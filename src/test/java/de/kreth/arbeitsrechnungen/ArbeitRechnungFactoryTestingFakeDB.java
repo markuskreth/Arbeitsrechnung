@@ -7,36 +7,35 @@ import de.kreth.arbeitsrechnungen.test.MockKlientenEditorPersister;
 
 public class ArbeitRechnungFactoryTestingFakeDB extends ArbeitRechnungFactory {
 
-   public MockRechnungDialogPersister rechnungDialogPersister = null;
-   public KlientenEditorPersister klientenEditorPersister = null;
-   
-   
-   private ArbeitRechnungFactoryTestingFakeDB() {
-   }
+	public MockRechnungDialogPersister rechnungDialogPersister = null;
+	public KlientenEditorPersister klientenEditorPersister = null;
 
-   public static ArbeitRechnungFactoryTestingFakeDB init() {
-      ArbeitRechnungFactoryTestingFakeDB arbeitRechnungFactoryTestingFakeDB = new ArbeitRechnungFactoryTestingFakeDB();
-      instance = arbeitRechnungFactoryTestingFakeDB;
-      return arbeitRechnungFactoryTestingFakeDB;
-   }
+	private ArbeitRechnungFactoryTestingFakeDB() {
+	}
 
-   @Override
-   public Persister getPersister(Class<? extends Persister> clazz, Options optionen) {
-      if (clazz == KlientenEditorPersister.class) {
-         if(klientenEditorPersister != null) {
-            return klientenEditorPersister;
-         } else {
-            return new MockKlientenEditorPersister();
-         }
-      }
-      if (clazz == RechnungDialogPersister.class) {
-         if(rechnungDialogPersister != null) {
-            return rechnungDialogPersister;
-         } else {
-            return new MockRechnungDialogPersister();
-         }
-      }
-      throw new IllegalArgumentException("Klasse " + clazz.getSimpleName() + " nicht unterstützt...");
-   }
+	public static ArbeitRechnungFactoryTestingFakeDB init() {
+		ArbeitRechnungFactoryTestingFakeDB arbeitRechnungFactoryTestingFakeDB = new ArbeitRechnungFactoryTestingFakeDB();
+		instance = arbeitRechnungFactoryTestingFakeDB;
+		return arbeitRechnungFactoryTestingFakeDB;
+	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Persister> T getPersister(Class<T> clazz) {
+		if (clazz == KlientenEditorPersister.class) {
+			if (klientenEditorPersister != null) {
+				return (T) klientenEditorPersister;
+			} else {
+				return (T) new MockKlientenEditorPersister();
+			}
+		}
+		if (clazz == RechnungDialogPersister.class) {
+			if (rechnungDialogPersister != null) {
+				return (T) rechnungDialogPersister;
+			} else {
+				return (T) new MockRechnungDialogPersister();
+			}
+		}
+		throw new IllegalArgumentException("Klasse " + clazz.getSimpleName() + " nicht unterstützt...");
+	}
 }

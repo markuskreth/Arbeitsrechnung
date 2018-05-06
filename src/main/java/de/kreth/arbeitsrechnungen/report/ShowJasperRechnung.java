@@ -2,70 +2,109 @@ package de.kreth.arbeitsrechnungen.report;
 
 import java.io.OutputStream;
 import java.net.URL;
-import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import javax.swing.JOptionPane;
 
-import arbeitsabrechnungendataclass.Verbindung_mysql;
-import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.Options;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
+import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
-import net.sf.jasperreports.engine.*;
+import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
+import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
+import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
+import de.kreth.arbeitsrechnungen.persister.RechnungPersister;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class ShowJasperRechnung {
 
-   Logger log = LogManager.getLogger(getClass());
-   
-   public static void main(String[] args) throws JRException {
-      ShowJasperRechnung showJasperRechnung = new ShowJasperRechnung();
+	private static final String MTV_JRXML = "mtv_gross_buchholz.jrxml";
+	
+	private final Logger log = LoggerFactory.getLogger(getClass());
+	private RechnungDialogPersister p = ArbeitRechnungFactory.getInstance().getPersister(RechnungDialogPersister.class);
+	private KlientenEditorPersister klientenEditorPersister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
+	
 
-      URL resource = showJasperRechnung.getClass().getResource("mtv_gross_buchholz.jasper");
-      showJasperRechnung.log.debug(resource);
+	public static void main(String[] args) throws JRException {
 
-      JRDataSource res = showJasperRechnung.createSource(16);
-      showJasperRechnung.compileAndShowReport(res);
-   }
+		ShowJasperRechnung showJasperRechnung = new ShowJasperRechnung();
 
-   public JRDataSource createSource(int rechnungId) {
+		int rechnungId;
+		if(args.length>0 && StringUtils.isNumeric(args[0])) {
+			rechnungId = Integer.valueOf(args[0]);
+		}else {
+			rechnungId = showJasperRechnung.chooseRechnung();
+		}
+		URL resource = showJasperRechnung.getClass().getResource(MTV_JRXML);
+		showJasperRechnung.log.debug(resource == null ? "null" : resource.toString());
 
-      Options opts = Einstellungen.getInstance().getEinstellungen();
-      
-      Verbindung_mysql verb = new Verbindung_mysql(opts.getProperties());
-      ResultSet rs = verb.query("SELECT rechnungen_id, betrag, rechnungen.datum, geldeingang, pdfdatei, rechnungnr, \n" + 
-            "   zahldatum, zusammenfassungen, rechnungen.zusatz1, rechnungen.zusatz2,\n" + 
-            "    klienten.Zusatz1, klienten.Zusatz1_Name, klienten.Zusatz2, klienten.Zusatz2_Name, \n" + 
-            "    einheiten.Beginn, einheiten.Ende, einheiten.Dauer, einheiten.Preis, \n" + 
-            "    einheiten.Preisänderung, einheiten.zusatz1 zusatz1Val, einheiten.zusatz2 zusatz2Val, angebote.Beschreibung, \n" + 
-            "    angebote.Preis preisProStunde\n" + 
-            "FROM Arbeitrechnungen.rechnungen \n" + 
-            "    inner join Arbeitrechnungen.klienten on rechnungen.klienten_id=klienten.klienten_id\n" + 
-            "    inner join einheiten on rechnungen.rechnungen_id=einheiten.rechnung_id\n" + 
-            "    inner join angebote on einheiten.angebote_id=angebote.angebote_id\n" + 
-            "where rechnungen_id=" + rechnungId);
-      
-      JRResultSetDataSource source = new JRResultSetDataSource(rs);
-      return source;
-   }
+		JRDataSource res = showJasperRechnung.createSource(rechnungId);
+		showJasperRechnung.compileAndShowReport(res);
+	}
 
-   public JRDataSource createSource(Rechnung rechnung) {
-      return new RechnungDataSource(rechnung);
-   }
-   
-   public JasperPrint compileAndShowReport(JRDataSource source) throws JRException {
-      JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("mtv_gross_buchholz.jrxml"));
-      JasperPrint print = JasperFillManager.fillReport(report, new HashMap<>(), source);
-      JasperViewer.viewReport(print, false);
-      
-      return print;
-   }
+	private int chooseRechnung() {
+		List<Klient> klienten = klientenEditorPersister.getAllKlienten();
+		RechnungPersister pers = ArbeitRechnungFactory.getInstance().getPersister(RechnungPersister.class);
+		List<KlientRechnung> rechnungen = new ArrayList<>();
+		for (Klient k: klienten) {
+			List<Rechnung> tmp = pers.getRechnungenForKlient(k.getKlienten_id());
+			for (Rechnung r: tmp) {
+				rechnungen.add(new KlientRechnung(k, r));
+			}
+		}
+		
+		KlientRechnung result = (KlientRechnung) JOptionPane.showInputDialog(null, "Wählen Sie eine Rechnung", "Rechnung anzeigen"
+				, JOptionPane.QUESTION_MESSAGE, null
+				, rechnungen.toArray(), rechnungen.get(0));
+		
+		if(null == result) {
+			return 16;
+		} else {
+			return result.getRechnung().getRechnungen_id();
+		}
+	}
 
-   public boolean store(JasperPrint repo, OutputStream outputStream) throws JRException {
-      JasperExportManager.exportReportToPdfStream(repo, outputStream);
-      return false;
-   }
+	public JRDataSource createSource(int rechnungId) {
 
+		Builder rechn = p.getRechnungById(rechnungId);
+		rechn.einheiten(p.getEinheiten(rechnungId));
+
+		int klienten_id = p.getKlientenIdForRechnungId(rechnungId);
+		Klient klient = klientenEditorPersister.getKlientById(klienten_id);
+		rechn.zusatz1Name(klient.getZusatz1_Name());
+		rechn.zusatz2Name(klient.getZusatz2_Name());
+		return createSource(rechn.build());
+
+	}
+
+	public JRDataSource createSource(Rechnung rechnung) {
+		return new RechnungDataSource(rechnung);
+	}
+
+	public JasperPrint compileAndShowReport(JRDataSource source) throws JRException {
+		JasperReport report = JasperCompileManager
+				.compileReport(getClass().getResourceAsStream(MTV_JRXML));
+		JasperPrint print = JasperFillManager.fillReport(report, new HashMap<>(), source);
+		JasperViewer.viewReport(print, false);
+
+		return print;
+	}
+
+	public boolean store(JasperPrint repo, OutputStream outputStream) throws JRException {
+		JasperExportManager.exportReportToPdfStream(repo, outputStream);
+		return false;
+	}
 
 }

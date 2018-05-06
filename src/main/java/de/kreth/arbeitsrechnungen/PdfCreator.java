@@ -3,22 +3,32 @@ package de.kreth.arbeitsrechnungen;
 /**
  * @author markus
  */
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.Vector;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 
 public class PdfCreator {
 
-   private Logger logger = LogManager.getLogger(getClass());
+   private Logger logger = LoggerFactory.getLogger(getClass());
 
    public static final String TEXUMBRUCH = "\\\\\\\\";
    public static final String TEXLINE = "\\\\hline ";
@@ -112,7 +122,7 @@ public class PdfCreator {
             try {
                latexdatei.close();
             } catch (IOException e) {
-               logger.fatal("Fehler beim Schließen der Tex-datei in " + rechnung.getTexdatei(), e);
+               logger.error("Fehler beim Schließen der Tex-datei in " + rechnung.getTexdatei(), e);
             }
          }
 

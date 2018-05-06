@@ -6,8 +6,16 @@
  */
 package de.kreth.arbeitsrechnungen.gui.jframes;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Component;
+import java.awt.FocusTraversalPolicy;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.net.URL;
@@ -17,12 +25,27 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
-import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.gui.LabelComponentBinding;
@@ -51,8 +74,6 @@ public class KlientenEditor extends JDialog {
    private int currentIndex = -1;
    private List<Angebot> angebote;
 
-   private Options optionen;
-
    /**
     * Focusklasse anonym: Soll die Reihenfolge der Komponenten festgelgen und
     * widergeben.
@@ -73,8 +94,7 @@ public class KlientenEditor extends JDialog {
    public KlientenEditor(final Frame arg0) {
       super(arg0, "Klienteneditor");
 
-      optionen = Einstellungen.getInstance().getEinstellungen();
-      persister = new KlientenEditorPersister(optionen);
+      persister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
 
       allKlienten = persister.getAllKlienten();
 
@@ -107,16 +127,15 @@ public class KlientenEditor extends JDialog {
    public void setVisible(final boolean b) {
       super.setVisible(b);
       if (b) {
-         new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-               updateRechnungenPanel();
-               updateKlient();
-               updateAngeboteTabelle();
-            }
-         }).start();
+    	  SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				updateRechnungenPanel();
+				updateKlient();
+				updateAngeboteTabelle();
+			}
+		});
       }
    }
 
@@ -579,7 +598,9 @@ public class KlientenEditor extends JDialog {
          jButtonZumAnfang.setEnabled(false);
          jButtonVor.setEnabled(false);
          jButtonZumEnde.setEnabled(false);
+         jTabbedPane1.setEnabled(false);
       } else {
+    	  jTabbedPane1.setEnabled(true);
          if (currentKlient.equals(allKlienten.get(0))) {
             jButtonZurueck.setEnabled(false);
             jButtonZumAnfang.setEnabled(false);
@@ -598,7 +619,9 @@ public class KlientenEditor extends JDialog {
    private void updateTables() {
       updateAngeboteTabelle();
       updateRechnungenPanel();
-      this.arbeitsstundenTabelle1.update(currentKlient.getKlienten_id());
+      if(currentKlient != null) {
+    	  this.arbeitsstundenTabelle1.update(currentKlient.getKlienten_id());
+      }
    }
 
    /**
@@ -1693,6 +1716,9 @@ public class KlientenEditor extends JDialog {
     */
    private void TextFieldFocusLost(final FocusEvent event) {
 
+	   if (currentKlient == null) {
+		   return;
+	   }
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
          persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");

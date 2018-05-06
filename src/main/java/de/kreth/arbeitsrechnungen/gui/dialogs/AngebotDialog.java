@@ -18,8 +18,7 @@ import java.awt.Window;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
-import de.kreth.arbeitsrechnungen.Einstellungen;
-import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
 
@@ -32,7 +31,6 @@ public class AngebotDialog extends javax.swing.JDialog {
    NumberFormat nf = NumberFormat.getNumberInstance();
 
    AngebotPersister persister;
-   Options optionen;
 
    /**
     * Creates new form AngebotDialog bei DatensatzID == -1 wird ein neuer
@@ -43,8 +41,7 @@ public class AngebotDialog extends javax.swing.JDialog {
       setModal(true);
       initComponents();
 
-      optionen = Einstellungen.getInstance().getEinstellungen();
-      persister = new AngebotPersister(optionen);
+      persister = ArbeitRechnungFactory.getInstance().getPersister(AngebotPersister.class);
       nf.setMaximumFractionDigits(2);
 
       // Bei null ist es ein neuer Datensatz

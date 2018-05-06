@@ -10,24 +10,34 @@ package de.kreth.arbeitsrechnungen.gui.jframes;
  */
 
 import java.awt.Font;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.LayoutStyle;
+import javax.swing.WindowConstants;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 
 public class Arbeitsstunden extends JFrame {
 
    private static final long serialVersionUID = 4796722096135537141L;
-   private Logger logger = LogManager.getLogger(getClass());
+   private Logger logger = LoggerFactory.getLogger(getClass());
 
    private KlientenEditorPersister persister;
 
@@ -39,9 +49,9 @@ public class Arbeitsstunden extends JFrame {
     * 
     * @param optionen
     */
-   public Arbeitsstunden(Options optionen) {
+   public Arbeitsstunden() {
       ready = false;
-      persister = new KlientenEditorPersister(optionen);
+      persister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
       logger.debug("Init beginnt:");
 
       initComponents();

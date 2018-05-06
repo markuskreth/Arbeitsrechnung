@@ -5,6 +5,7 @@ package de.kreth.arbeitsrechnungen;
  */
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -13,6 +14,10 @@ public class MySqlDate {
    private static DateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
    private Calendar cal;
+
+   public MySqlDate(String datum) throws ParseException {
+	   this(sdf.parse(datum));
+   }
 
    public MySqlDate(java.util.Date datum) {
       cal = new GregorianCalendar();

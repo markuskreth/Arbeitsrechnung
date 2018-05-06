@@ -4,10 +4,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Vector;
 
 import de.kreth.arbeitsrechnungen.Options;
-import de.kreth.arbeitsrechnungen.data.*;
+import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
+import de.kreth.arbeitsrechnungen.data.ArbeitsstundeImpl;
+import de.kreth.arbeitsrechnungen.data.Klient;
+import de.kreth.arbeitsrechnungen.data.Rechnung;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 
 public class RechnungDialogPersister extends AbstractPersister {
@@ -46,27 +52,41 @@ public class RechnungDialogPersister extends AbstractPersister {
             + "pdfdatei, adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, geldeingang, timestamp " + "FROM rechnungen WHERE rechnungen_id=" + rechnungs_id + ";";
 
       logger.debug("getRechnungById: " + sql);
-      Builder r = new Rechnung.Builder();
+      Builder rechnungBuilder = new Rechnung.Builder();
 
       try {
          ResultSet daten = verbindung.query(sql);
          if (daten.next()) {
-            Calendar datum = new GregorianCalendar();
-            datum.setTimeInMillis(daten.getDate("datum").getTime());
-            Calendar zahldatum = new GregorianCalendar();
-            zahldatum.setTimeInMillis(daten.getDate("zahldatum").getTime());
-            Calendar geldeingang = new GregorianCalendar();
-            geldeingang.setTimeInMillis(daten.getDate("geldeingang").getTime());
-
-            r.rechnungen_id(rechnungs_id).klienten_id(daten.getInt("klienten_id")).datum(datum).rechnungnr(daten.getString("rechnungnr")).betrag(daten.getDouble("betrag"))
-                  .texdatei(daten.getString("texdatei")).pdfDatei(daten.getString("pdfdatei")).adresse(daten.getString("adresse")).zusatz1(daten.getBoolean("zusatz1"))
-                  .zusatz2(daten.getBoolean("zusatz2")).zusammenfassungenErlauben(daten.getBoolean("zusammenfassungen")).zahldatum(zahldatum).geldeingang(geldeingang);
+            rechnungBuilder.rechnungen_id(rechnungs_id)
+            	.klienten_id(daten.getInt("klienten_id"))
+            	.datum(getCalendarValue(daten, "datum"))
+            	.rechnungnr(daten.getString("rechnungnr"))
+            	.betrag(daten.getDouble("betrag"))
+            	.texdatei(daten.getString("texdatei"))
+            	.pdfDatei(daten.getString("pdfdatei"))
+            	.adresse(daten.getString("adresse"))
+            	.zusatz1(daten.getBoolean("zusatz1"))
+            	.zusatz2(daten.getBoolean("zusatz2"))
+            	.zusammenfassungenErlauben(daten.getBoolean("zusammenfassungen"))
+            	.zahldatum(getCalendarValue(daten, "zahldatum"))
+            	.geldeingang(getCalendarValue(daten, "geldeingang"));
          }
       } catch (SQLException e) {
          logger.warn(sql, e);
       }
-      return r;
+      
+      return rechnungBuilder;
    }
+
+	private Calendar getCalendarValue(ResultSet daten, String columnLabel) throws SQLException {
+		java.sql.Date date = daten.getDate(columnLabel);
+		if(date == null) {
+			return null;
+		}
+		Calendar value = new GregorianCalendar();
+		value.setTimeInMillis(date.getTime());
+		return value;
+	}
 
    public Vector<Arbeitsstunde> getEinheiten(int rechnungs_id) {
       String where = " rechnung_id=" + rechnungs_id;
