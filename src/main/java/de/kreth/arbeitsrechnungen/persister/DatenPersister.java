@@ -13,7 +13,7 @@ import de.kreth.arbeitsrechnungen.data.Einheit;
 
 public class DatenPersister extends AbstractPersister {
 
-   public DatenPersister(Options optionen) {
+   public DatenPersister(Options optionen) throws SQLException {
       super(optionen);
    }
 

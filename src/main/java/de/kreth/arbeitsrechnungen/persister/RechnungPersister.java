@@ -13,7 +13,7 @@ import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 
 public class RechnungPersister extends AbstractPersister {
 
-   public RechnungPersister(Options optionen) {
+   public RechnungPersister(Options optionen) throws SQLException {
       super(optionen);
    }
 

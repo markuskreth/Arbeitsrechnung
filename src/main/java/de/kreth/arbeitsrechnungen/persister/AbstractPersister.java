@@ -1,5 +1,7 @@
 package de.kreth.arbeitsrechnungen.persister;
 
+import java.sql.SQLException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,13 +13,13 @@ public class AbstractPersister implements Persister {
    protected final Logger logger = LoggerFactory.getLogger(getClass());
    protected final Verbindung verbindung;
 
-   public AbstractPersister(Options optionen) {
+   public AbstractPersister(Options optionen) throws SQLException {
       super();
       verbindung = connectToDb(optionen);
    }
 
    @Override
-   public Verbindung connectToDb(Options optionen) {
+   public Verbindung connectToDb(Options optionen) throws SQLException {
       return new DatabaseConnector(optionen.getProperties()).getVerbindung();
    }
 

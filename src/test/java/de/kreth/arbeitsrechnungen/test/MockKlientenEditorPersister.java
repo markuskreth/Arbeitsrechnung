@@ -1,5 +1,7 @@
 package de.kreth.arbeitsrechnungen.test;
 
+import java.sql.SQLException;
+
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.database.Verbindung;
@@ -7,12 +9,12 @@ import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 
 public class MockKlientenEditorPersister extends KlientenEditorPersister {
 
-   public MockKlientenEditorPersister(Options optionen) {
+   public MockKlientenEditorPersister(Options optionen) throws SQLException {
       super(optionen);
    }
 
-   public MockKlientenEditorPersister() {
-      super(null);
+   public MockKlientenEditorPersister() throws SQLException {
+      this(null);
    }
 
    @Override

@@ -1,5 +1,6 @@
 package de.kreth.arbeitsrechnungen;
 
+import java.sql.SQLException;
 import java.util.Vector;
 
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
@@ -12,11 +13,11 @@ public class MockRechnungDialogPersister extends RechnungDialogPersister {
    public int klientId;
    public Builder rechnungBuilder;
 
-   public MockRechnungDialogPersister(Options optionen) {
+   public MockRechnungDialogPersister(Options optionen) throws SQLException {
       this();
    }
 
-   public MockRechnungDialogPersister() {
+   public MockRechnungDialogPersister() throws SQLException {
       super(null);
    }
 

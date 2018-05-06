@@ -14,7 +14,7 @@ public class RechnungDialogPersister extends AbstractPersister {
 
    private final DateFormat sqlDateFormat;
 
-   public RechnungDialogPersister(Options optionen) {
+   public RechnungDialogPersister(Options optionen) throws SQLException {
       super(optionen);
       sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
    }

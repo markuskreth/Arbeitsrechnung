@@ -11,7 +11,7 @@ import de.kreth.arbeitsrechnungen.data.Klient;
 
 public class KlientenEditorPersister extends AbstractPersister {
 
-   public KlientenEditorPersister(Options optionen) {
+   public KlientenEditorPersister(Options optionen) throws SQLException {
       super(optionen);
    }
 

@@ -14,7 +14,7 @@ import de.kreth.arbeitsrechnungen.persister.KlientPersister.Auftraggeber;
 
 public class AngebotPersister extends AbstractPersister {
 
-	public AngebotPersister(Options optionen) {
+	public AngebotPersister(Options optionen) throws SQLException {
 		super(optionen);
 	}
 	

@@ -1,13 +1,14 @@
 package de.kreth.arbeitsrechnungen.persister;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Einheit;
 
 public class KlientPersister extends AbstractPersister {
 
-	public KlientPersister(Options optionen) {
+	public KlientPersister(Options optionen) throws SQLException {
 		super(optionen);
 	}
 

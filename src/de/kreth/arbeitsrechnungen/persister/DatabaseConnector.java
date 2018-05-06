@@ -20,17 +20,7 @@ public final class DatabaseConnector {
 
    public DatabaseConnector(Properties optionen) {
       super();
-      if(verbindung == null || verbindung.connected() == false) {
-
-         verbindung = new Verbindung_mysql(optionen);
-         
-         if (verbindung.connected()) {
-            logger.info("Connected to " + verbindung);
-//            checkVersion();
-         } else {
-            logger.error("Not connected to " + verbindung);
-         }
-      }
+      this.options = optionen;
    }
 
 //   private void checkVersion() {

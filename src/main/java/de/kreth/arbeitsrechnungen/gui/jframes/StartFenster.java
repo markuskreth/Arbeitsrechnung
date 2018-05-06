@@ -8,6 +8,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Iterator;
@@ -47,7 +49,17 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       logger = LoggerFactory.getLogger(getClass());
 
       loadOrCreateOptions();
-      persister = ArbeitRechnungFactory.getInstance().getPersister(DatenPersister.class);
+      try {
+         persister = ArbeitRechnungFactory.getInstance().getPersister(DatenPersister.class);
+      } catch (IllegalArgumentException e) {
+         if(InvocationTargetException.class.equals(e.getCause().getClass()) && SQLException.class.equals(e.getCause().getCause().getClass())) {
+            JOptionPane.showMessageDialog(null, 
+                  "Cannot connect database, exiting: " + e.getCause().getCause().getMessage(), 
+                  "Fataler Fehler", JOptionPane.ERROR_MESSAGE);
+         
+            System.exit(5);
+         }
+      }
 
       // Model mit Überschriften erstellen
 //      einheitenTableModel = new LabledStringValueNoneditableTableModel(new String[] { "Firma", "Einsätze", "Summe" });

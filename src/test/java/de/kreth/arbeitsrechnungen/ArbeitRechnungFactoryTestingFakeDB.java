@@ -1,5 +1,7 @@
 package de.kreth.arbeitsrechnungen;
 
+import java.sql.SQLException;
+
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 import de.kreth.arbeitsrechnungen.persister.Persister;
 import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
@@ -26,14 +28,22 @@ public class ArbeitRechnungFactoryTestingFakeDB extends ArbeitRechnungFactory {
 			if (klientenEditorPersister != null) {
 				return (T) klientenEditorPersister;
 			} else {
-				return (T) new MockKlientenEditorPersister();
+				try {
+               return (T) new MockKlientenEditorPersister();
+            } catch (SQLException e) {
+               throw new RuntimeException(e);
+            }
 			}
 		}
 		if (clazz == RechnungDialogPersister.class) {
 			if (rechnungDialogPersister != null) {
 				return (T) rechnungDialogPersister;
 			} else {
-				return (T) new MockRechnungDialogPersister();
+				try {
+               return (T) new MockRechnungDialogPersister();
+            } catch (SQLException e) {
+               throw new RuntimeException(e);
+            }
 			}
 		}
 		throw new IllegalArgumentException("Klasse " + clazz.getSimpleName() + " nicht unterstützt...");

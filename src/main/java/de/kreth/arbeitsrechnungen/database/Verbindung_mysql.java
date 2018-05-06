@@ -31,20 +31,23 @@ public class Verbindung_mysql extends Verbindung {
 		 * Treiber laden, Verbindung aufbauen und die Tabellen der Datenbank auslesen
 		 * und in die tabellenliste speichern.
 		 */
-		String URL2 = "jdbc:mysql://" + server + "/" + datenbank
+		URL = "jdbc:mysql://" + server + "/" + datenbank
 				+ "?useLegacyDatetimeCode=false&serverTimezone=Europe/Berlin";
 
 		// Verbindung aufbauen
 		try {
-			verbindung = DriverManager.getConnection(URL2, benutzer, password);
+			verbindung = DriverManager.getConnection(URL, benutzer, password);
 
 		} catch (Exception e) {
-			logger.error("Verbindung zu " + URL2 + " konnte nicht hergestellt werden.", e);
+			logger.error("Verbindung zu " + URL + " konnte nicht hergestellt werden.", e);
 		}
 	}
 
 	@Override
 	public String toString() {
+	   if(verbindung == null) {
+	      return "URL=" + URL;
+	   }
 		try {
 			return verbindung.getMetaData().getURL();
 		} catch (SQLException e) {

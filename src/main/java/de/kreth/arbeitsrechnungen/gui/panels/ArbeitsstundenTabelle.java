@@ -94,7 +94,6 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 		geloeschte_spalten[0] = null;
 		geloeschte_spalten[1] = null;
 
-
 		Klient kl = factory.getPersister(KlientenEditorPersister.class)
 				.getKlientById(klienten_id);
 		if (kl != null) {

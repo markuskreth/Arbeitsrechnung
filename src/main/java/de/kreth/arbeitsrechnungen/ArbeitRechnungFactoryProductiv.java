@@ -98,7 +98,8 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 		try {
 			Constructor<T> constructor = clazz.getConstructor(optionen.getClass());
 			return constructor.newInstance(optionen);
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException 
+		      | IllegalArgumentException | InvocationTargetException e) {
 			throw new IllegalArgumentException("Klasse " + clazz.getSimpleName() + " nicht unterstützt...", e);
 		}
 	}
