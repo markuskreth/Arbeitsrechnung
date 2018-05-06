@@ -62,11 +62,8 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
 	private String filter = "(ISNULL(Bezahlt) OR ISNULL(Rechnung_verschickt))";
 
-	private DatenPersister datenPersister;
+   private ArbeitRechnungFactory factory;
 
-	// public static final String TEXUMBRUCH = "\\\\\\\\";
-	// public static final String TEXLINE = "\\\\hline";
-	// public static final String TEXEURO = "\\\\officialeuro";
 	public static final int EINGEREICHTE = 1;
 	public static final int NICHTEINGEREICHTE = 2;
 	public static final int OFFENE = 3;
@@ -89,8 +86,8 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 	/** Creates new form ArbeitsstundenTabelle */
 	public ArbeitsstundenTabelle(Window parent, int klienten_id) {
 		
-		ArbeitRechnungFactory factory = ArbeitRechnungFactory.getInstance();
-		datenPersister = factory.getPersister(DatenPersister.class);
+		factory = ArbeitRechnungFactory.getInstance();
+		
 		geloeschte_spalten[0] = null;
 		geloeschte_spalten[1] = null;
 
@@ -132,7 +129,10 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 		arbeitsstunden.clear();
 
 		try {
+
+	      DatenPersister datenPersister = factory.getPersister(DatenPersister.class);
 			arbeitsstunden.addAll(datenPersister.getEinheiten(klienten_id, filter));
+			datenPersister.close();
 		} catch (SQLException e) {
 			logger.error("Failure fetching Arbeitsstunden", e);
 		}
@@ -786,6 +786,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 					"Kein Datensatz ausgewählt!", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 
+	      DatenPersister datenPersister = factory.getPersister(DatenPersister.class);
 			List<Date> daten = datenPersister.getDatumForEinheiten(einheit_id);
 
 			try {
@@ -821,6 +822,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 				this.update(klient);
 				this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true, false);
 			}
+			datenPersister.close();
 		}
 	}
 
@@ -1205,7 +1207,10 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 				einheitId[i] = this.arbeitsstunden.get(einheitId[i]).getID();
 			}
 
-			return datenPersister.updateFields(feld, feld2, datum, einheitId);
+         DatenPersister datenPersister = factory.getPersister(DatenPersister.class);
+			boolean updateFields = datenPersister.updateFields(feld, feld2, datum, einheitId);
+			datenPersister.close();
+         return updateFields;
 		} else
 			return false;
 	}
@@ -1244,7 +1249,6 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 		// neu geladen
 		update(klient);
 		this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true, false);
-		datenPersister.close();
 	}
 
 	@Override

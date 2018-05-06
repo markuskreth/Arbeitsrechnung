@@ -45,7 +45,7 @@ public final class DatabaseConnector {
             // checkVersion();
          } else {
             logger.error("Not connected to " + verbindung);
-            throw new SQLException("No connection to Database possible: " + optionen.getProperty("sqlserver") + "/" + optionen.getProperty("datenbank"));
+            throw new SQLException("No connection to Database possible: " + verbindung);
          }
       }
    }

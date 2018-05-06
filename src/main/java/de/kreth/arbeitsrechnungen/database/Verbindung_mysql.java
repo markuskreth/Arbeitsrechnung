@@ -30,9 +30,10 @@ public class Verbindung_mysql extends Verbindung {
 		StringBuilder builder = new StringBuilder();
       builder.append("jdbc:mysql://");
       builder.append(server);
-      builder.append("/");
+      builder.append(":3306/");
       builder.append(datenbank);
       builder.append("?useLegacyDatetimeCode=false&serverTimezone=Europe/Berlin");
+
       /**
 		 * Treiber laden, Verbindung aufbauen und die Tabellen der Datenbank auslesen
 		 * und in die tabellenliste speichern.
@@ -49,11 +50,24 @@ public class Verbindung_mysql extends Verbindung {
 
 	@Override
 	public String toString() {
+	   StringBuilder txt = new StringBuilder(URL);
 	   if(verbindung == null) {
-	      return "URL=" + URL + " (not connected)";
+	      txt.append(" (not connected)");
 	   } else {
-         return "URL=" + URL + " (not connected)";
+	      boolean closed = true;
+	      
+	      try {
+            closed = verbindung.isClosed();
+         } catch (SQLException e) {
+            if(logger.isTraceEnabled()) {
+               logger.trace("error queriing connection closed status", e);
+            }
+         }
+	      if(closed) {
+	         txt.append(" (not connected)");
+	      }
 	   }
+	   return txt.toString();
 	}
 
 	public Verbindung_mysql(Properties options) {
