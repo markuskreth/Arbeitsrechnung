@@ -94,7 +94,8 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 		geloeschte_spalten[0] = null;
 		geloeschte_spalten[1] = null;
 
-		Klient kl = factory.getPersister(KlientenEditorPersister.class)
+		KlientenEditorPersister klientPersister = factory.getPersister(KlientenEditorPersister.class);
+      Klient kl = klientPersister
 				.getKlientById(klienten_id);
 		if (kl != null) {
 			if (kl.hasZusatz1()) {
@@ -106,6 +107,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 				this.zusatz2_name = kl.getZusatz2_Name();
 			}
 		}
+		klientPersister.close();
 		initComponents();
 		this.jTextFieldStundenzahl.setVisible(false);
 		this.jLabel6.setVisible(false);
@@ -717,12 +719,22 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 
 		ArbeitRechnungFactory factory = ArbeitRechnungFactory.getInstance();
 
-		EinheitEinzelFrame fenster = new EinheitEinzelFrame(
-				factory.getPersister(KlientPersister.class),
-				factory.getPersister(AngebotPersister.class));
+		KlientPersister klPersister = factory.getPersister(KlientPersister.class);
+      AngebotPersister angPersister = factory.getPersister(AngebotPersister.class);
+      EinheitEinzelFrame fenster = new EinheitEinzelFrame(
+				klPersister,
+				angPersister);
 		fenster.load(this.klient, -1);
 		fenster.addWindowListener(this);
 		fenster.setVisible(true);
+
+      fenster.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+               klPersister.close();
+               angPersister.close();
+            }
+      });
 	}
 
 	private void jButtonBearbeitenActionPerformed(ActionEvent evt) {
@@ -739,11 +751,21 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 			einheit_id = this.arbeitsstunden.get(einheit_id).getID();
 			ArbeitRechnungFactory factory = ArbeitRechnungFactory.getInstance();
 
-			EinheitEinzelFrame fenster = new EinheitEinzelFrame(factory.getPersister(KlientPersister.class),
-					factory.getPersister(AngebotPersister.class));
+			KlientPersister klPersister = factory.getPersister(KlientPersister.class);
+         AngebotPersister angebotPersister = factory.getPersister(AngebotPersister.class);
+         EinheitEinzelFrame fenster = new EinheitEinzelFrame(klPersister,
+					angebotPersister);
 			fenster.load(this.klient, einheit_id);
 			fenster.addWindowListener(this);
 			fenster.setVisible(true);
+
+	      fenster.addWindowListener(new WindowAdapter() {
+	            @Override
+	            public void windowClosed(WindowEvent e) {
+	               klPersister.close();
+	               angebotPersister.close();
+	            }
+	      });
 		}
 	}
 
@@ -1222,6 +1244,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 		// neu geladen
 		update(klient);
 		this.firePropertyChange("ArbeitsstundenTabelle.Tabellendaten", true, false);
+		datenPersister.close();
 	}
 
 	@Override

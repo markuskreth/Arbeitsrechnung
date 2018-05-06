@@ -72,6 +72,13 @@ public class KlientenEditor extends JDialog {
 
       persister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
 
+      addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+               persister.close();
+            }
+      });
+      
       allKlienten = persister.getAllKlienten();
 
       if (allKlienten.size() > 0) {

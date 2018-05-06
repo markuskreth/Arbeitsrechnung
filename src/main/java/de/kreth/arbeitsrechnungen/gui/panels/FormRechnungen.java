@@ -9,8 +9,7 @@ package de.kreth.arbeitsrechnungen.gui.panels;
  * @author markus
  */
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.beans.PropertyChangeSupport;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -63,6 +62,13 @@ public class FormRechnungen extends JPanel {
       initComponents();
       logger.debug("Konstruktor FormRechnungen ausgeführt!");
       update();
+
+      owner.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+               rechnungPersister.close();
+            }
+      });
    }
 
    private void update() {

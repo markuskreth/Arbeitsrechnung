@@ -27,17 +27,21 @@ public class Verbindung_mysql extends Verbindung {
 	}
 
 	protected Verbindung_mysql(String server, String datenbank, String benutzer, String password) {
-		/**
+		StringBuilder builder = new StringBuilder();
+      builder.append("jdbc:mysql://");
+      builder.append(server);
+      builder.append("/");
+      builder.append(datenbank);
+      builder.append("?useLegacyDatetimeCode=false&serverTimezone=Europe/Berlin");
+      /**
 		 * Treiber laden, Verbindung aufbauen und die Tabellen der Datenbank auslesen
 		 * und in die tabellenliste speichern.
 		 */
-		URL = "jdbc:mysql://" + server + "/" + datenbank
-				+ "?useLegacyDatetimeCode=false&serverTimezone=Europe/Berlin";
+		URL = builder.toString();
 
 		// Verbindung aufbauen
 		try {
 			verbindung = DriverManager.getConnection(URL, benutzer, password);
-
 		} catch (Exception e) {
 			logger.error("Verbindung zu " + URL + " konnte nicht hergestellt werden.", e);
 		}
@@ -46,14 +50,10 @@ public class Verbindung_mysql extends Verbindung {
 	@Override
 	public String toString() {
 	   if(verbindung == null) {
-	      return "URL=" + URL;
+	      return "URL=" + URL + " (not connected)";
+	   } else {
+         return "URL=" + URL + " (not connected)";
 	   }
-		try {
-			return verbindung.getMetaData().getURL();
-		} catch (SQLException e) {
-			logger.error("Error in Mysql Verbindung", e);
-			return e.toString();
-		}
 	}
 
 	public Verbindung_mysql(Properties options) {
@@ -125,7 +125,9 @@ public class Verbindung_mysql extends Verbindung {
 	@Override
 	public void close() {
 		try {
-			logger.trace("Closing " + verbindung);
+		   if(logger.isTraceEnabled()) {
+		      logger.trace("Closing " + verbindung);
+		   }
 			verbindung.close();
 		} catch (Exception e) {
 			logger.error("Fehler in close ", e);

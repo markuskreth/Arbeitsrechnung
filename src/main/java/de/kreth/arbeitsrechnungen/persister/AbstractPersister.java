@@ -27,4 +27,9 @@ public class AbstractPersister implements Persister {
       logger.debug(Thread.currentThread().getStackTrace()[2].getMethodName() + ": " + sqltext);
    }
 
+   @Override
+   public void close() {
+      verbindung.close();
+   }
+
 }

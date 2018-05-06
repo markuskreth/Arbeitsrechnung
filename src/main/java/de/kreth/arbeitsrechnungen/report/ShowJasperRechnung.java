@@ -27,8 +27,6 @@ public class ShowJasperRechnung {
 	private static final String MTV_JRXML = "mtv_gross_buchholz.jrxml";
 	
 	private final Logger log = LoggerFactory.getLogger(getClass());
-	private RechnungDialogPersister p = ArbeitRechnungFactory.getInstance().getPersister(RechnungDialogPersister.class);
-	private KlientenEditorPersister klientenEditorPersister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
 	
 
 	public static void main(String[] args) throws JRException {
@@ -37,7 +35,7 @@ public class ShowJasperRechnung {
 
 		int rechnungId;
 		if(args.length>0 && StringUtils.isNumeric(args[0])) {
-			rechnungId = Integer.valueOf(args[0]);
+			rechnungId = Integer.valueOf(args[0]).intValue();
 		}else {
 			rechnungId = showJasperRechnung.chooseRechnung();
 		}
@@ -49,6 +47,8 @@ public class ShowJasperRechnung {
 	}
 
 	private int chooseRechnung() {
+
+      KlientenEditorPersister klientenEditorPersister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
 		List<Klient> klienten = klientenEditorPersister.getAllKlienten();
 		RechnungPersister pers = ArbeitRechnungFactory.getInstance().getPersister(RechnungPersister.class);
 		List<KlientRechnung> rechnungen = new ArrayList<>();
@@ -58,6 +58,9 @@ public class ShowJasperRechnung {
 				rechnungen.add(new KlientRechnung(k, r));
 			}
 		}
+		
+		pers.close();
+		klientenEditorPersister.close();
 		
 		KlientRechnung result = (KlientRechnung) JOptionPane.showInputDialog(null, "Wählen Sie eine Rechnung", "Rechnung anzeigen"
 				, JOptionPane.QUESTION_MESSAGE, null
@@ -72,13 +75,16 @@ public class ShowJasperRechnung {
 
 	public JRDataSource createSource(int rechnungId) {
 
+      KlientenEditorPersister klientenEditorPersister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
+	   RechnungDialogPersister p = ArbeitRechnungFactory.getInstance().getPersister(RechnungDialogPersister.class);
 		Builder rechn = p.getRechnungById(rechnungId);
 		rechn.einheiten(p.getEinheiten(rechnungId));
-
 		int klienten_id = p.getKlientenIdForRechnungId(rechnungId);
 		Klient klient = klientenEditorPersister.getKlientById(klienten_id);
 		rechn.zusatz1Name(klient.getZusatz1_Name());
 		rechn.zusatz2Name(klient.getZusatz2_Name());
+		p.close();
+		klientenEditorPersister.close();
 		return createSource(rechn.build());
 
 	}

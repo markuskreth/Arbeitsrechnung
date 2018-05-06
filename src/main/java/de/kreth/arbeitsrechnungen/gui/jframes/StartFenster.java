@@ -73,6 +73,12 @@ public class StartFenster extends JFrame implements PropertyChangeListener {
       initHintman();
       this.jButtonArtenEinheiten.setEnabled(false);
 
+      addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+               persister.close();
+            }
+      });
    }
 
    private void initHintman() {

@@ -15,8 +15,7 @@ import java.awt.Component;
  * @author markus
  */
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -54,6 +53,14 @@ public class EinheitEinzelFrame extends JFrame {
 		this.klientPersister = factory.getPersister(KlientPersister.class);
 		this.angebotPersister = factory.getPersister(AngebotPersister.class);
 		initComponents();
+
+      addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+               klientPersister.close();
+               angebotPersister.close();
+            }
+      });
 	}
 	
 	/**
@@ -558,6 +565,7 @@ public class EinheitEinzelFrame extends JFrame {
 
 	public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
 
         		EinheitEinzelFrame frame = new EinheitEinzelFrame();

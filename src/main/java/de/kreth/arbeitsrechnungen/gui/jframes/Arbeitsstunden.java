@@ -45,6 +45,13 @@ public class Arbeitsstunden extends JFrame {
       logger.debug("Init beginnt:");
 
       initComponents();
+
+      addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+               persister.close();
+            }
+      });
       ready = true;
    }
 

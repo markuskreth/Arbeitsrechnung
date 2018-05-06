@@ -72,10 +72,17 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
 
       initComponents();
       ArbeitRechnungFactory factory = ArbeitRechnungFactory.getInstance();
-	klientenPersister = (KlientenEditorPersister) factory.getPersister(KlientenEditorPersister.class);
-      persister = (RechnungDialogPersister) factory.getPersister(RechnungDialogPersister.class);
-
+      klientenPersister = factory.getPersister(KlientenEditorPersister.class);
+      persister = factory.getPersister(RechnungDialogPersister.class);
       heute = new GregorianCalendar();
+
+      addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+               persister.close();
+               klientenPersister.close();
+            }
+      });
    }
 
    /**
@@ -159,7 +166,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
    /**
     * Erstellt eine neue Rechnung für die übergebenen Einheiten.
     * 
-    * @param optionen
     * @param parent
     * @param einheiten
     */
@@ -919,7 +925,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
    /**
     * Speichert die Rechnung und Details in der Datenbank
     * 
-    * @param optionen
     */
    public int speichern() {
 
