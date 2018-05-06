@@ -119,7 +119,6 @@ public class AngebotPersister extends AbstractPersister {
 
 		try {
 			rs = verbindung.query(sqltext);
-
 			rs.first();
 			String inhalt = rs.getString("Inhalt");
 			float preis = rs.getFloat("Preis");

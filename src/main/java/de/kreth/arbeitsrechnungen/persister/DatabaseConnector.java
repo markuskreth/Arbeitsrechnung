@@ -41,7 +41,9 @@ public final class DatabaseConnector {
          verbindung = new Verbindung_mysql(optionen);
 
          if (verbindung.connected()) {
-            logger.info("Connected to " + verbindung);
+            if(logger.isDebugEnabled()) {
+               logger.debug("Connected to " + verbindung);
+            }
             // checkVersion();
          } else {
             logger.error("Not connected to " + verbindung);
