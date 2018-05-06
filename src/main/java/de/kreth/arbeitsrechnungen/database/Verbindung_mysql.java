@@ -9,6 +9,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+
 public class Verbindung_mysql extends Verbindung {
 
 	static String URL = "jdbc:mysql://192.168.0.1";
@@ -17,9 +19,22 @@ public class Verbindung_mysql extends Verbindung {
 
 	private Connection verbindung = null;
 
+   private static MysqlConnectionPoolDataSource ds;
+
 	protected Verbindung_mysql(String datenbank, String benutzer, String password) {
 		try {
-			verbindung = DriverManager.getConnection(URL + "/" + datenbank, benutzer, password);
+		   if (ds == null) {
+   		   ds = new MysqlConnectionPoolDataSource();
+//            ds.setUrl(URL);
+
+            ds.setServerName("192.168.0.1");
+            ds.getModifiableProperty("serverTimezone").setValue("Europe/Berlin");
+//            ds.getModifiableProperty("useLegacyDatetimeCode").setValue(Boolean.FALSE);
+            ds.setUser(benutzer);
+            ds.setPassword(password);
+            ds.setDatabaseName(datenbank);
+		   }
+         verbindung = ds.getPooledConnection().getConnection();
 		} catch (Exception e) {
 			logger.error("Verbindung zu " + URL + " konnte nicht hergestellt werden.", e);
 
@@ -27,22 +42,30 @@ public class Verbindung_mysql extends Verbindung {
 	}
 
 	protected Verbindung_mysql(String server, String datenbank, String benutzer, String password) {
-		StringBuilder builder = new StringBuilder();
-      builder.append("jdbc:mysql://");
-      builder.append(server);
-      builder.append(":3306/");
-      builder.append(datenbank);
-      builder.append("?useLegacyDatetimeCode=false&serverTimezone=Europe/Berlin");
 
-      /**
-		 * Treiber laden, Verbindung aufbauen und die Tabellen der Datenbank auslesen
-		 * und in die tabellenliste speichern.
-		 */
-		URL = builder.toString();
-
+	   
 		// Verbindung aufbauen
 		try {
-			verbindung = DriverManager.getConnection(URL, benutzer, password);
+		   if (ds == null || server.equals(ds.getServerName()) == false) {
+		      StringBuilder builder = new StringBuilder();
+		      builder.append("jdbc:mysql://");
+		      builder.append(server);
+		      builder.append(":3306/");
+		      builder.append(datenbank);
+		      builder.append("?useLegacyDatetimeCode=false&serverTimezone=Europe/Berlin");
+
+		      URL = builder.toString();
+
+   		   ds = new MysqlConnectionPoolDataSource();
+//   		   ds.setUrl(URL);
+   		   ds.setServerName(server);
+            ds.getModifiableProperty("serverTimezone").setValue("Europe/Berlin");
+//            ds.getJdbcModifiableProperty("useLegacyDatetimeCode").setValue(Boolean.FALSE);
+   		   ds.setUser(benutzer);
+   		   ds.setPassword(password);
+            ds.setDatabaseName(datenbank);
+		   }
+			verbindung = ds.getPooledConnection().getConnection();
 		} catch (Exception e) {
 			logger.error("Verbindung zu " + URL + " konnte nicht hergestellt werden.", e);
 		}
