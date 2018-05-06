@@ -2,6 +2,7 @@ package de.kreth.arbeitsrechnungen;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
@@ -85,7 +86,7 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 		try {
 			logger.debug("loading Option properties from " + optionfile.getAbsolutePath());
 			Properties prop = new Properties();
-			prop.load(new FileInputStream(optionfile));
+			prop.load(new InputStreamReader(new FileInputStream(optionfile), "UTF-8"));
 			return new Options.Build(prop).build();
 		} catch (Exception e) {
 			logger.error("Startfenster.java: Options-Datei konnte nicht geladen werden.", e);
