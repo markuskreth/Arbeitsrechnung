@@ -46,8 +46,6 @@ public class FormRechnungen extends JPanel {
    private Vector<Rechnung> rechnungen = new Vector<Rechnung>();
    private Window owner;
 
-   private RechnungPersister rechnungPersister;
-
    /**
     * Creates new form FormRechnungen
     * 
@@ -56,26 +54,20 @@ public class FormRechnungen extends JPanel {
    public FormRechnungen(Window owner, int klienten_id) {
       super();
       this.owner = owner;
-      rechnungPersister = ArbeitRechnungFactory.getInstance().getPersister(RechnungPersister.class);
 
       this.klienten_id = klienten_id;
       initComponents();
       logger.debug("Konstruktor FormRechnungen ausgeführt!");
       update();
 
-      owner.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-               rechnungPersister.close();
-            }
-      });
    }
 
    private void update() {
       this.rechnungen.removeAllElements();
 
+      RechnungPersister rechnungPersister = ArbeitRechnungFactory.getInstance().getPersister(RechnungPersister.class);
       this.rechnungen.addAll(rechnungPersister.getRechnungenForKlient(this.klienten_id));
-
+      rechnungPersister.close();
       makeTable();
 
    }
@@ -93,8 +85,8 @@ public class FormRechnungen extends JPanel {
       DefaultTableModel mymodel = new DefaultTableModel() {
 
          /**
-			 * 
-			 */
+          * 
+          */
          private static final long serialVersionUID = 4244937355506945056L;
          Class<?>[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class };
          boolean[] canEdit = new boolean[] { false, false, false, false, false };
@@ -207,21 +199,16 @@ public class FormRechnungen extends JPanel {
 
       GroupLayout layout = new GroupLayout(this);
       this.setLayout(layout);
-      layout.setHorizontalGroup(layout
-            .createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
-            .addGroup(
-                  GroupLayout.Alignment.TRAILING,
-                  layout.createSequentialGroup().addContainerGap().addComponent(jButtonBezahlt).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                        .addComponent(jButtonAendern).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jButtonAnsehen)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jButtonLoeschen).addContainerGap()));
-      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-            layout.createSequentialGroup()
-                  .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
-                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(
-                        layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jButtonLoeschen).addComponent(jButtonAnsehen).addComponent(jButtonAendern)
-                              .addComponent(jButtonBezahlt)).addContainerGap()));
+      layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE).addGroup(
+            GroupLayout.Alignment.TRAILING,
+            layout.createSequentialGroup().addContainerGap().addComponent(jButtonBezahlt).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                  .addComponent(jButtonAendern).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jButtonAnsehen)
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(jButtonLoeschen).addContainerGap()));
+      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup().addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(jButtonLoeschen)
+                        .addComponent(jButtonAnsehen).addComponent(jButtonAendern).addComponent(jButtonBezahlt))
+                  .addContainerGap()));
    }// </editor-fold>//GEN-END:initComponents
 
    /**
@@ -253,9 +240,12 @@ public class FormRechnungen extends JPanel {
 
    private void jButtonLoeschenActionPerformed(ActionEvent evt) {
       Rechnung rechn = this.rechnungen.elementAt(this.jTable1.getSelectedRow());
-      if (JOptionPane.showConfirmDialog(this.getParent(), "Wollen Sie die gewählte Rechnung endgültig löschen?", "Endgültige Löschung!", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-         
-         if(rechnungPersister.delete(rechn)) {
+      if (JOptionPane.showConfirmDialog(this.getParent(), "Wollen Sie die gewählte Rechnung endgültig löschen?", "Endgültige Löschung!",
+            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+         RechnungPersister rechnungPersister = ArbeitRechnungFactory.getInstance().getPersister(RechnungPersister.class);
+
+         if (rechnungPersister.delete(rechn)) {
             // gelöscht
             JOptionPane.showMessageDialog(this.getParent(), "Rechnung erfolgreich gelöscht!");
             pchListeners.fireIndexedPropertyChange(GELOESCHT, rechn.getRechnungen_id(), true, false);
@@ -263,7 +253,7 @@ public class FormRechnungen extends JPanel {
             // nicht gelöscht.
             JOptionPane.showMessageDialog(this.getParent(), "Achtung! Rechnung konnte nicht gelöscht werden!");
          }
-         
+         rechnungPersister.close();
       }
    }
 
@@ -280,18 +270,21 @@ public class FormRechnungen extends JPanel {
          Kalenderauswahl kalender = new Kalenderauswahl(null);
          kalender.setVisible(true);
          // TODO Löschen einer Bezahlung nicht implementiert...
-         
+
          if (kalender.isBestaetigt() && kalender.getDatum() != null) {
-            if(rechnungPersister.setRechnungBezahlt(rechnung, in_klausel, kalender)) {
+
+            RechnungPersister rechnungPersister = ArbeitRechnungFactory.getInstance().getPersister(RechnungPersister.class);
+
+            if (rechnungPersister.setRechnungBezahlt(rechnung, in_klausel, kalender)) {
                JOptionPane.showMessageDialog(null, "Rechnung ist abgerechnet", "Rechnung bezahlt", JOptionPane.INFORMATION_MESSAGE);
                this.update();
                for (int i = 1; i < rechnung.length; i++) {
                   pchListeners.fireIndexedPropertyChange(GEAENDERT, this.rechnungen.elementAt(rechnung[i]).getRechnungen_id(), true, false);
                }
             } else {
-               JOptionPane
-               .showMessageDialog(null, "Rechnung ist nicht abgerechnet!!!\nDie Einheiten aber schon!!! ", "Achtung! Achtung! Achtung!", JOptionPane.ERROR_MESSAGE);
-      }
+               JOptionPane.showMessageDialog(null, "Rechnung ist nicht abgerechnet!!!\nDie Einheiten aber schon!!! ", "Achtung! Achtung! Achtung!", JOptionPane.ERROR_MESSAGE);
+            }
+            rechnungPersister.close();
          }
       }
    }

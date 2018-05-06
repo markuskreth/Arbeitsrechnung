@@ -58,9 +58,10 @@ public class KlientenEditor extends JDialog {
          this.jTextFieldATelefon, this.jTextFieldAEmail, this.jTextAreaBemerkungen };
 
    private FocusTraversalPolicy policy = new FocusTraversalPolicyImpl();
-   private KlientenEditorPersister persister;
 
    private LabledStringValueNoneditableTableModel angeboteTableModel;
+
+   private final ArbeitRechnungFactory factory;
 
    /**
     * Creates new form KlientenEditor
@@ -70,16 +71,11 @@ public class KlientenEditor extends JDialog {
    public KlientenEditor(final Frame arg0) {
       super(arg0, "Klienteneditor");
 
-      persister = ArbeitRechnungFactory.getInstance().getPersister(KlientenEditorPersister.class);
+      factory = ArbeitRechnungFactory.getInstance();
 
-      addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-               persister.close();
-            }
-      });
-      
+      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
       allKlienten = persister.getAllKlienten();
+      persister.close();
 
       if (allKlienten.size() > 0) {
          currentKlient = allKlienten.get(0);
@@ -1390,6 +1386,7 @@ public class KlientenEditor extends JDialog {
     */
    private void updateRechnungenPanel() {
 
+      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
       this.jTabbedPane1.remove(jPanelRechnungen);
       int anzahl = persister.getRechnungenAnzahl(currentKlient);
 
@@ -1397,7 +1394,7 @@ public class KlientenEditor extends JDialog {
          this.jTabbedPane1.insertTab("Rechnungen", null, jPanelRechnungen, null, 1);
          this.formRechnungen1.update(currentKlient.getKlienten_id());
       }
-
+      persister.close();
    }
 
    /**
@@ -1412,7 +1409,9 @@ public class KlientenEditor extends JDialog {
       if (currentKlient != null)
          klientId = currentKlient.getKlienten_id();
 
+      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
       angebote = persister.getAngeboteForKlient(klientId);
+      persister.close();
 
       angeboteTableModel.setRowCount(0);
 
@@ -1434,8 +1433,11 @@ public class KlientenEditor extends JDialog {
     * @param evt
     */
    private void jButtonNewKlientActionPerformed(final ActionEvent evt) {
+
+      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
       currentKlient = persister.createNewAuftraggeber();
       allKlienten = persister.getAllKlienten();
+      persister.close();
       updateComponents();
    }
 
@@ -1461,8 +1463,10 @@ public class KlientenEditor extends JDialog {
             toNextKlientIfPossible();
          }
 
+         KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
          persister.delete(toDelete);
-
+         persister.close();
+         
          updateComponents();
       }
    }
@@ -1576,7 +1580,9 @@ public class KlientenEditor extends JDialog {
                   JOptionPane.YES_NO_OPTION);
 
             if (ergebnis == JOptionPane.YES_OPTION) {
+               KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
                persister.deleteAngebot(angebot);
+               persister.close();
             }
 
             this.updateAngeboteTabelle();
@@ -1636,7 +1642,10 @@ public class KlientenEditor extends JDialog {
 
       dateiname.setVisible(true);
       if (dateiname.getFile() != null) {
+
+         KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
          persister.speicherWert(currentKlient.getKlienten_id(), "tex_datei", "\"" + dateiname.getDirectory() + dateiname.getFile() + "\"");
+         persister.close();
          this.jTextFieldTex_datei.setText(currentKlient.getTex_datei());
       }
       dateiname.dispose();
@@ -1660,6 +1669,8 @@ public class KlientenEditor extends JDialog {
     * @param event
     */
    private void TextFieldActionPerformed(final ActionEvent event) {
+
+      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
          System.out.println("Text: " + tf.getText() + "\nName: " + tf.getName() + "\n");
@@ -1675,7 +1686,7 @@ public class KlientenEditor extends JDialog {
          }
          allKlienten = persister.getAllKlienten();
       }
-
+      persister.close();
    }
 
    /**
@@ -1702,6 +1713,8 @@ public class KlientenEditor extends JDialog {
 	   if (currentKlient == null) {
 		   return;
 	   }
+
+      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
       if (event.getSource() instanceof JTextField) {
          JTextField tf = (JTextField) event.getSource();
          persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");
@@ -1713,6 +1726,7 @@ public class KlientenEditor extends JDialog {
          persister.speicherWert(currentKlient.getKlienten_id(), ta.getName(), "\"" + ta.getText() + "\"");
          allKlienten = persister.getAllKlienten();
       }
+      persister.close();
    }
 
    /**
