@@ -11,12 +11,8 @@ import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 
 import de.kreth.arbeitsrechnungen.MockableArbeitRechnungFactory;
 import de.kreth.arbeitsrechnungen.data.Angebot;
-import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
-import de.kreth.arbeitsrechnungen.persister.DatenPersister;
-import de.kreth.arbeitsrechnungen.persister.KlientPersister;
+import de.kreth.arbeitsrechnungen.persister.*;
 import de.kreth.arbeitsrechnungen.persister.KlientPersister.Auftraggeber;
-import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
-import de.kreth.arbeitsrechnungen.persister.RechnungPersister;
 
 public abstract class AbstractFrameTest extends AssertJSwingJUnitTestCase {
 

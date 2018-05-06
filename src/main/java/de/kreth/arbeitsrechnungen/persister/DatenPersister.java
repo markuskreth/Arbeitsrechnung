@@ -3,12 +3,7 @@ package de.kreth.arbeitsrechnungen.persister;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 import de.kreth.arbeitsrechnungen.MySqlDate;
 import de.kreth.arbeitsrechnungen.Options;

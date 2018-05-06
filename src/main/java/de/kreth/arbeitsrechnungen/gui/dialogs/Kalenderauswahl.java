@@ -14,10 +14,7 @@ import java.awt.Window;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.LayoutStyle;
+import javax.swing.*;
 
 import com.toedter.calendar.JCalendar;
 

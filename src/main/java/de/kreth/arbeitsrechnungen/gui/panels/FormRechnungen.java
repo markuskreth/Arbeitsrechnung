@@ -16,13 +16,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.LayoutStyle;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import org.slf4j.Logger;

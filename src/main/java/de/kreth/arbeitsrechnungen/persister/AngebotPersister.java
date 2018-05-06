@@ -144,12 +144,14 @@ public class AngebotPersister extends AbstractPersister {
 		if(logger.isDebugEnabled()) {
 			logger.debug("insertOrUpdateAngebot:" + sql);
 		}
+		Angebot result = angebot;
+		
 		try {
 			verbindung.sql(sql);
 			if (angebot.getAngebote_id() < 0) {
 				ResultSet id = verbindung.getAutoincrement();
 				if (id.next()) {
-					angebot = new Angebot.Builder(angebot.getInhalt(), angebot.getPreis())
+				   result = new Angebot.Builder(angebot.getInhalt(), angebot.getPreis())
 							.beschreibung(angebot.getBeschreibung())
 							.preis_pro_stunde(angebot.isPreis_pro_stunde())
 							.angebotId(id.getInt(1))
@@ -159,7 +161,7 @@ public class AngebotPersister extends AbstractPersister {
 		} catch (SQLException e) {
 			logger.error("insertOrUpdateAngebot for klientId=" + klientId + "; Angebot=" + angebot, e);
 		}
-		return angebot;
+		return result;
 	}
 
 	private String insertAngebot(int klientId, Angebot angebot) {

@@ -9,44 +9,16 @@ import java.awt.Rectangle;
  * @author markus
  */
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.*;
 
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JViewport;
-import javax.swing.LayoutStyle;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -63,10 +35,7 @@ import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.gui.dialogs.Kalenderauswahl;
 import de.kreth.arbeitsrechnungen.gui.dialogs.RechnungDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.EinheitEinzelFrame;
-import de.kreth.arbeitsrechnungen.persister.AngebotPersister;
-import de.kreth.arbeitsrechnungen.persister.DatenPersister;
-import de.kreth.arbeitsrechnungen.persister.KlientPersister;
-import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
+import de.kreth.arbeitsrechnungen.persister.*;
 
 @SuppressWarnings("boxing")
 public class ArbeitsstundenTabelle extends JPanel implements WindowListener {

@@ -19,13 +19,7 @@ import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
 import de.kreth.arbeitsrechnungen.persister.RechnungPersister;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class ShowJasperRechnung {

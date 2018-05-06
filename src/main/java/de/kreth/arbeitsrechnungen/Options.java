@@ -1,10 +1,7 @@
 package de.kreth.arbeitsrechnungen;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class Options {
 
