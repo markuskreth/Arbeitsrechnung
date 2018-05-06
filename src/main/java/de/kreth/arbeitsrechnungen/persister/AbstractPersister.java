@@ -3,8 +3,8 @@ package de.kreth.arbeitsrechnungen.persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.database.Verbindung;
 
 public class AbstractPersister implements Persister {
 

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package arbeitsabrechnungendataclass;
+package de.kreth.arbeitsrechnungen.database;
 
 /**
  * @author markus

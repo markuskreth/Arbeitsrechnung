@@ -1,8 +1,8 @@
 package de.kreth.arbeitsrechnungen.test;
 
-import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Klient;
+import de.kreth.arbeitsrechnungen.database.Verbindung;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
 
 public class MockKlientenEditorPersister extends KlientenEditorPersister {

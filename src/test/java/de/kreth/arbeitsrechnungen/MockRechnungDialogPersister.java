@@ -2,9 +2,9 @@ package de.kreth.arbeitsrechnungen;
 
 import java.util.Vector;
 
-import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
+import de.kreth.arbeitsrechnungen.database.Verbindung;
 import de.kreth.arbeitsrechnungen.persister.RechnungDialogPersister;
 
 public class MockRechnungDialogPersister extends RechnungDialogPersister {

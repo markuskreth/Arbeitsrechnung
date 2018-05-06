@@ -5,8 +5,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import arbeitsabrechnungendataclass.Verbindung;
-import arbeitsabrechnungendataclass.Verbindung_mysql;
+import de.kreth.arbeitsrechnungen.database.Verbindung;
+import de.kreth.arbeitsrechnungen.database.Verbindung_mysql;
 
 /**
  * Stellt die Db-Verbindung her und stellt logger-Objekt zur Verfügung.

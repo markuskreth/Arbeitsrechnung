@@ -1,4 +1,4 @@
-package arbeitsabrechnungendataclass;
+package de.kreth.arbeitsrechnungen.database;
 
 /**
  * @author markus

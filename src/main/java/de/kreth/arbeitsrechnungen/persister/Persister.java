@@ -1,7 +1,7 @@
 package de.kreth.arbeitsrechnungen.persister;
 
-import arbeitsabrechnungendataclass.Verbindung;
 import de.kreth.arbeitsrechnungen.Options;
+import de.kreth.arbeitsrechnungen.database.Verbindung;
 
 public interface Persister {
 

@@ -1,5 +1,5 @@
 
-package arbeitsabrechnungendataclass;
+package de.kreth.arbeitsrechnungen.database;
 
 /**
  *
