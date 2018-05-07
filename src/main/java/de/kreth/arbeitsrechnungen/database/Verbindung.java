@@ -1,5 +1,6 @@
 package de.kreth.arbeitsrechnungen.database;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -29,8 +30,10 @@ public abstract class Verbindung {
 	 */
 	public abstract ResultSet query(CharSequence sql) throws SQLException;
 
+	public abstract PreparedStatement prepareStatement(CharSequence sql) throws SQLException;
+	
 	/**
-	 * führt den sqlbefehl aus und liefert bei erfolg true zurück.
+	 * Führt den sqlbefehl aus und liefert bei erfolg true zurück.
 	 * 
 	 * @param sql
 	 * @return befehl ausgeführt oder nicht?

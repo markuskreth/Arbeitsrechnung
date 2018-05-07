@@ -1,5 +1,6 @@
 package de.kreth.arbeitsrechnungen.persister;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -20,14 +21,18 @@ public class RechnungDialogPersister extends AbstractPersister {
    }
 
    public int getKlientenIdForRechnungId(int rechnungs_id) {
-      String sql = "SELECT klienten_id FROM rechnungen WHERE rechnungen_id=" + rechnungs_id + ";";
+      String sql = "SELECT klienten_id FROM rechnungen WHERE rechnungen_id=?";
 
-      logger.debug("getKlientenIdForRechnungId: " + sql);
+      if(logger.isDebugEnabled()) {
+         logger.debug("getKlientenIdForRechnungId: " + sql);
+      }
       
       int result = 0;
       
       try {
-         ResultSet rs = verbindung.query(sql);
+         PreparedStatement stm = verbindung.prepareStatement(sql);
+         stm.setInt(1, rechnungs_id);
+         ResultSet rs = stm.executeQuery();
          if(rs.next()) {
             result = rs.getInt("klienten_id");
             if(rs.next()) {
@@ -83,22 +88,20 @@ public class RechnungDialogPersister extends AbstractPersister {
 	}
 
    public Vector<Arbeitsstunde> getEinheiten(int rechnungs_id) {
-      String where = " rechnung_id=" + rechnungs_id;
-      return getEinheiten(where);
-   }
-
-   private Vector<Arbeitsstunde> getEinheiten(String where) {
+      
       // Vector einheiten wird mit zugehörigen Daten von Vector einheiten_int
       // gefüllt
       String sql = "SELECT DISTINCT einheiten.einheiten_id AS einheiten_id, einheiten.klienten_id AS klienten_id, "
             + "einheiten.angebote_id AS angebote_id, Datum, Beginn, Ende, zusatz1, zusatz2, Preisänderung, Rechnung_verschickt, "
             + "Rechnung_Datum, Bezahlt,Bezahlt_Datum, Inhalt, einheiten.Preis, einheiten.Dauer, angebote.Preis AS StundenPreis, angebote.preis_pro_stunde FROM einheiten, "
-            + "angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND " + where + " ORDER BY Datum, Preis;";
+            + "angebote  WHERE einheiten.angebote_id=angebote.angebote_id AND rechnung_id=? ORDER BY Datum, Preis;";
       logger.debug(sql);
       Vector<Arbeitsstunde> result = new Vector<>();
       try {
-
-         ResultSet daten = verbindung.query(sql);
+         PreparedStatement stm = verbindung.prepareStatement(sql);
+        
+         stm.setInt(1, rechnungs_id);
+         ResultSet daten = stm.executeQuery();
 
          while (daten.next()) {
             // Wenn Erster Datensatz kann klienten_id gesetzt werden und

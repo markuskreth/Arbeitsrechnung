@@ -1,5 +1,6 @@
 package de.kreth.arbeitsrechnungen.persister;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -184,16 +185,19 @@ public class AngebotPersister extends AbstractPersister {
 	}
 
 	public List<Angebot> getForKlient(int klient) {
-		String sqltext = "SELECT * FROM angebote WHERE klienten_id=" + klient + ";";
+		String sqltext = "SELECT * FROM angebote WHERE klienten_id=?";
 		logger.debug("Einheit_einzel.initangebote: " + sqltext);
 		List<Angebot> result = new ArrayList<>();
 
 		try {
-			ResultSet daten = verbindung.query(sqltext);
+		   PreparedStatement stm = verbindung.prepareStatement(sqltext);
+		   stm.setInt(1, klient);
+			ResultSet daten = stm.executeQuery();
 			while (daten.next()) {
 				Angebot a = new Angebot.Builder(daten.getString("Inhalt"), daten.getFloat("Preis"))
 						.beschreibung(daten.getString("Beschreibung"))
-						.preis_pro_stunde(daten.getBoolean("preis_pro_stunde")).angebotId(daten.getInt("angebote_id"))
+						.preis_pro_stunde(daten.getBoolean("preis_pro_stunde"))
+						.angebotId(daten.getInt("angebote_id"))
 						.build();
 				result.add(a);
 				logger.trace("added to AngebotList: " + a);

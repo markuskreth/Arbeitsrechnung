@@ -115,4 +115,9 @@ public class VerbindungJavaDB extends Verbindung {
 		throw new UnsupportedOperationException();
 	}
 
+   @Override
+   public PreparedStatement prepareStatement(CharSequence sql) throws SQLException {
+      return verbindung.prepareStatement(sql.toString());
+   }
+
 }

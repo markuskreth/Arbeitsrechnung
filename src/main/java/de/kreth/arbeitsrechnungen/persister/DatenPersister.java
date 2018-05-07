@@ -26,7 +26,7 @@ public class DatenPersister extends AbstractPersister {
       debugLogSql(sqltext);
       
       try {
-         ResultSet daten = verbindung.query(sqltext);
+         ResultSet daten = verbindung.prepareStatement(sqltext).executeQuery();
          while (daten.next()) {
             Forderung e = new Forderung();
             e.id = daten.getInt("id");
@@ -54,7 +54,7 @@ public class DatenPersister extends AbstractPersister {
       Vector<Einheit> result = new Vector<>();
 
       try {
-         ResultSet daten = verbindung.query(sqltext);
+         ResultSet daten = verbindung.prepareStatement(sqltext).executeQuery();
          while (daten.next()) {
             Einheit f = new Einheit.Builder().auftraggeber(daten.getString("auftraggeber")).anzahl(daten.getInt("anzahl")).klientenpreis(daten.getDouble("klientpreis"))
                   .id(daten.getInt("id")).build();

@@ -170,4 +170,9 @@ public class Verbindung_mysql extends Verbindung {
 	public ResultSet getAutoincrement() throws SQLException {
 		return verbindung.createStatement().executeQuery("SELECT LAST_INSERT_ID()");
 	}
+
+   @Override
+   public PreparedStatement prepareStatement(CharSequence sql) throws SQLException {
+      return verbindung.prepareStatement(sql.toString());
+   }
 }

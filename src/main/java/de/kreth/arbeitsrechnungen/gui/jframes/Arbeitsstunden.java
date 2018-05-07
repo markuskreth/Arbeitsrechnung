@@ -37,7 +37,6 @@ public class Arbeitsstunden extends JFrame {
    /**
     * Creates new form Arbeitsstunden
     * 
-    * @param optionen
     */
    public Arbeitsstunden() {
       ready = false;

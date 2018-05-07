@@ -97,11 +97,6 @@
 			<version>2.8.2</version>
 		</dependency>
 		<dependency>
-			<groupId>de.kreth</groupId>
-			<artifactId>ArbeitsabrechnungenDataClass</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-swing-junit-4.5</artifactId>
 			<version>1.2.0</version>
@@ -112,6 +107,21 @@
 			<artifactId>mockito-core</artifactId>
 			<version>2.16.0</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.kreth.hsqldbcreator</groupId>
+			<artifactId>HsqldbCreator</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.8.0-beta2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.8.0-beta2</version>
 		</dependency>
 	</dependencies>
 </project>

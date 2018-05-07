@@ -1,8 +1,6 @@
 package de.kreth.arbeitsrechnungen.database;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import de.kreth.hsqldbcreator.HsqlCreator;
 
@@ -68,4 +66,9 @@ public class Verbindung_HsqlCreator extends Verbindung {
 	public ResultSet getAutoincrement() throws SQLException {
 		return stm.executeQuery("CALL IDENTITY()");
 	}
+
+   @Override
+   public PreparedStatement prepareStatement(CharSequence sql) throws SQLException {
+      return stm.getConnection().prepareStatement(sql.toString());
+   }
 }

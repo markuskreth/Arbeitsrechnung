@@ -89,7 +89,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
     * Erstellt einen neuen RechnungsDialog für die übergebene RechnungsId. Die
     * alte Rechnung wird angezeigt.
     * 
-    * @param optionen
     * @param parent
     * @param rechnungId
     */
