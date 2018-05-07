@@ -55,7 +55,8 @@ public abstract class AbstractFrameTest extends AssertJSwingJUnitTestCase {
 		angebote.add(new Angebot.Builder("Angebot 9,5Eur", 9.5).angebotId(9).preis_pro_stunde(true).build());
 	}
 
-	private void initMockAuftraggeber() {
+	@SuppressWarnings("boxing")
+   private void initMockAuftraggeber() {
 		auftraggeber = mock(Auftraggeber.class);
 		when(auftraggeber.getName()).thenReturn("Auftraggeber Name");
 		when(auftraggeber.getKlientId()).thenReturn(1);

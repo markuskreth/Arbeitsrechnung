@@ -45,7 +45,7 @@ public class RechnungDataSource implements JRDataSource {
 		case "Dauer":
 			return Float.valueOf(current.getDauerInMinutes());
 		case "betrag":
-			return current.getEinzelPreis().floatValue();
+			return Float.valueOf(current.getEinzelPreis().floatValue());
 		default:
 			break;
 		}

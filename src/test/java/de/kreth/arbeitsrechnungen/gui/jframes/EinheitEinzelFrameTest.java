@@ -30,120 +30,116 @@ import de.kreth.arbeitsrechnungen.data.Einheit;
 
 public class EinheitEinzelFrameTest extends AbstractFrameTest {
 
-	Calendar einheitDate;
+   Calendar einheitDate;
 
-	@Override
-	protected void onSetUp() {
-		super.onSetUp();
+   @Override
+   protected void onSetUp() {
+      super.onSetUp();
 
-		application(EinheitEinzelFrame.class).start();
-	
-		einheitDate = new GregorianCalendar(2017, Calendar.AUGUST, 1, 12, 33, 45);
-	}
+      application(EinheitEinzelFrame.class).start();
 
-	@Test
-	public void testComboBoxIsSet() {
-		final FrameFixture frame = findFrame(new GenericTypeMatcher<Frame>(Frame.class) {
-			  protected boolean isMatching(Frame frame) {
-			    return "Arbeitsstunde".equals(frame.getTitle()) && frame.isShowing();
-			  }
-			}).using(robot());
-		assertNotNull(frame);
-		assertTrue(frame.target() instanceof EinheitEinzelFrame);
-		
-		GuiTask task = new GuiTask() {
-			
-			@Override
-			protected void executeInEDT() throws Throwable {
-				EinheitEinzelFrame einh = (EinheitEinzelFrame) frame.target();
-				einh.load(1, -1);
-			}
-		};
-		GuiActionRunner.execute(task);
-		
-		JComboBoxFixture cmbAngebote = frame.comboBox("jComboBoxAngebot");
-		String[] contents = cmbAngebote.contents();
-		assertEquals(1, contents.length);
-		String comItem = cmbAngebote.selectedItem();
-		assertNotNull(comItem);
-		assertEquals("Angebot 9,5Eur|9,50 €", comItem);
-		
-	}
+      einheitDate = new GregorianCalendar(2017, Calendar.AUGUST, 1, 12, 33, 45);
+   }
 
-	@Test
-	public void testInvalidUserId() throws SQLException {
-		final FrameFixture frame = findFrame(new GenericTypeMatcher<Frame>(Frame.class) {
-			  protected boolean isMatching(Frame frame) {
-			    return "Arbeitsstunde".equals(frame.getTitle()) && frame.isShowing();
-			  }
-			}).using(robot());
-		assertNotNull(frame);
-		assertTrue(frame.target() instanceof EinheitEinzelFrame);
+   @Test
+   public void testComboBoxIsSet() {
+      final FrameFixture frame = findFrame(new GenericTypeMatcher<Frame>(Frame.class) {
 
-		Calendar start = (Calendar)einheitDate.clone();
-		start.set(Calendar.HOUR_OF_DAY, 17);
-		start.set(Calendar.MINUTE, 0);
-		start.set(Calendar.SECOND, 0);
-		start.set(Calendar.MILLISECOND, 0);
-		
-		Calendar ende = (Calendar)start.clone();
-		ende.set(Calendar.HOUR_OF_DAY, 19);
-		ende.set(Calendar.MINUTE, 30);
-		
-		final Einheit einheit = new Einheit.Builder()
-				.angebot(angebote.get(0))
-				.angebotId(9)
-				.id(-1)
-				.auftraggeber(auftraggeber.getName())
-				.klientenId(auftraggeber.getKlientId())
-				.datum(einheitDate.getTime())
-				.beginn(start.getTime())
-				.ende(ende.getTime())
-				.zusatz1("ca. 13")
-				.build();
-		
-		GuiTask task = new GuiTask() {
-			
-			@Override
-			protected void executeInEDT() throws Throwable {
-				EinheitEinzelFrame einh = (EinheitEinzelFrame) frame.target();
-				einh.load(1, -1);
-				JDateChooser dateChooser = FrameElementAccessor.getDateChooser(einh);
-				dateChooser.setCalendar(einheitDate);
-			}
-		};
-		GuiActionRunner.execute(task);
+         @Override
+         protected boolean isMatching(Frame frame) {
+            return "Arbeitsstunde".equals(frame.getTitle()) && frame.isShowing();
+         }
+      }).using(robot());
+      assertNotNull(frame);
+      assertTrue(frame.target() instanceof EinheitEinzelFrame);
 
-		JTextComponentFixture startField = frame.textBox("jFormattedTextFieldStart");
-		startField.setText("17:00");
+      GuiTask task = new GuiTask() {
 
-		JTextComponentFixture endeField = frame.textBox("jFormattedTextFieldEnde");
-		endeField.setText("19:30");
+         @Override
+         protected void executeInEDT() throws Throwable {
+            EinheitEinzelFrame einh = (EinheitEinzelFrame) frame.target();
+            einh.load(1, -1);
+         }
+      };
+      GuiActionRunner.execute(task);
 
-		JTextComponentFixture zusatz1Field = frame.textBox("jTextFieldZusatz1");
-		zusatz1Field.setText("ca. 13");
-		
-		frame.button("jButton2").click();
-		verify(angebotPersister).storeEinheit(any(), eq(einheit));
-	}
+      JComboBoxFixture cmbAngebote = frame.comboBox("jComboBoxAngebot");
+      String[] contents = cmbAngebote.contents();
+      assertEquals(1, contents.length);
+      String comItem = cmbAngebote.selectedItem();
+      assertNotNull(comItem);
+      assertEquals("Angebot 9,5Eur|9,50 €", comItem);
 
-	public static class EinheitEinzelFrameAssert extends AbstractAssert<EinheitEinzelFrameAssert, EinheitEinzelFrame> {
+   }
 
-		protected EinheitEinzelFrameAssert(EinheitEinzelFrame actual) {
-			super(actual, EinheitEinzelFrame.class);
-		}
-		
-		public EinheitEinzelFrameAssert setDatum(Date d) {
-			
-			return this;
-		}
-	}
-	
-	public static class FrameElementAccessor extends EinheitEinzelFrame {
-		private static final long serialVersionUID = 1L;
+   @Test
+   public void testInvalidUserId() throws SQLException {
+      final FrameFixture frame = findFrame(new GenericTypeMatcher<Frame>(Frame.class) {
 
-		public static JDateChooser getDateChooser(EinheitEinzelFrame frame) {
-			return frame.jDateChooserDatum;
-		}
-	}
+         @Override
+         protected boolean isMatching(Frame frame) {
+            return "Arbeitsstunde".equals(frame.getTitle()) && frame.isShowing();
+         }
+      }).using(robot());
+      assertNotNull(frame);
+      assertTrue(frame.target() instanceof EinheitEinzelFrame);
+
+      Calendar start = (Calendar) einheitDate.clone();
+      start.set(Calendar.HOUR_OF_DAY, 17);
+      start.set(Calendar.MINUTE, 0);
+      start.set(Calendar.SECOND, 0);
+      start.set(Calendar.MILLISECOND, 0);
+
+      Calendar ende = (Calendar) start.clone();
+      ende.set(Calendar.HOUR_OF_DAY, 19);
+      ende.set(Calendar.MINUTE, 30);
+
+      final Einheit einheit = new Einheit.Builder().angebot(angebote.get(0)).angebotId(9).id(-1).auftraggeber(auftraggeber.getName()).klientenId(auftraggeber.getKlientId())
+            .datum(einheitDate.getTime()).beginn(start.getTime()).ende(ende.getTime()).zusatz1("ca. 13").build();
+
+      GuiTask task = new GuiTask() {
+
+         @Override
+         protected void executeInEDT() throws Throwable {
+            EinheitEinzelFrame einh = (EinheitEinzelFrame) frame.target();
+            einh.load(1, -1);
+            JDateChooser dateChooser = FrameElementAccessor.getDateChooser(einh);
+            dateChooser.setCalendar(einheitDate);
+         }
+      };
+      GuiActionRunner.execute(task);
+
+      JTextComponentFixture startField = frame.textBox("jFormattedTextFieldStart");
+      startField.setText("17:00");
+
+      JTextComponentFixture endeField = frame.textBox("jFormattedTextFieldEnde");
+      endeField.setText("19:30");
+
+      JTextComponentFixture zusatz1Field = frame.textBox("jTextFieldZusatz1");
+      zusatz1Field.setText("ca. 13");
+
+      frame.button("jButton2").click();
+      verify(angebotPersister).storeEinheit(any(), eq(einheit));
+   }
+
+   public static class EinheitEinzelFrameAssert extends AbstractAssert<EinheitEinzelFrameAssert, EinheitEinzelFrame> {
+
+      protected EinheitEinzelFrameAssert(EinheitEinzelFrame actual) {
+         super(actual, EinheitEinzelFrame.class);
+      }
+
+      public EinheitEinzelFrameAssert setDatum(Date d) {
+
+         return this;
+      }
+   }
+
+   public static class FrameElementAccessor extends EinheitEinzelFrame {
+
+      private static final long serialVersionUID = 1L;
+
+      public static JDateChooser getDateChooser(EinheitEinzelFrame frame) {
+         return frame.jDateChooserDatum;
+      }
+   }
 }

@@ -17,7 +17,8 @@ public class ArbeitsrechnungenTestApp {
 		new ArbeitsrechnungenTestApp().start();
 	}
 
-	private void start() throws FileNotFoundException, IOException {
+	@SuppressWarnings("unused")
+   private void start() throws FileNotFoundException, IOException {
 
 		new TestEinstellungen();
 		ArbeitRechnungFactoryProductiv.init();
