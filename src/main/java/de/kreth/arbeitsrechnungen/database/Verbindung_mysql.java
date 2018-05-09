@@ -31,6 +31,8 @@ public class Verbindung_mysql extends Verbindung {
             ds.setUser(benutzer);
             ds.setPassword(password);
             ds.setDatabaseName(datenbank);
+		   } else if (ds.getUrl().equals(URL) == false || ds.getDatabaseName().equals(datenbank) == false) {
+		         throw new RuntimeException("Database connected but not matching requested.");
 		   }
          verbindung = ds.getConnection();
 		} catch (Exception e) {
@@ -40,7 +42,6 @@ public class Verbindung_mysql extends Verbindung {
 	}
 
 	protected Verbindung_mysql(String server, String datenbank, String benutzer, String password) {
-
 	   
 		// Verbindung aufbauen
 		try {

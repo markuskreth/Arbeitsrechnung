@@ -12,10 +12,11 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
@@ -45,7 +46,7 @@ public class KlientenEditor extends JDialog {
    public static final int NICHTEINGEREICHTE = 2;
    public static final int OFFENE = 3;
 
-   private List<Klient> allKlienten;
+   private final List<Klient> allKlienten = new ArrayList<>();
    private Klient currentKlient = null;
    private int currentIndex = -1;
    private List<Angebot> angebote;
@@ -63,6 +64,8 @@ public class KlientenEditor extends JDialog {
 
    private final ArbeitRechnungFactory factory;
 
+   private ExecutorService exec;
+
    /**
     * Creates new form KlientenEditor
     * 
@@ -72,15 +75,7 @@ public class KlientenEditor extends JDialog {
       super(arg0, "Klienteneditor");
 
       factory = ArbeitRechnungFactory.getInstance();
-
-      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
-      allKlienten = persister.getAllKlienten();
-      persister.close();
-
-      if (allKlienten.size() > 0) {
-         currentKlient = allKlienten.get(0);
-         currentIndex = 0;
-      }
+      exec = Executors.newCachedThreadPool();
 
       initComponents();
 
@@ -97,6 +92,38 @@ public class KlientenEditor extends JDialog {
          e.printStackTrace();
       }
       setEvents();
+
+      SwingWorker<List<Klient>, Void> worker = new SwingWorker<List<Klient>, Void>() {
+
+         @Override
+         protected List<Klient> doInBackground() throws Exception {
+            try (KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class)) {
+               List<Klient> result = persister.getAllKlienten();
+               persister.close();
+               return result;
+            }
+            
+         }
+
+         @Override
+         protected void done() {
+            try {
+               List<Klient> values = get();
+               allKlienten.clear();
+               allKlienten.addAll(values);
+               if (allKlienten.size() > 0) {
+                  currentKlient = allKlienten.get(0);
+                  currentIndex = 0;
+               }
+               updateComponents();
+
+            } catch (InterruptedException | ExecutionException e) {
+               e.printStackTrace();
+            }
+            super.done();
+         }
+      };
+      worker.execute();
    }
 
    /**
@@ -106,15 +133,15 @@ public class KlientenEditor extends JDialog {
    public void setVisible(final boolean b) {
       super.setVisible(b);
       if (b) {
-    	  SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				updateRechnungenPanel();
-				updateKlient();
-				updateAngeboteTabelle();
-			}
-		});
+         SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+               updateRechnungenPanel();
+               updateKlient();
+               updateAngeboteTabelle();
+            }
+         });
       }
    }
 
@@ -579,7 +606,7 @@ public class KlientenEditor extends JDialog {
          jButtonZumEnde.setEnabled(false);
          jTabbedPane1.setEnabled(false);
       } else {
-    	  jTabbedPane1.setEnabled(true);
+         jTabbedPane1.setEnabled(true);
          if (currentKlient.equals(allKlienten.get(0))) {
             jButtonZurueck.setEnabled(false);
             jButtonZumAnfang.setEnabled(false);
@@ -598,8 +625,8 @@ public class KlientenEditor extends JDialog {
    private void updateTables() {
       updateAngeboteTabelle();
       updateRechnungenPanel();
-      if(currentKlient != null) {
-    	  this.arbeitsstundenTabelle1.update(currentKlient.getKlienten_id());
+      if (currentKlient != null) {
+         this.arbeitsstundenTabelle1.update(currentKlient.getKlienten_id());
       }
    }
 
@@ -711,20 +738,14 @@ public class KlientenEditor extends JDialog {
 
       javax.swing.GroupLayout jPanelRechnungenLayout = new javax.swing.GroupLayout(jPanelRechnungen);
       jPanelRechnungen.setLayout(jPanelRechnungenLayout);
-      jPanelRechnungenLayout.setHorizontalGroup(jPanelRechnungenLayout
-            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 605, Short.MAX_VALUE)
-            .addGroup(
-                  jPanelRechnungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                        jPanelRechnungenLayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-                              .addComponent(formRechnungen1, javax.swing.GroupLayout.PREFERRED_SIZE, 605, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 0, Short.MAX_VALUE))));
-      jPanelRechnungenLayout.setVerticalGroup(jPanelRechnungenLayout
-            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 225, Short.MAX_VALUE)
-            .addGroup(
-                  jPanelRechnungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                        jPanelRechnungenLayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-                              .addComponent(formRechnungen1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 0, Short.MAX_VALUE))));
+      jPanelRechnungenLayout.setHorizontalGroup(jPanelRechnungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 605, Short.MAX_VALUE)
+            .addGroup(jPanelRechnungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                  .addGroup(jPanelRechnungenLayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(formRechnungen1, javax.swing.GroupLayout.PREFERRED_SIZE, 605, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 0, Short.MAX_VALUE))));
+      jPanelRechnungenLayout.setVerticalGroup(jPanelRechnungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 225, Short.MAX_VALUE)
+            .addGroup(jPanelRechnungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                  .addGroup(jPanelRechnungenLayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(formRechnungen1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 0, Short.MAX_VALUE))));
 
       jTabbedPane1.addTab(resourceMap.getString("jPanelRechnungen.TabConstraints.tabTitle"), jPanelRechnungen); // NOI18N
 
@@ -781,23 +802,18 @@ public class KlientenEditor extends JDialog {
 
       javax.swing.GroupLayout jPanelAngeboteLayout = new javax.swing.GroupLayout(jPanelAngebote);
       jPanelAngebote.setLayout(jPanelAngeboteLayout);
-      jPanelAngeboteLayout.setHorizontalGroup(jPanelAngeboteLayout
-            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(
-                  javax.swing.GroupLayout.Alignment.TRAILING,
+      jPanelAngeboteLayout.setHorizontalGroup(jPanelAngeboteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                   jPanelAngeboteLayout.createSequentialGroup().addContainerGap(278, Short.MAX_VALUE).addComponent(jButtonaddAngebot)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jButtonEditAngebot)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jButtonDeleteAngebot).addContainerGap())
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE));
-      jPanelAngeboteLayout.setVerticalGroup(jPanelAngeboteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            javax.swing.GroupLayout.Alignment.TRAILING,
-            jPanelAngeboteLayout
-                  .createSequentialGroup()
-                  .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+      jPanelAngeboteLayout.setVerticalGroup(jPanelAngeboteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+            jPanelAngeboteLayout.createSequentialGroup().addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                   .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                  .addGroup(
-                        jPanelAngeboteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButtonaddAngebot).addComponent(jButtonEditAngebot)
-                              .addComponent(jButtonDeleteAngebot)).addContainerGap()));
+                  .addGroup(jPanelAngeboteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jButtonaddAngebot).addComponent(jButtonEditAngebot)
+                        .addComponent(jButtonDeleteAngebot))
+                  .addContainerGap()));
 
       jTabbedPane1.addTab(resourceMap.getString("jPanelAngebote.TabConstraints.tabTitle"), jPanelAngebote); // NOI18N
 
@@ -832,71 +848,33 @@ public class KlientenEditor extends JDialog {
 
       javax.swing.GroupLayout jPanelEinstellungenLayout = new javax.swing.GroupLayout(jPanelEinstellungen);
       jPanelEinstellungen.setLayout(jPanelEinstellungenLayout);
-      jPanelEinstellungenLayout.setHorizontalGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            jPanelEinstellungenLayout
-                  .createSequentialGroup()
-                  .addContainerGap()
-                  .addGroup(
-                        jPanelEinstellungenLayout
-                              .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                              .addGroup(
-                                    jPanelEinstellungenLayout
-                                          .createSequentialGroup()
-                                          .addGroup(
-                                                jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jCheckBoxZusatz2)
-                                                      .addComponent(jCheckBoxZusatz1))
-                                          .addGap(18, 18, 18)
-                                          .addGroup(
-                                                jPanelEinstellungenLayout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                      .addGroup(
-                                                            jPanelEinstellungenLayout
-                                                                  .createSequentialGroup()
-                                                                  .addComponent(jLabel17)
-                                                                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                  .addComponent(jTextFieldZusatzBezeichnung1, javax.swing.GroupLayout.PREFERRED_SIZE, 127,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                      .addGroup(
-                                                            jPanelEinstellungenLayout.createSequentialGroup().addComponent(jLabel18).addGap(57, 57, 57)
-                                                                  .addComponent(jTextFieldZusatzBezeichnung2))))
-                              .addComponent(jLabel16)
-                              .addGroup(
-                                    jPanelEinstellungenLayout.createSequentialGroup().addComponent(jLabel19).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addComponent(jTextFieldRechnungBezeichnung, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                  .addContainerGap(213, Short.MAX_VALUE)));
-      jPanelEinstellungenLayout.setVerticalGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            jPanelEinstellungenLayout
-                  .createSequentialGroup()
-                  .addContainerGap()
-                  .addGroup(
-                        jPanelEinstellungenLayout
-                              .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                              .addGroup(
-                                    jPanelEinstellungenLayout
-                                          .createSequentialGroup()
-                                          .addGroup(
-                                                jPanelEinstellungenLayout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jLabel17)
-                                                      .addComponent(jTextFieldZusatzBezeichnung1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE))
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanelEinstellungenLayout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jLabel18)
-                                                      .addComponent(jTextFieldZusatzBezeichnung2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE)))
-                              .addGroup(
-                                    jPanelEinstellungenLayout.createSequentialGroup().addComponent(jLabel16).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                          .addComponent(jCheckBoxZusatz1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jCheckBoxZusatz2)))
+      jPanelEinstellungenLayout.setHorizontalGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanelEinstellungenLayout
+            .createSequentialGroup().addContainerGap()
+            .addGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanelEinstellungenLayout.createSequentialGroup()
+                  .addGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jCheckBoxZusatz2).addComponent(jCheckBoxZusatz1))
                   .addGap(18, 18, 18)
-                  .addGroup(
-                        jPanelEinstellungenLayout
-                              .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                              .addComponent(jLabel19)
-                              .addComponent(jTextFieldRechnungBezeichnung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap(107, Short.MAX_VALUE)));
+                  .addGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanelEinstellungenLayout.createSequentialGroup().addComponent(jLabel17).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                              .addComponent(jTextFieldZusatzBezeichnung1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanelEinstellungenLayout.createSequentialGroup().addComponent(jLabel18).addGap(57, 57, 57).addComponent(jTextFieldZusatzBezeichnung2))))
+                  .addComponent(jLabel16)
+                  .addGroup(jPanelEinstellungenLayout.createSequentialGroup().addComponent(jLabel19).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldRechnungBezeichnung, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addContainerGap(213, Short.MAX_VALUE)));
+      jPanelEinstellungenLayout.setVerticalGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelEinstellungenLayout.createSequentialGroup().addContainerGap()
+                  .addGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addGroup(jPanelEinstellungenLayout.createSequentialGroup()
+                        .addGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel17).addComponent(
+                              jTextFieldZusatzBezeichnung1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel18).addComponent(
+                              jTextFieldZusatzBezeichnung2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanelEinstellungenLayout.createSequentialGroup().addComponent(jLabel16).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                              .addComponent(jCheckBoxZusatz1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jCheckBoxZusatz2)))
+                  .addGap(18, 18, 18)
+                  .addGroup(jPanelEinstellungenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel19).addComponent(
+                        jTextFieldRechnungBezeichnung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                  .addContainerGap(107, Short.MAX_VALUE)));
 
       jTabbedPane1.addTab(resourceMap.getString("jPanelEinstellungen.TabConstraints.tabTitle"), jPanelEinstellungen); // NOI18N
 
@@ -1117,224 +1095,145 @@ public class KlientenEditor extends JDialog {
 
       javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
       jPanel3.setLayout(jPanel3Layout);
-      jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(
-                  javax.swing.GroupLayout.Alignment.TRAILING,
-                  jPanel3Layout
-                        .createSequentialGroup()
-                        .addContainerGap()
+      jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+            jPanel3Layout.createSequentialGroup().addContainerGap().addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                  .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                  .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout
+                        .createSequentialGroup().addGap(13, 13, 13).addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(jLabel6)
+                              .addComponent(jLabel7).addComponent(jLabel1).addComponent(jLabel2).addComponent(jLabel3).addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addGroup(jPanel3Layout.createSequentialGroup()
+                              .addComponent(jTextFieldKPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addGap(2, 2, 2).addComponent(jTextFieldKOrt, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                              .addComponent(jTextFieldKAdress2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                              .addComponent(jTextFieldKAdress1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                              .addComponent(jTextFieldKunde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                              .addComponent(jTextFieldKTelefon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                              .addComponent(jTextFieldKEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                              .addComponent(jLabel5).addComponent(jLabel8).addComponent(jLabel9).addComponent(jLabel10).addComponent(jLabel11).addComponent(jLabel12))
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel3Layout.createSequentialGroup()
+                              .addComponent(jTextFieldAPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addGap(2, 2, 2).addComponent(jTextFieldAOrt, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
+                              .addComponent(jTextFieldAuftraggeber, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                              .addComponent(jTextFieldAAdress1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                              .addComponent(jTextFieldAAdress2, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                              .addComponent(jTextFieldATelefon, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                              .addComponent(jTextFieldAEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)))
+                  .addGroup(jPanel3Layout.createSequentialGroup().addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonNewKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonDelKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
+                        .addComponent(jButtonBeenden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                  .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup().addGap(279, 279, 279).addComponent(jLabel14).addGap(225, 225, 225))
+                  .addGroup(jPanel3Layout.createSequentialGroup().addComponent(jButtonZumAnfang).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonZurueck, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(6, 6, 6)
+                        .addComponent(jButtonVor, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButtonZumEnde).addGap(105, 105, 105))
+                  .addGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                        jPanel3Layout.createSequentialGroup().addComponent(jLabel15).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                              .addComponent(jTextFieldTex_datei, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+                              .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                              .addComponent(jButtonfindeTexDatei, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                  .addContainerGap()));
+      jPanel3Layout
+            .setVerticalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                  .addGroup(jPanel3Layout.createSequentialGroup().addContainerGap().addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                              .addComponent(jButtonDelKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addComponent(jButtonNewKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addComponent(jButtonBeenden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(
+                              jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jButtonZumEnde).addComponent(jButtonVor)
+                                    .addComponent(jButtonZumAnfang).addComponent(jButtonZurueck))
                         .addGroup(
                               jPanel3Layout
-                                    .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-                                    .addGroup(
-                                          javax.swing.GroupLayout.Alignment.LEADING,
-                                          jPanel3Layout
-                                                .createSequentialGroup()
-                                                .addGap(13, 13, 13)
-                                                .addGroup(
-                                                      jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(jLabel6).addComponent(jLabel7)
-                                                            .addComponent(jLabel1).addComponent(jLabel2).addComponent(jLabel3).addComponent(jLabel4))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(
-                                                      jPanel3Layout
-                                                            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                            .addGroup(
-                                                                  jPanel3Layout
-                                                                        .createSequentialGroup()
-                                                                        .addComponent(jTextFieldKPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                              javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addGap(2, 2, 2)
-                                                                        .addComponent(jTextFieldKOrt, javax.swing.GroupLayout.PREFERRED_SIZE, 112,
-                                                                              javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                            .addComponent(jTextFieldKAdress2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                  Short.MAX_VALUE)
-                                                            .addComponent(jTextFieldKAdress1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                  Short.MAX_VALUE)
-                                                            .addComponent(jTextFieldKunde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                  Short.MAX_VALUE)
-                                                            .addComponent(jTextFieldKTelefon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                  Short.MAX_VALUE)
-                                                            .addComponent(jTextFieldKEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                  Short.MAX_VALUE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(
-                                                      jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(jLabel5).addComponent(jLabel8)
-                                                            .addComponent(jLabel9).addComponent(jLabel10).addComponent(jLabel11).addComponent(jLabel12))
-                                                .addGap(6, 6, 6)
-                                                .addGroup(
-                                                      jPanel3Layout
-                                                            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addGroup(
-                                                                  jPanel3Layout
-                                                                        .createSequentialGroup()
-                                                                        .addComponent(jTextFieldAPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                              javax.swing.GroupLayout.PREFERRED_SIZE).addGap(2, 2, 2)
-                                                                        .addComponent(jTextFieldAOrt, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
-                                                            .addComponent(jTextFieldAuftraggeber, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
-                                                            .addComponent(jTextFieldAAdress1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
-                                                            .addComponent(jTextFieldAAdress2, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
-                                                            .addComponent(jTextFieldATelefon, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
-                                                            .addComponent(jTextFieldAEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)))
-                                    .addGroup(
-                                          jPanel3Layout
-                                                .createSequentialGroup()
-                                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButtonNewKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    .createParallelGroup(
+                                          javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup().addGap(3, 3, 3).addComponent(jLabel14)
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldAuftraggeber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
                                                       javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButtonDelKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                .addComponent(jLabel5))
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldAAdress1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
                                                       javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
-                                                .addComponent(jButtonBeenden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                .addComponent(jLabel8))
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldAAdress2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel9))
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel10)
+                                                .addComponent(jTextFieldAOrt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jTextFieldAPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
                                                       javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING,
-                                          jPanel3Layout.createSequentialGroup().addGap(279, 279, 279).addComponent(jLabel14).addGap(225, 225, 225))
-                                    .addGroup(
-                                          jPanel3Layout.createSequentialGroup().addComponent(jButtonZumAnfang).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButtonZurueck, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(6, 6, 6)
-                                                .addComponent(jButtonVor, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButtonZumEnde).addGap(105, 105, 105))
-                                    .addGroup(
-                                          javax.swing.GroupLayout.Alignment.LEADING,
-                                          jPanel3Layout.createSequentialGroup().addComponent(jLabel15).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jTextFieldTex_datei, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButtonfindeTexDatei, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap()));
-      jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            jPanel3Layout
-                  .createSequentialGroup()
-                  .addContainerGap()
-                  .addGroup(
-                        jPanel3Layout
-                              .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                              .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                              .addGroup(
-                                    jPanel3Layout
-                                          .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                          .addComponent(jButtonDelKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                          .addComponent(jButtonNewKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                          .addComponent(jButtonBeenden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(
-                        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jButtonZumEnde).addComponent(jButtonVor)
-                              .addComponent(jButtonZumAnfang).addComponent(jButtonZurueck))
-                  .addGroup(
-                        jPanel3Layout
-                              .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                              .addGroup(
-                                    jPanel3Layout
-                                          .createSequentialGroup()
-                                          .addGap(3, 3, 3)
-                                          .addComponent(jLabel14)
                                           .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldAuftraggeber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel5))
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldATelefon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel11))
                                           .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldAAdress1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel8))
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldAEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel12)))
+                                    .addGroup(jPanel3Layout.createSequentialGroup().addGap(18, 18, 18)
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldKunde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel1))
                                           .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldAAdress2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel9))
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldKAdress1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel2))
                                           .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jLabel10)
-                                                      .addComponent(jTextFieldAOrt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                      .addComponent(jTextFieldAPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE))
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldKAdress2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel3))
                                           .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldATelefon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel11))
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel4)
+                                                .addComponent(jTextFieldKOrt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jTextFieldKPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE))
                                           .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldAEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel12)))
-                              .addGroup(
-                                    jPanel3Layout
-                                          .createSequentialGroup()
-                                          .addGap(18, 18, 18)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldKunde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel1))
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldKTelefon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel6))
                                           .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldKAdress1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel2))
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldKAdress2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel3))
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jLabel4)
-                                                      .addComponent(jTextFieldKOrt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                      .addComponent(jTextFieldKPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE))
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldKTelefon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel6))
-                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                          .addGroup(
-                                                jPanel3Layout
-                                                      .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                      .addComponent(jTextFieldKEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(jLabel7))))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(
-                        jPanel3Layout
-                              .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                              .addGroup(
-                                    jPanel3Layout
-                                          .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                          .addComponent(jLabel15)
-                                          .addComponent(jTextFieldTex_datei, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jTextFieldKEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                      javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel7))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                              .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel15).addComponent(jTextFieldTex_datei,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                               .addComponent(jButtonfindeTexDatei, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
-                  .addContainerGap()));
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                        .addContainerGap()));
 
       jSplitPane1.setLeftComponent(jPanel3);
 
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
-      layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            layout.createSequentialGroup().addContainerGap().addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE).addContainerGap()));
-      layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            layout.createSequentialGroup().addContainerGap().addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE).addContainerGap()));
+      layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE).addContainerGap()));
+      layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE).addContainerGap()));
 
       pack();
    }
@@ -1386,15 +1285,15 @@ public class KlientenEditor extends JDialog {
     */
    private void updateRechnungenPanel() {
 
-      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
-      this.jTabbedPane1.remove(jPanelRechnungen);
-      int anzahl = persister.getRechnungenAnzahl(currentKlient);
+      try (KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class)) {
+         this.jTabbedPane1.remove(jPanelRechnungen);
+         int anzahl = persister.getRechnungenAnzahl(currentKlient);
 
-      if (anzahl > 0) {
-         this.jTabbedPane1.insertTab("Rechnungen", null, jPanelRechnungen, null, 1);
-         this.formRechnungen1.update(currentKlient.getKlienten_id());
+         if (anzahl > 0) {
+            this.jTabbedPane1.insertTab("Rechnungen", null, jPanelRechnungen, null, 1);
+            this.formRechnungen1.update(currentKlient.getKlienten_id());
+         }
       }
-      persister.close();
    }
 
    /**
@@ -1409,10 +1308,10 @@ public class KlientenEditor extends JDialog {
       if (currentKlient != null)
          klientId = currentKlient.getKlienten_id();
 
-      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
-      angebote = persister.getAngeboteForKlient(klientId);
-      persister.close();
-
+      try (KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class)) {
+         angebote = persister.getAngeboteForKlient(klientId);
+      }
+      
       angeboteTableModel.setRowCount(0);
 
       for (Angebot angebot : angebote) {
@@ -1433,12 +1332,18 @@ public class KlientenEditor extends JDialog {
     * @param evt
     */
    private void jButtonNewKlientActionPerformed(final ActionEvent evt) {
+      exec.execute(new Runnable() {
 
-      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
-      currentKlient = persister.createNewAuftraggeber();
-      allKlienten = persister.getAllKlienten();
-      persister.close();
-      updateComponents();
+         @Override
+         public void run() {
+            KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
+            currentKlient = persister.createNewAuftraggeber();
+            allKlienten.clear();
+            allKlienten.addAll(persister.getAllKlienten());
+            persister.close();
+            updateComponents();
+         }
+      });
    }
 
    /**
@@ -1466,7 +1371,7 @@ public class KlientenEditor extends JDialog {
          KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
          persister.delete(toDelete);
          persister.close();
-         
+
          updateComponents();
       }
    }
@@ -1669,24 +1574,31 @@ public class KlientenEditor extends JDialog {
     * @param event
     */
    private void TextFieldActionPerformed(final ActionEvent event) {
+      exec.execute(new Runnable() {
 
-      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
-      if (event.getSource() instanceof JTextField) {
-         JTextField tf = (JTextField) event.getSource();
-         System.out.println("Text: " + tf.getText() + "\nName: " + tf.getName() + "\n");
-         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");
-         allKlienten = persister.getAllKlienten();
-      }
-      if (event.getSource() instanceof JCheckBox) {
-         JCheckBox cb = (JCheckBox) event.getSource();
-         if (cb.isSelected()) {
-            persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), Integer.valueOf(1));
-         } else {
-            persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), Integer.valueOf(0));
+         @Override
+         public void run() {
+
+            allKlienten.clear();
+            try (KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class)) {
+               if (event.getSource() instanceof JTextField) {
+                  JTextField tf = (JTextField) event.getSource();
+                  System.out.println("Text: " + tf.getText() + "\nName: " + tf.getName() + "\n");
+                  persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");
+                  allKlienten.addAll(persister.getAllKlienten());
+               }
+               if (event.getSource() instanceof JCheckBox) {
+                  JCheckBox cb = (JCheckBox) event.getSource();
+                  if (cb.isSelected()) {
+                     persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), Integer.valueOf(1));
+                  } else {
+                     persister.speicherWert(currentKlient.getKlienten_id(), cb.getName(), Integer.valueOf(0));
+                  }
+                  allKlienten.addAll(persister.getAllKlienten());
+               }
+            }
          }
-         allKlienten = persister.getAllKlienten();
-      }
-      persister.close();
+      });
    }
 
    /**
@@ -1710,27 +1622,35 @@ public class KlientenEditor extends JDialog {
     */
    private void TextFieldFocusLost(final FocusEvent event) {
 
-	   if (currentKlient == null) {
-		   return;
-	   }
-
-      KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
-      if (event.getSource() instanceof JTextField) {
-         JTextField tf = (JTextField) event.getSource();
-         persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");
-         allKlienten = persister.getAllKlienten();
+      if (currentKlient == null) {
+         return;
       }
+      exec.execute(new Runnable() {
 
-      if (event.getSource() instanceof JTextArea) {
-         JTextArea ta = (JTextArea) event.getSource();
-         persister.speicherWert(currentKlient.getKlienten_id(), ta.getName(), "\"" + ta.getText() + "\"");
-         allKlienten = persister.getAllKlienten();
-      }
-      persister.close();
+         @Override
+         public void run() {
+            allKlienten.clear();
+            
+            try (KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class)) {
+               if (event.getSource() instanceof JTextField) {
+                  JTextField tf = (JTextField) event.getSource();
+                  persister.speicherWert(currentKlient.getKlienten_id(), tf.getName(), "\"" + tf.getText() + "\"");
+                  allKlienten.addAll(persister.getAllKlienten());
+               }
+
+               if (event.getSource() instanceof JTextArea) {
+                  JTextArea ta = (JTextArea) event.getSource();
+                  persister.speicherWert(currentKlient.getKlienten_id(), ta.getName(), "\"" + ta.getText() + "\"");
+                  allKlienten.addAll(persister.getAllKlienten());
+               }
+            }
+         }
+      });
    }
 
    /**
     * KLienten aktualisieren, Tabelle wird neu geladen.
+    * 
     * @param klientenID
     */
    public void setCurrentKlientenId(final int klientenID) {
