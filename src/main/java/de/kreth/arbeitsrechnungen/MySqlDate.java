@@ -1,5 +1,8 @@
 package de.kreth.arbeitsrechnungen;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 /**
  * @author markus
  */
@@ -28,8 +31,13 @@ public class MySqlDate {
       this.cal = cal;
    }
 
-   public String getSqlDate() {
+   @Override
+   public String toString() {
       return sdf.format(cal.getTime());
+   }
+   
+   public Date getSqlDate() {
+      return new Date(cal.getTimeInMillis());
    }
 
    public int getYear() {
@@ -59,6 +67,10 @@ public class MySqlDate {
 
    public long getTimestamp() {
       return cal.getTimeInMillis();
+   }
+
+   public Timestamp getSqlTimestamp() {
+      return new Timestamp(cal.getTimeInMillis());
    }
 
 }

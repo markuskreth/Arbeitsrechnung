@@ -1771,4 +1771,15 @@ public class KlientenEditor extends JDialog {
       }
    }
 
+   public void setSingleKlientMode() {
+      setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+      this.jButtonDelKlient.setVisible(false);
+      this.jButtonNewKlient.setVisible(false);
+      this.jButtonVor.setVisible(false);
+      this.jButtonZumAnfang.setVisible(false);
+      this.jButtonZumEnde.setVisible(false);
+      this.jButtonZurueck.setVisible(false);
+      this.jButtonDelKlient.setVisible(false);
+   }
+
 }

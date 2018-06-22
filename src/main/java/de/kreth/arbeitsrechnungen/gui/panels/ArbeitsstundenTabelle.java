@@ -60,7 +60,7 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 	private TableColumn spalte6;
 	private Integer[] geloeschte_spalten = new Integer[2];
 
-	private String filter = "(ISNULL(Bezahlt) OR ISNULL(Rechnung_verschickt))";
+	private String filter = "(Bezahlt IS NULL OR Rechnung_verschickt IS NULL)";
 
    private ArbeitRechnungFactory factory;
 

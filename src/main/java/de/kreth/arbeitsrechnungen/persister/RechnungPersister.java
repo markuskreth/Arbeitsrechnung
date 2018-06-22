@@ -26,8 +26,8 @@ public class RechnungPersister extends AbstractPersister {
 
       List<Rechnung> result = new ArrayList<>();
       
-      try {
-         ResultSet rs = verbindung.query(sql);
+      try (ResultSet rs = verbindung.query(sql)) {
+         
          while(rs.next()) {
 
             Calendar datum = null;
@@ -78,14 +78,13 @@ public class RechnungPersister extends AbstractPersister {
    private Vector<Arbeitsstunde> loadEinheitenForRechnung(int rechnungenId) {
 
       String sql = "SELECT einheiten_id, angebote_id, Beginn, Bezahlt, Bezahlt_Datum, Datum, Dauer, Ende, Preis, Preisänderung, Rechnung_Datum, rechnung_id, Rechnung_verschickt"
-            + ", zusatz1, zusatz2, klienten_id FROM Arbeitrechnungen.einheiten where rechnung_id=" + rechnungenId;
+            + ", zusatz1, zusatz2, klienten_id FROM einheiten where rechnung_id=" + rechnungenId;
 
       logger.debug("FormRechnungen: update: " + sql);
 
       Vector<Arbeitsstunde> result = new Vector<>();
 
-      try {
-         ResultSet rs = verbindung.query(sql);
+      try (ResultSet rs = verbindung.query(sql)) {
 
          while (rs.next()) {
             final int einheiten_id = rs.getInt("einheiten_id");

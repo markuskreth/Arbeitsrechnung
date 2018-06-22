@@ -17,9 +17,9 @@ public class KlientPersister extends AbstractPersister {
 				+ "FROM einheiten " + "WHERE einheiten_id=" + einheit + ";";
 		logger.info("Einheit_einzel.setEinheit: " + sqltext);
 
-		try {
-			ResultSet daten = verbindung.query(sqltext);
-			daten.first();
+		try (ResultSet daten = verbindung.query(sqltext)) {
+			
+			daten.next();
 
 			Einheit e = new Einheit.Builder().angebotId(daten.getInt("angebote_id"))
 					.beginn(daten.getTimestamp("Beginn")).ende(daten.getTimestamp("Ende"))
@@ -74,9 +74,9 @@ public class KlientPersister extends AbstractPersister {
 		String sqltext = "SELECT Auftraggeber, Zusatz1, Zusatz2, Zusatz1_Name, Zusatz2_Name  FROM klienten WHERE klienten_id="
 				+ klient + ";";
 		logger.info("Einheit_einzel.setAuftraggeber: " + sqltext);
-		try {
-			ResultSet daten = verbindung.query(sqltext);
-			if (daten.first()) {
+		try (ResultSet daten = verbindung.query(sqltext)) {
+			
+			if (daten.next()) {
 				Auftraggeber result = new Auftraggeber();
 				result.klientId = klient;
 				result.name = daten.getString("Auftraggeber");

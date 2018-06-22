@@ -881,12 +881,11 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
             String pdfProg = einstellungen.getPdfProg();
             if (pdfProg != null) {
                String befehl = "";
-               befehl = pdfProg + " " + rechnung.getPdfdatei();
+               befehl = pdfProg + " \"" + rechnung.getPdfdatei() + "\"";
 
                if (target.canRead()) {
                   logger.info("showPdf: " + befehl);
                   try {
-                     // Runtime.getRuntime().exec("sh -c " + befehl);
                      Runtime.getRuntime().exec(befehl);
                   } catch (Exception e) {
                      logger.debug("showPdf Runtime error:", e);

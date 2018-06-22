@@ -45,7 +45,7 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 
 		if (Boolean.parseBoolean(useTest)) {
 			optionen = new Options.Build()
-					.dbHost("localhost").dbUser("markus").dbPassword("0773").dbDatabaseName("ArbeitrechnungenBak")
+					.dbHost("192.168.0.8").dbUser("markus").dbPassword("0773").dbDatabaseName("ArbeitrechnungenBak")
 					.stdTexFile("Rechnung_Allgemein.tex").texTemplatesDir("Tex-Vorlagen")
 					.targetDir("targetDir").tmpDir("tmpDir").pdfProg("/usr/bin/okular")
 					.build();
@@ -104,5 +104,9 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 			throw new IllegalArgumentException("Klasse " + clazz.getSimpleName() + " nicht unterstützt...", e);
 		}
 	}
+
+   public void setOptions(Options einstellungen) {
+      this.optionen = einstellungen;
+   }
 	
 }

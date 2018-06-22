@@ -1,5 +1,6 @@
 package de.kreth.arbeitsrechnungen.persister;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,9 +32,8 @@ public class KlientenEditorPersister extends AbstractPersister {
       String sql = "SELECT * FROM klienten " + whereClause;
       logger.debug(sql);
 
-      try {
-         ResultSet rs = verbindung.query(sql);
-
+      try (ResultSet rs = verbindung.query(sql)) {
+         
          while (rs.next()) {
 
             int klientenId = rs.getInt("klienten_id");
@@ -81,7 +81,7 @@ public class KlientenEditorPersister extends AbstractPersister {
     */
    public void speicherWert(int klientenId, String Feld, Object Wert) {
       try {
-         String sql = "UPDATE klienten SET " + Feld + "=" + Wert + " WHERE klienten_id=" + klientenId + ";";
+         String sql = "UPDATE klienten SET " + Feld + "='" + Wert + "' WHERE klienten_id=" + klientenId + ";";
          verbindung.sql(sql);
          logger.debug(sql);
       } catch (Exception e) {
@@ -95,8 +95,8 @@ public class KlientenEditorPersister extends AbstractPersister {
       logger.debug("updateKlientenTabelle: " + sqltext);
       List<Angebot> result = new ArrayList<>();
 
-      try {
-         ResultSet rs = verbindung.query(sqltext);
+      try (ResultSet rs = verbindung.query(sqltext)) {
+         
          while (rs.next()) {
             int angebote_id = rs.getInt("angebote_id");
             String inhalt = rs.getString("Inhalt");
@@ -121,16 +121,21 @@ public class KlientenEditorPersister extends AbstractPersister {
       String aAdresse1 = "Strasse eingeben";
       String plz = "00000";
       String ort = "Ort eingeben";
-      String sql = "INSERT INTO klienten (Auftraggeber, AAdresse1, APLZ, AOrt) " + "VALUES (\"" + auftraggeber + "\", \"" + aAdresse1 + "\", \"" + plz + "\", \"" + ort + "\");";
-
-      logger.debug(sql);
 
       try {
-         verbindung.sql(sql);
-         ResultSet rs = verbindung.query("SELECT LAST_INSERT_ID()");
-         rs.first();
+         PreparedStatement stm = verbindung.prepareStatement("INSERT INTO klienten (Auftraggeber, AAdresse1, APLZ, AOrt) VALUES (?,?,?,?)");
+         stm.setString(1, auftraggeber);
+         stm.setString(2, aAdresse1);
+         stm.setString(3, plz);
+         stm.setString(4, ort);
+         stm.executeUpdate();
+         ResultSet rs = verbindung.getAutoincrement();
+         rs.next();
          int klient_id = rs.getInt(1);
          k = new Klient.Builder(klient_id, auftraggeber, aAdresse1, plz, ort).build();
+         if(logger.isInfoEnabled()) {
+            logger.info("Inserted new Klient with ID=" + klient_id);
+         }
       } catch (SQLException e) {
          logger.error("Fehler bei createNewAuftraggeber", e);
       }
@@ -199,11 +204,10 @@ public class KlientenEditorPersister extends AbstractPersister {
          String sql = "SELECT COUNT(rechnungen_id) AS Anzahl FROM rechnungen WHERE klienten_id=" + currentKlient.getKlienten_id() + ";";
          logger.debug("getRechnungenAnzahl: " + sql);
 
-         try {
-            ResultSet rs;
-            rs = verbindung.query(sql);
+         try (ResultSet rs = verbindung.query(sql)) {
+            
 
-            if (rs.first())
+            if (rs.next())
                anzahl = rs.getInt(1);
 
          } catch (SQLException e) {

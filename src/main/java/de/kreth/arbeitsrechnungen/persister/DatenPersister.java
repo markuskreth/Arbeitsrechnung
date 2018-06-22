@@ -152,7 +152,7 @@ public class DatenPersister extends AbstractPersister {
          
          result.add(stunde.build());
       }
-      
+      daten.close();
       return result;
    }
 
@@ -176,7 +176,7 @@ public class DatenPersister extends AbstractPersister {
          while (einheit.next()) {
             daten.add(einheit.getDate("Datum"));
          }
-
+         einheit.close();
       } catch (SQLException e) {
          logger.error("Error fetching Daten for EinheitenIds " + einheit_id, e);
       }

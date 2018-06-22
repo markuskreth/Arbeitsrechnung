@@ -371,7 +371,7 @@ public class Rechnung {
       private boolean stunden = false;
       private Vector<Arbeitsstunde> einheiten = new Vector<>();
 
-      private Set<String> mustBeSet = new HashSet<>(Arrays.asList("klienten_id", "datum", "einheiten", "rechnungnr", "texdatei", "zahldatum", "adresse", "zusatz1", "zusatz2",
+      private Set<String> mustBeSet = new HashSet<>(Arrays.asList("klienten_id", "datum", "einheiten", "rechnungnr", "zahldatum", "adresse", "zusatz1", "zusatz2",
             BETRAG));
 
       public Builder() {

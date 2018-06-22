@@ -2,20 +2,23 @@ package de.kreth.arbeitsrechnungen.database;
 
 import java.sql.*;
 
-import de.kreth.hsqldbcreator.HsqlCreator;
+import org.hsqldb.jdbc.jdbcDataSource;
 
 public class Verbindung_HsqlCreator extends Verbindung {
 
-	HsqlCreator stm;
+   jdbcDataSource stm;
+   private Connection conn;
 
-	public Verbindung_HsqlCreator(HsqlCreator stm) {
+	public Verbindung_HsqlCreator(jdbcDataSource ds) {
 		super();
-		this.stm = stm;
-		try {
-			Statement createStatement = stm.getConnection().createStatement();
+		this.stm = ds;
+		try (Connection connection = ds.getConnection()){
+			
+         Statement createStatement = connection.createStatement();
 			if (DatabaseConfiguration.initDatabase(createStatement, "INTEGER IDENTITY") == false) {
 				logger.warn("Tables created");
 			}
+			this.conn = ds.getConnection();
 		} catch (SQLException e) {
 			logger.error("Error creating database.", e);
 			this.stm = null;
@@ -25,7 +28,7 @@ public class Verbindung_HsqlCreator extends Verbindung {
 	@Override
 	public boolean connected() {
 		try {
-			return !stm.isClosed();
+			return !conn.isClosed();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -35,28 +38,29 @@ public class Verbindung_HsqlCreator extends Verbindung {
 	@Override
 	public ResultSet query(CharSequence sql) throws SQLException {
 		logger.debug("executing: " + sql);
-		return stm.executeQuery(sql.toString());
+		
+		return conn.createStatement().executeQuery(sql.toString());
 	}
 
 	@Override
 	public boolean sql(CharSequence sql) throws SQLException {
 		logger.debug("executing: " + sql);
-		return stm.execute(sql.toString());
+      return conn.createStatement().execute(sql.toString());
 	}
 
 	@Override
 	public void close() {
-		try {
-			stm.close();
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
+//		try {
+//			conn.close();
+//		} catch (SQLException e) {
+//			System.err.println(e);
+//		}
 	}
 
 	@Override
 	public String toString() {
-		try {
-			return stm.getConnection().getMetaData().getURL();
+		try (Connection connection = stm.getConnection()) {
+         return connection.getMetaData().getURL();
 		} catch (SQLException e) {
 			return stm.toString();
 		}
@@ -64,7 +68,7 @@ public class Verbindung_HsqlCreator extends Verbindung {
 
 	@Override
 	public ResultSet getAutoincrement() throws SQLException {
-		return stm.executeQuery("CALL IDENTITY()");
+	   return conn.createStatement().executeQuery("CALL IDENTITY()");
 	}
 
    @Override

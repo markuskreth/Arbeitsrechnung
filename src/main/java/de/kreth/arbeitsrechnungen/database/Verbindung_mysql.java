@@ -161,7 +161,7 @@ public class Verbindung_mysql extends Verbindung {
 		   if(logger.isTraceEnabled()) {
 		      logger.trace("Closing " + verbindung);
 		   }
-			verbindung.close();
+//			verbindung.close();
 		} catch (Exception e) {
 			logger.error("Fehler in close ", e);
 		}

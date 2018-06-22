@@ -1,14 +1,16 @@
 package de.kreth.arbeitsrechnungen.database;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.hsqldb.jdbc.jdbcDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.kreth.hsqldbcreator.HsqlCreator;
+import de.kreth.arbeitsrechnungen.Options;
 
 public abstract class Verbindung {
 
@@ -16,6 +18,7 @@ public abstract class Verbindung {
 		HSQLDB, MYSQL
 	}
 
+	private static Verbindung verbindung = null;
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	private static final String DBTYPE = "dbtype";
 
@@ -50,7 +53,10 @@ public abstract class Verbindung {
 	 */
 	public static Verbindung getVerbindung(Properties options) {
 
-		Verbindung verbindung = null;
+	   if (verbindung != null) {
+	      return verbindung;
+	   }
+	   
 		if (isOldConnectionData(options)) {
 			verbindung = new Verbindung_mysql(options);
 		} else if (options.containsKey(DBTYPE)) {
@@ -59,8 +65,11 @@ public abstract class Verbindung {
 
 			switch (type) {
 			case HSQLDB:
-				HsqlCreator instance = HsqlCreator.getInstance();
-				verbindung = new Verbindung_HsqlCreator(instance);
+			   jdbcDataSource ds = new jdbcDataSource();
+			   File dir = new File(System.getProperty("user.home"), Options.BENUTZERVERZEICHNIS);
+			   File dbFile = new File(dir, "hsqlDatabase");
+			   ds.setDatabase("jdbc:hsqldb:" + dbFile.getAbsolutePath());
+				verbindung = new Verbindung_HsqlCreator(ds);
 				break;
 			case MYSQL:
 				verbindung = new Verbindung_mysql(options);

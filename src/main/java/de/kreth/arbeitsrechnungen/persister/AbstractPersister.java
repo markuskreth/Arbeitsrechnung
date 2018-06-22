@@ -20,7 +20,8 @@ public class AbstractPersister implements Persister {
 
    @Override
    public Verbindung connectToDb(Options optionen) throws SQLException {
-      return new DatabaseConnector(optionen.getProperties()).getVerbindung();
+      Verbindung vb = Verbindung.getVerbindung(optionen.getProperties());
+      return vb;
    }
 
    protected void debugLogSql(String sqltext) {
