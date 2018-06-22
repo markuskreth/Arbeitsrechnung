@@ -135,7 +135,7 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
    private void werteVonRechnungInFormularEintragen() {
 
       this.jTextKlient.setText(rechnung.getAdresse());
-      this.jTextTexDatei.setText(rechnung.getTexdatei());
+      this.jTextTexDatei.setVisible(false);
       this.jDateRechnungsdatum.setCalendar(rechnung.getDatum());
       this.jDateZahlDatum.setCalendar(rechnung.getZahldatum());
       this.jTextRechnungsnummer.setText(rechnung.getRechnungnr());
@@ -144,8 +144,8 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       this.jCheckBoxStundenzahl.setVisible(this.stunden_vorhanden);
 
       this.jTextKlient.setText(rechnung.getAdresse());
-      this.jTextTexDatei.setText(rechnung.getTexdatei());
-
+      this.jTextTexDatei.setVisible(false);
+      
       this.jToggleButtonDetails.setSelected(false);
       toggleDetails();
 
@@ -190,10 +190,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
             .zusatz1Name(klient.getZusatz1_Name()).zusatz2Name(klient.getZusatz2_Name());
 
       setAdresse(reBuilder);
-
-      if (klient.getTex_datei() != null && !klient.getTex_datei().isEmpty()) {
-         reBuilder.texdatei(klient.getTex_datei());
-      }
 
       rechnung = reBuilder.build();
 
@@ -249,10 +245,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       if (e.getDocument().equals(this.jTextKlient.getDocument())) {
          logger.debug("Adresse geändert!");
          this.rechnung.setAdresse(this.jTextKlient.getText());
-      }
-      if (e.getDocument().equals(this.jTextTexDatei.getDocument())) {
-         logger.debug("Tex-Datei geändert!");
-         this.rechnung.setTexdatei(this.jTextTexDatei.getText());
       }
       if (e.getDocument().equals(this.jTextRechnungsnummer.getDocument())) {
          logger.debug("Rechnungsnummer geändert!");
@@ -873,8 +865,13 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
             File target = new File(einstellungen.getTargetDir(), new_pdf);
             logger.info("storing rechnung pdf to " + target.getAbsolutePath());
             
-            OutputStream outStream = new FileOutputStream(target);
-            rechn.store(repo, outStream);
+            OutputStream outStream;
+            try {
+               outStream = new FileOutputStream(target);
+               rechn.store(repo, outStream);
+            } catch (FileNotFoundException e1) {
+               JOptionPane.showMessageDialog(this, "Konnte Pdf Datei nicht speichern: " + target.getAbsolutePath(), "Fehler beim Speichern PDF", JOptionPane.ERROR_MESSAGE);
+            }
             rechnung.setPdfdatei(target.getAbsolutePath());
             persister.insertOrUpdateRechnung(rechnung);
             
@@ -903,9 +900,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
             pchListeners.firePropertyChange(ERSTELLT, 0, rechnung.getRechnungen_id());
          }
 
-      } catch (FileNotFoundException e) {
-         logger.error("Error storing PDF", e);
-         JOptionPane.showMessageDialog(this, "Datei " + rechnung.getTexdatei() + "\nkonnte nicht gefunden werden!\nAbbruch!", "Datei nicht gefunden", JOptionPane.ERROR_MESSAGE);
       } catch (JRException e1) {
          logger.error("Error creating PDF", e1);
          JOptionPane.showMessageDialog(this, "Rechnung vom " + rechnung.getDatum() + "\nkonnte nicht erstellt werden!\nAbbruch!\n" + e1.getMessage(), "PDF nicht erstellt",
@@ -943,10 +937,6 @@ public class RechnungDialog extends JDialog implements PropertyChangeListener, D
       RechnungSystemExecutionService fileService = new RechnungSystemExecutionService();
 
       int ergebnis = fileService.movePdf(rechnung, dateiname);
-
-      if (ergebnis == 0) {
-         ergebnis = fileService.moveTex(rechnung, dateiname);
-      }
 
       if (ergebnis == 0) {
          persister.insertOrUpdateRechnung(rechnung);

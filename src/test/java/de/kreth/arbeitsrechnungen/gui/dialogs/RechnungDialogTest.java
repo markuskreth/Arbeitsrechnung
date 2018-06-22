@@ -28,7 +28,7 @@ public class RechnungDialogTest {
 				.datum(new GregorianCalendar()).zusatz2(false)
 				.klienten_id(-15).zusatz1(true)
 				.rechnungnr("TestRechnung" + getClass().getName()).zahldatum(null)
-				.texdatei("").adresse("").einheiten(new Vector<>());
+				.adresse("").einheiten(new Vector<>());
 	}
 
 	@Test

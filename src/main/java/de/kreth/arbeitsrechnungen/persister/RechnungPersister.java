@@ -18,7 +18,7 @@ public class RechnungPersister extends AbstractPersister {
    }
 
    public List<Rechnung> getRechnungenForKlient(int klienten_id) {
-      String sql = "SELECT rechnungen_id, klienten_id, datum, rechnungnr, betrag, texdatei, pdfdatei," 
+      String sql = "SELECT rechnungen_id, klienten_id, datum, rechnungnr, betrag, pdfdatei," 
             + "adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, geldeingang"
             + " FROM rechnungen WHERE klienten_id=" + klienten_id;
 
@@ -55,7 +55,6 @@ public class RechnungPersister extends AbstractPersister {
                   .datum(datum)
                   .rechnungnr(rs.getString("rechnungnr"))
                   .betrag(rs.getDouble("betrag"))
-                  .texdatei(rs.getString("texdatei"))
                   .pdfDatei(rs.getString("pdfdatei"))
                   .adresse(rs.getString("adresse"))
                   .zusatz1(rs.getBoolean("zusatz1"))

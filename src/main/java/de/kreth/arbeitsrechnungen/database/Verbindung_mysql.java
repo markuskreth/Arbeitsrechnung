@@ -15,12 +15,11 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 public class Verbindung_mysql extends Verbindung {
 
 	static String URL = "jdbc:mysql://192.168.0.1";
-
+   private static MysqlDataSource ds;
+   
 	private Logger logger = LoggerFactory.getLogger(Verbindung_mysql.class);
 
 	private Connection verbindung = null;
-
-   private static MysqlDataSource ds;
 
 	protected Verbindung_mysql(String datenbank, String benutzer, String password) {
 		try {
@@ -37,7 +36,6 @@ public class Verbindung_mysql extends Verbindung {
          verbindung = ds.getConnection();
 		} catch (Exception e) {
 			logger.error("Verbindung zu " + URL + " konnte nicht hergestellt werden.", e);
-
 		}
 	}
 
@@ -67,6 +65,11 @@ public class Verbindung_mysql extends Verbindung {
 		}
 	}
 
+   public Verbindung_mysql(Properties options) {
+      this(options.getProperty("sqlserver"), options.getProperty("datenbank"), options.getProperty("user"),
+            options.getProperty("password"));
+   }
+
 	@Override
 	public String toString() {
 	   StringBuilder txt = new StringBuilder(URL);
@@ -89,11 +92,6 @@ public class Verbindung_mysql extends Verbindung {
 	   return txt.toString();
 	}
 
-	public Verbindung_mysql(Properties options) {
-		this(options.getProperty("sqlserver"), options.getProperty("datenbank"), options.getProperty("user"),
-				options.getProperty("password"));
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -108,6 +106,10 @@ public class Verbindung_mysql extends Verbindung {
 		}
 	}
 
+	
+   public Connection getConnection() {
+      return verbindung;
+   }
 	/*
 	 * (non-Javadoc)
 	 * 

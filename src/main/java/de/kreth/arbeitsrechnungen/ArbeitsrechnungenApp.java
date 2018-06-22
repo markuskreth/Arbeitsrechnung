@@ -5,10 +5,14 @@
 package de.kreth.arbeitsrechnungen;
 
 import java.io.IOException;
+import java.sql.*;
 import java.util.Properties;
+
+import javax.swing.JOptionPane;
 
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.database.Verbindung;
+import de.kreth.arbeitsrechnungen.database.Verbindung_mysql;
 import de.kreth.arbeitsrechnungen.gui.jframes.KlientenEditor;
 import de.kreth.arbeitsrechnungen.gui.jframes.StartFenster;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
@@ -32,6 +36,7 @@ public class ArbeitsrechnungenApp {
             String singleKlientMode = System.getProperty(SINGLE_KLIENT_MODE);
             ArbeitRechnungFactoryProductiv.init();
             if (singleKlientMode == null || Boolean.parseBoolean(singleKlientMode) == false) {
+               changeColumnDefault(ArbeitRechnungFactoryProductiv.instance);
                new StartFenster().setVisible(true);
             } else {
                Options opts = Einstellungen.getInstance().getEinstellungen();
@@ -73,5 +78,23 @@ public class ArbeitsrechnungenApp {
             }
          }
       });
+   }
+
+   protected static void changeColumnDefault(ArbeitRechnungFactory factory) {
+
+      Verbindung_mysql vb = (Verbindung_mysql) Verbindung.getVerbindung(Einstellungen.getInstance().getEinstellungen().getProperties());
+      try {
+         Connection conn = vb.getConnection();
+         DatabaseMetaData dbMeta = conn.getMetaData();
+         ResultSet rs = dbMeta.getColumns(conn.getCatalog(), null, "rechnungen", "texdatei");
+         if (rs.next()) {
+            String columnDefaultVal = rs.getString("COLUMN_DEF");
+            if(columnDefaultVal == null) {
+               conn.createStatement().execute("ALTER TABLE rechnungen CHANGE COLUMN `texdatei` `texdatei` VARCHAR(255) NULL DEFAULT NULL");
+            }
+         }
+      } catch (SQLException e) {
+         JOptionPane.showMessageDialog(null, "Database Exception: " + e.getMessage() + "\n" + e.getStackTrace(), "Error on Database update", JOptionPane.ERROR_MESSAGE);
+      }
    }
 }

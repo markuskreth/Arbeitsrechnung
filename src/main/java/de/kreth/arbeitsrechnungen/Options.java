@@ -7,8 +7,6 @@ public class Options {
 
    public static final String BENUTZERVERZEICHNIS = ".arbeitrechnungen";
    
-   public static final String STD_TEX_FILE = "stdtexdatei";
-   public static final String TEX_TEMPLATE_DIR = "verzeichnistexdateien";
    public static final String PDF_PROG = "pdfprogramm";
    public static final String DB_USER = "user";
    public static final String DB_HOST = "sqlserver";
@@ -21,8 +19,6 @@ public class Options {
    public static final Set<String> PROPERTIES;
    static {
       PROPERTIES = new HashSet<>();
-      PROPERTIES.add(STD_TEX_FILE);
-      PROPERTIES.add(TEX_TEMPLATE_DIR);
       PROPERTIES.add(PDF_PROG);
       PROPERTIES.add(DB_USER);
       PROPERTIES.add(DB_HOST);
@@ -37,14 +33,6 @@ public class Options {
 
    private Options(Build build) {
       prop = build.properties;
-   }
-
-   public String getStdTexFile() {
-      return prop.getProperty(STD_TEX_FILE);
-   }
-
-   public File getTexTemplatesDir() {
-      return new File(prop.getProperty(TEX_TEMPLATE_DIR));
    }
 
    public String getPdfProg() {
@@ -96,7 +84,7 @@ public class Options {
 
       private Properties properties = null;
 
-      Set<String> toSet = new HashSet<>(Arrays.asList(STD_TEX_FILE, TEX_TEMPLATE_DIR, PDF_PROG, DB_USER, DB_HOST, DB_DATABASE_NAME, DB_PASSWORD, TARGET_DIR, TMP_DIR));
+      Set<String> toSet = new HashSet<>(Arrays.asList(PDF_PROG, DB_USER, DB_HOST, DB_DATABASE_NAME, DB_PASSWORD, TARGET_DIR, TMP_DIR));
 
       @Override
       public String toString() {
@@ -110,20 +98,6 @@ public class Options {
       public Build(Properties properties) {
          this.properties = properties;
          toSet.clear();
-      }
-
-      public Build stdTexFile(String stdTexFile) {
-         properties.setProperty(STD_TEX_FILE, stdTexFile);
-         toSet.remove(STD_TEX_FILE);
-         return this;
-      }
-
-      public Build texTemplatesDir(String texTemplatesDir) {
-         if (texTemplatesDir == null)
-            throw new IllegalArgumentException("texTemplatesDir must not be null!");
-         properties.setProperty(TEX_TEMPLATE_DIR, texTemplatesDir);
-         toSet.remove(TEX_TEMPLATE_DIR);
-         return this;
       }
 
       public Build pdfProg(String pdfProg) {

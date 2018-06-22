@@ -15,7 +15,7 @@
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="mm"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT rechnungen_id, adresse, betrag, rechnungen.datum, geldeingang, pdfdatei, rechnungnr, 
-	texdatei, timestamp, zahldatum, zusammenfassungen, rechnungen.zusatz1, rechnungen.zusatz2
+	timestamp, zahldatum, zusammenfassungen, rechnungen.zusatz1, rechnungen.zusatz2
 	Auftraggeber,AAdresse1, AAdresse2, AEmail, AOrt, APLZ, ATelefon
 --    ,klienten.Zusatz1, klienten.Zusatz1_Name, klienten.Zusatz2, klienten.Zusatz2_Name, 
 --    einheiten.Beginn, einheiten.Datum, einheiten.Dauer, einheiten.Ende, einheiten.Preis, 

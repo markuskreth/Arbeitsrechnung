@@ -17,7 +17,6 @@ public class Rechnung {
    private Calendar datum;
    private String rechnungnr;
    private String adresse;
-   private String texdatei;
    private String pdfdatei;
    private boolean zusatz1;
    private boolean zusatz2;
@@ -38,7 +37,6 @@ public class Rechnung {
       this.datum = builder.datum;
       this.rechnungnr = builder.rechnungnr;
       this.adresse = builder.adresse;
-      this.texdatei = builder.texdatei;
       this.pdfdatei = builder.pdfdatei;
       this.zusatz1 = builder.zusatz1;
       this.zusatz2 = builder.zusatz2;
@@ -60,7 +58,6 @@ public class Rechnung {
    public static final String PROP_RECHNUNGEN_ID = "rechnungen_id";
    public static final String PROP_KLIENTEN_ID = "klienten_id";
    public static final String PROP_RECHNUNGNR = "rechnungnr";
-   public static final String PROP_TEXDATEI = "texdatei";
    public static final String PROP_DATUM = "datum";
    public static final String PROP_BETRAG = "betrag";
    public static final String PROP_ZUSATZ2 = "zusatz2";
@@ -218,26 +215,6 @@ public class Rechnung {
    }
 
    /**
-    * Get the value of texdatei
-    * 
-    * @return the value of texdatei
-    */
-   public String getTexdatei() {
-      return texdatei;
-   }
-
-   /**
-    * Set the value of texdatei
-    * 
-    * @param texdatei new value of texdatei
-    */
-   public void setTexdatei(String texdatei) {
-      String oldTexdatei = this.texdatei;
-      this.texdatei = texdatei;
-      propertyChangeSupport.firePropertyChange(PROP_TEXDATEI, oldTexdatei, texdatei);
-   }
-
-   /**
     * Get the value of pdfdatei
     * 
     * @return the value of pdfdatei
@@ -358,7 +335,6 @@ public class Rechnung {
       private Calendar datum = null;
       private String rechnungnr = "";
       private String adresse = "";
-      private String texdatei = "";
       private String pdfdatei = "";
       private boolean zusatz1 = false;
       private boolean zusatz2 = false;
@@ -423,12 +399,6 @@ public class Rechnung {
       public Builder adresse(String adresse) {
          this.adresse = adresse;
          mustBeSet.remove("adresse");
-         return this;
-      }
-
-      public Builder texdatei(String texdatei) {
-         this.texdatei = texdatei;
-         mustBeSet.remove("texdatei");
          return this;
       }
 

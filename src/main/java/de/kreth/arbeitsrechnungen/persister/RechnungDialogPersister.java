@@ -43,7 +43,7 @@ public class RechnungDialogPersister extends AbstractPersister {
    
    public Builder getRechnungById(int rechnungs_id) {
 
-      String sql = "SELECT rechnungen_id, klienten_id, datum, rechnungnr, betrag, texdatei, "
+      String sql = "SELECT rechnungen_id, klienten_id, datum, rechnungnr, betrag, "
             + "pdfdatei, adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, geldeingang, timestamp " + "FROM rechnungen WHERE rechnungen_id=" + rechnungs_id + ";";
 
       logger.debug("getRechnungById: " + sql);
@@ -57,7 +57,6 @@ public class RechnungDialogPersister extends AbstractPersister {
             	.datum(getCalendarValue(daten, "datum"))
             	.rechnungnr(daten.getString("rechnungnr"))
             	.betrag(daten.getDouble("betrag"))
-            	.texdatei(daten.getString("texdatei"))
             	.pdfDatei(daten.getString("pdfdatei"))
             	.adresse(daten.getString("adresse"))
             	.zusatz1(daten.getBoolean("zusatz1"))
@@ -252,21 +251,20 @@ public class RechnungDialogPersister extends AbstractPersister {
 
          try {
             PreparedStatement insert1 = verbindung.prepareStatement("INSERT INTO rechnungen "
-                  + "(klienten_id, datum, rechnungnr, betrag, texdatei, pdfdatei, adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, timestamp)"
-                  + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                  + "(klienten_id, datum, rechnungnr, betrag, pdfdatei, adresse, zusatz1, zusatz2, zusammenfassungen, zahldatum, timestamp)"
+                  + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             insert1.setInt(1, rechnung.getKlienten_id());
             insert1.setDate(2, new java.sql.Date(rechnung.getDatum().getTimeInMillis()));
             insert1.setString(3, rechnung.getRechnungnr());
             insert1.setBigDecimal(4, rechnung.getBetrag());
-            insert1.setString(5, rechnung.getTexdatei());
-            insert1.setString(6, rechnung.getPdfdatei());
-            insert1.setString(7, rechnung.getAdresse());
-            insert1.setInt(8, rechnung.getZusatz1_name() == null?0:1);
-            insert1.setInt(9, rechnung.getZusatz2_name() == null?0:1);
-            insert1.setInt(10, rechnung.isZusammenfassungenErlauben() ?1:0);
+            insert1.setString(5, rechnung.getPdfdatei());
+            insert1.setString(6, rechnung.getAdresse());
+            insert1.setInt(7, rechnung.getZusatz1_name() == null?0:1);
+            insert1.setInt(8, rechnung.getZusatz2_name() == null?0:1);
+            insert1.setInt(9, rechnung.isZusammenfassungenErlauben() ?1:0);
 
-            insert1.setDate(11, new java.sql.Date(rechnung.getZahldatum().getTimeInMillis()));
-            insert1.setTimestamp(12, new Timestamp(new Date().getTime()));
+            insert1.setDate(10, new java.sql.Date(rechnung.getZahldatum().getTimeInMillis()));
+            insert1.setTimestamp(11, new Timestamp(new Date().getTime()));
             
             insert1.executeUpdate();
 
@@ -288,18 +286,17 @@ public class RechnungDialogPersister extends AbstractPersister {
          PreparedStatement update1;
          try {
             update1 = verbindung.prepareStatement(
-                  "UPDATE rechnungen SET datum=?, rechnungnr=?, betrag=?, texdatei=?, pdfdatei=?, adresse=?, zusatz1=?, zusatz2=?, zusammenfassungen=?, zahldatum=? WHERE rechnungen_id =?");
+                  "UPDATE rechnungen SET datum=?, rechnungnr=?, betrag=?, pdfdatei=?, adresse=?, zusatz1=?, zusatz2=?, zusammenfassungen=?, zahldatum=? WHERE rechnungen_id =?");
             update1.setDate(1, new java.sql.Date(rechnung.getDatum().getTimeInMillis()));
             update1.setString(2, rechnung.getRechnungnr());
             update1.setBigDecimal(3, rechnung.getBetrag());
-            update1.setString(4, rechnung.getTexdatei());
-            update1.setString(5, rechnung.getPdfdatei());
-            update1.setString(6, rechnung.getAdresse());
-            update1.setInt(7, rechnung.getZusatz1_name() == null?0:1);
-            update1.setInt(8, rechnung.getZusatz2_name() == null?0:1);
-            update1.setBoolean(9, rechnung.isZusammenfassungenErlauben());
-            update1.setDate(10, new java.sql.Date(rechnung.getZahldatum().getTimeInMillis()));
-            update1.setInt(11, rechnung.getRechnungen_id());
+            update1.setString(4, rechnung.getPdfdatei());
+            update1.setString(5, rechnung.getAdresse());
+            update1.setInt(6, rechnung.getZusatz1_name() == null?0:1);
+            update1.setInt(7, rechnung.getZusatz2_name() == null?0:1);
+            update1.setBoolean(8, rechnung.isZusammenfassungenErlauben());
+            update1.setDate(9, new java.sql.Date(rechnung.getZahldatum().getTimeInMillis()));
+            update1.setInt(10, rechnung.getRechnungen_id());
             
             update1.executeUpdate();
          } catch (SQLException e) {

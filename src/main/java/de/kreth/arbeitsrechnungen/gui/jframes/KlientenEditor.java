@@ -9,7 +9,6 @@ package de.kreth.arbeitsrechnungen.gui.jframes;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
-import java.io.File;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.*;
@@ -581,7 +580,7 @@ public class KlientenEditor extends JDialog {
          jTextFieldKTelefon.setText(currentKlient.getKTelefon());
          jTextFieldKEmail.setText(currentKlient.getKEmail());
          jTextAreaBemerkungen.setText(currentKlient.getBemerkungen());
-         jTextFieldTex_datei.setText(currentKlient.getTex_datei());
+         jTextFieldTex_datei.setVisible(false);
 
          jCheckBoxZusatz1.setSelected(currentKlient.hasZusatz1());
          jCheckBoxZusatz2.setSelected(currentKlient.hasZusatz2());
@@ -1077,21 +1076,9 @@ public class KlientenEditor extends JDialog {
       jTextAreaBemerkungen.setName("Bemerkungen"); // NOI18N
       jScrollPane1.setViewportView(jTextAreaBemerkungen);
 
-      jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
-      jLabel15.setName("jLabel15"); // NOI18N
-
-      jTextFieldTex_datei.setText(resourceMap.getString("tex_datei.text")); // NOI18N
-      jTextFieldTex_datei.setName("tex_datei"); // NOI18N
-
-      jButtonfindeTexDatei.setText(resourceMap.getString("jButtonfindeTexDatei.text")); // NOI18N
-      jButtonfindeTexDatei.setName("jButtonfindeTexDatei"); // NOI18N
-      jButtonfindeTexDatei.addActionListener(new ActionListener() {
-
-         @Override
-         public void actionPerformed(final ActionEvent evt) {
-            jButtonfindeTexDateiActionPerformed(evt);
-         }
-      });
+      jLabel15.setVisible(false);
+      jTextFieldTex_datei.setVisible(false);
+      jButtonfindeTexDatei.setVisible(false);
 
       javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
       jPanel3.setLayout(jPanel3Layout);
@@ -1513,47 +1500,6 @@ public class KlientenEditor extends JDialog {
 
          openAngebotDialogForSelected();
       }
-   }
-
-   private void jButtonfindeTexDateiActionPerformed(final ActionEvent evt) {
-
-      java.awt.FileDialog dateiname = new java.awt.FileDialog(this, "Tex-Datei", java.awt.FileDialog.LOAD);
-      int endindex = 0;
-      if (currentKlient.getTex_datei() == null) {
-         endindex = 0;
-      } else {
-         endindex = currentKlient.getTex_datei().lastIndexOf("/");
-      }
-
-      if (endindex > 0) {
-         dateiname.setDirectory(currentKlient.getTex_datei().substring(0, endindex));
-         dateiname.setFile(currentKlient.getTex_datei().substring(endindex, currentKlient.getTex_datei().length()));
-      } else {
-         if (currentKlient.getTex_datei() != null) {
-            dateiname.setFile(currentKlient.getTex_datei());
-         }
-      }
-      dateiname.setFilenameFilter(new java.io.FilenameFilter() {
-
-         @Override
-         public boolean accept(final File dir, final String name) {
-            if (name.endsWith(".tex")) {
-               return true;
-            } else {
-               return false;
-            }
-         }
-      });
-
-      dateiname.setVisible(true);
-      if (dateiname.getFile() != null) {
-
-         KlientenEditorPersister persister = factory.getPersister(KlientenEditorPersister.class);
-         persister.speicherWert(currentKlient.getKlienten_id(), "tex_datei", "\"" + dateiname.getDirectory() + dateiname.getFile() + "\"");
-         persister.close();
-         this.jTextFieldTex_datei.setText(currentKlient.getTex_datei());
-      }
-      dateiname.dispose();
    }
 
    /**

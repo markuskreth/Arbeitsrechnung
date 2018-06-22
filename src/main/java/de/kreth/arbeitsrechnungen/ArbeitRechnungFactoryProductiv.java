@@ -46,7 +46,6 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 		if (Boolean.parseBoolean(useTest)) {
 			optionen = new Options.Build()
 					.dbHost("192.168.0.8").dbUser("markus").dbPassword("0773").dbDatabaseName("ArbeitrechnungenBak")
-					.stdTexFile("Rechnung_Allgemein.tex").texTemplatesDir("Tex-Vorlagen")
 					.targetDir("targetDir").tmpDir("tmpDir").pdfProg("/usr/bin/okular")
 					.build();
 		} else {

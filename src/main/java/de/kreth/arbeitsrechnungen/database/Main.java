@@ -82,7 +82,6 @@ public class Main {
 		+ "Zusatz1_Name varchar(100) DEFAULT NULL, "
 		+ "Zusatz2 tinyint DEFAULT NULL, "
 		+ "Zusatz2_Name varchar(100) DEFAULT NULL, "
-		+ "tex_datei varchar(255) DEFAULT NULL, "
 		+ "rechnungnummer_bezeichnung varchar(255) DEFAULT NULL,"
 		+ "PRIMARY KEY (klienten_id));");
 	verbindung.sql("CREATE TABLE angebote (\n"
@@ -124,7 +123,6 @@ public class Main {
 		+ "datum datetime NOT NULL, \n"
 		+ "rechnungnr varchar(255) NOT NULL, \n"
 		+ "betrag float NOT NULL, \n"
-		+ "texdatei varchar(255) NOT NULL, \n"
 		+ "pdfdatei varchar(255) NOT NULL, \n"
 		+ "adresse varchar(255) NOT NULL, \n"
 		+ "zusatz1 boolean NOT NULL, \n"
@@ -144,19 +142,9 @@ public class Main {
 
         verbindung.sql("INSERT INTO klienten \n VALUES(1, \n'Berufsfeuerwehr Hannover', \n'', \n'', \n'     ', \n'', '', '', \n'Gesunde Karriere', \n'Mirja Massen', \n'Georgstr. 50 B', '30159', \n'Hannover', '', '', '', \n1, 'Wache/ Ausfall', \n1, 'Teilnehmerzahl', \n'/home/markus/programming/NetBeansProjects/Arbeitsrechnungen/Tex-Vorlagen/Rechnung_Allgemein.tex', 'Feuerwehr Hannover');");
 	verbindung.sql("\nINSERT INTO klienten VALUES(2, 'Solfit', '', '', '     ', '', '', '', 'Solvay GmbH', 'z.Hd. Herrn Michael Busche', 'Hans-Böckler-Allee 20', '30173', 'Hannover', '', '', '', 1, 'Kursname', NULL, NULL, '/home/markus/programming/NetBeansProjects/Arbeitsrechnungen/Tex-Vorlagen/Rechnung_Solfit.tex', NULL);");
-	verbindung.sql("\nINSERT INTO klienten \n(klienten_id, Kunde, KAdresse1, KAdresse2, KPLZ, KOrt, KTelefon, KEmail, Auftraggeber, AAdresse1, AAdresse2, APLZ, AOrt, ATelefon, AEmail, Bemerkungen, Zusatz1, Zusatz1_Name, Zusatz2, Zusatz2_Name, tex_datei, rechnungnummer_bezeichnung)\n"
+	verbindung.sql("\nINSERT INTO klienten \n(klienten_id, Kunde, KAdresse1, KAdresse2, KPLZ, KOrt, KTelefon, KEmail, Auftraggeber, AAdresse1, AAdresse2, APLZ, AOrt, ATelefon, AEmail, Bemerkungen, Zusatz1, Zusatz1_Name, Zusatz2, Zusatz2_Name, rechnungnummer_bezeichnung)\n"
                 + " VALUES(26, '', '', '', '     ', '', '', \nNULL, \n'Hochschulsport Hannover', \n'Im Moritzwinkel 6', '', '30159', 'Hannover', \nNULL, NULL, NULL, 1, 'Anzahl Teilnehmer', 1, 'Kursnr.', NULL, '');");
-/*	verbindung.sql("\nINSERT INTO klienten \n"
-                + "(`klienten_id`, `Kunde`, `KAdresse1`, `KAdresse2`, `KPLZ`, `KOrt`, `KTelefon`, `KEmail`, `Auftraggeber`, `AAdresse1`, `AAdresse2`, `APLZ`, `AOrt`, `ATelefon`, `AEmail`, `Bemerkungen`, `Zusatz1`, `Zusatz1_Name`, `Zusatz2`, `Zusatz2_Name`, `tex_datei`, `rechnungnummer_bezeichnung`)\n"
-                + " VALUES(28, '', \nNULL, '', '     ', '', '', \nNULL, \n'MTV Groß-Buchholz', \n'Rotekreuzstr. 25', '', \n'30627', 'Hannover', NULL, NULL, NULL, \n"
-                + "1, 'Teilnehmerzahl', 0, \n'leer', \n"
-                + "'/home/markus/programming/NetBeansProjects/Arbeitsrechnungen/test/buchholz-abrechnung.tex'\n"
-                + ", NULL);");
- *
- */
-//	verbindung.sql("\nINSERT INTO `klienten` (`klienten_id`, `Kunde`, `KAdresse1`, `KAdresse2`, `KPLZ`, `KOrt`, `KTelefon`, `KEmail`, `Auftraggeber`, `AAdresse1`, `AAdresse2`, `APLZ`, `AOrt`, `ATelefon`, `AEmail`, `Bemerkungen`, `Zusatz1`, `Zusatz1_Name`, `Zusatz2`, `Zusatz2_Name`, `tex_datei`, `rechnungnummer_bezeichnung`) VALUES(35, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Jugendzentrum Emplelde', 'Auf dem Rade 3', NULL, '30952', 'Ronnenberg', '0511 - 4383359-0', 'juzempelde@gmx.de', 'Öffnungszeiten: Mo - Do 14 - 19 Uhr (Offene Tür)\nMo - Do 15 - 18 Uhr (Netzbutze)', NULL, NULL, NULL, NULL, '/home/data/markus/programming/NetBeansProjects/Arbeitsrechnungen/Tex-Vorlagen/Rechnung_Allgemein.tex', NULL);");
-//	verbindung.sql("\nINSERT INTO `klienten` (`klienten_id`, `Kunde`, `KAdresse1`, `KAdresse2`, `KPLZ`, `KOrt`, `KTelefon`, `KEmail`, `Auftraggeber`, `AAdresse1`, `AAdresse2`, `APLZ`, `AOrt`, `ATelefon`, `AEmail`, `Bemerkungen`, `Zusatz1`, `Zusatz1_Name`, `Zusatz2`, `Zusatz2_Name`, `tex_datei`, `rechnungnummer_bezeichnung`) VALUES(36, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'sonja', 'vertretung', NULL, '00000', 'Ort eingeben', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);");
-//	verbindung.sql("\nINSERT INTO `klienten` (`klienten_id`, `Kunde`, `KAdresse1`, `KAdresse2`, `KPLZ`, `KOrt`, `KTelefon`, `KEmail`, `Auftraggeber`, `AAdresse1`, `AAdresse2`, `APLZ`, `AOrt`, `ATelefon`, `AEmail`, `Bemerkungen`, `Zusatz1`, `Zusatz1_Name`, `Zusatz2`, `Zusatz2_Name`, `tex_datei`, `rechnungnummer_bezeichnung`) VALUES(37, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Opexx', 'Bayernstr. 21', NULL, '30855', 'Langenhagen', '0511-63 28 39 ', 'Nickart@OPExx-Hannover.de', 'Jürgen Nickart, Geschäftsführer', NULL, NULL, NULL, NULL, NULL, NULL);");
+
 	verbindung.sql("INSERT INTO PUBLIC.einheiten VALUES(49, 1, 3, '2009-06-24', '2009-06-24 08:00:00', '2009-06-24 09:00:00', 0, 'Wache 1', 'ausgefallen', 13, -5, 1, '2009-07-08 00:00:00', NULL, 1, '2009-07-24 00:00:00', NULL);");
 
 	/**        try {

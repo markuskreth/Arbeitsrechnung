@@ -41,23 +41,6 @@ public class RechnungSystemExecutionService {
       return ergebnis;
    }
 
-   public int moveTex(Rechnung rechnung, String dateiname) {
-
-      int ergebnis = -1;
-
-      File srcFile = new File(rechnung.getTexdatei());
-      File destFile = new File(options.getTargetDir(), dateiname+".tex");
-      
-      try {
-         FileUtils.moveFile(srcFile, destFile);
-         ergebnis = 0;
-      } catch (java.io.IOException exp) {
-         logger.warn("Fehler in ProcessBuilder", exp);
-      }
-
-      return ergebnis;
-   }
-
    public void showRechnung(Rechnung rechnungToShow) {
       String befehl = this.options.getPdfProg();
       befehl += " " + rechnungToShow.getPdfdatei();

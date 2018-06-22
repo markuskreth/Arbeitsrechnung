@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 import javax.swing.*;
@@ -230,16 +231,20 @@ public class ArbeitsstundenTabelle extends JPanel implements WindowListener {
 		};
 
 		// Vektor aus Daten erstellen und einzeln zum Model hinzufügen
-		DecimalFormat df = new DecimalFormat("0.00");
-
+		NumberFormat df = DecimalFormat.getCurrencyInstance();
+		
 		for (int i = 0; i < arbeitsstunden.size(); i++) {
 			Arbeitsstunde elementAt = this.arbeitsstunden.get(i);
 			Vector<Object> daten = elementAt.toVector();
 			daten.removeElementAt(0);
 			daten.removeElementAt(0);
 			daten.removeElementAt(0);
-			String preis = df.format(daten.elementAt(4)) + " €";
-			daten.removeElementAt(4);
+			if(elementAt.getPreis().equals(daten.elementAt(3))) {
+            daten.removeElementAt(3);
+         } else if(elementAt.getPreis().equals(daten.elementAt(4))) {
+            daten.removeElementAt(4);
+         }
+			String preis = df.format(elementAt.getPreis());
 			daten.add(4, preis);
 			mymodel.addRow(daten);
 		}

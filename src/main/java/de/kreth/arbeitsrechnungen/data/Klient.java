@@ -23,7 +23,6 @@ public class Klient {
    protected String kAdress1;
 
    protected String bemerkungen;
-   protected String tex_datei;
    protected boolean zusatz1;
    protected String zusatz1_Name;
    protected boolean zusatz2;
@@ -48,7 +47,6 @@ public class Klient {
       this.kAdress2 = builder.kAdress2;
       this.kAdress1 = builder.kAdress1;
       this.bemerkungen = builder.bemerkungen;
-      this.tex_datei = builder.tex_datei;
       this.zusatz1 = builder.zusatz1;
       this.zusatz1_Name = builder.zusatz1_Name;
       this.zusatz2 = builder.zusatz2;
@@ -120,10 +118,6 @@ public class Klient {
       return bemerkungen;
    }
 
-   public String getTex_datei() {
-      return tex_datei;
-   }
-
    public boolean hasZusatz1() {
       return zusatz1;
    }
@@ -165,7 +159,6 @@ public class Klient {
       result = prime * result + klienten_id;
       result = prime * result + ((kunde == null) ? 0 : kunde.hashCode());
       result = prime * result + ((rechnungnummer_bezeichnung == null) ? 0 : rechnungnummer_bezeichnung.hashCode());
-      result = prime * result + ((tex_datei == null) ? 0 : tex_datei.hashCode());
       result = prime * result + (zusatz1 ? 1231 : 1237);
       result = prime * result + ((zusatz1_Name == null) ? 0 : zusatz1_Name.hashCode());
       result = prime * result + (zusatz2 ? 1231 : 1237);
@@ -264,11 +257,6 @@ public class Klient {
             return false;
       } else if (!rechnungnummer_bezeichnung.equals(other.rechnungnummer_bezeichnung))
          return false;
-      if (tex_datei == null) {
-         if (other.tex_datei != null)
-            return false;
-      } else if (!tex_datei.equals(other.tex_datei))
-         return false;
       if (zusatz1 != other.zusatz1)
          return false;
       if (zusatz1_Name == null) {
@@ -306,7 +294,6 @@ public class Klient {
       private String kAdress1;
 
       private String bemerkungen;
-      private String tex_datei;
       private boolean zusatz1;
       private String zusatz1_Name;
       private boolean zusatz2;
@@ -373,11 +360,6 @@ public class Klient {
 
       public Builder bemerkungen(String bemerkungen) {
          this.bemerkungen = bemerkungen;
-         return this;
-      }
-
-      public Builder tex_datei(String tex_datei) {
-         this.tex_datei = tex_datei;
          return this;
       }
 

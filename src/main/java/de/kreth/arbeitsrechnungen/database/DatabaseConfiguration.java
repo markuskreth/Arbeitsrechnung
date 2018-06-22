@@ -73,7 +73,6 @@ public class DatabaseConfiguration {
 		stringBuilder.append("Zusatz1_Name varchar(100) DEFAULT NULL, ");
 		stringBuilder.append("Zusatz2 tinyint DEFAULT NULL, ");
 		stringBuilder.append("Zusatz2_Name varchar(100) DEFAULT NULL, ");
-		stringBuilder.append("tex_datei varchar(255) DEFAULT NULL, ");
 		stringBuilder.append("rechnungnummer_bezeichnung varchar(255) DEFAULT NULL");
 		stringBuilder.append(");");
 		stm.executeQuery(stringBuilder.toString());
@@ -126,7 +125,6 @@ public class DatabaseConfiguration {
 		stringBuilder.append("datum datetime NOT NULL, ");
 		stringBuilder.append("rechnungnr varchar(255) NOT NULL, ");
 		stringBuilder.append("betrag float NOT NULL, ");
-		stringBuilder.append("texdatei varchar(255) NOT NULL, ");
 		stringBuilder.append("pdfdatei varchar(255) NOT NULL, ");
 		stringBuilder.append("adresse varchar(255) NOT NULL, ");
 		stringBuilder.append("zusatz1 boolean NOT NULL, ");

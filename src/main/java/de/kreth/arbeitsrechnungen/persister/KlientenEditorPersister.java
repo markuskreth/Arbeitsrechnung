@@ -53,7 +53,6 @@ public class KlientenEditorPersister extends AbstractPersister {
             String kPLZ = rs.getString("KPLZ");
             String kTelefon = rs.getString("KTelefon");
             String bemerkungen = rs.getString("Bemerkungen");
-            String tex_datei = rs.getString("tex_datei");
             boolean zusatz1 = rs.getBoolean("Zusatz1");
             String zusatz1_Name = rs.getString("Zusatz1_Name");
             boolean zusatz2 = rs.getBoolean("Zusatz2");
@@ -61,7 +60,7 @@ public class KlientenEditorPersister extends AbstractPersister {
             String rechnungnummer_bezeichnung = rs.getString("rechnungnummer_bezeichnung");
 
             result.add(new Klient.Builder(klientenId, auftraggeber, aAdress1, aPlz, aOrt).aEmail(aEmail).aTelefon(aTelefon).aAdress2(aAdress2).kunde(kunde).kEmail(kEmail)
-                  .kTelefon(kTelefon).kOrt(kOrt).kPlz(kPLZ).kAdress1(kAdresse1).kAdress2(kAdresse2).bemerkungen(bemerkungen).tex_datei(tex_datei).zusatz1(zusatz1)
+                  .kTelefon(kTelefon).kOrt(kOrt).kPlz(kPLZ).kAdress1(kAdresse1).kAdress2(kAdresse2).bemerkungen(bemerkungen).zusatz1(zusatz1)
                   .zusatz1_Name(zusatz1_Name).zusatz2(zusatz2).zusatz2_Name(zusatz2_Name).rechnungnummer_bezeichnung(rechnungnummer_bezeichnung).build());
          }
       } catch (SQLException e) {

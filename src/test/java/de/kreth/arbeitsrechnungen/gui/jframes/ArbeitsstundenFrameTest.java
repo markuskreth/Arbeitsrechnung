@@ -3,14 +3,15 @@ package de.kreth.arbeitsrechnungen.gui.jframes;
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 import java.awt.Frame;
-import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
