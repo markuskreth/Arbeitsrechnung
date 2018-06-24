@@ -18,6 +18,9 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JTableFixture;
 import org.junit.Test;
 
+import de.kreth.arbeitsrechnungen.Einstellungen;
+import de.kreth.arbeitsrechnungen.MockableEinstellungen;
+import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Einheit;
 import de.kreth.arbeitsrechnungen.persister.DatenPersister.Forderung;
 
@@ -26,6 +29,11 @@ public class ApplicationTest extends AbstractFrameTest {
    @Override
    protected void onSetUp() {
       super.onSetUp();
+      Options optionen = new Options.Build(Einstellungen.getInstance().getEinstellungen().getProperties())
+            .dbHost("leer")
+            .dbDatabaseName("leer")
+            .build();
+      MockableEinstellungen.setOptions(optionen);
       application(getClass()).start();
    }
 
@@ -79,8 +87,13 @@ public class ApplicationTest extends AbstractFrameTest {
       when(forderung.getDatum()).thenReturn(fordDate);
 
       List<Forderung> forrdList = Arrays.asList(forderung);
-      List<Einheit> einheitList = Arrays.asList(new Einheit.Builder().auftraggeber("Auftraggeber2Name").datum(new GregorianCalendar(2017, 7, 5).getTime())
-            .beginn(new GregorianCalendar(2017, 7, 5, 17, 0, 0).getTime()).ende(new GregorianCalendar(2017, 7, 5, 19, 0, 0).getTime()).klientenpreis(11.1).anzahl(2).build());
+      List<Einheit> einheitList = Arrays.asList(new Einheit.Builder().auftraggeber("Auftraggeber2Name")
+            .datum(new GregorianCalendar(2017, 7, 5).getTime())
+            .beginn(new GregorianCalendar(2017, 7, 5, 17, 0, 0).getTime())
+            .ende(new GregorianCalendar(2017, 7, 5, 19, 0, 0).getTime())
+            .klientenpreis(11.1)
+            .anzahl(2)
+            .build());
 
       final FrameFixture frame = initWith(forrdList, einheitList);
 

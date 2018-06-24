@@ -94,8 +94,16 @@ public class EinheitEinzelFrameTest extends AbstractFrameTest {
       ende.set(Calendar.HOUR_OF_DAY, 19);
       ende.set(Calendar.MINUTE, 30);
 
-      final Einheit einheit = new Einheit.Builder().angebot(angebote.get(0)).angebotId(9).id(-1).auftraggeber(auftraggeber.getName()).klientenId(auftraggeber.getKlientId())
-            .datum(einheitDate.getTime()).beginn(start.getTime()).ende(ende.getTime()).zusatz1("ca. 13").build();
+      final Einheit einheit = new Einheit.Builder().angebot(angebote.get(0))
+            .angebotId(9)
+            .id(-1)
+            .auftraggeber(auftraggeber.getName())
+            .klientenId(auftraggeber.getKlientId())
+            .datum(einheitDate.getTime())
+            .beginn(start.getTime())
+            .ende(ende.getTime())
+            .zusatz1("ca. 13")
+            .build();
 
       GuiTask task = new GuiTask() {
 

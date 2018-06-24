@@ -71,7 +71,6 @@ public class ArbeitsrechnungenApp {
                ArbeitRechnungFactoryProductiv factory = (ArbeitRechnungFactoryProductiv) ArbeitRechnungFactory.instance;
                factory.setOptions(Einstellungen.getInstance().getEinstellungen());
                
-               ArbeitRechnungFactoryProductiv.init();
                try {
                   checkSingleKlient(factory);
                } catch (IOException e) {
