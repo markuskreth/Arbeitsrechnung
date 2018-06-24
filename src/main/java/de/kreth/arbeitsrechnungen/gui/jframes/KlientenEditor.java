@@ -26,6 +26,7 @@ import de.kreth.arbeitsrechnungen.data.Angebot;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.gui.LabelComponentBinding;
 import de.kreth.arbeitsrechnungen.gui.dialogs.AngebotDialog;
+import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.starttablemodels.LabledStringValueNoneditableTableModel;
 import de.kreth.arbeitsrechnungen.gui.panels.ArbeitsstundenTabelle;
 import de.kreth.arbeitsrechnungen.gui.panels.FormRechnungen;
@@ -64,6 +65,8 @@ public class KlientenEditor extends JDialog {
    private final ArbeitRechnungFactory factory;
 
    private ExecutorService exec;
+
+   private JButton btnOptions;
 
    /**
     * Creates new form KlientenEditor
@@ -706,6 +709,20 @@ public class KlientenEditor extends JDialog {
       jTextFieldTex_datei = new JTextField();
       jButtonfindeTexDatei = new JButton();
 
+      btnOptions = new JButton("Optionen");
+      btnOptions.setPreferredSize(new java.awt.Dimension(110, 25));
+      btnOptions.setName("btnOptions");
+      btnOptions.addActionListener(new ActionListener() {
+         
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            OptionenDialog dlg = new OptionenDialog(null, false);
+            dlg.setSingleKlientMode();
+            dlg.setModal(true);
+            dlg.setVisible(true);
+         }
+      });
+      btnOptions.setVisible(false);
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
       ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
@@ -1110,6 +1127,8 @@ public class KlientenEditor extends JDialog {
                               .addComponent(jTextFieldAEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)))
                   .addGroup(jPanel3Layout.createSequentialGroup().addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonNewKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonDelKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1132,6 +1151,7 @@ public class KlientenEditor extends JDialog {
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                               .addComponent(jButtonDelKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addComponent(btnOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                               .addComponent(jButtonNewKlient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                               .addComponent(jButtonBeenden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1726,6 +1746,7 @@ public class KlientenEditor extends JDialog {
       this.jButtonZumEnde.setVisible(false);
       this.jButtonZurueck.setVisible(false);
       this.jButtonDelKlient.setVisible(false);
+      btnOptions.setVisible(true);
    }
 
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-06-25T00:57:12 -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="mtv_gross_buchholz" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="266"/>
@@ -100,6 +99,11 @@ where rechnungen_id=16]]>
 	<field name="zusatz2Val" class="java.lang.String"/>
 	<field name="Beschreibung" class="java.lang.String"/>
 	<field name="einzelPreis" class="java.lang.Float"/>
+	<field name="TrainerName" class="java.lang.String"/>
+	<field name="TrainerAdress" class="java.lang.String"/>
+	<field name="Bankverbindung" class="java.lang.String"/>
+	<field name="IBAN" class="java.lang.String"/>
+	<field name="BIC" class="java.lang.String"/>
 	<variable name="Dauer1" class="java.lang.Float" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{Dauer}]]></variableExpression>
 	</variable>
@@ -210,7 +214,7 @@ where rechnungen_id=16]]>
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["Markus Kreth"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{TrainerName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="321" y="23" width="230" height="12" uuid="51369e01-bdaa-404f-bd31-84966a50d09b">
@@ -228,7 +232,7 @@ where rechnungen_id=16]]>
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["Bütersworthstr. 17; 30161 Hannover"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{TrainerAdress}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="8" y="83" width="170" height="15" uuid="a48fb240-0555-48ef-8de9-60d57e03b5e2">
@@ -250,7 +254,7 @@ where rechnungen_id=16]]>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["SK Hannover"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Bankverbindung}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="193" y="83" width="170" height="15" uuid="00a2706d-8a78-41a7-b1b1-1330a143e7a9">
@@ -272,7 +276,7 @@ where rechnungen_id=16]]>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["DE53 2505 0180 0037 7931 60"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{IBAN}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="382" y="83" width="170" height="15" uuid="87461aed-ea3e-4a7c-a34f-f4e131ea4e1b">
@@ -294,7 +298,7 @@ where rechnungen_id=16]]>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["SPKHDE2HXXX"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{BIC}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="65" y="110" width="289" height="15" uuid="d814e093-2e20-4247-b113-5ed88eae3fae">

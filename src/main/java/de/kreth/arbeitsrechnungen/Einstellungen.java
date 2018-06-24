@@ -13,10 +13,11 @@ public class Einstellungen {
 
    static Einstellungen instance; 
    
-   private final String propertyPath;
    private Options opt;
 
    private Logger logger;
+
+   private String propertyPath;
 
    protected Einstellungen() {
 
@@ -27,7 +28,7 @@ public class Einstellungen {
       File homeverzeichnis;
       
       String homedir = sysprops.getProperty("user.home");
-      homeverzeichnis = new File(homedir + sysprops.getProperty("file.separator") + Options.BENUTZERVERZEICHNIS);
+      homeverzeichnis = new File(homedir, Options.BENUTZERVERZEICHNIS);
 
       if (!homeverzeichnis.exists()) {
          // Verzeichnis anlegen
@@ -35,16 +36,8 @@ public class Einstellungen {
          homeverzeichnis.mkdirs();
       }
 
-      StringBuilder bld = new StringBuilder();
-      bld.append(sysprops.getProperty("user.home"));
-      bld.append(sysprops.getProperty("file.separator"));
-      bld.append(Options.BENUTZERVERZEICHNIS);
-      bld.append(sysprops.getProperty("file.separator"));
-      bld.append("optionen.ini");
-      
-      propertyPath = bld.toString();
-      java.io.File optionfile = new java.io.File(propertyPath);
-
+      java.io.File optionfile = new java.io.File(homeverzeichnis, "optionen.ini");
+      propertyPath =optionfile.getAbsolutePath();
       if(optionfile.exists()) {
          try {
             optionen.load(new java.io.FileInputStream(optionfile));
@@ -66,6 +59,10 @@ public class Einstellungen {
       return opt;
    }
 
+   public String getPropertyPath() {
+      return propertyPath;
+   }
+   
    public void store(Options opt) throws FileNotFoundException, IOException {
       this.opt = opt;
       opt.getProperties().store(new FileOutputStream(propertyPath), "Eigene Optionen");

@@ -33,6 +33,8 @@ import de.kreth.arbeitsrechnungen.Options.Build;
 
 public class OptionenDialog extends JDialog {
 
+   private static final String ÜBUNGSLEITER_UND_BANKVERBINDUNG = "Übungsleiter und Bankverbindung";
+
    private static final long serialVersionUID = -527076543127705929L;
 
    private Logger logger = LoggerFactory.getLogger(getClass());
@@ -44,6 +46,20 @@ public class OptionenDialog extends JDialog {
    private Options options;
 
    private Build optionBuilder;
+
+   private JPanel jPanelBankverbindung;
+
+   private JTextField jTextNameTrainer;
+
+   private JTextField jTextAdresseTrainer;
+
+   private JTextField jTextBankverb;
+
+   private JTextField jTextIsbn;
+
+   private JTextField jTextBic;
+
+   private ResourceBundle resourceMap;
 
    /**
     * Launch the Dialog.
@@ -59,14 +75,7 @@ public class OptionenDialog extends JDialog {
    }
 
    public OptionenDialog() {
-      super();
-
-      this.firststart = false;
-      initComponents();
-      
-      if (!firststart) {
-         loadoptions();
-      }
+      this(null, false);
    }
 
    /** Creates new form Optionen */
@@ -106,7 +115,8 @@ public class OptionenDialog extends JDialog {
             }
          }
       }
-      
+
+      optionBuilder = new Options.Build(properties);
    }
 
    private void fillComponentMap(Map<String, JTextField> components, Container contentPane) {
@@ -186,12 +196,43 @@ public class OptionenDialog extends JDialog {
       jPanelEinheitenArten = new JPanel();
       jButton1 = new JButton();
       jButton2 = new JButton();
+      
+      jPanelBankverbindung = new JPanel();
+      jPanelBankverbindung.setLayout(new GridLayout(5, 2));
+      JLabel jLabelName = new JLabel("Name des Übungsleiters");
+      JLabel jLabelAdresse = new JLabel("Adresse des Übungsleiters");
+      JLabel jLabelBankverb = new JLabel("Bankverbindung");
+      JLabel jLabelIsbn = new JLabel("IBAN");
+      JLabel jLabelBic = new JLabel("BIC");
 
+      jTextNameTrainer = new JTextField();
+      jTextNameTrainer.setName("TrainerName");
+      jTextAdresseTrainer = new JTextField();
+      jTextAdresseTrainer.setName("TrainerAdress");
+      jTextBankverb = new JTextField();
+      jTextBankverb.setName("Bankverbindung");
+      jTextIsbn = new JTextField();
+      jTextIsbn.setName("IBAN");
+      jTextBic = new JTextField();
+      jTextBic.setName("BIC");
+      
+      jPanelBankverbindung.add(jLabelName);
+      jPanelBankverbindung.add(jTextNameTrainer);
+      jPanelBankverbindung.add(jLabelAdresse);
+      jPanelBankverbindung.add(jTextAdresseTrainer);
+      jPanelBankverbindung.add(jLabelBankverb);
+      jPanelBankverbindung.add(jTextBankverb);
+      jPanelBankverbindung.add(jLabelIsbn);
+      jPanelBankverbindung.add(jTextIsbn);
+      jPanelBankverbindung.add(jLabelBic);
+      jPanelBankverbindung.add(jTextBic);
+      
+      jTabbedPane1.addTab(ÜBUNGSLEITER_UND_BANKVERBINDUNG, jPanelBankverbindung);
       jPanelSettings = new JPanel();
             
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-      ResourceBundle resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
+      resourceMap = ResourceBundle.getBundle(getClass().getSimpleName());
 
       setTitle(resourceMap.getString("Form.title")); // NOI18N
       setName("Form"); // NOI18N
@@ -427,7 +468,7 @@ public class OptionenDialog extends JDialog {
 
          @Override
          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
+            jButton1ActionCancel(evt);
          }
       });
 
@@ -437,7 +478,7 @@ public class OptionenDialog extends JDialog {
 
          @Override
          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton2ActionPerformed(evt);
+            jButton2ActionAcceptAndStore(evt);
          }
       });
 
@@ -467,7 +508,7 @@ public class OptionenDialog extends JDialog {
       jTabbedPane1.addTab(resourceMap.getString("jPanelSettings.TabConstraints.tabTitle"), jPanelSettings);
    }
 
-   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+   private void jButton1ActionCancel(java.awt.event.ActionEvent evt) {
       this.setVisible(false);
       this.dispose();
       if (firststart) {
@@ -476,7 +517,7 @@ public class OptionenDialog extends JDialog {
       }
    }
 
-   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+   private void jButton2ActionAcceptAndStore(java.awt.event.ActionEvent evt) {
       saveoptions();
       this.setVisible(false);
       this.dispose();
@@ -579,7 +620,6 @@ public class OptionenDialog extends JDialog {
       return selectedFile;
    }
 
-   // Variables declaration - do not modify//GEN-BEGIN:variables
    private JButton jButton1;
    private JButton jButton2;
    private JButton jButtonArbVerz;
@@ -609,6 +649,23 @@ public class OptionenDialog extends JDialog {
    private JTextField jTextFieldStdTexDatei;
    private JTextField jTextFieldUser;
    private JTextField jTextFieldVerzeichnisTexDateien;
-   // End of variables declaration//GEN-END:variables
 
+   public void setSingleKlientMode() {
+
+      int index = 0;
+      
+      while (index<jTabbedPane1.getTabCount()){
+         if(jTabbedPane1.getTitleAt(index).equalsIgnoreCase(ÜBUNGSLEITER_UND_BANKVERBINDUNG)) {
+            index++;
+         } else {
+            jTabbedPane1.remove(index);
+         }
+      }
+      
+   }
+
+   @Override
+   public void setVisible(boolean b) {
+      super.setVisible(b);
+   }
 }

@@ -12,7 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.kreth.arbeitsrechnungen.ArbeitRechnungFactory;
+import de.kreth.arbeitsrechnungen.*;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 import de.kreth.arbeitsrechnungen.data.Rechnung.Builder;
@@ -31,6 +31,7 @@ public class ShowJasperRechnung {
 
 	public static void main(String[] args) throws JRException {
 
+	   ArbeitRechnungFactoryProductiv.init();
 		ShowJasperRechnung showJasperRechnung = new ShowJasperRechnung();
 
 		int rechnungId;

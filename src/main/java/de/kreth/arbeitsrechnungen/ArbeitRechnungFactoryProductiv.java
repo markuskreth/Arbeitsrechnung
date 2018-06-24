@@ -47,6 +47,8 @@ public class ArbeitRechnungFactoryProductiv extends ArbeitRechnungFactory {
 			optionen = new Options.Build()
 					.dbHost("192.168.0.8").dbUser("markus").dbPassword("0773").dbDatabaseName("ArbeitrechnungenBak")
 					.targetDir("targetDir").tmpDir("tmpDir").pdfProg("/usr/bin/okular")
+					.bankverbindung("SH Hannover").iban("DE2505018037703160").bic("SPIRgendwas")
+					.trainerName("Markus Kreth").trainerAdress("Hannoversche Str. 45A; 30629 Hannover")
 					.build();
 		} else {
 			File optionfile = new File(homedir + sysprops.getProperty("file.separator") + Options.BENUTZERVERZEICHNIS

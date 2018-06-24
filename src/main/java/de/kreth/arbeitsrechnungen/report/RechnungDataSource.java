@@ -7,6 +7,8 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.kreth.arbeitsrechnungen.Einstellungen;
+import de.kreth.arbeitsrechnungen.Options;
 import de.kreth.arbeitsrechnungen.data.Arbeitsstunde;
 import de.kreth.arbeitsrechnungen.data.Rechnung;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -21,10 +23,15 @@ public class RechnungDataSource implements JRDataSource {
 	private Iterator<Arbeitsstunde> einheiten;
 	private Arbeitsstunde current;
 
+   private Options options;
+
 	public RechnungDataSource(Rechnung r) {
 		super();
 		this.r = r;
 		einheiten = this.r.getEinheiten().iterator();
+
+      options = Einstellungen.getInstance().getEinstellungen();
+
 	}
 
 	@Override
@@ -44,8 +51,18 @@ public class RechnungDataSource implements JRDataSource {
 			return current.getDatum();
 		case "Dauer":
 			return Float.valueOf(current.getDauerInMinutes());
-		case "betrag":
-			return Float.valueOf(current.getEinzelPreis().floatValue());
+//		case "betrag":
+//			return Float.valueOf(current.getEinzelPreis().floatValue());
+      case Options.TRAINER_NAME:
+         return options.getTrainerName();
+      case Options.TRAINER_ADRESS:
+         return options.getTrainerAdress();
+      case Options.BANKVERBINDUNG:
+         return options.getBankname();
+      case Options.BANK_BIC:
+         return options.getBic();
+      case Options.BANK_IBAN:
+         return options.getIban();
 		default:
 			break;
 		}

@@ -4,6 +4,7 @@
 
 package de.kreth.arbeitsrechnungen;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
@@ -13,6 +14,7 @@ import javax.swing.JOptionPane;
 import de.kreth.arbeitsrechnungen.data.Klient;
 import de.kreth.arbeitsrechnungen.database.Verbindung;
 import de.kreth.arbeitsrechnungen.database.Verbindung_mysql;
+import de.kreth.arbeitsrechnungen.gui.dialogs.OptionenDialog;
 import de.kreth.arbeitsrechnungen.gui.jframes.KlientenEditor;
 import de.kreth.arbeitsrechnungen.gui.jframes.StartFenster;
 import de.kreth.arbeitsrechnungen.persister.KlientenEditorPersister;
@@ -34,13 +36,33 @@ public class ArbeitsrechnungenApp {
          @Override
          public void run() {
             String singleKlientMode = System.getProperty(SINGLE_KLIENT_MODE);
-            ArbeitRechnungFactoryProductiv.init();
             if (singleKlientMode == null || Boolean.parseBoolean(singleKlientMode) == false) {
+
+               ArbeitRechnungFactoryProductiv.init();
                changeColumnDefault(ArbeitRechnungFactoryProductiv.instance);
                new StartFenster().setVisible(true);
             } else {
+
+               File einstellungFile = new File(Einstellungen.getInstance().getPropertyPath());
+               if (einstellungFile.exists() == false) {
+                  einstellungFile.getParentFile().mkdirs();
+                  try {
+                     einstellungFile.createNewFile();
+                  } catch (IOException e) {
+                     throw new RuntimeException("Unable to create Einstellung-File", e);
+                  }
+               }
+
+               ArbeitRechnungFactoryProductiv.init();
                Options opts = Einstellungen.getInstance().getEinstellungen();
-               
+
+               if(opts.getBankname() == null 
+                     || opts.getTrainerName() == null) {
+                  OptionenDialog dlg = new OptionenDialog(null, false);
+                  dlg.setSingleKlientMode();
+                  dlg.setVisible(true);
+               }
+               opts = Einstellungen.getInstance().getEinstellungen();
                Properties props = opts.getProperties();
                props.setProperty("dbtype", Verbindung.ConnectionTypes.HSQLDB.name());
                props.remove("sqlserver");
@@ -49,11 +71,13 @@ public class ArbeitsrechnungenApp {
                ArbeitRechnungFactoryProductiv factory = (ArbeitRechnungFactoryProductiv) ArbeitRechnungFactory.instance;
                factory.setOptions(Einstellungen.getInstance().getEinstellungen());
                
+               ArbeitRechnungFactoryProductiv.init();
                try {
                   checkSingleKlient(factory);
                } catch (IOException e) {
                   throw new IllegalStateException("Error loading Single Klient from Resources", e);
                }
+               
                KlientenEditor klienteneditor = new KlientenEditor(null);
                klienteneditor.setSingleKlientMode();
                klienteneditor.setFilter(KlientenEditor.NICHTEINGEREICHTE);

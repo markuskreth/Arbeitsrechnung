@@ -15,6 +15,11 @@ public class Options {
    public static final String TARGET_DIR = "verzPdfFiles";
    public static final String TMP_DIR = "arbeitsverzeichnis";
    public static final String LOG_LEVEL = "LogLevel";
+   public static final String TRAINER_NAME = "TrainerName";
+   public static final String TRAINER_ADRESS = "TrainerAdress";
+   public static final String BANKVERBINDUNG = "Bankverbindung";
+   public static final String BANK_IBAN = "IBAN";
+   public static final String BANK_BIC = "BIC";
    
    public static final Set<String> PROPERTIES;
    static {
@@ -27,6 +32,11 @@ public class Options {
       PROPERTIES.add(TARGET_DIR);
       PROPERTIES.add(TMP_DIR);
       PROPERTIES.add(LOG_LEVEL);
+      PROPERTIES.add(TRAINER_NAME);
+      PROPERTIES.add(TRAINER_ADRESS);
+      PROPERTIES.add(BANKVERBINDUNG);
+      PROPERTIES.add(BANK_IBAN);
+      PROPERTIES.add(BANK_BIC);
    }
    
    private Properties prop;
@@ -35,6 +45,26 @@ public class Options {
       prop = build.properties;
    }
 
+   public String getTrainerName() {
+      return prop.getProperty(TRAINER_NAME);
+   }
+
+   public String getTrainerAdress() {
+      return prop.getProperty(TRAINER_ADRESS);
+   }
+
+   public String getBankname() {
+      return prop.getProperty(BANKVERBINDUNG);
+   }
+
+   public String getIban() {
+      return prop.getProperty(BANK_IBAN);
+   }
+
+   public String getBic() {
+      return prop.getProperty(BANK_BIC);
+   }
+   
    public String getPdfProg() {
       return prop.getProperty(PDF_PROG);
    }
@@ -84,7 +114,7 @@ public class Options {
 
       private Properties properties = null;
 
-      Set<String> toSet = new HashSet<>(Arrays.asList(PDF_PROG, DB_USER, DB_HOST, DB_DATABASE_NAME, DB_PASSWORD, TARGET_DIR, TMP_DIR));
+      Set<String> toSet = new HashSet<>(Arrays.asList(PDF_PROG, DB_USER, DB_HOST, DB_DATABASE_NAME, DB_PASSWORD, TARGET_DIR, TMP_DIR, TRAINER_NAME, TRAINER_ADRESS, BANKVERBINDUNG, BANK_IBAN));
 
       @Override
       public String toString() {
@@ -113,6 +143,34 @@ public class Options {
             throw new IllegalArgumentException("dbUser must not be null!");
          properties.setProperty(DB_USER, dbUser);
          toSet.remove(DB_USER);
+         return this;
+      }
+
+      public Build trainerAdress(String trainerAdress) {
+         return setPropertyIfValid(trainerAdress, TRAINER_ADRESS);
+      }
+
+      public Build trainerName(String trainerName) {
+         return setPropertyIfValid(trainerName, TRAINER_NAME);
+      }
+
+      public Build bankverbindung(String bankverbindung) {
+         return setPropertyIfValid(bankverbindung, BANKVERBINDUNG);
+      }
+
+      public Build iban(String iban) {
+         return setPropertyIfValid(iban, BANK_IBAN);
+      }
+
+      public Build bic(String bic) {
+         return setPropertyIfValid(bic, BANK_BIC);
+      }
+
+      private Build setPropertyIfValid(String trainerName, String key) {
+         if (trainerName == null)
+            throw new IllegalArgumentException(key + " must not be null!");
+         properties.setProperty(key, trainerName);
+         toSet.remove(key);
          return this;
       }
 
