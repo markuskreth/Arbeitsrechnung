@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.kreth</groupId>
 	<artifactId>arbeitsrechnungen</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<name>Arbeitsrechnungen</name>
 	<description>My first java project, still using it productive</description>
 	<build>
